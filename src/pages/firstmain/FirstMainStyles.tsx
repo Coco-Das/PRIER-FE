@@ -1,6 +1,6 @@
 import styled from 'styled-components';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import Button from '@mui/material/Button';
 
 //import { ReactComponent as firstmainimg1 } from '../../assets/FirstMainImg1.svg';
 import firstmainimg2 from '../../assets/FirstMainImg2.svg';
@@ -33,6 +33,7 @@ export const Logo = styled(logo)`
   margin-bottom: 1.5rem;
   width: 30rem;
   height: 10rem;
+  margin-top: -5rem;
 `;
 export const Text = styled.h1`
   background: linear-gradient(
@@ -48,7 +49,7 @@ export const Text = styled.h1`
   font-weight: 800;
   margin-bottom: 3rem;
 `;
-export const StartButton = styled(Link)`
+const StyledButton = styled(Button)`
   background: linear-gradient(90deg, rgba(49, 90, 241, 1) 0%, rgba(119, 60, 209, 1) 100%);
   border-radius: 15px;
   width: 12rem;
@@ -79,3 +80,6 @@ export const StartButton = styled(Link)`
     position: absolute;
   }
 `;
+
+export const StartButton = styled(({ ...props }) => <StyledButton {...props} />)``;
+//StartButton은 StyledButton을 래핑하여 Link 컴포넌트와 연결합니다.
