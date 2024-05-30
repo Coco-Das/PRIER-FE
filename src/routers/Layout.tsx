@@ -6,7 +6,7 @@ export const Layout = () => {
 
   const style: React.CSSProperties = {
     height: '100vh',
-    overflowY: 'scroll',
+    overflowY: 'auto',
   };
   const showHeader = location.pathname !== '/login';
 
