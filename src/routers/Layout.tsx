@@ -8,7 +8,8 @@ export const Layout = () => {
     height: '100vh',
     overflowY: 'auto',
   };
-  const showHeader = location.pathname !== '/login';
+  const hideHeaderPaths = ['/login', '/firstmain', '/'];
+  const showHeader = !hideHeaderPaths.includes(location.pathname);
 
   return (
     <div style={style}>

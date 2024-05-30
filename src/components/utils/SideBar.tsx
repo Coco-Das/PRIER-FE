@@ -45,15 +45,15 @@ const Spacer = styled('div')(({ theme }) => ({
 const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) => {
   const navigate = useNavigate();
   const menuItems = [
-    { text: '프로젝트 리스트', path: '/Main' },
-    { text: '테스트 생성하기', path: '/createTest' },
-    { text: 'IT 소식', path: '/Board' },
-    { text: '잡담/일상', path: '/Board' },
-    { text: '기술', path: '/Board' },
-    { text: '인턴/공모전', path: '/Board' },
-    { text: '공지사항', path: '/Board' },
-    { text: '마이페이지', path: '/MyPage' },
-    { text: '로그아웃', path: '/Login' },
+    { text: '프로젝트 리스트', path: '/main' },
+    { text: '테스트 생성하기', path: '/createtest' },
+    { text: 'IT 소식', path: '/board' },
+    { text: '잡담/일상', path: '/board' },
+    { text: '기술', path: '/board' },
+    { text: '인턴/공모전', path: '/board' },
+    { text: '공지사항', path: '/board' },
+    { text: '마이페이지', path: '/mypage' },
+    { text: '로그아웃', path: '/login' },
   ];
 
   const DrawerList = (
