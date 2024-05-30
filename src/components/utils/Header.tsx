@@ -10,9 +10,9 @@ const HeaderContainer = styled.nav`
   height: 64px; // 16px * 4
   display: flex;
   align-items: center;
-  /* justify-content: space-between; */
-  border-bottom: 1px solid black;
+  border-bottom: 1px solid;
   width: 100%;
+  border-image: linear-gradient(90deg, #315af1, #23be87, #773cd1) 1;
 `;
 const StyledMenu = styled(Menu)`
   &:hover {
@@ -36,24 +36,6 @@ const StyledUser = styled(User)`
   margin-left: auto;
   margin-right: 20px;
 `;
-const MenuContainer = styled.div`
-  display: flex;
-  z-index: 5;
-  flex-direction: column;
-  gap: 0.5rem;
-  border-radius: 0.5rem;
-  padding: 1.25rem 1.5rem;
-  text-align: center;
-  position: absolute;
-  top: 4rem;
-  right: 0.25rem;
-  p {
-    &:hover {
-      cursor: pointer;
-    }
-  }
-  z-index: 100;
-`;
 
 export const Header = () => {
   const [sideBarOpen, setSideBarOpen] = React.useState(false);
@@ -62,7 +44,7 @@ export const Header = () => {
   const currentPath = location.pathname;
 
   const handleLogoCick = () => {
-    navigate('/menu');
+    navigate('/main');
   };
   const toggleSideBar = (open: boolean) => {
     setSideBarOpen(open);
@@ -71,7 +53,7 @@ export const Header = () => {
   return (
     <HeaderContainer>
       <StyledMenu onClick={() => toggleSideBar(!sideBarOpen)} />
-      <StyledLogo />
+      <StyledLogo onClick={handleLogoCick} />
       <StyledUser />
       <SideBar open={sideBarOpen} toggleDrawer={toggleSideBar} currentPath={currentPath} />
     </HeaderContainer>
