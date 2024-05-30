@@ -2,22 +2,21 @@ import styled from 'styled-components';
 import * as React from 'react';
 import Button from '@mui/material/Button';
 
-//import { ReactComponent as firstmainimg1 } from '../../assets/FirstMainImg1.svg';
-import firstmainimg2 from '../../assets/FirstMainImg2.svg';
-import firstmainimg3 from '../../assets/FirstMainImg3.svg';
-import firstmainimg4 from '../../assets/FirstMainImg4.svg';
-import firstmainimg5 from '../../assets/FirstMainImg5.svg';
-import firstmainimg6 from '../../assets/FirstMainImg6.svg';
-import firstmainimg7 from '../../assets/FirstMainImg7.svg';
-import firstmainimg8 from '../../assets/FirstMainImg8.svg';
-import firstmainimg9 from '../../assets/FirstMainImg9.svg';
-import firstmainimg10 from '../../assets/FirstMainImg10.svg';
-import firstmainimg11 from '../../assets/FirstMainImg11.svg';
-import firstmainimg12 from '../../assets/FirstMainImg12.svg';
-import firstmainimg13 from '../../assets/FirstMainImg13.svg';
-import firstmainimg14 from '../../assets/FirstMainImg14.svg';
-import firstmainimg15 from '../../assets/FirstMainImg15.svg';
-import firstmainimg16 from '../../assets/FirstMainImg16.svg';
+import { ReactComponent as firstmainimg1 } from '../../assets/FirstMainImg1.svg';
+import { ReactComponent as firstmainimg2 } from '../../assets/FirstMainImg2.svg';
+import { ReactComponent as firstmainimg3 } from '../../assets/FirstMainImg3.svg';
+import { ReactComponent as firstmainimg4 } from '../../assets/FirstMainImg4.svg';
+import { ReactComponent as firstmainimg5 } from '../../assets/FirstMainImg5.svg';
+import { ReactComponent as firstmainimg6 } from '../../assets/FirstMainImg6.svg';
+import { ReactComponent as firstmainimg7 } from '../../assets/FirstMainImg7.svg';
+import { ReactComponent as firstmainimg8 } from '../../assets/FirstMainImg8.svg';
+import { ReactComponent as firstmainimg9 } from '../../assets/FirstMainImg9.svg';
+import { ReactComponent as firstmainimg10 } from '../../assets/FirstMainImg10.svg';
+import { ReactComponent as firstmainimg11 } from '../../assets/FirstMainImg11.svg';
+import { ReactComponent as firstmainimg12 } from '../../assets/FirstMainImg12.svg';
+import { ReactComponent as firstmainimg13 } from '../../assets/FirstMainImg13.svg';
+import { ReactComponent as firstmainimg14 } from '../../assets/FirstMainImg14.svg';
+import { ReactComponent as firstmainimg15 } from '../../assets/FirstMainImg15.svg';
 import { ReactComponent as logo } from '../../assets/Logo-firstMain.svg';
 
 export const FirstMainContainer = styled.div`
@@ -83,3 +82,79 @@ const StyledButton = styled(Button)`
 
 export const StartButton = styled(({ ...props }) => <StyledButton {...props} />)``;
 //StartButton은 StyledButton을 래핑하여 Link 컴포넌트와 연결합니다.
+
+export const Img1 = styled(firstmainimg1)`
+  position: fixed;
+  left: 4rem;
+  top: 1rem;
+`;
+export const Img2 = styled(firstmainimg2)`
+  position: fixed;
+  left: 18rem;
+  top: 2rem;
+`;
+export const Img3 = styled(firstmainimg3)`
+  position: fixed;
+  left: 32rem;
+  top: 1rem;
+`;
+export const Img4 = styled(firstmainimg4)`
+  position: fixed;
+  right: 13rem;
+  top: 0.5rem;
+`;
+export const Img5 = styled(firstmainimg5)`
+  position: fixed;
+  right: 4rem;
+  top: 4rem;
+`;
+export const Img6 = styled(firstmainimg6)`
+  position: fixed;
+  left: 14rem;
+  top: 14rem;
+`;
+export const Img7 = styled(firstmainimg7)`
+  position: fixed;
+  left: 6rem;
+  top: 20rem;
+`;
+export const Img8 = styled(firstmainimg8)`
+  position: fixed;
+  left: -3rem;
+  bottom: -4rem;
+`;
+export const Img9 = styled(firstmainimg9)`
+  position: fixed;
+  left: 18rem;
+  bottom: 1rem;
+`;
+export const Img10 = styled(firstmainimg10)`
+  position: fixed;
+  left: 25rem;
+  bottom: -1rem;
+`;
+export const Img11 = styled(firstmainimg11)`
+  position: fixed;
+  right: 34rem;
+  bottom: 10rem;
+`;
+export const Img12 = styled(firstmainimg12)`
+  position: fixed;
+  right: 23rem;
+  bottom: 6rem;
+`;
+export const Img13 = styled(firstmainimg13)`
+  position: fixed;
+  right: 20rem;
+  bottom: 15rem;
+`;
+export const Img14 = styled(firstmainimg14)`
+  position: fixed;
+  right: 4rem;
+  top: 24rem;
+`;
+export const Img15 = styled(firstmainimg15)`
+  position: fixed;
+  right: 0rem;
+  bottom: -3rem;
+`;
