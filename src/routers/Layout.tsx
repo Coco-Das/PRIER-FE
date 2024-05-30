@@ -1,12 +1,12 @@
 import { Outlet, useLocation } from 'react-router-dom';
-import Header from '../components/utils/Header';
+import { Header } from '../components/utils/Header';
 
 export const Layout = () => {
   const location = useLocation();
 
-  const style = {
+  const style: React.CSSProperties = {
     height: '100vh',
-    overflow: 'scroll',
+    overflowY: 'scroll',
   };
   const showHeader = location.pathname !== '/login';
 
