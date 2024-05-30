@@ -1,8 +1,10 @@
+import * as React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Menu } from '../../assets/Menu.svg';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
 import { ReactComponent as User } from '../../assets/user.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import SideBar from './SideBar';
 
 const HeaderContainer = styled.nav`
   height: 64px; // 16px * 4
@@ -36,15 +38,24 @@ const StyledUser = styled(User)`
 `;
 
 export const Header = () => {
+  const [sideBarOpen, setSideBarOpen] = React.useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   const handleLogoCick = () => {
     navigate('/main');
   };
+  const toggleSideBar = (open: boolean) => {
+    setSideBarOpen(open);
+  };
+
   return (
     <HeaderContainer>
-      <StyledMenu />
+      <StyledMenu onClick={() => toggleSideBar(!sideBarOpen)} />
       <StyledLogo onClick={handleLogoCick} />
       <StyledUser />
+      <SideBar open={sideBarOpen} toggleDrawer={toggleSideBar} currentPath={currentPath} />
     </HeaderContainer>
   );
 };
