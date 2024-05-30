@@ -4,13 +4,14 @@ import { ReactComponent as ChartIcon } from '../../assets/main_chart.svg';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { IconButton, InputAdornment } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 import { GreetingContainer, LinkButton, MainContainer, MainText, OrderButton, PointText, Title } from './MainStyle';
 import ProjectPreview from '../../components/user/ProjectPreview';
 
 export default function Main() {
   const [activeButton, setActiveButton] = useState('인기순');
   return (
-    <div className="flex-col" style={{ margin: '1% 7%' }}>
+    <div className="flex-col cursor-pointer" style={{ margin: '1% 7%' }}>
       <MainContainer>
         <GreetingContainer>
           <ChartIcon style={{ width: '18%' }} />
@@ -63,6 +64,9 @@ export default function Main() {
         />
       </div>
       <ProjectPreview />
+      <span className="flex justify-center mt-6">
+        <Pagination count={5} color="primary" size="large" />
+      </span>
     </div>
   );
 }
