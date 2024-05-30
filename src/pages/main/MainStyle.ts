@@ -50,7 +50,7 @@ export const LinkButton = styled.div`
   justify-content: flex-end;
   border: none;
   border-radius: 8px;
-  padding: 7px;
+  padding: 10px;
   margin-left: auto;
   margin-top: 1%;
   width: max-content;
@@ -64,10 +64,16 @@ export const LinkButton = styled.div`
   ${device.medium} {
     font-size: 14px;
   }
+  &:hover {
+    background-color: #315af1;
+    color: #ffffff;
+  }
 `;
 export const Title = styled.h2`
   color: #315af1;
   font-weight: 700;
+  margin-top: 2%;
+  margin-bottom: 1%;
   ${device.small} {
     font-size: 14px;
   }
@@ -80,13 +86,17 @@ export const Title = styled.h2`
     font-size: 24px;
   }
 `;
-export const ProjectContainer = styled.div`
+interface OrderButtonProps {
+  active: boolean;
+}
+
+export const OrderButton = styled.button<OrderButtonProps>`
   border: none;
-  border-radius: 15px;
-  padding: 3px;
-  width: 20%;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
-`;
-export const OrderButton = styled.div`
-  border: none;
+  border-radius: 20px;
+  padding: 4px 6px;
+  margin-bottom: 3%;
+  font-size: 14px;
+  font-weight: 300;
+  background-color: ${props => (props.active ? '#315af1' : '#f0f0f0')};
+  color: ${props => (props.active ? '#ffffff' : '#000000')};
 `;

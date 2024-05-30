@@ -1,23 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as ChartIcon } from '../../assets/main_chart.svg';
-import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { IconButton, InputAdornment } from '@mui/material';
-import {
-  GreetingContainer,
-  LinkButton,
-  MainContainer,
-  MainText,
-  PointText,
-  ProjectContainer,
-  Title,
-} from './MainStyle';
+import Pagination from '@mui/material/Pagination';
+import { GreetingContainer, LinkButton, MainContainer, MainText, OrderButton, PointText, Title } from './MainStyle';
+import ProjectPreview from '../../components/user/ProjectPreview';
 
 export default function Main() {
+  const [activeButton, setActiveButton] = useState('인기순');
   return (
-    <div className="flex-col" style={{ margin: '1% 7%' }}>
+    <div className="flex-col cursor-pointer" style={{ margin: '1% 7%' }}>
       <MainContainer>
         <GreetingContainer>
           <ChartIcon style={{ width: '18%' }} />
@@ -34,17 +28,30 @@ export default function Main() {
         </GreetingContainer>
       </MainContainer>
       <Title>신규 프로젝트</Title>
-      <ProjectContainer>
-        <TeamProfile />
-      </ProjectContainer>
+      <ProjectPreview />
       <Title>모든 프로젝트</Title>
-      <div className="flex justify-between">
-        <div>
-          <button>인기순</button>
-          <button>등록순</button>
+      <div className="flex justify-between mb-2">
+        <div className="flex gap-2">
+          <OrderButton active={activeButton === '인기순'} onClick={() => setActiveButton('인기순')}>
+            인기순
+          </OrderButton>
+          <OrderButton active={activeButton === '등록순'} onClick={() => setActiveButton('등록순')}>
+            등록순
+          </OrderButton>
         </div>
         <TextField
           variant="standard"
+          sx={{
+            '& .MuiInput-underline:before': {
+              borderBottomColor: '#315af1',
+            },
+            '& .MuiInput-underline:after': {
+              borderBottomColor: '#28b381',
+            },
+            '& .MuiInput-underline:hover:not(.Mui-disabled):before': {
+              borderBottomColor: '#315af1',
+            },
+          }}
           InputProps={{
             endAdornment: (
               <InputAdornment position="end">
@@ -56,6 +63,10 @@ export default function Main() {
           }}
         />
       </div>
+      <ProjectPreview />
+      <span className="flex justify-center mt-6">
+        <Pagination count={5} color="primary" size="large" />
+      </span>
     </div>
   );
 }

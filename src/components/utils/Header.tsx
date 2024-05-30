@@ -5,8 +5,10 @@ import { ReactComponent as Logo } from '../../assets/Logo.svg';
 import { ReactComponent as User } from '../../assets/user.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SideBar from './SideBar';
+import Profile from '../user/Profile';
 
 const HeaderContainer = styled.nav`
+  position: relative;
   height: 64px; // 16px * 4
   display: flex;
   align-items: center;
@@ -39,6 +41,7 @@ const StyledUser = styled(User)`
 
 export const Header = () => {
   const [sideBarOpen, setSideBarOpen] = React.useState(false);
+  const [profileOpen, setProfileOpen] = React.useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -49,12 +52,16 @@ export const Header = () => {
   const toggleSideBar = (open: boolean) => {
     setSideBarOpen(open);
   };
+  const openProfile = (open: boolean) => {
+    setProfileOpen(open);
+  };
 
   return (
     <HeaderContainer>
       <StyledMenu onClick={() => toggleSideBar(!sideBarOpen)} />
       <StyledLogo onClick={handleLogoCick} />
-      <StyledUser />
+      <StyledUser onClick={() => openProfile(!profileOpen)} />
+      {profileOpen && <Profile />}
       <SideBar open={sideBarOpen} toggleDrawer={toggleSideBar} currentPath={currentPath} />
     </HeaderContainer>
   );
