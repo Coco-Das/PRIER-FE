@@ -27,19 +27,16 @@ export const GreetingContainer = styled.div`
     background-image: linear-gradient(45deg, #315af1, #23be87, #773cd1);
     background-clip: border-box;
     filter: hue-rotate(0deg);
-    animation: huerotate 6s infinite linear;
+    animation: huerotate 3s infinite linear;
     z-index: -1;
   }
 
-  @keyframes borderAnimation {
+  @keyframes huerotate {
     0% {
-      background-position: 0% 50%;
-    }
-    50% {
-      background-position: 100% 50%;
+      filter: hue-rotate(0deg);
     }
     100% {
-      background-position: 0% 50%;
+      filter: hue-rotate(360deg);
     }
   }
 `;

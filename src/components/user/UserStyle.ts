@@ -41,10 +41,10 @@ export const PointText = styled.p`
 `;
 export const StyledPointIcon = styled(PointIcon)`
   width: 40px;
-  -webkit-animation: icon-move 2s ease-in-out infinite;
+  -webkit-animation: icon-move 1s ease-in-out 3;
   @-webkit-keyframes icon-move {
     50% {
-      -webkit-transform: rotate(5deg);
+      -webkit-transform: rotate(30deg);
     }
   }
 `;
@@ -95,3 +95,5 @@ export const Filler = styled.div<{ percentage: number }>`
 export interface ProgressBarProps {
   percentage: number;
 }
+
+export const ReviewContainer = styled.div``;

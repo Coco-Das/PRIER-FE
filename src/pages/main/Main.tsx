@@ -30,7 +30,7 @@ export default function Main() {
               여기, 사용자와 함께 성장하는 첫 걸음을 내딛을 수 있는 공간입니다.
             </MainText>
             <LinkButton>
-              <Link to="createTest">지금 바로 등록하기</Link>
+              <Link to="/createtest">지금 바로 등록하기</Link>
             </LinkButton>
           </div>
         </GreetingContainer>
