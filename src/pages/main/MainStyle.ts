@@ -1,5 +1,6 @@
 import styled from 'styled-components';
 import { device } from '../../styles/Media';
+import { ReactComponent as ChartIcon } from '../../assets/main_chart.svg';
 
 export const MainContainer = styled.div`
   display: flex;
@@ -9,13 +10,40 @@ export const MainContainer = styled.div`
 export const GreetingContainer = styled.div`
   position: relative;
   display: flex;
-  border: 2px solid transparent;
   border-radius: 20px;
-  background: linear-gradient(#f3f8ff, #f3f8ff) padding-box,
-    linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
   width: 100vw;
   padding: 0 3%;
+  background-color: #f3f8ff;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 21px;
+    border: 2px solid transparent;
+    background-image: linear-gradient(45deg, #315af1, #23be87, #773cd1);
+    background-clip: border-box;
+    filter: hue-rotate(0deg);
+    animation: huerotate 6s infinite linear;
+    z-index: -1;
+  }
+
+  @keyframes borderAnimation {
+    0% {
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
+    }
+    100% {
+      background-position: 0% 50%;
+    }
+  }
 `;
+
 export const PointText = styled.h1`
   color: #315af1;
   font-weight: 700;
@@ -45,6 +73,10 @@ export const MainText = styled.p`
     font-size: 24px;
   }
 `;
+export const StyledChartIcon = styled(ChartIcon)`
+  width: 18%;
+`;
+
 export const LinkButton = styled.div`
   display: flex;
   justify-content: flex-end;
@@ -67,6 +99,7 @@ export const LinkButton = styled.div`
   &:hover {
     background-color: #315af1;
     color: #ffffff;
+    transition: 0.7s;
   }
 `;
 export const Title = styled.h2`
