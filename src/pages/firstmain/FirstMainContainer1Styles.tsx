@@ -19,22 +19,23 @@ import { ReactComponent as firstmainimg14 } from '../../assets/FirstMainImg14.sv
 import { ReactComponent as firstmainimg15 } from '../../assets/FirstMainImg15.svg';
 import { ReactComponent as logo } from '../../assets/Logo-firstMain.svg';
 
-export const FirstMainContainer = styled.div`
-  height: 100vh;
-  background-color: #1d2732;
+export const FirstContainer = styled.div`
+  height: 120vh;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
+  overflow: hidden;
+  position: relative; /* 자식 요소의 절대 위치를 위한 상대 위치 */
 `;
 
 export const Logo = styled(logo)`
-  margin-bottom: 1.5rem;
   width: 30rem;
   height: 10rem;
-  margin-top: -5rem;
+  margin-top: 15rem;
+  position: relative;
 `;
 export const Text = styled.h1`
+  position: relative;
   background: linear-gradient(
     90deg,
     rgba(65, 136, 254, 1) 0%,
@@ -49,6 +50,8 @@ export const Text = styled.h1`
   margin-bottom: 3rem;
 `;
 const StyledButton = styled(Button)`
+  position: relative;
+
   background: linear-gradient(90deg, rgba(49, 90, 241, 1) 0%, rgba(119, 60, 209, 1) 100%);
   border-radius: 15px;
   width: 12rem;
@@ -84,77 +87,77 @@ export const StartButton = styled(({ ...props }) => <StyledButton {...props} />)
 //StartButton은 StyledButton을 래핑하여 Link 컴포넌트와 연결합니다.
 
 export const Img1 = styled(firstmainimg1)`
-  position: fixed;
+  position: absolute;
   left: 4rem;
   top: 1rem;
 `;
 export const Img2 = styled(firstmainimg2)`
-  position: fixed;
+  position: absolute;
   left: 18rem;
   top: 2rem;
 `;
 export const Img3 = styled(firstmainimg3)`
-  position: fixed;
+  position: absolute;
   left: 32rem;
   top: 1rem;
 `;
 export const Img4 = styled(firstmainimg4)`
-  position: fixed;
+  position: absolute;
   right: 13rem;
   top: 0.5rem;
 `;
 export const Img5 = styled(firstmainimg5)`
-  position: fixed;
+  position: absolute;
   right: 4rem;
   top: 4rem;
 `;
 export const Img6 = styled(firstmainimg6)`
-  position: fixed;
+  position: absolute;
   left: 14rem;
   top: 14rem;
 `;
 export const Img7 = styled(firstmainimg7)`
-  position: fixed;
+  position: absolute;
   left: 6rem;
   top: 20rem;
 `;
 export const Img8 = styled(firstmainimg8)`
-  position: fixed;
+  position: absolute;
   left: -3rem;
-  bottom: -4rem;
+  top: 34rem;
 `;
 export const Img9 = styled(firstmainimg9)`
-  position: fixed;
+  position: absolute;
   left: 18rem;
-  bottom: 1rem;
+  top: 41rem;
 `;
 export const Img10 = styled(firstmainimg10)`
-  position: fixed;
+  position: absolute;
   left: 25rem;
-  bottom: -1rem;
+  top: 38rem;
 `;
 export const Img11 = styled(firstmainimg11)`
-  position: fixed;
+  position: absolute;
   right: 34rem;
-  bottom: 10rem;
+  top: 35rem;
 `;
 export const Img12 = styled(firstmainimg12)`
-  position: fixed;
+  position: absolute;
   right: 23rem;
   bottom: 6rem;
 `;
 export const Img13 = styled(firstmainimg13)`
-  position: fixed;
+  position: absolute;
   right: 20rem;
-  bottom: 15rem;
+  top: 30rem;
 `;
 export const Img14 = styled(firstmainimg14)`
-  position: fixed;
+  position: absolute;
   right: 4rem;
   top: 24rem;
 `;
 export const Img15 = styled(firstmainimg15)`
-  position: fixed;
+  position: absolute;
   right: 0rem;
-  bottom: -3rem;
+  top: 33rem;
 `;

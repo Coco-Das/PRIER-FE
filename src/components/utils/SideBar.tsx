@@ -55,50 +55,10 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
     { text: '마이페이지', path: '/mypage' },
     { text: '로그아웃', path: '/login' },
   ];
-
-  const DrawerList = (
-    <Box
-      sx={{ width: 250 }}
-      role="presentation"
-      onClick={() => toggleDrawer(false)}
-      onKeyDown={() => toggleDrawer(false)}
-    >
-      <List>
-        {menuItems.slice(0, 4).map((item, index) => (
-          <ListItem key={item.text} disablePadding onClick={() => item.path && navigate(item.path)}>
-            <CustomListItemButton current={currentPath === item.path}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </CustomListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <List>
-        {menuItems.slice(4, 7).map((item, index) => (
-          <ListItem key={item.text} disablePadding onClick={() => item.path && navigate(item.path)}>
-            <CustomListItemButton current={currentPath === item.path}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </CustomListItemButton>
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-      <Spacer />
-      <List sx={{ marginBottom: '50px' }}>
-        {menuItems.slice(7).map((item, index) => (
-          <ListItem key={item.text} disablePadding onClick={() => item.path && navigate(item.path)}>
-            <CustomListItemButton current={currentPath === item.path}>
-              <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-              <ListItemText primary={item.text} />
-            </CustomListItemButton>
-          </ListItem>
-        ))}
-      </List>
-    </Box>
-  );
-
+  const handleNavigation = (path: string) => {
+    navigate(path);
+    toggleDrawer(false); // 메뉴를 닫기 위해 추가
+  };
   return (
     <CustomDrawer
       anchor="left"
@@ -123,7 +83,19 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
       }}
       variant="temporary"
     >
-      {DrawerList}
+      <Box sx={{ width: 250 }} role="presentation">
+        <List>
+          {menuItems.map((item, index) => (
+            <ListItem key={item.text} disablePadding>
+              <CustomListItemButton current={currentPath === item.path} onClick={() => handleNavigation(item.path)}>
+                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <ListItemText primary={item.text} />
+              </CustomListItemButton>
+            </ListItem>
+          ))}
+        </List>
+        <Divider />
+      </Box>
     </CustomDrawer>
   );
 };
