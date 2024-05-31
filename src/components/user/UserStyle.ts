@@ -1,4 +1,5 @@
 import { styled } from 'styled-components';
+import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 
 export const ProjectContainer = styled.div`
   border: none;
@@ -19,7 +20,7 @@ export const ProfileContainer = styled.div`
   border: 1px solid none;
   border-radius: 20px;
   background-color: white;
-  width: 30%;
+  width: 28%;
   padding: 25px;
   z-index: 10;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.2);
@@ -38,6 +39,16 @@ export const PointText = styled.p`
   color: #315af1;
   font-size: 16px;
 `;
+export const StyledPointIcon = styled(PointIcon)`
+  width: 40px;
+  -webkit-animation: icon-move 2s ease-in-out infinite;
+  @-webkit-keyframes icon-move {
+    50% {
+      -webkit-transform: rotate(5deg);
+    }
+  }
+`;
+
 export const ProgressBarContainer = styled.div`
   width: 100%;
   background-color: #e0e0e0;
@@ -51,7 +62,34 @@ export const Filler = styled.div<{ percentage: number }>`
   width: ${({ percentage }) => percentage}%;
   background-color: #4285f4;
   border-radius: inherit;
-  transition: width 0.2s ease-in;
+  position: relative;
+  overflow: hidden;
+  transition: width 2s ease-in;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -20;
+    left: 5;
+    width: 100%;
+    height: 10px;
+    background: linear-gradient(
+      90deg,
+      rgba(255, 255, 255, 0) 0%,
+      rgba(255, 255, 255, 0.2) 50%,
+      rgba(255, 255, 255, 0) 100%
+    );
+    animation: shine 2s 10;
+  }
+
+  @keyframes shine {
+    0% {
+      transform: translateX(-20%);
+    }
+    100% {
+      transform: translateX(100%);
+    }
+  }
 `;
 
 export interface ProgressBarProps {

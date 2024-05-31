@@ -1,7 +1,15 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Filler, LinkText, MiddleText, PointText, ProfileContainer, ProgressBarContainer, Title } from './UserStyle';
-import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
+import {
+  Filler,
+  LinkText,
+  MiddleText,
+  PointText,
+  ProfileContainer,
+  ProgressBarContainer,
+  StyledPointIcon,
+  Title,
+} from './UserStyle';
 
 export default function Profile() {
   const [progress] = useState(50);
@@ -20,7 +28,7 @@ export default function Profile() {
       <MiddleText>등급 LV.</MiddleText>
       <div className="flex-col">
         <div className="flex items-center gap-3">
-          <PointIcon style={{ width: '40px' }} />
+          <StyledPointIcon></StyledPointIcon>
           <MiddleText>포인트</MiddleText>
         </div>
         <PointText className="text-center">{} 120000 코어 보유</PointText>

@@ -31,10 +31,12 @@ const StyledLogo = styled(Logo)`
   margin-left: 40px;
 `;
 const StyledUser = styled(User)`
+  height: 100%;
+`;
+const UserContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
-  height: 100%;
   margin-left: auto;
   margin-right: 20px;
 `;
@@ -52,16 +54,22 @@ export const Header = () => {
   const toggleSideBar = (open: boolean) => {
     setSideBarOpen(open);
   };
-  const openProfile = (open: boolean) => {
-    setProfileOpen(open);
+  const handleMouseEnter = () => {
+    setProfileOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setProfileOpen(false);
   };
 
   return (
-    <HeaderContainer>
+    <HeaderContainer onMouseLeave={handleMouseLeave}>
       <StyledMenu onClick={() => toggleSideBar(!sideBarOpen)} />
       <StyledLogo onClick={handleLogoCick} />
-      <StyledUser onClick={() => openProfile(!profileOpen)} />
-      {profileOpen && <Profile />}
+      <UserContainer onMouseEnter={handleMouseEnter}>
+        <StyledUser />
+        {profileOpen && <Profile />}
+      </UserContainer>
       <SideBar open={sideBarOpen} toggleDrawer={toggleSideBar} currentPath={currentPath} />
     </HeaderContainer>
   );

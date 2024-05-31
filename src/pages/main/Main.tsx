@@ -1,11 +1,19 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ReactComponent as ChartIcon } from '../../assets/main_chart.svg';
 import TextField from '@mui/material/TextField';
 import SearchIcon from '@mui/icons-material/Search';
 import { IconButton, InputAdornment } from '@mui/material';
 import Pagination from '@mui/material/Pagination';
-import { GreetingContainer, LinkButton, MainContainer, MainText, OrderButton, PointText, Title } from './MainStyle';
+import {
+  GreetingContainer,
+  LinkButton,
+  MainContainer,
+  MainText,
+  OrderButton,
+  PointText,
+  StyledChartIcon,
+  Title,
+} from './MainStyle';
 import ProjectPreview from '../../components/user/ProjectPreview';
 
 export default function Main() {
@@ -14,7 +22,7 @@ export default function Main() {
     <div className="flex-col cursor-pointer" style={{ margin: '1% 7%' }}>
       <MainContainer>
         <GreetingContainer>
-          <ChartIcon style={{ width: '18%' }} />
+          <StyledChartIcon />
           <div className="flex flex-col" style={{ marginTop: '3%', marginLeft: '4%' }}>
             <PointText className="mt-2">반갑습니다 {}개발자1님</PointText>
             <MainText>
