@@ -7,7 +7,7 @@ export const Container = styled.div`
   position: relative;
   overflow: hidden;
   box-sizing: border-box;
-  padding: 20px;
+  padding: 20px 30px; /* 양 옆에 30px 공간 추가 */
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -17,13 +17,13 @@ export const Container = styled.div`
 export const Title = styled.div`
   color: #4188fe;
   text-align: left;
-  font-family: 'Paybooc-ExtraBold', sans-serif;
   font-size: 28px;
   line-height: 140%;
   font-weight: 800;
   margin-bottom: 20px;
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
+  align-self: center; /* 가운데 정렬 */
 `;
 
 // 네비게이션 스타일
@@ -31,9 +31,10 @@ export const Navigation = styled.div`
   height: 40px;
   margin-bottom: 20px;
   width: 100%;
-  max-width: 800px;
+  max-width: 1000px;
   display: flex;
   justify-content: space-between;
+  align-self: center; /* 가운데 정렬 */
 `;
 
 // 버튼 스타일
@@ -53,7 +54,6 @@ export const Button = styled.div`
 export const ButtonText = styled.div`
   color: #ffffff;
   text-align: left;
-  font-family: 'Paybooc-Bold', sans-serif;
   font-size: 16px;
   line-height: 150%;
   font-weight: 700;
@@ -66,6 +66,7 @@ export const SegmentedControlContainer = styled.div`
   gap: 0px;
   align-items: flex-start;
   justify-content: flex-start;
+  align-self: center; /* 가운데 정렬 */
 `;
 
 // 세그먼트 컨트롤 스타일
@@ -75,10 +76,40 @@ export const SegmentedControl = styled.div`
   padding: 4px;
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: 2vh;
   align-items: flex-start;
   justify-content: flex-start;
   flex-shrink: 0;
+  height: 46px;
+  align-self: center; /* 가운데 정렬 */
+`;
+
+// 카테고리 버튼 컨테이너 스타일
+export const CategoryButtonsContainer = styled(SegmentedControlContainer)`
+  position: relative;
+  display: flex;
+  align-items: center;
+`;
+
+// 카테고리 버튼 스타일
+export const CategoryButton = styled.div<{ active?: boolean }>`
+  background: ${props => (props.active ? '#4188fe' : 'transparent')};
+  border-radius: 4px;
+  height: 40px;
+  display: flex;
+  padding: 0 10px;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: ${props => (props.active ? '#ffffff' : '#000000')};
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 10px;
+
+  &:hover {
+    background: #d1e0fc;
+    color: #4188fe;
+  }
 `;
 
 // 메뉴 아이템 스타일
@@ -87,7 +118,7 @@ interface MenuItemProps {
 }
 
 export const MenuItem = styled.div<MenuItemProps>`
-  padding: 10px;
+  padding: 1vh;
   cursor: pointer;
   background-color: ${props => (props.active ? '#ffffff' : 'transparent')};
   border-radius: 5px;
@@ -97,20 +128,22 @@ export const MenuItem = styled.div<MenuItemProps>`
   &:active {
     background-color: #ffffff;
   }
+  font-size: 15px;
 `;
 
 // 포스트 박스 스타일
 export const PostBox = styled.div`
   background: #ffffff;
   border-radius: 15px;
-  width: 90%;
-  max-width: 800px;
-  padding: 20px;
+  width: 100%;
+  max-width: 1000px;
+  padding: 1vh;
   margin-bottom: 20px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   position: relative;
+  align-self: center; /* 가운데 정렬 */
 `;
 
 export const UserContainer = styled.div`
@@ -144,7 +177,6 @@ export const AuthorContainer = styled.div`
 
 export const Author = styled.div`
   color: #000000;
-  font-family: 'Paybooc-Bold', sans-serif;
   font-size: 16px;
   line-height: 150%;
   font-weight: 700;
@@ -152,7 +184,6 @@ export const Author = styled.div`
 
 export const CreatedAt = styled.div`
   color: #828282;
-  font-family: 'Paybooc-Medium', sans-serif;
   font-size: 14px;
   line-height: 150%;
   font-weight: 500;
@@ -160,7 +191,6 @@ export const CreatedAt = styled.div`
 
 export const ContentContainer = styled.div`
   color: #000000;
-  font-family: 'Paybooc-Medium', sans-serif;
   font-size: 16px;
   line-height: 150%;
   font-weight: 500;
@@ -181,7 +211,6 @@ export const LikesContainer = styled.div`
   align-items: center;
   justify-content: flex-end;
   margin-top: 10px;
-  font-family: 'Paybooc-Medium', sans-serif;
   font-size: 16px;
   line-height: 150%;
   font-weight: 500;
@@ -191,8 +220,29 @@ export const Likes = styled.div`
   margin-right: 5px;
 `;
 
-export const LikeImage = styled.img`
-  width: 20px;
-  height: 20px;
-  object-fit: cover;
+export const LikeButton = styled.button`
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease-in-out;
+
+  &:active {
+    transform: scale(0.9);
+  }
+`;
+
+export const LikeIcon = styled.img`
+  width: 24px;
+  height: 24px;
+`;
+
+export const NoPostsMessage = styled.div`
+  font-size: 16px;
+  color: #828282;
+  text-align: center;
+  margin-top: 20px;
 `;

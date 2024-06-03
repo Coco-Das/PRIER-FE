@@ -9,7 +9,7 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import InboxIcon from '@mui/icons-material/MoveToInbox';
 import MailIcon from '@mui/icons-material/Mail';
-import { styled } from '@mui/material/styles';
+import { styled, keyframes } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 
 interface SideBarProps {
@@ -29,11 +29,20 @@ interface CustomListItemButtonProps extends ListItemButtonProps {
   current: boolean;
 }
 
+const tilt = keyframes`
+  0% { transform: rotate(0deg); }
+  50% { transform: rotate(-10deg); }
+  100% { transform: rotate(0deg); }
+`;
+
 const CustomListItemButton = styled(ListItemButton, {
   shouldForwardProp: (prop: any) => prop !== 'current',
 })<CustomListItemButtonProps>(({ theme, current }) => ({
   '&:hover': {
     backgroundColor: '#D1E0FC',
+    '& .MuiListItemIcon-root': {
+      animation: `${tilt} 0.3s`,
+    },
   },
   backgroundColor: current ? '#D1E0FC' : 'inherit',
 }));
@@ -47,13 +56,11 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
   const menuItems = [
     { text: '프로젝트 리스트', path: '/main' },
     { text: '테스트 생성하기', path: '/createtest' },
-    { text: 'IT 소식', path: '/board' },
-    { text: '잡담/일상', path: '/board' },
-    { text: '기술', path: '/board' },
-    { text: '인턴/공모전', path: '/board' },
-    { text: '공지사항', path: '/board' },
+    { text: '테스트한 프로젝트', path: '/testlist' },
+    { text: '커뮤니티', path: '/board' },
+    { text: '상점', path: '/store' },
     { text: '마이페이지', path: '/mypage' },
-    { text: '로그아웃', path: '/login' },
+    { text: '로그아웃', path: '/' },
   ];
   const handleNavigation = (path: string) => {
     navigate(path);
