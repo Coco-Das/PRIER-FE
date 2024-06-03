@@ -96,4 +96,21 @@ export interface ProgressBarProps {
   percentage: number;
 }
 
-export const ReviewContainer = styled.div``;
+export const ReviewContainer = styled.div`
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.2);
+  backgroud-color: white;
+  width: 100%;
+  padding: 20px;
+`;
+
+export const ReviewProject = styled.h1`
+  font-size: 22px;
+  margin-top: 5%;
+`;
+
+export const ReviewTeam = styled.h2`
+  color: #315af1;
+  font-size: 18px;
+`;
