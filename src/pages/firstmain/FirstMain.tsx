@@ -26,7 +26,7 @@ import {
 import { Text2, Text3 } from './FirstMainContainer2Styles';
 const GlobalStyle = createGlobalStyle`
   body {
-    background-color: #1d2732; /* 원하는 배경색으로 설정 */
+    background-color: #1C2631; /* 원하는 배경색으로 설정 */
     margin: 0;
     padding: 0;
     box-sizing: border-box;
