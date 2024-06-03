@@ -47,11 +47,9 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
   const menuItems = [
     { text: '프로젝트 리스트', path: '/main' },
     { text: '테스트 생성하기', path: '/createtest' },
-    { text: 'IT 소식', path: '/board' },
-    { text: '잡담/일상', path: '/board' },
-    { text: '기술', path: '/board' },
-    { text: '인턴/공모전', path: '/board' },
-    { text: '공지사항', path: '/board' },
+    { text: '테스트한 리스트', path: '/testlist' },
+    { text: '커뮤니티', path: '/board' },
+    { text: '상점', path: '/store' },
     { text: '마이페이지', path: '/mypage' },
     { text: '로그아웃', path: '/login' },
   ];
