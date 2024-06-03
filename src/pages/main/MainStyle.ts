@@ -130,3 +130,63 @@ export const OrderButton = styled.button<OrderButtonProps>`
   background-color: ${props => (props.active ? '#315af1' : '#f0f0f0')};
   color: ${props => (props.active ? '#ffffff' : '#000000')};
 `;
+
+export const SearchInputWrapper = styled.div`
+  input {
+    position: relative;
+    background: none;
+    border: none;
+    outline: none;
+    width: 160px;
+    padding: 0;
+    z-index: 1;
+    overflow: hidden;
+    line-height: 18px;
+    margin: 5px 0;
+    font-size: 18px;
+    -webkit-appearance: none;
+    transition: all 0.6s ease;
+    cursor: pointer;
+    & + div {
+      position: relative;
+      height: 28px;
+      width: 100%;
+      margin: -28px 0 0 0;
+      svg {
+        display: block;
+        position: absolute;
+        height: 28px;
+        width: 160px;
+        right: 0;
+        top: 0;
+        fill: none;
+        stroke: #315AF1;
+        stroke-width: 1.5px;
+        stroke-dashoffset: 212.908 + 59;
+        stroke-dasharray: 59 212.908;
+        transition: all 0.6s ease;
+      }
+    }
+
+    &:focus {
+      width: 160px;
+      padding: 0 4px;
+      cursor: text;
+      & + div {
+        svg {
+          stroke-dasharray: 150 212.908;
+          stroke-dashoffset: 300;
+        }
+      }
+    }
+  }
+}
+
+* {
+  box-sizing: inherit;
+  &:before,
+  &:after {
+    box-sizing: inherit;
+  }
+}
+}`;
