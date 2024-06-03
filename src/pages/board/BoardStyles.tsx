@@ -191,8 +191,22 @@ export const Likes = styled.div`
   margin-right: 5px;
 `;
 
-export const LikeImage = styled.img`
-  width: 20px;
-  height: 20px;
-  object-fit: cover;
+export const LikeButton = styled.button`
+  border: none;
+  background: none;
+  padding: 0;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.1s ease-in-out;
+
+  &:active {
+    transform: scale(0.9);
+  }
+`;
+
+export const LikeIcon = styled.img`
+  width: 24px;
+  height: 24px;
 `;

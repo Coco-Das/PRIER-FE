@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+
 import {
   Container,
   Title,
@@ -20,9 +21,12 @@ import {
   Image,
   LikesContainer,
   Likes,
-  LikeImage,
+  LikeButton,
+  LikeIcon,
 } from './BoardStyles';
 import userAvatar from '../../assets/user.svg';
+import UnLike from '../../assets/UnLike.svg';
+import Like from '../../assets/Like.svg';
 
 // 게시물과 카테고리 인터페이스 정의
 interface Post {
@@ -463,12 +467,20 @@ const categories: Category[] = [
 const Board: React.FC = () => {
   const { categoryId } = useParams<{ categoryId: string }>();
   const [activeCategory, setActiveCategory] = useState<string>(categoryId || 'it-news');
+  const [likedPosts, setLikedPosts] = useState<{ [key: number]: boolean }>({});
 
   useEffect(() => {
     if (categoryId) {
       setActiveCategory(categoryId);
     }
   }, [categoryId]);
+
+  const toggleLike = (postId: number) => {
+    setLikedPosts(prevLikedPosts => ({
+      ...prevLikedPosts,
+      [postId]: !prevLikedPosts[postId],
+    }));
+  };
 
   const filteredPosts = posts.filter(post => post.category === activeCategory);
 
@@ -508,7 +520,9 @@ const Board: React.FC = () => {
           <Image src="image.png" alt="Content" />
           <LikesContainer>
             <Likes>{post.likes} likes</Likes>
-            <LikeImage src="like.png" alt="Like" />
+            <LikeButton onClick={() => toggleLike(post.id)}>
+              <LikeIcon src={likedPosts[post.id] ? Like : UnLike} alt="like/unlike" />
+            </LikeButton>
           </LikesContainer>
         </PostBox>
       ))}
