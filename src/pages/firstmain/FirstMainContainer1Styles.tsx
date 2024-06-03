@@ -24,6 +24,7 @@ export const FirstContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   overflow: hidden;
   position: relative; /* 자식 요소의 절대 위치를 위한 상대 위치 */
 `;
@@ -31,7 +32,7 @@ export const FirstContainer = styled.div`
 export const Logo = styled(logo)`
   width: 30rem;
   height: 10rem;
-  margin-top: 15rem;
+  margin-top: -10rem;
   position: relative;
 `;
 export const Text = styled.h1`

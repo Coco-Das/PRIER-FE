@@ -23,7 +23,8 @@ import {
   StartButton,
   Text,
 } from './FirstMainContainer1Styles';
-import { Text2, Text3 } from './FirstMainContainer2Styles';
+import { Text2, Text3, Project1, Project2 } from './FirstMainContainer2Styles';
+import { ThirdContainer, Text4, Review1, Review2, Review3, Review4, Review5 } from './FirstMainContainer3Styles';
 const GlobalStyle = createGlobalStyle`
   body {
     background-color: #1C2631; /* 원하는 배경색으로 설정 */
@@ -58,9 +59,25 @@ function FirstMain() {
       </FirstContainer>
       <FirstContainer>
         <Text2>프리어와 함께하는 프로젝트</Text2>
-        <Text3>다양한 카테고리의 프로젝트들이 1,536개</Text3>
-        <Text3>등록되고 있습니다.</Text3>
+        <Text3>
+          다양한 카테고리의 프로젝트들이 1,536개 <br />
+          등록되고 있습니다.
+        </Text3>
+        <Project1 />
+        <Project2 />
       </FirstContainer>
+      <ThirdContainer>
+        <Text2>실시간으로 등록되는 리뷰들</Text2>
+        <Text4>
+          디자이너, 기획자,개발자 등 <br />
+          다양한 사람들이 함께하고 있어요!
+        </Text4>
+        <Review3 />
+        <Review4 />
+        <Review1 />
+        <Review2 />
+        <Review5 />
+      </ThirdContainer>
     </>
   );
 }

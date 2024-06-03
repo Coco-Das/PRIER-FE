@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import * as React from 'react';
+import { ReactComponent as ProjectImg1 } from '../../assets/ProjectImg1.svg';
+import { ReactComponent as ProjectImg2 } from '../../assets/ProjectImg2.svg';
 
 export const Text2 = styled.h1`
   position: relative;
@@ -27,7 +29,18 @@ export const Text3 = styled.h1`
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   text-align: left;
-  font-size: 28px;
-  font-weight: 800;
+  font-size: 20px;
+  font-weight: 600;
   margin-bottom: 3rem;
+`;
+
+export const Project1 = styled(ProjectImg1)`
+  position: absolute;
+  left: 12rem;
+  top: 20rem;
+`;
+export const Project2 = styled(ProjectImg2)`
+  position: absolute;
+  right: 12rem;
+  top: 35rem;
 `;
