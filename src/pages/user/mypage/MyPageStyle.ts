@@ -1,5 +1,7 @@
 import { styled } from 'styled-components';
 import { ReactComponent as UserIcon } from '../../../assets/userProfile.svg';
+import { ReactComponent as ChartIcon } from '../../../assets/main_chart.svg';
+import { ReactComponent as GraphIcon } from '../../../assets/Graph.svg';
 export const ProfileContainer = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -67,7 +69,77 @@ export const StepLine = styled.div`
 export const ProjectContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 70%;
+  width: 75%;
   margin-right: 20px;
 `;
-export const ReviewContainer = styled.div``;
+export const LinkProject = styled.div`
+  width: 100%;
+  max-width: 280px;
+  height: auto;
+  border: none;
+  border-radius: 15px;
+  background-color: white;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.2);
+  padding: 10px;
+  margin-bottom: 20px;
+`;
+export const FeedbackContainer = styled.div`
+  background-color: #e8e0f1;
+  height: 50%;
+  width: 100%;
+  max-width: 280px;
+  border: none;
+  border-radius: 15px;
+  padding: 20px;
+`;
+export const StaticContainer = styled.div`
+  background-color: #f3f5fb;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 80%;
+  max-width: 320px;
+  border: none;
+  border-radius: 15px;
+  padding: 20px;
+  margin-right: 20px;
+`;
+export const AIReport = styled.div`
+  background-color: #e1f9f0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  max-width: 320px;
+  height: 80%;
+  border: none;
+  border-radius: 15px;
+  padding: 20px;
+`;
+
+export const ReviewWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 25%;
+  max-width: 25%;
+`;
+export const TitleText = styled.h2`
+  font-weight: 700;
+  font-size: 20px;
+`;
+export const DetailText = styled.p`
+  color: #828282;
+  font-size: 16px;
+`;
+export const PointText = styled.h1`
+  font-weight: 700;
+  font-size: 30px;
+`;
+export const StyledChartIcon = styled(ChartIcon)`
+  width: 100px;
+  transform: scaleX(-1);
+  justify-content: flex-end;
+`;
+export const StyledGraphIcon = styled(GraphIcon)`
+  margin: 0px;
+  width: 45px;
+`;

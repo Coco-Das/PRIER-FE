@@ -1,18 +1,28 @@
 import React from 'react';
 import {
+  AIReport,
+  DetailText,
+  FeedbackContainer,
   IntroduceContainer,
+  LinkProject,
+  PointText,
   ProfileContainer,
   ProfileTextContainer,
   ProjectContainer,
   QuestContainer,
-  ReviewContainer,
+  ReviewWrapper,
+  StaticContainer,
   Step,
   StepCircle,
   StepLabel,
   StepLine,
   StepsContainer,
+  StyledChartIcon,
+  StyledGraphIcon,
   StyledUserIcon,
+  TitleText,
 } from './MyPageStyle';
+import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
 import { LinkText, MiddleText } from '../../../components/user/UserStyle';
 import { Link } from 'react-router-dom';
@@ -72,18 +82,52 @@ function MyPage() {
           </QuestContainer>
         </div>
       </div>
-      <div className="flex items-center">
+      <div className="flex justify-between mt-5">
         <ProjectContainer>
-          <Title>진행 중인 프로젝트</Title>
-          <Link to="/testlist">
-            <LinkText className="text-end">전체 프로젝트 &gt;</LinkText>
-          </Link>
-          <div className="flex"></div>
+          <div className="flex items-baseline justify-between">
+            <Title>진행 중인 프로젝트</Title>
+            <Link to="/testlist">
+              <LinkText>전체 프로젝트 &gt;</LinkText>
+            </Link>
+          </div>
+          <div className="flex ">
+            <div className="flex-col mr-5">
+              <Link to="/createtest">
+                <LinkProject>
+                  <div className="flex items-center gap-3">
+                    <TeamProfile />
+                    <p className="text-lg">COCODAS</p>
+                  </div>
+                  <p className="text-gray-600 text-center mt-2">웹 IDE 프로젝트</p>
+                </LinkProject>
+              </Link>
+              <FeedbackContainer>
+                <TitleText>제출된 피드백</TitleText>
+                <PointText>34</PointText>
+                <DetailText>+ {} 34개의 피드백이 추가로 제출되었습니다.</DetailText>
+                <LinkText className="text-end">모아보기 &gt;</LinkText>
+              </FeedbackContainer>{' '}
+            </div>
+            <StaticContainer>
+              <TitleText>통계</TitleText>
+              <PointText>평점</PointText>
+              <DetailText>평점 4의 별점</DetailText>
+              <StyledChartIcon></StyledChartIcon>
+            </StaticContainer>
+            <AIReport>
+              <div className="flex gap-4">
+                <TitleText>AI 분석 Report</TitleText>
+                <StyledGraphIcon></StyledGraphIcon>
+              </div>
+            </AIReport>
+          </div>
         </ProjectContainer>
-        <ReviewContainer>
-          <Title>{}개발자 1님의 리뷰</Title>
-          <MyReview />
-        </ReviewContainer>
+        <ReviewWrapper>
+          <Title>개발자 1님의 리뷰</Title>
+          <ul>
+            <MyReview />
+          </ul>
+        </ReviewWrapper>
       </div>
     </div>
   );
