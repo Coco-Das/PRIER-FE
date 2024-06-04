@@ -1,4 +1,3 @@
-import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Layout } from './Layout';
 import Main from '../pages/main/Main';
@@ -7,13 +6,15 @@ import Login from '../pages/user/login/Login';
 import Register from '../pages/user/register/Register';
 import Store from '../pages/user/store/Store';
 import MyPage from '../pages/user/mypage/MyPage';
-import CreateTest from '../pages/test/createTest/CreateTest';
 import Feedback from '../pages/test/feedback/Feedback';
 import ResponseTest from '../pages/test/responseTest/ResponseTest';
 import TestList from '../pages/test/testList/TestList';
 import CreateBoard from '../pages/board/CreateBoard';
 import MyBoard from '../pages/board/MyBoard';
 import Board from '../pages/board/Board';
+import Community from '../pages/board/Community';
+import { CreateTest } from '../pages/test/createTest/CreateTest';
+
 const router = createBrowserRouter([
   {
     path: '/',
