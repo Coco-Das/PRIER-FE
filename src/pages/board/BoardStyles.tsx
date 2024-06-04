@@ -74,9 +74,9 @@ export const SegmentedControl = styled.div`
   background: #e1f9f0;
   border-radius: 8px;
   padding: 4px;
+  gap: 5px;
   display: flex;
   flex-direction: row;
-  gap: 2vh;
   align-items: flex-start;
   justify-content: flex-start;
   flex-shrink: 0;
@@ -104,7 +104,7 @@ export const CategoryButton = styled.div<{ active?: boolean }>`
   color: ${props => (props.active ? '#ffffff' : '#000000')};
   font-weight: 500;
   cursor: pointer;
-  margin-left: 10px;
+  margin-left: 5px;
 
   &:hover {
     background: #d1e0fc;
@@ -165,8 +165,8 @@ export const Avatar = styled.div`
 `;
 
 export const AvatarImage = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
   object-fit: cover;
 `;
 

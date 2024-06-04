@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   Container,
   Title,
@@ -26,6 +28,8 @@ import {
   NoPostsMessage,
 } from './BoardStyles';
 import { posts as initialPosts, Post } from '../../states/board/BoardStore';
+import SearchInput from '../../components/SearchInput';
+import PaginationComponent from '../../components/PaginationComponent';
 import userAvatar from '../../assets/user.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
@@ -105,7 +109,8 @@ const Board: React.FC = () => {
             My Posts
           </CategoryButton>
         </CategoryButtonsContainer>
-        <Button>
+        <SearchInput />
+        <Button as={Link} to="/CreateBoard">
           <ButtonText>새 글 작성하기</ButtonText>
         </Button>
       </Navigation>
@@ -132,8 +137,9 @@ const Board: React.FC = () => {
           </PostBox>
         ))
       ) : (
-        <NoPostsMessage>해당 posts가 없습니다.</NoPostsMessage>
+        <NoPostsMessage>해당 포스트가 없습니다.</NoPostsMessage>
       )}
+      <PaginationComponent />
     </Container>
   );
 };

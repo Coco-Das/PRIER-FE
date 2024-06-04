@@ -14,7 +14,6 @@ import TestList from '../pages/test/testList/TestList';
 import CreateBoard from '../pages/board/CreateBoard';
 import MyBoard from '../pages/board/MyBoard';
 import Board from '../pages/board/Board';
-import Community from '../pages/board/Community';
 const router = createBrowserRouter([
   {
     path: '/',
@@ -66,10 +65,6 @@ const router = createBrowserRouter([
       {
         path: '/MyBoard',
         element: <MyBoard />,
-      },
-      {
-        path: '/Community',
-        element: <Community />,
       },
     ],
   },
