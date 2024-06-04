@@ -41,6 +41,7 @@ export const PointText = styled.p`
 `;
 export const StyledPointIcon = styled(PointIcon)`
   width: 40px;
+  height: 40px;
   -webkit-animation: icon-move 1s ease-in-out 3;
   @-webkit-keyframes icon-move {
     50% {
@@ -95,6 +96,7 @@ export const Filler = styled.div<{ percentage: number }>`
 export interface ProgressBarProps {
   percentage: number;
 }
+// 리뷰
 
 export const ReviewContainer = styled.div`
   border: none;
@@ -113,4 +115,45 @@ export const ReviewProject = styled.h1`
 export const ReviewTeam = styled.h2`
   color: #315af1;
   font-size: 18px;
+`;
+
+//기프티콘
+export const GifticonContainer = styled.div`
+  display: flex;
+  width: 50%;
+  max-height: 20%;
+  padding: 20px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
+`;
+export const GiftTextWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  gap: 1em;
+`;
+
+export const GiftImg = styled.img`
+  width: 40%;
+  margin-right: 20px;
+`;
+
+export const SoldOutContainer = styled.div`
+  display: flex;
+  width: 50%;
+  max-height: 20%;
+  padding: 20px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
+  backdrop-filter: blur(10px);
+`;
+export const SoldOutFlag = styled.div`
+  border: none;
+  border-radius: 20px;
+  width: 40px;
+  padding: 10px;
+  background-color: #f55b66 55%;
+  color: #a4000c;
 `;
