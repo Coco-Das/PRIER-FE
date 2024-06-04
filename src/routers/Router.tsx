@@ -12,7 +12,6 @@ import TestList from '../pages/test/testList/TestList';
 import CreateBoard from '../pages/board/CreateBoard';
 import MyBoard from '../pages/board/MyBoard';
 import Board from '../pages/board/Board';
-import Community from '../pages/board/Community';
 import { CreateTest } from '../pages/test/createTest/CreateTest';
 
 const router = createBrowserRouter([

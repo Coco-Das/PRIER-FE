@@ -40,7 +40,6 @@ export const ProjectTextArea = styled.div`
 export const Textarea = styled.textarea`
   width: 100%;
   outline: none;
-  border: 1px solid black;
   padding: 10px;
   font-size: 16px;
   font-family: inherit;
@@ -68,9 +67,8 @@ export const StyledInput = styled.input`
 export const StyledImg = styled.img`
   margin-top: 10px;
   max-width: 100%;
-  height: auto;
-  /* width: 300px; 원하는 너비로 조정 */
-  height: 300px; /* 원하는 높이로 조정 */
+  width: 400px;
+  height: 300px;
 `;
 
 export const ImageWrapper = styled.div`
