@@ -165,8 +165,8 @@ export const Avatar = styled.div`
 `;
 
 export const AvatarImage = styled.img`
-  width: 100%;
-  height: 100%;
+  width: 90%;
+  height: 90%;
   object-fit: cover;
 `;
 

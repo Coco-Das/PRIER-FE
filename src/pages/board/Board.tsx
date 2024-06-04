@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   Container,
   Title,
@@ -108,7 +110,7 @@ const Board: React.FC = () => {
           </CategoryButton>
         </CategoryButtonsContainer>
         <SearchInput />
-        <Button>
+        <Button as={Link} to="/CreateBoard">
           <ButtonText>새 글 작성하기</ButtonText>
         </Button>
       </Navigation>
