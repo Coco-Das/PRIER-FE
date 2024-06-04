@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
+
 import {
   Container,
   CreateContainer,
@@ -8,6 +10,11 @@ import {
   AvatarImage,
   AuthorContainer,
   Author,
+  Button,
+  ButtonText,
+  ContentContainer,
+  Title,
+  ContentText,
 } from './CreateBoardStyles';
 import userAvatar from '../../assets/user.svg';
 import Select, { selectClasses } from '@mui/joy/Select';
@@ -15,6 +22,9 @@ import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 
 function CreateBoard() {
+  const [title, setTitle] = useState('');
+  const [content, setContent] = useState('');
+
   return (
     <Container>
       <CreateContainer>
@@ -49,7 +59,14 @@ function CreateBoard() {
               <Author>개발자1</Author>
             </AuthorContainer>
           </UserContainer>
+          <ContentContainer>
+            <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
+            <ContentText placeholder="내용을 입력하세요" value={content} onChange={e => setContent(e.target.value)} />
+          </ContentContainer>
         </PostBox>
+        <Button as={Link} to="/CreateBoard" className="ml-auto">
+          <ButtonText>완료</ButtonText>
+        </Button>
       </CreateContainer>
     </Container>
   );
