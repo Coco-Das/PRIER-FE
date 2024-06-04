@@ -1,10 +1,14 @@
+import * as React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Menu } from '../../assets/Menu.svg';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
 import { ReactComponent as User } from '../../assets/user.svg';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
+import SideBar from './SideBar';
+import Profile from '../user/Profile';
 
 const HeaderContainer = styled.nav`
+  position: relative;
   height: 64px; // 16px * 4
   display: flex;
   align-items: center;
@@ -27,24 +31,46 @@ const StyledLogo = styled(Logo)`
   margin-left: 40px;
 `;
 const StyledUser = styled(User)`
+  height: 100%;
+`;
+const UserContainer = styled.div`
   &:hover {
     cursor: pointer;
   }
-  height: 100%;
   margin-left: auto;
   margin-right: 20px;
 `;
 
 export const Header = () => {
+  const [sideBarOpen, setSideBarOpen] = React.useState(false);
+  const [profileOpen, setProfileOpen] = React.useState(false);
   const navigate = useNavigate();
+  const location = useLocation();
+  const currentPath = location.pathname;
+
   const handleLogoCick = () => {
     navigate('/main');
   };
+  const toggleSideBar = (open: boolean) => {
+    setSideBarOpen(open);
+  };
+  const handleMouseEnter = () => {
+    setProfileOpen(true);
+  };
+
+  const handleMouseLeave = () => {
+    setProfileOpen(false);
+  };
+
   return (
-    <HeaderContainer>
-      <StyledMenu />
+    <HeaderContainer onMouseLeave={handleMouseLeave}>
+      <StyledMenu onClick={() => toggleSideBar(!sideBarOpen)} />
       <StyledLogo onClick={handleLogoCick} />
-      <StyledUser />
+      <UserContainer onMouseEnter={handleMouseEnter}>
+        <StyledUser />
+        {profileOpen && <Profile />}
+      </UserContainer>
+      <SideBar open={sideBarOpen} toggleDrawer={toggleSideBar} currentPath={currentPath} />
     </HeaderContainer>
   );
 };

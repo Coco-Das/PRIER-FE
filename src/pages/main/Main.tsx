@@ -1,26 +1,27 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { ReactComponent as ChartIcon } from '../../assets/main_chart.svg';
-import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
-import TextField from '@mui/material/TextField';
-import SearchIcon from '@mui/icons-material/Search';
-import { IconButton, InputAdornment } from '@mui/material';
+import Pagination from '@mui/material/Pagination';
 import {
   GreetingContainer,
   LinkButton,
   MainContainer,
   MainText,
+  OrderButton,
   PointText,
-  ProjectContainer,
+  SearchInputWrapper,
+  StyledChartIcon,
   Title,
 } from './MainStyle';
+import ProjectPreview from '../../components/board/ProjectPreview';
 
 export default function Main() {
+  const [activeButton, setActiveButton] = useState('인기순');
+
   return (
-    <div className="flex-col" style={{ margin: '1% 7%' }}>
+    <div className="flex-col cursor-pointer" style={{ margin: '1% 7%' }}>
       <MainContainer>
         <GreetingContainer>
-          <ChartIcon style={{ width: '18%' }} />
+          <StyledChartIcon />
           <div className="flex flex-col" style={{ marginTop: '3%', marginLeft: '4%' }}>
             <PointText className="mt-2">반갑습니다 {}개발자1님</PointText>
             <MainText>
@@ -28,34 +29,45 @@ export default function Main() {
               여기, 사용자와 함께 성장하는 첫 걸음을 내딛을 수 있는 공간입니다.
             </MainText>
             <LinkButton>
-              <Link to="createTest">지금 바로 등록하기</Link>
+              <Link to="/createtest">지금 바로 등록하기</Link>
             </LinkButton>
           </div>
         </GreetingContainer>
       </MainContainer>
       <Title>신규 프로젝트</Title>
-      <ProjectContainer>
-        <TeamProfile />
-      </ProjectContainer>
+      <ProjectPreview />
       <Title>모든 프로젝트</Title>
-      <div className="flex justify-between">
-        <div>
-          <button>인기순</button>
-          <button>등록순</button>
+      <div className="flex justify-between mb-2">
+        <div className="flex gap-2">
+          <OrderButton active={activeButton === '인기순'} onClick={() => setActiveButton('인기순')}>
+            인기순
+          </OrderButton>
+          <OrderButton active={activeButton === '등록순'} onClick={() => setActiveButton('등록순')}>
+            등록순
+          </OrderButton>
         </div>
-        <TextField
-          variant="standard"
-          InputProps={{
-            endAdornment: (
-              <InputAdornment position="end">
-                <IconButton type="button" sx={{ p: '10px' }} aria-label="search">
-                  <SearchIcon />
-                </IconButton>
-              </InputAdornment>
-            ),
-          }}
-        />
+
+        <SearchInputWrapper>
+          <input type="text" placeholder=" " />
+          <div>
+            <svg>
+              <use xlinkHref="#path"></use>
+            </svg>
+          </div>
+        </SearchInputWrapper>
       </div>
+      <ProjectPreview />
+      <span className="flex justify-center mt-6">
+        <Pagination count={5} color="primary" size="large" />
+      </span>
+      <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
+        <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 28" id="path">
+          <path
+            d="M32.9418651,-20.6880772 C37.9418651,-20.6880772 40.9418651,-16.6880772 40.9418651,-12.6880772 C40.9418651,-8.68807717 37.9418651,-4.68807717 32.9418651,-4.68807717 C27.9418651,-4.68807717 24.9418651,-8.68807717 24.9418651,-12.6880772 C24.9418651,-16.6880772 27.9418651,-20.6880772 32.9418651,-20.6880772 L32.9418651,-29.870624 C32.9418651,-30.3676803 33.3448089,-30.770624 33.8418651,-30.770624 C34.08056,-30.770624 34.3094785,-30.6758029 34.4782612,-30.5070201 L141.371843,76.386562"
+            transform="translate(83.156854, 22.171573) rotate(-225.000000) translate(-83.156854, -22.171573)"
+          ></path>
+        </symbol>
+      </svg>
     </div>
   );
 }
