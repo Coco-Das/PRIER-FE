@@ -98,10 +98,10 @@ export const KakaoContainer = styled.button`
   border: none;
   border-radius: 12px;
   width: 90%;
-  gap: 10px;
+  gap: 8px;
   background-color: #fee500;
   padding: 15px;
-  font-size: 18px;
+  font-size: 20px;
   cursor: pointer;
   transition: background-color 0.3s;
 
@@ -117,7 +117,7 @@ export const KakaoContainer = styled.button`
 export const KakaoText = styled.p`
   color: #000000 85%;
   margin: 0;
-  font-family: san-serif;
+  font-family: 'Noto Sans KR';
 `;
 
 export const StyledLogoIcon = styled(LogoIcon)`
