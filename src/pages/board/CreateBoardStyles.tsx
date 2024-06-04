@@ -3,7 +3,7 @@ import styled from 'styled-components';
 export const Container = styled.div`
   background: #f3f6fd;
   width: 100%;
-  height: 90vh;
+  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   align-self: center;
@@ -26,7 +26,7 @@ export const PostBox = styled.div`
   border-radius: 15px;
   width: 100%;
   max-width: 1000px;
-  min-height: 450px;
+  min-height: 65vh;
   padding: 1vh;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
