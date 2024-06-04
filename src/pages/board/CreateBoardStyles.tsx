@@ -65,6 +65,7 @@ export const AvatarImage = styled.img`
 export const AuthorContainer = styled.div`
   display: flex;
   flex-direction: column;
+  margin-right: 10vh;
 `;
 
 export const Author = styled.div`

@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-
 import {
   Container,
   CreateContainer,
@@ -20,6 +19,7 @@ import userAvatar from '../../assets/user.svg';
 import Select, { selectClasses } from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
+import ToggleGroupToolbar from '../../components/board/ToggleGroupToolbar'; // ToggleGroupToolbar 컴포넌트를 올바르게 가져오기
 
 function CreateBoard() {
   const [title, setTitle] = useState('');
@@ -58,6 +58,8 @@ function CreateBoard() {
             <AuthorContainer>
               <Author>개발자1</Author>
             </AuthorContainer>
+            {/* 여기에 ToggleGroupToolbar 컴포넌트를 추가 */}
+            <ToggleGroupToolbar />
           </UserContainer>
           <ContentContainer>
             <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
