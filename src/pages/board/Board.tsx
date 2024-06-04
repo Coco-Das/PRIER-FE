@@ -28,11 +28,12 @@ import {
   NoPostsMessage,
 } from './BoardStyles';
 import { posts as initialPosts, Post } from '../../states/board/BoardStore';
-import SearchInput from '../../components/SearchInput';
-import PaginationComponent from '../../components/PaginationComponent';
+import SearchInput from '../../components/board/SearchInput';
+import PaginationComponent from '../../components/board/PaginationComponent';
 import userAvatar from '../../assets/user.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
+import PostSkeleton from '../../components/board/PostSkeleton';
 
 const categoryLabels: { [key: string]: string } = {
   'it-news': 'IT 지식',
@@ -45,9 +46,10 @@ const categoryLabels: { [key: string]: string } = {
 const Board: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('it-news');
   const [activeFilter, setActiveFilter] = useState<string>('all');
-  const [posts, setPosts] = useState<Post[]>(initialPosts);
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>(initialPosts);
+  const [posts, setPosts] = useState<Post[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [title, setTitle] = useState<string>('Community');
+  const [loading, setLoading] = useState<boolean>(true);
 
   const toggleLike = (postId: number) => {
     setPosts(prevPosts => {
@@ -66,6 +68,15 @@ const Board: React.FC = () => {
     setActiveFilter(filter);
     setTitle(filter === 'all' ? 'Community' : filter === 'likes' ? 'Likes' : 'My Posts');
   };
+
+  useEffect(() => {
+    // 로딩 지연을 시뮬레이션
+    setLoading(true);
+    setTimeout(() => {
+      setPosts(initialPosts);
+      setLoading(false);
+    }, 2000); // 지연 시간을 조정하세요
+  }, []);
 
   useEffect(() => {
     let updatedPosts = [...posts].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
@@ -114,7 +125,13 @@ const Board: React.FC = () => {
           <ButtonText>새 글 작성하기</ButtonText>
         </Button>
       </Navigation>
-      {filteredPosts.length > 0 ? (
+      {loading ? (
+        <>
+          <PostSkeleton />
+          <PostSkeleton />
+          <PostSkeleton />
+        </>
+      ) : filteredPosts.length > 0 ? (
         filteredPosts.map(post => (
           <PostBox key={post.boardId}>
             <UserContainer>

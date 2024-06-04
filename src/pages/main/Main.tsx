@@ -12,7 +12,7 @@ import {
   StyledChartIcon,
   Title,
 } from './MainStyle';
-import ProjectPreview from '../../components/board/ProjectPreview';
+import ProjectPreview from '../../components/user/ProjectPreview';
 
 export default function Main() {
   const [activeButton, setActiveButton] = useState('인기순');
