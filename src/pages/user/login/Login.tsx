@@ -13,6 +13,7 @@ import {
   ScrollerItem,
 } from './LoginStyle';
 import KAKAO from '../../../assets/kakao.png';
+import { KAKAO_AUTH_URL } from '../../../services/LoginApi';
 
 function Login() {
   const messages = [
@@ -26,6 +27,9 @@ function Login() {
     ' 당신의 열정을, ',
     ' 당신의 도전을, ',
   ];
+  const handleKakaoLogin = () => {
+    window.location.href = KAKAO_AUTH_URL;
+  };
   return (
     <LoginWrapper>
       <Container>
@@ -48,7 +52,7 @@ function Login() {
             반갑습니다.<br></br>
             <span className="font-bold">프로젝트 리뷰어 &quot; 프리어 &quot; </span>입니다.
           </LoginText>
-          <KakaoContainer>
+          <KakaoContainer onClick={handleKakaoLogin}>
             <img src={KAKAO} />
             <KakaoText>카카오로 시작하기</KakaoText>
           </KakaoContainer>
