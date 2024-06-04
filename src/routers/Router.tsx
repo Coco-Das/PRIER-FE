@@ -3,7 +3,7 @@ import { Layout } from './Layout';
 import Main from '../pages/main/Main';
 import FirstMain from '../pages/firstmain/FirstMain';
 import Login from '../pages/user/login/Login';
-import Register from '../pages/user/register/Register';
+import KakaoLoading from '../pages/user/auth/KakaoLoading';
 import Store from '../pages/user/store/Store';
 import MyPage from '../pages/user/mypage/MyPage';
 import Feedback from '../pages/test/feedback/Feedback';
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         element: <FirstMain />,
       },
       { path: '/login', element: <Login /> },
-      { path: '/register', element: <Register /> },
+      { path: '/kakao/callback', element: <KakaoLoading /> },
       {
         path: '/mypage',
         element: <MyPage />,
