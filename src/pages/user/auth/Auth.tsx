@@ -1,7 +1,5 @@
 import React from 'react';
 
-function Register() {
+export default function Auth() {
   return <div></div>;
 }
-
-export default Register;
