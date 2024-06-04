@@ -24,7 +24,7 @@ import {
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
-import { LinkText, MiddleText } from '../../../components/board/UserStyle';
+import { LinkText, MiddleText } from '../../../components/user/UserStyle';
 import { Link } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
 

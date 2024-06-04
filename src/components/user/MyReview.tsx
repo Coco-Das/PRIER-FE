@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReviewContainer, ReviewProject, ReviewTeam } from '../board/UserStyle';
+import { ReviewContainer, ReviewProject, ReviewTeam } from './UserStyle';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';

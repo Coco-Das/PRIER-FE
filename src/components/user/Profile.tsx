@@ -9,7 +9,7 @@ import {
   ProgressBarContainer,
   StyledPointIcon,
   Title,
-} from '../board/UserStyle';
+} from './UserStyle';
 
 export default function Profile() {
   const [progress] = useState(50);
