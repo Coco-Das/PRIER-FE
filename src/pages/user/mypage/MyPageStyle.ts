@@ -23,12 +23,18 @@ export const ProfileText = styled.h2`
   font-size: 19px;
   font-weight: 600;
   margin-right: 20px;
+  cursor: default;
 `;
 export const CorrectText = styled.p`
   font-size: 15px;
   font-weight: 300;
   color: #828282;
   margin-right: 20px;
+  cursor: pointer;
+  &:hover {
+    color: #5a4d43;
+    font-weight: 400;
+  }
 `;
 export const ProfileAccountContainer = styled.div`
   display: flex;
@@ -59,6 +65,7 @@ export const StepsContainer = styled.div`
   display: flex;
   align-items: center;
   width: 100%;
+  cursor: pointer;
 `;
 
 export const Step = styled.div`
@@ -128,6 +135,7 @@ export const StaticContainer = styled.div`
   border-radius: 15px;
   padding: 20px;
   margin-right: 20px;
+  cursor: default;
 `;
 export const AIReportContainer = styled.div`
   background-color: #e1f9f0;
@@ -139,9 +147,11 @@ export const AIReportContainer = styled.div`
   border: none;
   border-radius: 15px;
   padding: 20px;
+  cursor: default;
 `;
 
 export const ReviewWrapper = styled.div`
+  cursor: defualt;
   display: flex;
   flex-direction: column;
   width: 25%;
