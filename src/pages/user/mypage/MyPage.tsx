@@ -1,11 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import {
-  AIReport,
   DetailText,
   FeedbackContainer,
   IntroduceContainer,
   LinkProject,
-  PointText,
+  UniqueText,
   ProfileContainer,
   ProfileTextContainer,
   ProjectContainer,
@@ -17,66 +16,87 @@ import {
   StepLabel,
   StepLine,
   StepsContainer,
-  StyledChartIcon,
+  MypageChartIcon,
   StyledGraphIcon,
   StyledUserIcon,
   TitleText,
+  ProfileAccountContainer,
+  CorrectText,
+  AIReportContainer,
+  ProfileText,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
-import { LinkText, MiddleText } from '../../../components/user/UserStyle';
+import { LinkText } from '../../../components/user/UserStyle';
 import { Link } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
+import { FetchMyPage } from '../../../services/UserApi';
+import { useUserStore } from '../../../states/user/UserStore';
 
-function MyPage() {
+export default function MyPage() {
+  useEffect(() => {
+    // FetchMyPage();
+  }, []);
+
+  const userProfile = useUserStore(state => state.userProfile);
   return (
     <div className="flex-col" style={{ margin: '1% 7%' }}>
-      <div className="flex">
+      <div className="flex w-full">
         <ProfileContainer>
           <StyledUserIcon></StyledUserIcon>
-          <div className="flex-col mt-3">
-            <Title>반갑습니다{} 님</Title>
+          <div className="flex-col mt-3 w-full">
+            <Title>반갑습니다 {userProfile.nickname} 님</Title>
             <ProfileTextContainer>
-              <MiddleText>닉네임 : </MiddleText>
-              <MiddleText></MiddleText>
-              <LinkText>수정 하기</LinkText>
+              <span className="flex">
+                <ProfileText>닉네임 : </ProfileText>
+                <ProfileText> {userProfile.nickname} </ProfileText>
+              </span>
+              <CorrectText>수정 하기</CorrectText>
             </ProfileTextContainer>
             <ProfileTextContainer>
-              <MiddleText>소속 : </MiddleText>
-              <LinkText>수정 하기</LinkText>
+              <span className="flex">
+                <ProfileText>소속 : </ProfileText>
+                <ProfileText>{userProfile.belonging} </ProfileText>
+              </span>
+              <CorrectText>수정 하기</CorrectText>
             </ProfileTextContainer>
             <ProfileTextContainer>
-              <MiddleText>등급 : </MiddleText>
-              <LinkText>수정 하기</LinkText>
+              <ProfileText>등급 : </ProfileText>
+              <ProfileText>{userProfile.rank} </ProfileText>
             </ProfileTextContainer>
             <ProfileTextContainer>
-              <MiddleText>계정 정보 : </MiddleText>
-              <LinkText>수정 하기</LinkText>
+              <ProfileText>계정 정보 : </ProfileText>
             </ProfileTextContainer>
+            <ProfileAccountContainer>
+              <span className="flex justify-between items-center">
+                <ProfileText>{userProfile.github} </ProfileText>
+                <CorrectText>수정 하기</CorrectText>
+              </span>
+            </ProfileAccountContainer>
           </div>
         </ProfileContainer>
         <div className="flex-col" style={{ width: '50%' }}>
           <IntroduceContainer>
             <p className="text-base mb-2">자신을 한줄로 소개</p>
-            <h1 className="text-2xl font-semibold">하잉</h1>
-            <LinkText className="text-end">수정하기</LinkText>
+            <h1 className="text-2xl font-semibold">{userProfile.intro}안녕하세요</h1>
+            <CorrectText className="text-end">수정하기</CorrectText>
           </IntroduceContainer>
           <QuestContainer>
             <h1 className="mb-2">오늘의 퀘스트</h1>
             <StepsContainer>
               <Step>
-                <StepLabel completed={true}>출석하기</StepLabel>
-                <StepCircle completed={true} color="#8e8ae3" />
+                <StepLabel completed={parseInt(userProfile.quest) >= 1}>출석하기</StepLabel>
+                <StepCircle completed={parseInt(userProfile.quest) >= 1} color="#8e8ae3" />
               </Step>
               <StepLine />
               <Step>
-                <StepLabel completed={true}>댓글 작성하기</StepLabel>
-                <StepCircle completed={true} color="#f4c542" />
+                <StepLabel completed={parseInt(userProfile.quest) >= 2}>댓글 작성하기</StepLabel>
+                <StepCircle completed={parseInt(userProfile.quest) >= 2} color="#f4c542" />
               </Step>
               <StepLine />
               <Step>
-                <StepLabel completed={false}>피드백 참여하기</StepLabel>
-                <StepCircle completed={false} color="#ccc" />
+                <StepLabel completed={parseInt(userProfile.quest) >= 3}>피드백 참여하기</StepLabel>
+                <StepCircle completed={parseInt(userProfile.quest) >= 3} color="#4188FE" />
               </Step>
             </StepsContainer>
           </QuestContainer>
@@ -91,7 +111,7 @@ function MyPage() {
             </Link>
           </div>
           <div className="flex ">
-            <div className="flex-col mr-5">
+            <div className="flex-col">
               <Link to="/createtest">
                 <LinkProject>
                   <div className="flex items-center gap-3">
@@ -103,27 +123,30 @@ function MyPage() {
               </Link>
               <FeedbackContainer>
                 <TitleText>제출된 피드백</TitleText>
-                <PointText>34</PointText>
+                <UniqueText>34</UniqueText>
                 <DetailText>+ {} 34개의 피드백이 추가로 제출되었습니다.</DetailText>
-                <LinkText className="text-end">모아보기 &gt;</LinkText>
-              </FeedbackContainer>{' '}
+                <Link to="/feedback">
+                  <LinkText className="text-end">모아보기 &gt;</LinkText>
+                </Link>
+              </FeedbackContainer>
             </div>
             <StaticContainer>
               <TitleText>통계</TitleText>
-              <PointText>평점</PointText>
+              <UniqueText>평점</UniqueText>
+              <UniqueText>{userProfile.statistic} % </UniqueText>
               <DetailText>평점 4의 별점</DetailText>
-              <StyledChartIcon></StyledChartIcon>
+              <MypageChartIcon></MypageChartIcon>
             </StaticContainer>
-            <AIReport>
+            <AIReportContainer>
               <div className="flex gap-4">
                 <TitleText>AI 분석 Report</TitleText>
                 <StyledGraphIcon></StyledGraphIcon>
               </div>
-            </AIReport>
+            </AIReportContainer>
           </div>
         </ProjectContainer>
         <ReviewWrapper>
-          <Title>개발자 1님의 리뷰</Title>
+          <Title>{userProfile.nickname} 님의 리뷰</Title>
           <ul>
             <MyReview />
           </ul>
@@ -132,5 +155,3 @@ function MyPage() {
     </div>
   );
 }
-
-export default MyPage;
