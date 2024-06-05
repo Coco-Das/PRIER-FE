@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   DetailText,
   FeedbackContainer,
@@ -30,22 +30,36 @@ import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
 import { Link } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
-import { FetchMyPage } from '../../../services/UserApi';
+import { FetchLogout, FetchMyPage } from '../../../services/UserApi';
 import { useUserStore } from '../../../states/user/UserStore';
+import CustomAlert from '../../../components/utils/CustomAlert';
 
 export default function MyPage() {
+  const userProfile = useUserStore(state => state.userProfile);
+  const [showAlert, setShowAlert] = useState(false);
+
   useEffect(() => {
     // FetchMyPage();
   }, []);
+  const ConfirmLogout = () => {
+    setShowAlert(true);
+  };
+  const logout = () => {
+    setShowAlert(false);
+    FetchLogout();
+  };
 
-  const userProfile = useUserStore(state => state.userProfile);
   return (
     <div className="flex-col" style={{ margin: '1% 7%' }}>
+      {showAlert && <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={logout} />}
       <div className="flex w-full">
         <ProfileContainer>
           <StyledUserIcon></StyledUserIcon>
           <div className="flex-col mt-3 w-full">
-            <Title>반갑습니다 {userProfile.nickname} 님</Title>
+            <span className="flex items-center justify-between">
+              <Title>반갑습니다 {userProfile.nickname} 님</Title>
+              <CorrectText onClick={ConfirmLogout}>로그 아웃</CorrectText>
+            </span>
             <ProfileTextContainer>
               <span className="flex">
                 <ProfileText>닉네임 : </ProfileText>
@@ -77,12 +91,12 @@ export default function MyPage() {
         </ProfileContainer>
         <div className="flex-col" style={{ width: '50%' }}>
           <IntroduceContainer>
-            <p className="text-base mb-2">자신을 한줄로 소개</p>
+            <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
             <h1 className="text-2xl font-semibold">{userProfile.intro}안녕하세요</h1>
             <CorrectText className="text-end">수정하기</CorrectText>
           </IntroduceContainer>
           <QuestContainer>
-            <h1 className="mb-2">오늘의 퀘스트</h1>
+            <h1 className="mb-2 cursor-pointer">오늘의 퀘스트</h1>
             <StepsContainer>
               <Step>
                 <StepLabel completed={parseInt(userProfile.quest) >= 1}>출석하기</StepLabel>
@@ -122,10 +136,10 @@ export default function MyPage() {
                 </LinkProject>
               </Link>
               <FeedbackContainer>
-                <TitleText>제출된 피드백</TitleText>
-                <UniqueText>34</UniqueText>
-                <DetailText>+ {} 34개의 피드백이 추가로 제출되었습니다.</DetailText>
                 <Link to="/feedback">
+                  <TitleText>제출된 피드백</TitleText>
+                  <UniqueText>34</UniqueText>
+                  <DetailText>+ {} 34개의 피드백이 추가로 제출되었습니다.</DetailText>
                   <LinkText className="text-end">모아보기 &gt;</LinkText>
                 </Link>
               </FeedbackContainer>
