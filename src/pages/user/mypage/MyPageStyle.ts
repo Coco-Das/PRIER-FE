@@ -15,10 +15,32 @@ export const ProfileTextContainer = styled.div`
   display: flex;
   width: 100%;
   align-items: center;
+  justify-content: space-between;
+  margin-left: 10px;
+  margin-bottom: 10px;
+`;
+export const ProfileText = styled.h2`
+  font-size: 19px;
+  font-weight: 600;
+  margin-right: 20px;
+`;
+export const CorrectText = styled.p`
+  font-size: 15px;
+  font-weight: 300;
+  color: #828282;
+  margin-right: 20px;
+`;
+export const ProfileAccountContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  width: 100%;
   margin-left: 10px;
   margin-bottom: 10px;
 `;
 export const IntroduceContainer = styled.div`
+  width: 100%;
+  height: 40%;
+  max-height: 40%;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin-bottom: 15px;
@@ -27,6 +49,7 @@ export const IntroduceContainer = styled.div`
   background-color: #e6f3ff;
 `;
 export const QuestContainer = styled.div`
+  width: 100%;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin-left: 15px;
@@ -73,8 +96,8 @@ export const ProjectContainer = styled.div`
   margin-right: 20px;
 `;
 export const LinkProject = styled.div`
-  width: 100%;
-  max-width: 280px;
+  width: 260px;
+  max-width: 260px;
   height: auto;
   border: none;
   border-radius: 15px;
@@ -82,21 +105,23 @@ export const LinkProject = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
   padding: 10px;
   margin-bottom: 20px;
+  margin-right: 20px;
 `;
 export const FeedbackContainer = styled.div`
   background-color: #e8e0f1;
   height: 50%;
-  width: 100%;
-  max-width: 280px;
+  width: 260px;
+  max-width: 260px;
   border: none;
   border-radius: 15px;
   padding: 20px;
+  margin-right: 20px;
 `;
 export const StaticContainer = styled.div`
   background-color: #f3f5fb;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 320px;
   height: 80%;
   max-width: 320px;
   border: none;
@@ -104,11 +129,11 @@ export const StaticContainer = styled.div`
   padding: 20px;
   margin-right: 20px;
 `;
-export const AIReport = styled.div`
+export const AIReportContainer = styled.div`
   background-color: #e1f9f0;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  width: 320px;
   max-width: 320px;
   height: 80%;
   border: none;
@@ -130,14 +155,14 @@ export const DetailText = styled.p`
   color: #828282;
   font-size: 16px;
 `;
-export const PointText = styled.h1`
+export const UniqueText = styled.h1`
   font-weight: 700;
   font-size: 30px;
 `;
-export const StyledChartIcon = styled(ChartIcon)`
+export const MypageChartIcon = styled(ChartIcon)`
   width: 100px;
+  height: 200px;
   transform: scaleX(-1);
-  justify-content: flex-end;
 `;
 export const StyledGraphIcon = styled(GraphIcon)`
   margin: 0px;
