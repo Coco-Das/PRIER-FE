@@ -14,9 +14,13 @@ export default function KakaoLoading() {
         .get(`http://localhost:8080/kakao/callback?code=${code}`, { code })
         .then(response => {
           console.log(response.data);
-          // 사용자 정보를 로컬 스토리지에 저장하거나 상태 관리
-          const ACCESS_TOKEN = response.data.accessToken;
-          localStorage.setItem('token', ACCESS_TOKEN);
+          // 사용자 정보를 로컬 스토리지에 저장
+          const ACCESS_TOKEN = response.data.access_token;
+          const KAKAO_ACCESS_TOKEN = response.data.kakaoAccessToken;
+          const USER_ID = response.data.userId;
+          localStorage.setItem('access_token', ACCESS_TOKEN);
+          localStorage.setItem('token', KAKAO_ACCESS_TOKEN);
+          localStorage.setItem('token', USER_ID);
           navigate('/main');
         })
         .catch(error => {
