@@ -20,6 +20,11 @@ interface UserStore {
   setLogout: () => void;
   setNickname: (nickname: string) => void;
   setBelonging: (belonging: string) => void;
+  setBlog: (blog: string) => void;
+  setGithub: (github: string) => void;
+  setFigma: (figma: string) => void;
+  setNotion: (notion: string) => void;
+  setIntro: (intro: string) => void;
 }
 
 const initialProfile: UserProfile = {

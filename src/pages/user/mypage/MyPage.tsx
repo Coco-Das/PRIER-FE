@@ -25,15 +25,32 @@ import {
   AIReportContainer,
   ProfileText,
   StyledInput,
+  AccountLink,
+  AccountIcon,
+  AccountInput,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
 import { Link, useNavigate } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
-import { EditBelonging, EditNickName, FetchLogout, FetchMyPage } from '../../../services/UserApi';
+import {
+  EditBelonging,
+  EditBlog,
+  EditFigma,
+  EditGithub,
+  EditIntro,
+  EditNickName,
+  EditNotion,
+  FetchLogout,
+  FetchMyPage,
+} from '../../../services/UserApi';
 import { useUserStore } from '../../../states/user/UserStore';
 import CustomAlert from '../../../components/utils/CustomAlert';
+import BlogIcon from '../../../assets/blog.png';
+import GithubIcon from '../../../assets/github.png';
+import FigmaIcon from '../../../assets/figma.png';
+import NotionIcon from '../../../assets/notion.png';
 
 export default function MyPage() {
   const navigate = useNavigate();
@@ -45,6 +62,21 @@ export default function MyPage() {
   const [showEditBelongingAlert, setShowEditBelongingAlert] = useState(false);
   const [isEditingBelonging, setIsEditingBelonging] = useState(false);
   const [newBelonging, setNewBelonging] = useState<string>('');
+  const [showEditBlogAlert, setShowEditBlogAlert] = useState(false);
+  const [isEditingBlog, setIsEditingBlog] = useState(false);
+  const [newBlog, setNewBlog] = useState<string>('');
+  const [showEditGithubAlert, setShowEditGithubAlert] = useState(false);
+  const [isEditingGithub, setIsEditingGithub] = useState(false);
+  const [newGithub, setNewGithub] = useState<string>('');
+  const [showEditFigmaAlert, setShowEditFigmaAlert] = useState(false);
+  const [isEditingFigma, setIsEditingFigma] = useState(false);
+  const [newFigma, setNewFigma] = useState<string>('');
+  const [showEditNotionAlert, setShowEditNotionAlert] = useState(false);
+  const [isEditingNotion, setIsEditingNotion] = useState(false);
+  const [newNotion, setNewNotion] = useState<string>('');
+  const [showEditIntroAlert, setShowEditIntroAlert] = useState(false);
+  const [isEditingIntro, setIsEditingIntro] = useState(false);
+  const [newIntro, setNewIntro] = useState<string>('');
   const UseFetchLogout = FetchLogout();
 
   useEffect(() => {
@@ -60,7 +92,7 @@ export default function MyPage() {
   const Logout = async () => {
     setShowLogoutAlert(false);
     await UseFetchLogout();
-    navigate('/');
+    navigate('/login');
   };
 
   //닉네임 수정
@@ -78,7 +110,7 @@ export default function MyPage() {
       await EditNickName(newNickName);
       setIsEditingName(false);
     } catch (error) {
-      console.error('닉네임 수정 중 오류 발생:', error);
+      alert('닉네임 수정 중 오류 발생:');
     }
   };
   const cancleEditName = () => {
@@ -101,7 +133,7 @@ export default function MyPage() {
       await EditBelonging(newBelonging);
       setIsEditingBelonging(false);
     } catch (error) {
-      console.error('소속 수정 중 오류 발생:', error);
+      alert('소속 수정 중 오류 발생:');
     }
   };
   const cancleEditBelonging = () => {
@@ -110,17 +142,157 @@ export default function MyPage() {
     setNewBelonging('');
   };
 
+  //블로그 수정
+  const BlogInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewBlog(event.target.value);
+  };
+  const setEditBlog = () => {
+    setIsEditingBlog(true);
+  };
+  const ConfirmEditBlog = () => {
+    setShowEditBlogAlert(true);
+  };
+  const saveEditBlog = async () => {
+    try {
+      await EditBlog(newBlog);
+      setIsEditingBlog(false);
+    } catch (error) {
+      alert('블로그 주소 수정 실패');
+    }
+  };
+  const cancleEditBlog = () => {
+    setIsEditingBlog(false);
+    setShowEditBlogAlert(false);
+    setNewBlog('');
+  };
+  //깃허브 수정
+  const GithubInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewGithub(event.target.value);
+  };
+  const setEditGithub = () => {
+    setIsEditingGithub(true);
+  };
+  const ConfirmEditGithub = () => {
+    setShowEditGithubAlert(true);
+  };
+  const saveEditGithub = async () => {
+    try {
+      await EditGithub(newBlog);
+      setIsEditingGithub(false);
+    } catch (error) {
+      alert('깃허브 주소 수정 실패');
+    }
+  };
+  const cancleEditGithub = () => {
+    setIsEditingGithub(false);
+    setShowEditGithubAlert(false);
+    setNewGithub('');
+  };
+  //피그마 수정
+  const FigmaInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewFigma(event.target.value);
+  };
+  const setEditFigma = () => {
+    setIsEditingFigma(true);
+  };
+  const ConfirmEditFigma = () => {
+    setShowEditFigmaAlert(true);
+  };
+  const saveEditFigma = async () => {
+    try {
+      await EditFigma(newBlog);
+      setIsEditingFigma(false);
+    } catch (error) {
+      alert('피그마 주소 수정 실패');
+    }
+  };
+  const cancleEditFigma = () => {
+    setIsEditingFigma(false);
+    setShowEditFigmaAlert(false);
+    setNewFigma('');
+  };
+  //노션 수정
+  const NotionInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewNotion(event.target.value);
+  };
+  const setEditNotion = () => {
+    setIsEditingNotion(true);
+  };
+  const ConfirmEditNotion = () => {
+    setShowEditNotionAlert(true);
+  };
+  const saveEditNotion = async () => {
+    try {
+      await EditNotion(newNotion);
+      setIsEditingNotion(false);
+    } catch (error) {
+      alert('노션 주소 수정 실패');
+    }
+  };
+  const cancleEditNotion = () => {
+    setIsEditingNotion(false);
+    setShowEditNotionAlert(false);
+    setNewNotion('');
+  };
+
+  //자기 소개 수정
+  const IntroInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewIntro(event.target.value);
+  };
+  const setEditIntro = () => {
+    setIsEditingIntro(true);
+  };
+  const ConfirmEditIntro = () => {
+    setShowEditIntroAlert(true);
+  };
+  const saveEditIntro = async () => {
+    try {
+      await EditIntro(newIntro);
+      setIsEditingIntro(false);
+    } catch (error) {
+      alert('자기소개 수정 중 오류 발생:');
+    }
+  };
+  const cancleEditIntro = () => {
+    setIsEditingIntro(false);
+    setShowEditIntroAlert(false);
+    setNewIntro('');
+  };
   return (
     <div className="flex-col" style={{ margin: '1% 7%' }}>
       {showLogoutAlert && (
         <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
       )}
       {showEditNameAlert && (
-        <CustomAlert message="정말 수정 하시겠습니까?" onConfirm={saveEditName} onCancel={cancleEditName} />
+        <CustomAlert message="닉네임을 수정 하시겠습니까?" onConfirm={saveEditName} onCancel={cancleEditName} />
       )}
       {showEditBelongingAlert && (
-        <CustomAlert message="정말 수정 하시겠습니까?" onConfirm={saveEditBelonging} onCancel={cancleEditBelonging} />
+        <CustomAlert message="소속을 수정 하시겠습니까?" onConfirm={saveEditBelonging} onCancel={cancleEditBelonging} />
       )}
+      {showEditBlogAlert && (
+        <CustomAlert message="블로그 주소를 수정 하시겠습니까?" onConfirm={saveEditBlog} onCancel={cancleEditBlog} />
+      )}
+      {showEditGithubAlert && (
+        <CustomAlert
+          message="Github 주소를 수정 하시겠습니까?"
+          onConfirm={saveEditGithub}
+          onCancel={cancleEditGithub}
+        />
+      )}
+      {showEditFigmaAlert && (
+        <CustomAlert message="Figma 주소를 수정 하시겠습니까?" onConfirm={saveEditFigma} onCancel={cancleEditFigma} />
+      )}
+      {showEditNotionAlert && (
+        <CustomAlert
+          message="Notion 주소를 수정 하시겠습니까?"
+          onConfirm={saveEditNotion}
+          onCancel={cancleEditNotion}
+        />
+      )}
+      {showEditIntroAlert && (
+        <CustomAlert message="한 줄 소개를 수정 하시겠습니까?" onConfirm={saveEditIntro} onCancel={cancleEditIntro} />
+      )}
+
       <div className="flex w-full">
         <ProfileContainer>
           <StyledUserIcon></StyledUserIcon>
@@ -169,22 +341,85 @@ export default function MyPage() {
               <ProfileText>{userProfile.rank} </ProfileText>
             </ProfileTextContainer>
             <ProfileTextContainer>
-              <ProfileText>계정 정보 : </ProfileText>
+              <ProfileText>계정 정보 : {userProfile.email}</ProfileText>
             </ProfileTextContainer>
             <ProfileAccountContainer>
-              <span className="flex justify-between items-center">
-                <ProfileText>{userProfile.github} </ProfileText>
-                <CorrectText>수정 하기</CorrectText>
-              </span>
+              <div className="flex items-center gap-5">
+                {isEditingBlog ? (
+                  <>
+                    <AccountIcon src={BlogIcon}></AccountIcon>
+                    <AccountInput type="text" value={newBlog} onChange={BlogInputChange}></AccountInput>
+                  </>
+                ) : (
+                  <AccountLink href={userProfile.blog} target="_blank">
+                    <AccountIcon src={BlogIcon}></AccountIcon>
+                    Blog
+                  </AccountLink>
+                )}
+                {isEditingGithub ? (
+                  <>
+                    <AccountIcon src={GithubIcon}></AccountIcon>
+                    <AccountInput type="text" value={newGithub} onChange={GithubInputChange}></AccountInput>
+                  </>
+                ) : (
+                  <AccountLink href={userProfile.github} target="_blank">
+                    <AccountIcon src={GithubIcon}></AccountIcon>
+                    Github
+                  </AccountLink>
+                )}
+                {isEditingFigma ? (
+                  <>
+                    <AccountIcon src={FigmaIcon}></AccountIcon>
+                    <AccountInput type="text" value={newFigma} onChange={FigmaInputChange}></AccountInput>
+                  </>
+                ) : (
+                  <AccountLink href={userProfile.figma} target="_blank">
+                    <AccountIcon src={FigmaIcon}></AccountIcon>
+                    Figma
+                  </AccountLink>
+                )}
+                {isEditingNotion ? (
+                  <>
+                    <AccountIcon src={NotionIcon}></AccountIcon>
+                    <AccountInput type="text" value={newNotion} onChange={NotionInputChange}></AccountInput>
+                  </>
+                ) : (
+                  <AccountLink href={userProfile.notion} target="_blank">
+                    <AccountIcon src={NotionIcon}></AccountIcon>
+                    Notion
+                  </AccountLink>
+                )}
+              </div>
+              {isEditingBlog ? (
+                <CorrectText className="text-end" onClick={ConfirmEditBlog}>
+                  확인
+                </CorrectText>
+              ) : (
+                <CorrectText className="text-end" onClick={setEditBlog}>
+                  수정 하기
+                </CorrectText>
+              )}
             </ProfileAccountContainer>
           </div>
         </ProfileContainer>
         <div className="flex-col" style={{ width: '50%' }}>
-          <IntroduceContainer>
-            <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
-            <h1 className="text-2xl font-semibold">{userProfile.intro}안녕하세요</h1>
-            <CorrectText className="text-end">수정하기</CorrectText>
-          </IntroduceContainer>
+          {isEditingIntro ? (
+            <IntroduceContainer>
+              <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
+              <StyledInput type="text" value={newIntro} onChange={IntroInputChange}></StyledInput>
+              <CorrectText className="text-end" onClick={ConfirmEditIntro}>
+                확인
+              </CorrectText>
+            </IntroduceContainer>
+          ) : (
+            <IntroduceContainer>
+              <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
+              <h1 className="text-2xl font-semibold">{userProfile.intro}안녕하세요</h1>
+              <CorrectText className="text-end" onClick={setEditIntro}>
+                수정하기
+              </CorrectText>
+            </IntroduceContainer>
+          )}
           <QuestContainer>
             <h1 className="mb-2 cursor-pointer">오늘의 퀘스트</h1>
             <StepsContainer>
