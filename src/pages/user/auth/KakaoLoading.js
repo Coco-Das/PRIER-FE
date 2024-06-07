@@ -7,31 +7,32 @@ export default function KakaoLoading() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const code = new URL(window.location.href).searchParams.get('code');
+    const currentUrl = new URL(window.location.href);
+    const code = currentUrl.searchParams.get('code');
+    console.log('receive code:', code);
+
     if (code) {
-      // 인가 코드를 백엔드 서버로 전송하여 액세스 토큰을 요청
-      axios
-        .get(`http://localhost:8080/kakao/callback?code=${code}`, { code })
-        .then(response => {
-          console.log(response.data);
-          // 사용자 정보를 로컬 스토리지에 저장
-          const ACCESS_TOKEN = response.data.access_token;
+      const fetchData = async () => {
+        console.log('fetchData:');
+        try {
+          const response = await axios.get(`http://15.152.32.189:8080/kakao/callback?code=${code}`);
+          const ACCESS_TOKEN = response.data.accessToken;
           const KAKAO_ACCESS_TOKEN = response.data.kakaoAccessToken;
-          const USER_ID = response.data.userId;
-          localStorage.setItem('access_token', ACCESS_TOKEN);
-          localStorage.setItem('token', KAKAO_ACCESS_TOKEN);
-          localStorage.setItem('token', USER_ID);
+          localStorage.setItem('accessToken', ACCESS_TOKEN);
+          localStorage.setItem('kakaoAccessToken', KAKAO_ACCESS_TOKEN);
+          console.log('로그인 성공');
           navigate('/main');
-        })
-        .catch(error => {
-          console.error('카카오 로그인 실패', error);
+        } catch (error) {
+          console.error('카카오 로그인 실패:', error);
           navigate('/login');
-        });
+        }
+      };
+
+      fetchData();
+    } else {
+      navigate('/login');
     }
   }, []);
-  return (
-    <>
-      <Loading></Loading>
-    </>
-  );
+
+  return <Loading />;
 }
