@@ -28,15 +28,17 @@ import {
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
 import { FetchLogout, FetchMyPage } from '../../../services/UserApi';
 import { useUserStore } from '../../../states/user/UserStore';
 import CustomAlert from '../../../components/utils/CustomAlert';
 
 export default function MyPage() {
+  const navigate = useNavigate();
   const userProfile = useUserStore(state => state.userProfile);
   const [showAlert, setShowAlert] = useState(false);
+  const UseFetchLogout = FetchLogout();
 
   useEffect(() => {
     // FetchMyPage();
@@ -44,14 +46,18 @@ export default function MyPage() {
   const ConfirmLogout = () => {
     setShowAlert(true);
   };
-  const logout = () => {
+  const CancelLogout = () => {
     setShowAlert(false);
-    FetchLogout();
+  };
+  const Logout = async () => {
+    setShowAlert(false);
+    await UseFetchLogout();
+    navigate('/');
   };
 
   return (
     <div className="flex-col" style={{ margin: '1% 7%' }}>
-      {showAlert && <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={logout} />}
+      {showAlert && <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />}
       <div className="flex w-full">
         <ProfileContainer>
           <StyledUserIcon></StyledUserIcon>
