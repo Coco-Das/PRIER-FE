@@ -24,40 +24,73 @@ import {
   CorrectText,
   AIReportContainer,
   ProfileText,
+  StyledInput,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
 import { Link, useNavigate } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
-import { FetchLogout, FetchMyPage } from '../../../services/UserApi';
+import { EditNickName, FetchLogout, FetchMyPage } from '../../../services/UserApi';
 import { useUserStore } from '../../../states/user/UserStore';
 import CustomAlert from '../../../components/utils/CustomAlert';
 
 export default function MyPage() {
   const navigate = useNavigate();
   const userProfile = useUserStore(state => state.userProfile);
-  const [showAlert, setShowAlert] = useState(false);
+  const [showLogoutAlert, setShowLogoutAlert] = useState(false);
+  const [showEditAlert, setShowEditAlert] = useState(false);
+  const [isEditing, setIsEditing] = useState(false);
+  const [newNickname, setNewNickname] = useState<string>('');
   const UseFetchLogout = FetchLogout();
 
   useEffect(() => {
     // FetchMyPage();
   }, []);
+  //로그아웃
   const ConfirmLogout = () => {
-    setShowAlert(true);
+    setShowLogoutAlert(true);
   };
   const CancelLogout = () => {
-    setShowAlert(false);
+    setShowLogoutAlert(false);
   };
   const Logout = async () => {
-    setShowAlert(false);
+    setShowLogoutAlert(false);
     await UseFetchLogout();
     navigate('/');
   };
 
+  //닉네임 수정
+  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewNickname(event.target.value);
+  };
+  const setEditClick = () => {
+    setIsEditing(true);
+  };
+  const ConfirmEdit = () => {
+    setShowEditAlert(true);
+  };
+  const saveEdit = async () => {
+    try {
+      await EditNickName(newNickname);
+      setIsEditing(false);
+    } catch (error) {
+      console.error('닉네임 수정 중 오류 발생:', error);
+    }
+  };
+
+  const cancleEdit = () => {
+    setIsEditing(false);
+    setShowEditAlert(false);
+    setNewNickname('');
+  };
+
   return (
     <div className="flex-col" style={{ margin: '1% 7%' }}>
-      {showAlert && <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />}
+      {showLogoutAlert && (
+        <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
+      )}
+      {showEditAlert && <CustomAlert message="정말 수정 하시겠습니까?" onConfirm={saveEdit} onCancel={cancleEdit} />}
       <div className="flex w-full">
         <ProfileContainer>
           <StyledUserIcon></StyledUserIcon>
@@ -66,13 +99,25 @@ export default function MyPage() {
               <Title>반갑습니다 {userProfile.nickname} 님</Title>
               <CorrectText onClick={ConfirmLogout}>로그 아웃</CorrectText>
             </span>
-            <ProfileTextContainer>
-              <span className="flex">
-                <ProfileText>닉네임 : </ProfileText>
-                <ProfileText> {userProfile.nickname} </ProfileText>
-              </span>
-              <CorrectText>수정 하기</CorrectText>
-            </ProfileTextContainer>
+
+            {isEditing ? (
+              <ProfileTextContainer>
+                <span className="flex">
+                  <ProfileText>닉네임 : </ProfileText>
+                  <StyledInput type="text" value={newNickname} onChange={handleInputChange}></StyledInput>
+                </span>
+                <CorrectText onClick={ConfirmEdit}>확인</CorrectText>
+              </ProfileTextContainer>
+            ) : (
+              <ProfileTextContainer>
+                <span className="flex">
+                  <ProfileText>닉네임 : </ProfileText>
+                  <ProfileText> {userProfile.nickname} </ProfileText>
+                </span>
+                <CorrectText onClick={setEditClick}>수정 하기</CorrectText>
+              </ProfileTextContainer>
+            )}
+
             <ProfileTextContainer>
               <span className="flex">
                 <ProfileText>소속 : </ProfileText>

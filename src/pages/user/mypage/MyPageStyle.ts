@@ -36,6 +36,9 @@ export const CorrectText = styled.p`
     font-weight: 400;
   }
 `;
+export const StyledInput = styled.input`
+  font-size: 18px;
+`;
 export const ProfileAccountContainer = styled.div`
   display: flex;
   flex-direction: column;

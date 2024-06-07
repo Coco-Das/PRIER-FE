@@ -1,4 +1,5 @@
 import { create } from 'zustand';
+
 interface UserProfile {
   nickname: string;
   belonging: string;
@@ -17,6 +18,7 @@ interface UserStore {
   userProfile: UserProfile;
   setUserProfile: (profile: UserProfile) => void;
   setLogout: () => void;
+  setNickname: (nickname: string) => void;
 }
 
 const initialProfile: UserProfile = {
@@ -55,5 +57,11 @@ export const useUserStore = create<UserStore>(set => ({
   setLogout: () => {
     sessionStorage.removeItem('nickname');
     set({ userProfile: initialProfile });
+  },
+  setNickname: (nickname: string) => {
+    set(state => ({
+      userProfile: { ...state.userProfile, nickname },
+    }));
+    sessionStorage.setItem('nickname', nickname);
   },
 }));

@@ -41,3 +41,15 @@ export function FetchLogout() {
     }
   }, [setLogout]);
 }
+
+export const EditNickName = async (newNickName: string) => {
+  try {
+    const response = await API_BASE_URL.put('/user/nickname', { nickname: newNickName });
+    console.log('닉네임 수정 요청 성공', response.data);
+    const setNickname = useUserStore.getState().setNickname;
+    setNickname(newNickName);
+  } catch (error) {
+    console.error('닉네임 수정 실패:', error);
+    throw error;
+  }
+};
