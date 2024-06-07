@@ -31,7 +31,7 @@ import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
 import { Link, useNavigate } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
-import { EditNickName, FetchLogout, FetchMyPage } from '../../../services/UserApi';
+import { EditBelonging, EditNickName, FetchLogout, FetchMyPage } from '../../../services/UserApi';
 import { useUserStore } from '../../../states/user/UserStore';
 import CustomAlert from '../../../components/utils/CustomAlert';
 
@@ -39,9 +39,12 @@ export default function MyPage() {
   const navigate = useNavigate();
   const userProfile = useUserStore(state => state.userProfile);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
-  const [showEditAlert, setShowEditAlert] = useState(false);
-  const [isEditing, setIsEditing] = useState(false);
-  const [newNickname, setNewNickname] = useState<string>('');
+  const [showEditNameAlert, setShowEditNameAlert] = useState(false);
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [newNickName, setNewNickName] = useState<string>('');
+  const [showEditBelongingAlert, setShowEditBelongingAlert] = useState(false);
+  const [isEditingBelonging, setIsEditingBelonging] = useState(false);
+  const [newBelonging, setNewBelonging] = useState<string>('');
   const UseFetchLogout = FetchLogout();
 
   useEffect(() => {
@@ -61,28 +64,50 @@ export default function MyPage() {
   };
 
   //닉네임 수정
-  const handleInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewNickname(event.target.value);
+  const NickNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewNickName(event.target.value);
   };
-  const setEditClick = () => {
-    setIsEditing(true);
+  const setEditName = () => {
+    setIsEditingName(true);
   };
-  const ConfirmEdit = () => {
-    setShowEditAlert(true);
+  const ConfirmEditName = () => {
+    setShowEditNameAlert(true);
   };
-  const saveEdit = async () => {
+  const saveEditName = async () => {
     try {
-      await EditNickName(newNickname);
-      setIsEditing(false);
+      await EditNickName(newNickName);
+      setIsEditingName(false);
     } catch (error) {
       console.error('닉네임 수정 중 오류 발생:', error);
     }
   };
-
-  const cancleEdit = () => {
-    setIsEditing(false);
-    setShowEditAlert(false);
-    setNewNickname('');
+  const cancleEditName = () => {
+    setIsEditingName(false);
+    setShowEditNameAlert(false);
+    setNewNickName('');
+  };
+  //소속 수정
+  const BelongingInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewBelonging(event.target.value);
+  };
+  const setEditBelonging = () => {
+    setIsEditingBelonging(true);
+  };
+  const ConfirmEditBelonging = () => {
+    setShowEditBelongingAlert(true);
+  };
+  const saveEditBelonging = async () => {
+    try {
+      await EditBelonging(newBelonging);
+      setIsEditingBelonging(false);
+    } catch (error) {
+      console.error('소속 수정 중 오류 발생:', error);
+    }
+  };
+  const cancleEditBelonging = () => {
+    setIsEditingBelonging(false);
+    setShowEditBelongingAlert(false);
+    setNewBelonging('');
   };
 
   return (
@@ -90,7 +115,12 @@ export default function MyPage() {
       {showLogoutAlert && (
         <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
       )}
-      {showEditAlert && <CustomAlert message="정말 수정 하시겠습니까?" onConfirm={saveEdit} onCancel={cancleEdit} />}
+      {showEditNameAlert && (
+        <CustomAlert message="정말 수정 하시겠습니까?" onConfirm={saveEditName} onCancel={cancleEditName} />
+      )}
+      {showEditBelongingAlert && (
+        <CustomAlert message="정말 수정 하시겠습니까?" onConfirm={saveEditBelonging} onCancel={cancleEditBelonging} />
+      )}
       <div className="flex w-full">
         <ProfileContainer>
           <StyledUserIcon></StyledUserIcon>
@@ -100,13 +130,13 @@ export default function MyPage() {
               <CorrectText onClick={ConfirmLogout}>로그 아웃</CorrectText>
             </span>
 
-            {isEditing ? (
+            {isEditingName ? (
               <ProfileTextContainer>
                 <span className="flex">
                   <ProfileText>닉네임 : </ProfileText>
-                  <StyledInput type="text" value={newNickname} onChange={handleInputChange}></StyledInput>
+                  <StyledInput type="text" value={newNickName} onChange={NickNameInputChange}></StyledInput>
                 </span>
-                <CorrectText onClick={ConfirmEdit}>확인</CorrectText>
+                <CorrectText onClick={ConfirmEditName}>확인</CorrectText>
               </ProfileTextContainer>
             ) : (
               <ProfileTextContainer>
@@ -114,17 +144,26 @@ export default function MyPage() {
                   <ProfileText>닉네임 : </ProfileText>
                   <ProfileText> {userProfile.nickname} </ProfileText>
                 </span>
-                <CorrectText onClick={setEditClick}>수정 하기</CorrectText>
+                <CorrectText onClick={setEditName}>수정 하기</CorrectText>
               </ProfileTextContainer>
             )}
-
-            <ProfileTextContainer>
-              <span className="flex">
-                <ProfileText>소속 : </ProfileText>
-                <ProfileText>{userProfile.belonging} </ProfileText>
-              </span>
-              <CorrectText>수정 하기</CorrectText>
-            </ProfileTextContainer>
+            {isEditingBelonging ? (
+              <ProfileTextContainer>
+                <span className="flex">
+                  <ProfileText>소속: </ProfileText>
+                  <StyledInput type="text" value={newBelonging} onChange={BelongingInputChange}></StyledInput>
+                </span>
+                <CorrectText onClick={ConfirmEditBelonging}>확인</CorrectText>
+              </ProfileTextContainer>
+            ) : (
+              <ProfileTextContainer>
+                <span className="flex">
+                  <ProfileText>소속 : </ProfileText>
+                  <ProfileText> {userProfile.belonging} </ProfileText>
+                </span>
+                <CorrectText onClick={setEditBelonging}>수정 하기</CorrectText>
+              </ProfileTextContainer>
+            )}
             <ProfileTextContainer>
               <ProfileText>등급 : </ProfileText>
               <ProfileText>{userProfile.rank} </ProfileText>

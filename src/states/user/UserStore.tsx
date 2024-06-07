@@ -19,6 +19,7 @@ interface UserStore {
   setUserProfile: (profile: UserProfile) => void;
   setLogout: () => void;
   setNickname: (nickname: string) => void;
+  setBelonging: (belonging: string) => void;
 }
 
 const initialProfile: UserProfile = {
@@ -63,5 +64,35 @@ export const useUserStore = create<UserStore>(set => ({
       userProfile: { ...state.userProfile, nickname },
     }));
     sessionStorage.setItem('nickname', nickname);
+  },
+  setBelonging: (belonging: string) => {
+    set(state => ({
+      userProfile: { ...state.userProfile, belonging },
+    }));
+  },
+  setBlog: (blog: string) => {
+    set(state => ({
+      userProfile: { ...state.userProfile, blog },
+    }));
+  },
+  setGithub: (github: string) => {
+    set(state => ({
+      userProfile: { ...state.userProfile, github },
+    }));
+  },
+  setFigma: (figma: string) => {
+    set(state => ({
+      userProfile: { ...state.userProfile, figma },
+    }));
+  },
+  setNotion: (notion: string) => {
+    set(state => ({
+      userProfile: { ...state.userProfile, notion },
+    }));
+  },
+  setIntro: (intro: string) => {
+    set(state => ({
+      userProfile: { ...state.userProfile, intro },
+    }));
   },
 }));

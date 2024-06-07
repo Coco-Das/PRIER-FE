@@ -53,3 +53,15 @@ export const EditNickName = async (newNickName: string) => {
     throw error;
   }
 };
+
+export const EditBelonging = async (newBelonging: string) => {
+  try {
+    const response = await API_BASE_URL.put('/user/belonging', { belonging: newBelonging });
+    console.log('소속 수정 성공', response.data);
+    const setBelonging = useUserStore.getState().setBelonging;
+    setBelonging(newBelonging);
+  } catch (error) {
+    console.error('소속 수정 실패', error);
+    throw error;
+  }
+};
