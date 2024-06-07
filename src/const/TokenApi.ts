@@ -1,10 +1,9 @@
 import axios from 'axios';
 
-export const KAKAO_ACCESS_TOKEN = localStorage.getItem('kakao_access_token');
-export const User_ID = localStorage.getItem('user_id');
+export const KAKAO_ACCESS_TOKEN = localStorage.getItem('kakaoAccessToken');
 
 export const API_BASE_URL = axios.create({
-  baseURL: 'http://localhost:8080/api',
+  baseURL: 'http://15.152.32.189:8080/api',
 });
 //요청 인터셉터
 API_BASE_URL.interceptors.request.use(
