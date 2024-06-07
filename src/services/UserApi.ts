@@ -2,7 +2,6 @@ import axios from 'axios';
 import { useCallback, useEffect } from 'react';
 import { useUserStore } from '../states/user/UserStore';
 import { API_BASE_URL, KAKAO_ACCESS_TOKEN } from '../const/TokenApi';
-import { useNavigate } from 'react-router-dom';
 
 export function FetchMyPage() {
   const setUserProfile = useUserStore(state => state.setUserProfile);
@@ -22,7 +21,6 @@ export function FetchMyPage() {
 }
 
 export function FetchLogout() {
-  const navigate = useNavigate();
   const setLogout = useUserStore(state => state.setLogout);
 
   return useCallback(async () => {
@@ -37,10 +35,33 @@ export function FetchLogout() {
       localStorage.removeItem('userId');
 
       setLogout();
-      navigate('/');
     } catch (error) {
       console.error('로그아웃 요청 실패:', error);
       throw error;
     }
-  }, [navigate, setLogout]);
+  }, [setLogout]);
 }
+
+export const EditNickName = async (newNickName: string) => {
+  try {
+    const response = await API_BASE_URL.put('/user/nickname', { nickname: newNickName });
+    console.log('닉네임 수정 요청 성공', response.data);
+    const setNickname = useUserStore.getState().setNickname;
+    setNickname(newNickName);
+  } catch (error) {
+    console.error('닉네임 수정 실패:', error);
+    throw error;
+  }
+};
+
+export const EditBelonging = async (newBelonging: string) => {
+  try {
+    const response = await API_BASE_URL.put('/user/belonging', { belonging: newBelonging });
+    console.log('소속 수정 성공', response.data);
+    const setBelonging = useUserStore.getState().setBelonging;
+    setBelonging(newBelonging);
+  } catch (error) {
+    console.error('소속 수정 실패', error);
+    throw error;
+  }
+};
