@@ -1,3 +1,5 @@
+// Routers.tsx
+import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Layout } from './Layout';
 import Main from '../pages/main/Main';
@@ -10,7 +12,7 @@ import Feedback from '../pages/test/feedback/Feedback';
 import ResponseTest from '../pages/test/responseTest/ResponseTest';
 import TestList from '../pages/test/testList/TestList';
 import CreateBoard from '../pages/board/CreateBoard';
-import MyBoard from '../pages/board/MyBoard';
+import PostDetail from '../pages/board/PostDetail';
 import Board from '../pages/board/Board';
 import { CreateTest } from '../pages/test/createTest/CreateTest';
 
@@ -59,16 +61,17 @@ const router = createBrowserRouter([
         element: <CreateBoard />,
       },
       {
-        path: '/Board',
+        path: '/board',
         element: <Board />,
       },
       {
-        path: '/MyBoard',
-        element: <MyBoard />,
+        path: '/post/:postId',
+        element: <PostDetail />,
       },
     ],
   },
 ]);
+
 const Routers = () => {
   return <RouterProvider router={router} />;
 };
