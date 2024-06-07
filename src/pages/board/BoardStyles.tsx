@@ -28,13 +28,25 @@ export const Title = styled.div`
 
 // 네비게이션 스타일
 export const Navigation = styled.div`
-  height: 40px;
-  margin-bottom: 20px;
   width: 100%;
   max-width: 1000px;
   display: flex;
-  justify-content: space-between;
+  flex-direction: column;
+  margin-bottom: 20px;
   align-self: center; /* 가운데 정렬 */
+`;
+
+export const TopContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+export const BottomContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 // 버튼 스타일
@@ -66,7 +78,6 @@ export const SegmentedControlContainer = styled.div`
   gap: 0px;
   align-items: flex-start;
   justify-content: flex-start;
-  align-self: center; /* 가운데 정렬 */
 `;
 
 // 세그먼트 컨트롤 스타일
@@ -77,16 +88,14 @@ export const SegmentedControl = styled.div`
   gap: 5px;
   display: flex;
   flex-direction: row;
-  align-items: flex-start;
+  align-items: center; /* 가운데 정렬 */
   justify-content: flex-start;
   flex-shrink: 0;
   height: 46px;
-  align-self: center; /* 가운데 정렬 */
 `;
 
 // 카테고리 버튼 컨테이너 스타일
 export const CategoryButtonsContainer = styled(SegmentedControlContainer)`
-  position: relative;
   display: flex;
   align-items: center;
 `;
@@ -246,3 +255,34 @@ export const NoPostsMessage = styled.div`
   text-align: center;
   margin-top: 20px;
 `;
+
+// 기존 스타일들을 유지하면서 새로운 스타일 추가
+export const PostDetailContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 960px;
+  margin: 0 auto;
+  padding: 20px;
+  box-sizing: border-box;
+`;
+
+export const PostContentContainer = styled.div`
+  width: 100%;
+  max-width: 680px;
+  box-sizing: border-box;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+`;
+
+export const CommentsContainer = styled.div`
+  width: 100%;
+  max-width: 280px;
+  box-sizing: border-box;
+  padding: 20px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+`;
+
+// 다른 기존 스타일들도 유지합니다.

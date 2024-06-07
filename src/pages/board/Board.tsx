@@ -1,15 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
-
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Container,
-  Title,
-  Navigation,
-  Button,
-  ButtonText,
-  SegmentedControlContainer,
-  SegmentedControl,
-  MenuItem,
   PostBox,
   UserContainer,
   Avatar,
@@ -23,25 +15,15 @@ import {
   Likes,
   LikeButton,
   LikeIcon,
-  CategoryButtonsContainer,
-  CategoryButton,
   NoPostsMessage,
 } from './BoardStyles';
 import { posts as initialPosts, Post } from '../../states/board/BoardStore';
-import SearchInput from '../../components/board/SearchInput';
 import PaginationComponent from '../../components/board/PaginationComponent';
 import userAvatar from '../../assets/user.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
 import PostSkeleton from '../../components/board/PostSkeleton';
-
-const categoryLabels: { [key: string]: string } = {
-  'it-news': 'IT 지식',
-  chat: '잡담/일상',
-  tech: '기술',
-  internship: '인턴십/공모전',
-  notice: '공지사항',
-};
+import NavigationBar from '../../components/board/NavigationBar';
 
 const Board: React.FC = () => {
   const [activeCategory, setActiveCategory] = useState<string>('it-news');
@@ -50,6 +32,7 @@ const Board: React.FC = () => {
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
   const [title, setTitle] = useState<string>('Community');
   const [loading, setLoading] = useState<boolean>(true);
+  const navigate = useNavigate();
 
   const toggleLike = (postId: number) => {
     setPosts(prevPosts => {
@@ -92,39 +75,19 @@ const Board: React.FC = () => {
     setFilteredPosts(updatedPosts);
   }, [activeCategory, activeFilter, posts]);
 
+  const handlePostClick = (postId: number) => {
+    navigate(`/post/${postId}`);
+  };
+
   return (
     <Container>
-      <Title>{title}</Title>
-      <Navigation>
-        <SegmentedControlContainer>
-          <SegmentedControl>
-            {Object.keys(categoryLabels).map(category => (
-              <MenuItem
-                key={category}
-                active={activeCategory === category}
-                onClick={() => handleCategoryClick(category)}
-              >
-                {categoryLabels[category]}
-              </MenuItem>
-            ))}
-          </SegmentedControl>
-        </SegmentedControlContainer>
-        <CategoryButtonsContainer>
-          <CategoryButton active={activeFilter === 'all'} onClick={() => handleFilterClick('all')}>
-            All
-          </CategoryButton>
-          <CategoryButton active={activeFilter === 'likes'} onClick={() => handleFilterClick('likes')}>
-            Likes
-          </CategoryButton>
-          <CategoryButton active={activeFilter === 'myposts'} onClick={() => handleFilterClick('myposts')}>
-            My Posts
-          </CategoryButton>
-        </CategoryButtonsContainer>
-        <SearchInput />
-        <Button as={Link} to="/CreateBoard">
-          <ButtonText>새 글 작성하기</ButtonText>
-        </Button>
-      </Navigation>
+      <NavigationBar
+        activeCategory={activeCategory}
+        activeFilter={activeFilter}
+        handleCategoryClick={handleCategoryClick}
+        handleFilterClick={handleFilterClick}
+        title={title}
+      />
       {loading ? (
         <>
           <PostSkeleton />
@@ -133,7 +96,7 @@ const Board: React.FC = () => {
         </>
       ) : filteredPosts.length > 0 ? (
         filteredPosts.map(post => (
-          <PostBox key={post.boardId}>
+          <PostBox key={post.boardId} onClick={() => handlePostClick(post.boardId)}>
             <UserContainer>
               <Avatar>
                 <AvatarImage src={userAvatar} alt="Avatar" />
@@ -147,7 +110,12 @@ const Board: React.FC = () => {
             <Image src="image.png" alt="Content" />
             <LikesContainer>
               <Likes>{post.likes} likes</Likes>
-              <LikeButton onClick={() => toggleLike(post.boardId)}>
+              <LikeButton
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  toggleLike(post.boardId);
+                }}
+              >
                 <LikeIcon src={post.likedByUser ? Like : UnLike} alt="like/unlike" />
               </LikeButton>
             </LikesContainer>
