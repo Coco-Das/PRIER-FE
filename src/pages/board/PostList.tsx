@@ -49,7 +49,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
           </UserContainer>
-          <ContentContainer>{post.content}</ContentContainer>
+          <ContentContainer>{post.title}</ContentContainer>
           <Image src="image.png" alt="Content" category={post.category} /> {/* category prop 추가 */}
           <LikesContainer>
             <Likes>likes {post.likes}</Likes>
