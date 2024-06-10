@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         element: <FirstMain />,
       },
       { path: '/login', element: <Login /> },
-      { path: '/kakao/callback', element: <KakaoLoading /> },
+      { path: 'api/kakao/callback', element: <KakaoLoading /> },
       {
         path: '/mypage',
         element: <MyPage />,

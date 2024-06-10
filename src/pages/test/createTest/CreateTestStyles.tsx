@@ -229,3 +229,5 @@ export const QuestionDiv = styled.div`
   background-clip: padding-box, border-box;
   background-origin: padding-box, border-box;
 `;
+
+export const SubmitBtn = styled.button``;
