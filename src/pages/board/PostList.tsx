@@ -40,11 +40,11 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
         >
           <UserContainer>
             <Avatar category={post.category}>
-              <AvatarImage src={post.category === 'notice' ? announcementAvatar : userAvatar} alt="Avatar" />
+              <AvatarImage src={post.category === 'Notice' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
               <Author category={post.category}>
-                {post.category === 'notice' ? '공지사항' : `작성자 ${post.memberId}`}
+                {post.category === 'Notice' ? '공지사항' : `작성자 ${post.memberId}`}
               </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>

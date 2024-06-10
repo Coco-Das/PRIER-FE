@@ -14,7 +14,7 @@ const Board: React.FC = () => {
   const location = useLocation();
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
-  const [activeCategory, setActiveCategory] = useState<string>('it-news');
+  const [activeCategory, setActiveCategory] = useState<string>('ITNews');
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
@@ -61,7 +61,7 @@ const Board: React.FC = () => {
 
   // 카테고리 변경을 처리하는 함수
   const handleCategoryClick = (category: string) => {
-    if (activeFilter === 'myposts' && category === 'notice') {
+    if (activeFilter === 'myposts' && category === 'Notice') {
       setActiveFilter('all');
     }
     setActiveCategory(category);

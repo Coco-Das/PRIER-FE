@@ -99,6 +99,7 @@ export const CategoryButtonsContainer = styled(SegmentedControlContainer)`
   display: flex;
   align-items: center;
 `;
+
 // 카테고리 버튼 스타일
 export const CategoryButton = styled.div<{ active?: boolean; disabled?: boolean }>`
   background: ${props => (props.active ? '#4188fe' : 'transparent')};
@@ -141,7 +142,7 @@ export const MenuItem = styled.div<MenuItemProps>`
 
 // 포스트 박스 스타일
 export const PostBox = styled.div<{ category?: string }>`
-  background: ${props => (props.category === 'notice' ? '#e1f9f0' : '#ffffff')};
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
   border-radius: 15px;
   border: none;
   padding: 1vh;
@@ -162,7 +163,7 @@ export const UserContainer = styled.div`
 `;
 
 export const Avatar = styled.div<{ category?: string }>`
-  background: ${props => (props.category === 'notice' ? '#e1f9f0' : '#f7f7f7')};
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#f7f7f7')};
   border-radius: 1000px;
   width: 50.58px;
   height: 50.58px;
@@ -185,7 +186,7 @@ export const AuthorContainer = styled.div`
 `;
 
 export const Author = styled.div<{ category?: string }>`
-  color: ${props => (props.category === 'notice' ? '#4188fe' : '#000000')};
+  color: ${props => (props.category === 'Notice' ? '#4188fe' : '#000000')};
   font-size: 16px;
   line-height: 150%;
   font-weight: 700;
@@ -214,7 +215,7 @@ export const Image = styled.img<{ category?: string }>`
   max-height: 300px; /* 최대 높이 설정 */
   margin-top: 10px;
   object-fit: cover;
-  background: ${props => (props.category === 'notice' ? '#e1f9f0' : '#ffffff')}; // 이미지 배경색 설정
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')}; // 이미지 배경색 설정
 `;
 
 export const LikesContainer = styled.div`

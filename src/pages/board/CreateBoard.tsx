@@ -43,11 +43,11 @@ function CreateBoard() {
             }}
             className="ml-auto"
           >
-            <Option value="it-news">IT 지식</Option>
-            <Option value="chat">잡담/일상</Option>
-            <Option value="tech">기술</Option>
-            <Option value="internship">인턴십/공모전</Option>
-            <Option value="notice">공지사항</Option>
+            <Option value="ITNews">IT 지식</Option>
+            <Option value="Daily">잡담/일상</Option>
+            <Option value="Tech">기술</Option>
+            <Option value="InternShip">인턴십/공모전</Option>
+            <Option value="Notice">공지사항</Option>
           </Select>
         </div>
         <PostBox>
