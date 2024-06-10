@@ -121,8 +121,8 @@ export const ReviewTeam = styled.h2`
 //기프티콘
 export const GifticonContainer = styled.div`
   display: flex;
-  width: 50%;
-  max-height: 20%;
+  width: 40rem;
+  max-height: 20rem;
   padding: 20px;
   border: 1px solid transparent;
   border-radius: 20px;
@@ -131,7 +131,7 @@ export const GifticonContainer = styled.div`
 export const GiftTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 60%;
+  width: 50rem;
   gap: 1em;
 `;
 

@@ -120,3 +120,32 @@ export const KakaoText = styled.p`
 export const StyledLogoIcon = styled(LogoIcon)`
   width: 50%;
 `;
+const bounce = keyframes`
+  0%, 100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
+  50% {
+    transform: translateY(-5px);
+    opacity: 1;
+  }
+`;
+export const KakaoMessage = styled.div`
+  position: absolute;
+  bottom: 405px;
+  background-color: white;
+  border: 1px solid red;
+  border-radius: 50px;
+  padding: 5px 10px;
+  color: red;
+  font-size: 12px;
+  font-weight: 300;
+  white-space: nowrap;
+  animation: ${bounce} 0.6s ease-in-out 2, fadeOut 0.6s forwards 5s;
+
+  @keyframes fadeOut {
+    to {
+      opacity: 0;
+    }
+  }
+`;

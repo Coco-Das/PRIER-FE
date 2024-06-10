@@ -1,23 +1,17 @@
 import axios from 'axios';
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import { useUserStore } from '../states/user/UserStore';
 import { API_BASE_URL, KAKAO_ACCESS_TOKEN } from '../const/TokenApi';
 
-export function FetchMyPage() {
-  const setUserProfile = useUserStore(state => state.setUserProfile);
-  useEffect(() => {
-    const FetchUserProfile = async () => {
-      try {
-        const response = await API_BASE_URL.get('/users/mypage');
-        console.log('유저 정보 요청 성공', response.data);
-        return response.data;
-      } catch (error) {
-        console.error('유저 정보 요청 실패:', error);
-        throw error;
-      }
-    };
-    FetchUserProfile();
-  }, [setUserProfile]);
+export async function FetchMyPage() {
+  try {
+    const response = await API_BASE_URL.get('/users/mypage');
+    console.log('유저 정보 요청 성공', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('유저 정보 요청 실패:', error);
+    throw error;
+  }
 }
 
 export function FetchLogout() {

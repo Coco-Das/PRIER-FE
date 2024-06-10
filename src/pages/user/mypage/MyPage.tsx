@@ -57,6 +57,7 @@ import AccountEdit from '../../../components/user/AccountEdit';
 export default function MyPage() {
   const navigate = useNavigate();
   const userProfile = useUserStore(state => state.userProfile);
+  const { setUserProfile } = useUserStore();
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [showEditNameAlert, setShowEditNameAlert] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -83,8 +84,17 @@ export default function MyPage() {
   const UseFetchLogout = FetchLogout();
 
   useEffect(() => {
-    // FetchMyPage();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const userProfileData = await FetchMyPage();
+        setUserProfile(userProfileData);
+      } catch (error) {
+        console.error('마이 페이지 호출 실패:', error);
+      }
+    };
+    fetchData();
+  }, [setUserProfile]);
+
   //로그아웃
   const ConfirmLogout = () => {
     setShowLogoutAlert(true);
