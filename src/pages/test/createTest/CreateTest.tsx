@@ -1,4 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
+import PropTypes from 'prop-types';
+import DatePicker from 'react-datepicker';
+import 'react-datepicker/dist/react-datepicker.css';
 import {
   BlueDiv,
   CreateWrapper,
@@ -27,14 +30,14 @@ import {
   Tag,
 } from './CreateTestStyles';
 import { ToggleBtn } from '../../../components/utils/Toggle';
+import { API_BASE_URL } from '../../../const/TokenApi';
 
-const AutoResizeTextarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = props => {
-  const [value, setValue] = useState('');
+interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
+  value?: string;
+}
+
+const AutoResizeTextarea: React.FC<AutoResizeTextareaProps> = ({ value, ...props }) => {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-  const handleChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setValue(event.target.value);
-  };
 
   useEffect(() => {
     const textarea = textareaRef.current;
@@ -44,15 +47,19 @@ const AutoResizeTextarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElem
     }
   }, [value]);
 
-  return <Textarea ref={textareaRef} value={value} onChange={handleChange} {...props} />;
+  return <Textarea ref={textareaRef} value={value} {...props} />;
+};
+
+AutoResizeTextarea.propTypes = {
+  value: PropTypes.string.isRequired,
 };
 
 interface Question {
   id: number;
   type: 'subjective' | 'objective';
   content: string;
-  options?: string[]; // 객관식 질문의 선택지
-  selectedOption?: string; // 사용자가 선택한 선택지
+  options?: string[]; // 객관식 질문의 선택지(고정)
+  // selectedOption?: string; // 사용자가 선택한 선택지
 }
 
 export const CreateTest = () => {
@@ -60,19 +67,33 @@ export const CreateTest = () => {
   const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>([]);
   const mainFileInputRef = useRef<HTMLInputElement>(null);
   const additionalFileInputRef = useRef<HTMLInputElement>(null);
-
+  const [title, setTitle] = useState('');
   const [questions, setQuestions] = useState<Question[]>([
     { id: 1, type: 'subjective', content: '' },
     { id: 2, type: 'objective', content: '', options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] },
   ]);
   const [tags, setTags] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>('');
+  const [step, setStep] = useState('');
+  const [introduce, setIntroduce] = useState('');
+  const [goal, setGoal] = useState('');
+  const [teamName, setTeamName] = useState('');
+  const [teamDescription, setTeamDescription] = useState('');
+  const [teamMate, setTeamMate] = useState('');
+  const [link, setLink] = useState('');
+  const [github, setGithub] = useState('');
+  const [startDate, setStartDate] = useState<Date | null>(null);
+  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [sub, setSub] = useState('');
+  const [obj, setObj] = useState('');
+
   const addQuestion = () => {
     setQuestions(prevQuestions => [
       ...prevQuestions,
       { id: prevQuestions.length + 1, type: 'subjective', content: '' },
     ]);
   };
+
   const toggleQuestionType = (id: number) => {
     setQuestions(prevQuestions =>
       prevQuestions.map(question =>
@@ -81,22 +102,10 @@ export const CreateTest = () => {
               ...question,
               type: question.type === 'subjective' ? 'objective' : 'subjective',
               options: question.type === 'subjective' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
-              selectedOption: undefined,
+              content: '',
             }
           : question,
       ),
-    );
-  };
-
-  const handleQuestionChange = (id: number, content: string) => {
-    setQuestions(prevQuestions =>
-      prevQuestions.map(question => (question.id === id ? { ...question, content } : question)),
-    );
-  };
-
-  const handleOptionChange = (id: number, selectedOption: string) => {
-    setQuestions(prevQuestions =>
-      prevQuestions.map(question => (question.id === id ? { ...question, selectedOption } : question)),
     );
   };
 
@@ -151,6 +160,104 @@ export const CreateTest = () => {
       setTagInput('');
     }
   };
+  const handleIntroduceChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setIntroduce(event.target.value);
+  };
+
+  const handleGoalChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setGoal(event.target.value);
+  };
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+
+  const handleStepChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setStep(event.target.value);
+  };
+
+  const handleTeamNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTeamName(event.target.value);
+  };
+
+  const handleTeamDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTeamDescription(event.target.value);
+  };
+
+  const handleTeamMateChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setTeamMate(event.target.value);
+  };
+
+  const handleLinkChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLink(event.target.value);
+  };
+
+  const handleGithubChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setGithub(event.target.value);
+  };
+  const handleSubChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setSub(event.target.value);
+  };
+  const handleObjChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setObj(event.target.value);
+  };
+
+  const handleQuestionContentChange = (id: number, content: string) => {
+    setQuestions(prevQuestions =>
+      prevQuestions.map(question => (question.id === id ? { ...question, content } : question)),
+    );
+  };
+
+  const handleSubmit = async () => {
+    const formData = new FormData();
+
+    formData.append(
+      'form',
+      new Blob(
+        [
+          JSON.stringify({
+            title,
+            introduce,
+            goal,
+            tags,
+            startDate: '2024-06-10',
+            endDate: '2024-07-21',
+            status: step === '배포완료' ? 0 : step === '개발 중' ? 1 : 2,
+            teamName,
+            teamDescription,
+            teamMate,
+            link,
+            question: questions.map(q => q.content),
+            type: questions.map(q => q.type),
+          }),
+        ],
+        {
+          type: 'application/json',
+        },
+      ),
+    );
+    if (mainFileInputRef.current?.files && mainFileInputRef.current.files.length > 0) {
+      formData.append('mainImage', mainFileInputRef.current.files[0]);
+    }
+    if (additionalFileInputRef.current?.files) {
+      Array.from(additionalFileInputRef.current.files).forEach(file => {
+        formData.append('contentImages', file);
+      });
+    }
+
+    const config = {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    };
+
+    try {
+      const response = await API_BASE_URL.post('http://13.209.76.145:8080/api/projects', formData, config);
+      console.log(response.data);
+      // navigator('/')
+    } catch (error) {
+      console.error('에러:', error);
+    }
+  };
 
   return (
     <CreateWrapper>
@@ -163,10 +270,21 @@ export const CreateTest = () => {
             </span>
           </div>
           <ProjectTextArea className="mt-2">
+            <input
+              style={{ fontSize: '25px', outline: 'none' }}
+              placeholder="프로젝트 제목을 입력하세요"
+              className="mb-10 font-semibold"
+              onChange={handleTitleChange}
+              value={title}
+            ></input>
             <p>프로젝트 소개</p>
-            <AutoResizeTextarea placeholder="프로젝트 소개를 입력하세요..." />
+            <AutoResizeTextarea
+              value={introduce}
+              onChange={handleIntroduceChange}
+              placeholder="프로젝트 소개를 입력하세요..."
+            />
             <p>프로젝트 목표</p>
-            <AutoResizeTextarea placeholder="프로젝트 목표를 입력하세요..." />
+            <AutoResizeTextarea value={goal} onChange={handleGoalChange} placeholder="프로젝트 목표를 입력하세요..." />
             <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
             <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
             {mainImageUrl && (
@@ -212,23 +330,40 @@ export const CreateTest = () => {
           <OrangeDiv className="mt-3">
             <span className="font-bold">개발일정</span>
             <OrangeInputDiv>
-              <Input />
-              <Input />
+              <DatePicker
+                selected={startDate}
+                onChange={(date: Date) => setStartDate(date)}
+                dateFormat="yyyy-MM-dd"
+                placeholderText="시작 날짜"
+                customInput={<Input style={{ width: '100%', textAlign: 'center' }} />}
+              />
+              <DatePicker
+                selected={endDate}
+                onChange={(date: Date) => setEndDate(date)}
+                dateFormat="yyyy-MM-dd"
+                placeholderText="종료 날짜"
+                customInput={<Input style={{ width: '100%', textAlign: 'center' }} />}
+              />
             </OrangeInputDiv>
             <OrangeInputDiv>
               <span>진행단계 :</span>
-              <Input placeholder="배포완료 / 개발 중 / 기획 중 선택" style={{ width: '60%' }} />
+              <Input
+                placeholder="배포완료 / 개발 중 / 기획 중 선택"
+                onChange={handleStepChange}
+                value={step}
+                style={{ width: '60%' }}
+              />
             </OrangeInputDiv>
           </OrangeDiv>
           <BlueDiv className="mt-2">
             <span className="font-bold">팀소개</span>
             <BlueInputDiv>
               <span>팀명 :</span>
-              <Input style={{ width: '67%' }} />
+              <Input style={{ width: '67%' }} onChange={handleTeamNameChange} value={teamName} />
             </BlueInputDiv>
             <BlueInputDiv>
               <span>한줄소개 :</span>
-              <Input style={{ width: '61%' }} />
+              <Input style={{ width: '61%' }} onChange={handleTeamDescriptionChange} value={teamDescription} />
             </BlueInputDiv>
             <BlueInputDiv style={{ alignItems: 'normal' }}>
               <span>팀원 :</span>
@@ -242,17 +377,19 @@ export const CreateTest = () => {
                   height: '110px',
                   overflowY: 'auto',
                 }}
+                onChange={handleTeamMateChange}
+                value={teamMate}
               ></Textarea>
             </BlueInputDiv>
           </BlueDiv>
           <GreenDiv className="mt-2">
             <GreenInputDiv>
               <span className="font-bold">배포 링크</span>
-              <Input style={{ width: '60%' }} />
+              <Input style={{ width: '60%' }} onChange={handleLinkChange} value={link} />
             </GreenInputDiv>
             <GreenInputDiv>
               <span className="font-bold">깃허브</span>
-              <Input style={{ width: '60%' }} />
+              <Input style={{ width: '60%' }} onChange={handleGithubChange} value={github} />
             </GreenInputDiv>
           </GreenDiv>
         </ProjectIntro>
@@ -288,6 +425,8 @@ export const CreateTest = () => {
                         fontWeight: 'bold',
                         width: '80%',
                       }}
+                      value={question.content}
+                      onChange={e => handleQuestionContentChange(question.id, e.target.value)}
                     />
                     <div style={{ marginLeft: 'auto' }}>
                       <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
@@ -295,8 +434,6 @@ export const CreateTest = () => {
                   </div>
                   <AutoResizeTextarea
                     placeholder="주관식 답변을 입력하세요..."
-                    value={question.content}
-                    onChange={e => handleQuestionChange(question.id, e.target.value)}
                     style={{
                       marginTop: '10px',
                       marginLeft: '75px',
@@ -312,6 +449,8 @@ export const CreateTest = () => {
                     <input
                       placeholder="질문을 입력하세요"
                       style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
+                      onChange={e => handleQuestionContentChange(question.id, e.target.value)}
+                      value={question.content}
                     />
                     <div style={{ marginLeft: 'auto' }}>
                       <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
@@ -332,14 +471,7 @@ export const CreateTest = () => {
                     {question.options?.map((option, i) => (
                       <div key={i}>
                         <label>
-                          <input
-                            type="radio"
-                            name={`question-${question.id}`}
-                            value={option}
-                            checked={question.selectedOption === option}
-                            onChange={e => handleOptionChange(question.id, e.target.value)}
-                          />{' '}
-                          {option}
+                          <input type="radio" name={`question-${question.id}`} value={option} /> {option}
                         </label>
                       </div>
                     ))}
@@ -349,6 +481,11 @@ export const CreateTest = () => {
             </QuestionDiv>
           ))}
           <CustomButton onClick={addQuestion}>질문 추가</CustomButton>
+          <div style={{ width: '100%', display: 'flex' }}>
+            <CustomButton onClick={handleSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
+              제출하기
+            </CustomButton>
+          </div>
         </div>
       </Question>
     </CreateWrapper>
