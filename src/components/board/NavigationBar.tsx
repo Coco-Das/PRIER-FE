@@ -42,6 +42,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   searchTerm,
   handleSearchChange,
 }) => {
+  const isNoticeCategory = activeCategory === 'notice';
+
   return (
     <Navigation>
       <TopContainer>
@@ -54,7 +56,12 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               <MenuItem
                 key={category}
                 active={activeCategory === category}
-                onClick={() => handleCategoryClick(category)}
+                onClick={() => {
+                  if (activeFilter === 'myposts' && category === 'notice') {
+                    handleFilterClick('all');
+                  }
+                  handleCategoryClick(category);
+                }}
               >
                 {categoryLabels[category]}
               </MenuItem>
@@ -68,7 +75,12 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
           <CategoryButton active={activeFilter === 'likes'} onClick={() => handleFilterClick('likes')}>
             Likes
           </CategoryButton>
-          <CategoryButton active={activeFilter === 'myposts'} onClick={() => handleFilterClick('myposts')}>
+          <CategoryButton
+            active={activeFilter === 'myposts'}
+            onClick={() => !isNoticeCategory && handleFilterClick('myposts')}
+            disabled={isNoticeCategory}
+            title={isNoticeCategory ? '공지사항에서는 My Posts를 사용할 수 없습니다.' : ''}
+          >
             My Posts
           </CategoryButton>
         </CategoryButtonsContainer>

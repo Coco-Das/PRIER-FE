@@ -16,6 +16,7 @@ import {
 } from './BoardStyles';
 import { Post } from '../../states/board/BoardStore';
 import userAvatar from '../../assets/user.svg';
+import announcementAvatar from '../../assets/Announcement.svg'; // 공지사항 아바타 이미지 추가
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
 import useFormatDate from '../../hooks/UseFormatDate'; // 경로 수정
@@ -32,18 +33,24 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
   return (
     <>
       {posts.map(post => (
-        <PostBox key={post.boardId} onClick={() => onPostClick(post.boardId)}>
+        <PostBox
+          key={post.boardId}
+          onClick={() => onPostClick(post.boardId)}
+          category={post.category} // 카테고리 props 추가
+        >
           <UserContainer>
-            <Avatar>
-              <AvatarImage src={userAvatar} alt="Avatar" />
+            <Avatar category={post.category}>
+              <AvatarImage src={post.category === 'notice' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author>{`작성자 ${post.memberId}`}</Author>
+              <Author category={post.category}>
+                {post.category === 'notice' ? '공지사항' : `작성자 ${post.memberId}`}
+              </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
           </UserContainer>
           <ContentContainer>{post.content}</ContentContainer>
-          <Image src="image.png" alt="Content" />
+          <Image src="image.png" alt="Content" category={post.category} /> {/* category prop 추가 */}
           <LikesContainer>
             <Likes>likes {post.likes}</Likes>
             <LikeButton

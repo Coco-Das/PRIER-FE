@@ -61,6 +61,9 @@ const Board: React.FC = () => {
 
   // 카테고리 변경을 처리하는 함수
   const handleCategoryClick = (category: string) => {
+    if (activeFilter === 'myposts' && category === 'notice') {
+      setActiveFilter('all');
+    }
     setActiveCategory(category);
     navigate(`/board?category=${category}&filter=${activeFilter}`);
   };
