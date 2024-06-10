@@ -10,14 +10,16 @@ import {
   StyledPointIcon,
   Title,
 } from './UserStyle';
+import { useUserStore } from '../../states/user/UserStore';
 
 export default function Profile() {
   const [progress] = useState(50);
+  const userProfile = useUserStore(state => state.userProfile);
 
   return (
     <ProfileContainer>
       <div className="flex justify-between items-center gap-10 mb-3">
-        <Title>반갑습니다 {}개발자1님</Title>
+        <Title>반갑습니다 {userProfile.nickname} 님</Title>
         <Link to="/mypage">
           <LinkText>마이 페이지 &gt;</LinkText>
         </Link>
@@ -25,7 +27,7 @@ export default function Profile() {
       <ProgressBarContainer>
         <Filler percentage={progress} />
       </ProgressBarContainer>
-      <MiddleText>등급 LV.</MiddleText>
+      <MiddleText>등급 {userProfile.rank}</MiddleText>
       <div className="flex-col">
         <div className="flex items-center gap-3">
           <StyledPointIcon></StyledPointIcon>
