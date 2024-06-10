@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import {
   Container,
   CreateContainer,
@@ -20,11 +20,25 @@ import Select, { selectClasses } from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import ToggleGroupToolbar from '../../components/board/ToggleGroupToolbar'; // ToggleGroupToolbar 컴포넌트를 올바르게 가져오기
+import CustomAlert from '../../components/utils/CustomAlert';
 
 function CreateBoard() {
+  const navigate = useNavigate();
+
   const [title, setTitle] = useState('');
   const [content, setContent] = useState('');
+  const [ShowCreateBoardAlert, setShowCreateBoardAlert] = useState(false);
 
+  const confirmCreateBoard = () => {
+    // 게시물 업로드 로직
+    setShowCreateBoardAlert(false);
+    navigate('/board');
+  };
+
+  const cancelCreateBoard = () => {
+    // 취소 로직
+    setShowCreateBoardAlert(false);
+  };
   return (
     <Container>
       <CreateContainer>
@@ -66,9 +80,24 @@ function CreateBoard() {
             <ContentText placeholder="내용을 입력하세요" value={content} onChange={e => setContent(e.target.value)} />
           </ContentContainer>
         </PostBox>
-        <Button as={Link} to="/CreateBoard" className="ml-auto">
-          <ButtonText>완료</ButtonText>
-        </Button>
+        <div>
+          <Button
+            className="ml-auto"
+            onClick={(e: any) => {
+              e.preventDefault();
+              setShowCreateBoardAlert(true);
+            }}
+          >
+            <ButtonText>완료</ButtonText>
+          </Button>
+          {ShowCreateBoardAlert && (
+            <CustomAlert
+              message="게시물을 업로드 하시겠습니까?"
+              onConfirm={confirmCreateBoard}
+              onCancel={cancelCreateBoard}
+            />
+          )}
+        </div>
       </CreateContainer>
     </Container>
   );
