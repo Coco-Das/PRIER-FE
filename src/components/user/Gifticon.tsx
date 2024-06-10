@@ -1,6 +1,5 @@
 import React from 'react';
 import { GiftImg, GiftTextWrapper, GifticonContainer, LinkText, Title } from './UserStyle';
-import Gift from '../../assets/gift.png';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import { styled } from 'styled-components';
 import { useGifticonStore } from '../../states/user/PointStore';
