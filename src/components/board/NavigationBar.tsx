@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import {
   Navigation,
   Button,
@@ -38,24 +38,6 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   handleFilterClick,
   title,
 }) => {
-  const navigate = useNavigate();
-
-  const handleNavClick = (category: string) => {
-    if (activeFilter === 'likes' || activeFilter === 'myposts') {
-      handleCategoryClick(category);
-      navigate(`/board?category=${category}&filter=${activeFilter}`);
-    } else {
-      handleCategoryClick(category);
-      handleFilterClick('all'); // 카테고리 변경 시 필터를 초기화
-      navigate(`/board?category=${category}&filter=all`);
-    }
-  };
-
-  const handleFilterNavClick = (filter: string) => {
-    handleFilterClick(filter);
-    navigate(`/board?category=${activeCategory}&filter=${filter}`);
-  };
-
   return (
     <Navigation>
       <TopContainer>
@@ -65,20 +47,24 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
         <SegmentedControlContainer>
           <SegmentedControl>
             {Object.keys(categoryLabels).map(category => (
-              <MenuItem key={category} active={activeCategory === category} onClick={() => handleNavClick(category)}>
+              <MenuItem
+                key={category}
+                active={activeCategory === category}
+                onClick={() => handleCategoryClick(category)}
+              >
                 {categoryLabels[category]}
               </MenuItem>
             ))}
           </SegmentedControl>
         </SegmentedControlContainer>
         <CategoryButtonsContainer>
-          <CategoryButton active={activeFilter === 'all'} onClick={() => handleFilterNavClick('all')}>
+          <CategoryButton active={activeFilter === 'all'} onClick={() => handleFilterClick('all')}>
             All
           </CategoryButton>
-          <CategoryButton active={activeFilter === 'likes'} onClick={() => handleFilterNavClick('likes')}>
+          <CategoryButton active={activeFilter === 'likes'} onClick={() => handleFilterClick('likes')}>
             Likes
           </CategoryButton>
-          <CategoryButton active={activeFilter === 'myposts'} onClick={() => handleFilterNavClick('myposts')}>
+          <CategoryButton active={activeFilter === 'myposts'} onClick={() => handleFilterClick('myposts')}>
             My Posts
           </CategoryButton>
         </CategoryButtonsContainer>

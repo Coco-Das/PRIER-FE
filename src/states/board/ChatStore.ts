@@ -17,7 +17,7 @@ const generateRandomComments = (numComments: number, boardIds: number[]): Commen
     comments.push({
       commentId: commentId++,
       boardId: boardId,
-      memberId: Math.ceil(Math.random() * 10),
+      memberId: Math.ceil(Math.random() * 3),
       content: `댓글 내용 ${i + 1}`,
       createdAt: new Date().toISOString(),
     });

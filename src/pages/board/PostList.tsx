@@ -18,6 +18,7 @@ import { Post } from '../../states/board/BoardStore';
 import userAvatar from '../../assets/user.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
+import useFormatDate from '../../hooks/UseFormatDate'; // 경로 수정
 
 interface PostListProps {
   posts: Post[];
@@ -26,6 +27,8 @@ interface PostListProps {
 }
 
 const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) => {
+  const formatDate = useFormatDate();
+
   return (
     <>
       {posts.map(post => (
@@ -36,13 +39,13 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
             </Avatar>
             <AuthorContainer>
               <Author>{`작성자 ${post.memberId}`}</Author>
-              <CreatedAt>{post.createdAt}</CreatedAt>
+              <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
           </UserContainer>
           <ContentContainer>{post.content}</ContentContainer>
           <Image src="image.png" alt="Content" />
           <LikesContainer>
-            <Likes>{post.likes} likes</Likes>
+            <Likes>likes {post.likes}</Likes>
             <LikeButton
               onClick={(e: any) => {
                 e.stopPropagation();
