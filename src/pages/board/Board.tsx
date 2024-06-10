@@ -14,8 +14,9 @@ const Board: React.FC = () => {
   const location = useLocation();
   const [posts, setPosts] = useState<Post[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
-  const [activeCategory, setActiveCategory] = useState<string>('it-news');
+  const [activeCategory, setActiveCategory] = useState<string>('ITNews');
   const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
@@ -40,9 +41,16 @@ const Board: React.FC = () => {
       } else if (activeFilter === 'myposts') {
         updatedPosts = posts.filter(post => post.category === activeCategory && post.memberId === 1); // 임의로 memberId를 1로 설정
       }
+
+      if (searchTerm) {
+        updatedPosts = updatedPosts.filter(
+          post => post.title.includes(searchTerm) || post.content.includes(searchTerm),
+        );
+      }
+
       setFilteredPosts(updatedPosts);
     }
-  }, [posts, activeCategory, activeFilter, postId]);
+  }, [posts, activeCategory, activeFilter, searchTerm, postId]);
 
   // 좋아요 토글 함수
   const toggleLike = (postId: number) => {
@@ -53,6 +61,9 @@ const Board: React.FC = () => {
 
   // 카테고리 변경을 처리하는 함수
   const handleCategoryClick = (category: string) => {
+    if (activeFilter === 'myposts' && category === 'Notice') {
+      setActiveFilter('all');
+    }
     setActiveCategory(category);
     navigate(`/board?category=${category}&filter=${activeFilter}`);
   };
@@ -69,6 +80,10 @@ const Board: React.FC = () => {
 
   const handleBackToList = () => {
     navigate(`/board?category=${activeCategory}&filter=${activeFilter}`); // 상세보기에서 목록으로 돌아가기
+  };
+
+  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setSearchTerm(e.target.value);
   };
 
   const getTitle = () => {
@@ -88,6 +103,8 @@ const Board: React.FC = () => {
         handleCategoryClick={handleCategoryClick}
         handleFilterClick={handleFilterClick}
         title={getTitle()}
+        searchTerm={searchTerm}
+        handleSearchChange={handleSearchChange}
       />
       {loading && !postId ? (
         <>
@@ -101,8 +118,12 @@ const Board: React.FC = () => {
         ) : (
           <PostDetail postId={Number(postId)} onBackToList={handleBackToList} toggleLike={toggleLike} posts={posts} />
         )
-      ) : (
+      ) : filteredPosts.length > 0 ? (
         <PostList posts={filteredPosts} onPostClick={handlePostClick} toggleLike={toggleLike} />
+      ) : searchTerm ? (
+        <NoPostsMessage>{searchTerm} (이)가 포함된 게시물이 없습니다.</NoPostsMessage>
+      ) : (
+        <NoPostsMessage>해당 게시물이 없습니다.</NoPostsMessage>
       )}
       {!postId && <PaginationComponent />}
     </Container>

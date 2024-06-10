@@ -101,7 +101,7 @@ export const CategoryButtonsContainer = styled(SegmentedControlContainer)`
 `;
 
 // 카테고리 버튼 스타일
-export const CategoryButton = styled.div<{ active?: boolean }>`
+export const CategoryButton = styled.div<{ active?: boolean; disabled?: boolean }>`
   background: ${props => (props.active ? '#4188fe' : 'transparent')};
   border-radius: 4px;
   height: 40px;
@@ -110,14 +110,14 @@ export const CategoryButton = styled.div<{ active?: boolean }>`
   align-items: center;
   justify-content: center;
   font-size: 15px;
-  color: ${props => (props.active ? '#ffffff' : '#000000')};
+  color: ${props => (props.active ? '#ffffff' : props.disabled ? '#d3d3d3' : '#000000')};
   font-weight: 500;
-  cursor: pointer;
+  cursor: ${props => (props.disabled ? 'not-allowed' : 'pointer')};
   margin-left: 5px;
 
   &:hover {
-    background: #d1e0fc;
-    color: #4188fe;
+    background: ${props => (props.disabled ? 'transparent' : '#d1e0fc')};
+    color: ${props => (props.disabled ? '#d3d3d3' : '#4188fe')};
   }
 `;
 
@@ -141,14 +141,15 @@ export const MenuItem = styled.div<MenuItemProps>`
 `;
 
 // 포스트 박스 스타일
-export const PostBox = styled.div`
-  background: #ffffff;
+export const PostBox = styled.div<{ category?: string }>`
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
   border-radius: 15px;
+  border: none;
+  padding: 1vh;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   width: 100%;
   max-width: 1200px;
-  padding: 1vh;
   margin-bottom: 20px;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
   flex-direction: column;
   position: relative;
@@ -161,8 +162,8 @@ export const UserContainer = styled.div`
   margin-bottom: 10px;
 `;
 
-export const Avatar = styled.div`
-  background: #f7f7f7;
+export const Avatar = styled.div<{ category?: string }>`
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#f7f7f7')};
   border-radius: 1000px;
   width: 50.58px;
   height: 50.58px;
@@ -184,8 +185,8 @@ export const AuthorContainer = styled.div`
   flex-direction: column;
 `;
 
-export const Author = styled.div`
-  color: #000000;
+export const Author = styled.div<{ category?: string }>`
+  color: ${props => (props.category === 'Notice' ? '#4188fe' : '#000000')};
   font-size: 16px;
   line-height: 150%;
   font-weight: 700;
@@ -206,13 +207,15 @@ export const ContentContainer = styled.div`
   margin-top: 10px;
 `;
 
-export const Image = styled.img`
+export const Image = styled.img<{ category?: string }>`
   border-radius: 10px;
   width: 100%;
   max-width: 760px;
   height: auto;
+  max-height: 300px; /* 최대 높이 설정 */
   margin-top: 10px;
   object-fit: cover;
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')}; // 이미지 배경색 설정
 `;
 
 export const LikesContainer = styled.div`

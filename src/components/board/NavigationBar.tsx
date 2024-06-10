@@ -16,11 +16,11 @@ import {
 import SearchInput from './SearchInput';
 
 const categoryLabels: { [key: string]: string } = {
-  'it-news': 'IT 지식',
-  chat: '잡담/일상',
-  tech: '기술',
-  internship: '인턴십/공모전',
-  notice: '공지사항',
+  ITNews: 'IT 지식',
+  Daily: '잡담/일상',
+  Tech: '기술',
+  InternShip: '인턴십/공모전',
+  Notice: '공지사항',
 };
 
 interface NavigationBarProps {
@@ -29,6 +29,8 @@ interface NavigationBarProps {
   handleCategoryClick: (category: string) => void;
   handleFilterClick: (filter: string) => void;
   title: string;
+  searchTerm: string;
+  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = ({
@@ -37,7 +39,11 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   handleCategoryClick,
   handleFilterClick,
   title,
+  searchTerm,
+  handleSearchChange,
 }) => {
+  const isNoticeCategory = activeCategory === 'Notice';
+
   return (
     <Navigation>
       <TopContainer>
@@ -50,7 +56,12 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               <MenuItem
                 key={category}
                 active={activeCategory === category}
-                onClick={() => handleCategoryClick(category)}
+                onClick={() => {
+                  if (activeFilter === 'myposts' && category === 'Notice') {
+                    handleFilterClick('all');
+                  }
+                  handleCategoryClick(category);
+                }}
               >
                 {categoryLabels[category]}
               </MenuItem>
@@ -64,11 +75,16 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
           <CategoryButton active={activeFilter === 'likes'} onClick={() => handleFilterClick('likes')}>
             Likes
           </CategoryButton>
-          <CategoryButton active={activeFilter === 'myposts'} onClick={() => handleFilterClick('myposts')}>
+          <CategoryButton
+            active={activeFilter === 'myposts'}
+            onClick={() => !isNoticeCategory && handleFilterClick('myposts')}
+            disabled={isNoticeCategory}
+            title={isNoticeCategory ? '공지사항에서는 My Posts를 사용할 수 없습니다.' : ''}
+          >
             My Posts
           </CategoryButton>
         </CategoryButtonsContainer>
-        <SearchInput />
+        <SearchInput searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
         <Button as={Link} to="/CreateBoard">
           <ButtonText>새 글 작성하기</ButtonText>
         </Button>

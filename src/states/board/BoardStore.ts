@@ -12,11 +12,11 @@ export interface Post {
 
 // 게시물 데이터
 export const posts: Post[] = [
-  // IT 소식 카테고리
+  // ITNews 카테고리
   {
     boardId: 1,
     memberId: 1,
-    category: 'it-news',
+    category: 'ITNews',
     title: 'IT 소식 제목 1',
     content: 'IT 소식 내용 1',
     createdAt: '2024-06-03T14:23:04',
@@ -26,7 +26,7 @@ export const posts: Post[] = [
   {
     boardId: 2,
     memberId: 2,
-    category: 'it-news',
+    category: 'ITNews',
     title: 'IT 소식 제목 2',
     content: 'IT 소식 내용 2',
     createdAt: '2024-06-03T14:24:05',
@@ -36,7 +36,7 @@ export const posts: Post[] = [
   {
     boardId: 3,
     memberId: 3,
-    category: 'it-news',
+    category: 'ITNews',
     title: 'IT 소식 제목 3',
     content: 'IT 소식 내용 3',
     createdAt: '2024-06-03T14:25:06',
@@ -46,7 +46,7 @@ export const posts: Post[] = [
   {
     boardId: 4,
     memberId: 4,
-    category: 'it-news',
+    category: 'ITNews',
     title: 'IT 소식 제목 4',
     content: 'IT 소식 내용 4',
     createdAt: '2024-06-03T14:26:07',
@@ -56,7 +56,7 @@ export const posts: Post[] = [
   {
     boardId: 5,
     memberId: 5,
-    category: 'it-news',
+    category: 'ITNews',
     title: 'IT 소식 제목 5',
     content: 'IT 소식 내용 5',
     createdAt: '2024-06-03T14:27:08',
@@ -64,11 +64,11 @@ export const posts: Post[] = [
     likedByUser: false,
   },
 
-  // 잡담/일상 카테고리
+  // Daily 카테고리
   {
     boardId: 6,
     memberId: 1,
-    category: 'chat',
+    category: 'Daily',
     title: '잡담 제목 1',
     content: '잡담 내용 1',
     createdAt: '2024-06-03T14:33:14',
@@ -78,7 +78,7 @@ export const posts: Post[] = [
   {
     boardId: 7,
     memberId: 2,
-    category: 'chat',
+    category: 'Daily',
     title: '잡담 제목 2',
     content: '잡담 내용 2',
     createdAt: '2024-06-03T14:34:15',
@@ -88,7 +88,7 @@ export const posts: Post[] = [
   {
     boardId: 8,
     memberId: 3,
-    category: 'chat',
+    category: 'Daily',
     title: '잡담 제목 3',
     content: '잡담 내용 3',
     createdAt: '2024-06-03T14:35:16',
@@ -98,7 +98,7 @@ export const posts: Post[] = [
   {
     boardId: 9,
     memberId: 4,
-    category: 'chat',
+    category: 'Daily',
     title: '잡담 제목 4',
     content: '잡담 내용 4',
     createdAt: '2024-06-03T14:36:17',
@@ -108,7 +108,7 @@ export const posts: Post[] = [
   {
     boardId: 10,
     memberId: 5,
-    category: 'chat',
+    category: 'Daily',
     title: '잡담 제목 5',
     content: '잡담 내용 5',
     createdAt: '2024-06-03T14:37:18',
@@ -116,11 +116,11 @@ export const posts: Post[] = [
     likedByUser: false,
   },
 
-  // 기술 카테고리
+  // Tech 카테고리
   {
     boardId: 11,
     memberId: 1,
-    category: 'tech',
+    category: 'Tech',
     title: '기술 제목 1',
     content: '기술 내용 1',
     createdAt: '2024-06-03T14:43:24',
@@ -130,7 +130,7 @@ export const posts: Post[] = [
   {
     boardId: 12,
     memberId: 2,
-    category: 'tech',
+    category: 'Tech',
     title: '기술 제목 2',
     content: '기술 내용 2',
     createdAt: '2024-06-03T14:44:25',
@@ -140,7 +140,7 @@ export const posts: Post[] = [
   {
     boardId: 13,
     memberId: 3,
-    category: 'tech',
+    category: 'Tech',
     title: '기술 제목 3',
     content: '기술 내용 3',
     createdAt: '2024-06-03T14:45:26',
@@ -150,7 +150,7 @@ export const posts: Post[] = [
   {
     boardId: 14,
     memberId: 4,
-    category: 'tech',
+    category: 'Tech',
     title: '기술 제목 4',
     content: '기술 내용 4',
     createdAt: '2024-06-03T14:46:27',
@@ -160,7 +160,7 @@ export const posts: Post[] = [
   {
     boardId: 15,
     memberId: 5,
-    category: 'tech',
+    category: 'Tech',
     title: '기술 제목 5',
     content: '기술 내용 5',
     createdAt: '2024-06-03T14:47:28',
@@ -168,11 +168,11 @@ export const posts: Post[] = [
     likedByUser: false,
   },
 
-  // 인턴십/공모전 카테고리
+  // InternShip 카테고리
   {
     boardId: 16,
     memberId: 1,
-    category: 'internship',
+    category: 'InternShip',
     title: '인턴십 제목 1',
     content: '인턴십 내용 1',
     createdAt: '2024-06-03T14:53:34',
@@ -182,7 +182,7 @@ export const posts: Post[] = [
   {
     boardId: 17,
     memberId: 2,
-    category: 'internship',
+    category: 'InternShip',
     title: '인턴십 제목 2',
     content: '인턴십 내용 2',
     createdAt: '2024-06-03T14:54:35',
@@ -192,7 +192,7 @@ export const posts: Post[] = [
   {
     boardId: 18,
     memberId: 3,
-    category: 'internship',
+    category: 'InternShip',
     title: '인턴십 제목 3',
     content: '인턴십 내용 3',
     createdAt: '2024-06-03T14:55:36',
@@ -202,7 +202,7 @@ export const posts: Post[] = [
   {
     boardId: 19,
     memberId: 4,
-    category: 'internship',
+    category: 'InternShip',
     title: '인턴십 제목 4',
     content: '인턴십 내용 4',
     createdAt: '2024-06-03T14:56:37',
@@ -212,7 +212,7 @@ export const posts: Post[] = [
   {
     boardId: 20,
     memberId: 5,
-    category: 'internship',
+    category: 'InternShip',
     title: '인턴십 제목 5',
     content: '인턴십 내용 5',
     createdAt: '2024-06-03T14:57:38',
@@ -220,11 +220,11 @@ export const posts: Post[] = [
     likedByUser: false,
   },
 
-  // 공지사항 카테고리
+  // Notice 카테고리
   {
     boardId: 21,
     memberId: 1,
-    category: 'notice',
+    category: 'Notice',
     title: '공지사항 제목 1',
     content: '공지사항 내용 1',
     createdAt: '2024-06-03T15:03:44',
@@ -234,7 +234,7 @@ export const posts: Post[] = [
   {
     boardId: 22,
     memberId: 2,
-    category: 'notice',
+    category: 'Notice',
     title: '공지사항 제목 2',
     content: '공지사항 내용 2',
     createdAt: '2024-06-03T15:04:45',
@@ -244,7 +244,7 @@ export const posts: Post[] = [
   {
     boardId: 23,
     memberId: 3,
-    category: 'notice',
+    category: 'Notice',
     title: '공지사항 제목 3',
     content: '공지사항 내용 3',
     createdAt: '2024-06-03T15:05:46',
@@ -254,7 +254,7 @@ export const posts: Post[] = [
   {
     boardId: 24,
     memberId: 4,
-    category: 'notice',
+    category: 'Notice',
     title: '공지사항 제목 4',
     content: '공지사항 내용 4',
     createdAt: '2024-06-03T15:06:47',
@@ -264,7 +264,7 @@ export const posts: Post[] = [
   {
     boardId: 25,
     memberId: 5,
-    category: 'notice',
+    category: 'Notice',
     title: '공지사항 제목 5',
     content: '공지사항 내용 5',
     createdAt: '2024-06-03T15:07:48',

@@ -1,7 +1,4 @@
-import styled from 'styled-components';
-import * as React from 'react';
-import Button from '@mui/material/Button';
-
+import styled, { keyframes, css } from 'styled-components';
 import { ReactComponent as firstmainimg1 } from '../../assets/FirstMainImg1.svg';
 import { ReactComponent as firstmainimg2 } from '../../assets/FirstMainImg2.svg';
 import { ReactComponent as firstmainimg3 } from '../../assets/FirstMainImg3.svg';
@@ -18,6 +15,22 @@ import { ReactComponent as firstmainimg13 } from '../../assets/FirstMainImg13.sv
 import { ReactComponent as firstmainimg14 } from '../../assets/FirstMainImg14.svg';
 import { ReactComponent as firstmainimg15 } from '../../assets/FirstMainImg15.svg';
 import { ReactComponent as logo } from '../../assets/Logo-firstMain.svg';
+import Button from '@mui/material/Button';
+
+const fadeInUp = keyframes`
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+`;
+
+const animationCSS = css`
+  animation: ${fadeInUp} 1s ease-in-out;
+`;
 
 export const FirstContainer = styled.div`
   height: 120vh;
@@ -34,7 +47,9 @@ export const Logo = styled(logo)`
   height: 10rem;
   margin-top: -10rem;
   position: relative;
+  ${animationCSS};
 `;
+
 export const Text = styled.h1`
   position: relative;
   background: linear-gradient(
@@ -49,10 +64,11 @@ export const Text = styled.h1`
   font-size: 32px;
   font-weight: 800;
   margin-bottom: 3rem;
+  ${animationCSS};
+  animation-delay: 0.2s;
 `;
-const StyledButton = styled(Button)`
-  position: relative;
 
+const StyledButton = styled(Button)`
   background: linear-gradient(90deg, rgba(49, 90, 241, 1) 0%, rgba(119, 60, 209, 1) 100%);
   border-radius: 15px;
   width: 12rem;
@@ -64,6 +80,8 @@ const StyledButton = styled(Button)`
   display: flex;
   align-items: center;
   justify-content: center;
+  ${animationCSS};
+  animation-delay: 0.4s;
 
   &::after {
     content: '지금 시작하기';
@@ -85,80 +103,113 @@ const StyledButton = styled(Button)`
 `;
 
 export const StartButton = styled(({ ...props }) => <StyledButton {...props} />)``;
-//StartButton은 StyledButton을 래핑하여 Link 컴포넌트와 연결합니다.
+
+const animatedImgStyle = css`
+  position: absolute;
+  ${animationCSS};
+`;
 
 export const Img1 = styled(firstmainimg1)`
-  position: absolute;
+  ${animatedImgStyle}
   left: 4rem;
   top: 1rem;
+  animation-delay: 0.6s;
 `;
+
 export const Img2 = styled(firstmainimg2)`
-  position: absolute;
+  ${animatedImgStyle}
   left: 18rem;
   top: 2rem;
+  animation-delay: 0.8s;
 `;
+
 export const Img3 = styled(firstmainimg3)`
-  position: absolute;
+  ${animatedImgStyle}
   left: 32rem;
   top: 1rem;
+  animation-delay: 1s;
 `;
+
 export const Img4 = styled(firstmainimg4)`
-  position: absolute;
+  ${animatedImgStyle}
   right: 13rem;
   top: 0.5rem;
+  animation-delay: 1.2s;
 `;
+
 export const Img5 = styled(firstmainimg5)`
-  position: absolute;
+  ${animatedImgStyle}
   right: 4rem;
   top: 4rem;
+  animation-delay: 1.4s;
 `;
+
 export const Img6 = styled(firstmainimg6)`
-  position: absolute;
+  ${animatedImgStyle}
   left: 14rem;
   top: 14rem;
+  animation-delay: 1.6s;
 `;
+
 export const Img7 = styled(firstmainimg7)`
-  position: absolute;
+  ${animatedImgStyle}
   left: 6rem;
   top: 20rem;
+  animation-delay: 1.8s;
 `;
+
 export const Img8 = styled(firstmainimg8)`
-  position: absolute;
+  ${animatedImgStyle}
   left: -3rem;
   top: 34rem;
+  animation-delay: 2s;
 `;
+
 export const Img9 = styled(firstmainimg9)`
-  position: absolute;
+  ${animatedImgStyle}
   left: 18rem;
   top: 41rem;
+  animation-delay: 2.2s;
 `;
+
 export const Img10 = styled(firstmainimg10)`
-  position: absolute;
+  ${animatedImgStyle}
   left: 25rem;
   top: 38rem;
+  animation-delay: 2.4s;
 `;
+
 export const Img11 = styled(firstmainimg11)`
-  position: absolute;
+  ${animatedImgStyle}
   right: 34rem;
   top: 35rem;
+  animation-delay: 2.6s;
 `;
+
 export const Img12 = styled(firstmainimg12)`
-  position: absolute;
+  ${animatedImgStyle}
   right: 23rem;
   bottom: 6rem;
+  animation-delay: 2.8s;
 `;
+
 export const Img13 = styled(firstmainimg13)`
-  position: absolute;
+  ${animatedImgStyle}
   right: 20rem;
   top: 30rem;
+  animation-delay: 3s;
 `;
+
 export const Img14 = styled(firstmainimg14)`
-  position: absolute;
+  ${animatedImgStyle}
   right: 4rem;
   top: 24rem;
+  animation-delay: 3.2s;
 `;
+
 export const Img15 = styled(firstmainimg15)`
-  position: absolute;
+  ${animatedImgStyle}
   right: 0rem;
   top: 33rem;
+  animation-delay: 3.4s;
 `;
