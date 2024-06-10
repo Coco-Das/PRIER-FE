@@ -12,6 +12,7 @@ export const LinkText = styled.p`
   font-size: 15px;
   font-weight: 300;
   color: #828282;
+  cursor: pointer;
 `;
 export const ProfileContainer = styled.div`
   position: absolute;

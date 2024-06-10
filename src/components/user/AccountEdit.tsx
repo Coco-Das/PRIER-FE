@@ -34,7 +34,7 @@ const ModalContent = styled.div`
 `;
 const AccountInput = styled.input`
   position: relative;
-  font-size: 18dpx;
+  font-size: 18px;
   width: 70%;
   max-width: 70%;
   border-radius: 20px;

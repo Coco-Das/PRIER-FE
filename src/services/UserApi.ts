@@ -181,3 +181,18 @@ export const EditIntro = async (newIntro: string) => {
     throw error;
   }
 };
+
+export const SendQuest = async (sequence: string) => {
+  const date = new Date().toISOString().split('T')[0];
+  try {
+    const response = await API_BASE_URL.get(`/quests/${date}/${sequence}`);
+    console.log('퀘스트 전송 성공', response.data);
+    if (response.status === 200) {
+      return true;
+    }
+  } catch (error) {
+    console.error('퀘스트 전송 실패', error);
+    throw error;
+  }
+  return false;
+};
