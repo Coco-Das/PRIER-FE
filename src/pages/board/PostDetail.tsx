@@ -33,6 +33,7 @@ import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
 import PostDetailSkeleton from '../../components/board/PostDetailSkeleton'; // PostDetailSkeleton 가져오기
 import useFormatDate from '../../hooks/UseFormatDate'; // 경로 수정
+import PositionedMenu from '../../components/board/PositionedMenu'; // PositionedMenu 컴포넌트 가져오기
 
 interface PostDetailProps {
   postId: number;
@@ -77,6 +78,11 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
               <Author>{`작성자 ${post.memberId}`}</Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
+            {post.memberId === 1 && ( // memberId가 1일 때만 메뉴바를 렌더링
+              <div style={{ marginLeft: 'auto' }}>
+                <PositionedMenu />
+              </div>
+            )}
           </UserContainer>
           <ContentContainer>
             <h1>{post.title}</h1>
@@ -110,16 +116,23 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
           postComments.map(comment => {
             const member = getMemberById(comment.memberId);
             return (
-              <CommentContainer key={comment.commentId}>
+              <CommentContainer key={comment.commentId} className="flex justify-between">
                 {member && (
                   <CommentAvatar>
                     <AvatarImage src={member.profilePicture} alt={member.name} />
                   </CommentAvatar>
                 )}
-                <CommentContent>
-                  <div className="flex flex-row items-center space-x-2">
-                    <CommentAuthor>{member?.name}</CommentAuthor>
-                    <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
+                <CommentContent className="flex-1">
+                  <div className="flex flex-row items-center space-x-2 justify-between">
+                    <div className="flex flex-row items-center space-x-2">
+                      <CommentAuthor>{member?.name}</CommentAuthor>
+                      <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
+                    </div>
+                    {comment.memberId === 1 && ( // 임시 유저 memberId가 1일 때만 메뉴바를 렌더링
+                      <div>
+                        <PositionedMenu />
+                      </div>
+                    )}
                   </div>
                   <CommentText>{comment.content}</CommentText>
                 </CommentContent>
