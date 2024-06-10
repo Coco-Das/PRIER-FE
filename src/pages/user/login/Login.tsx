@@ -4,6 +4,7 @@ import {
   Container,
   IntroText,
   KakaoContainer,
+  KakaoMessage,
   KakaoText,
   LoginContainer,
   LoginIntro,
@@ -52,6 +53,7 @@ function Login() {
             반갑습니다.<br></br>
             <span className="font-bold">프로젝트 리뷰어 &quot; 프리어 &quot; </span>입니다.
           </LoginText>
+          <KakaoMessage>5초 안에 시작하기</KakaoMessage>
           <KakaoContainer onClick={handleKakaoLogin}>
             <img src={KAKAO} />
             <KakaoText>카카오로 시작하기</KakaoText>
