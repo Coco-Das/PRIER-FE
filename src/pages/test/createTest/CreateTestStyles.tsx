@@ -26,6 +26,7 @@ export const ProjectDiv = styled.div`
   width: 65%;
   display: flex;
   flex-direction: column;
+  flex: 1;
 `;
 
 export const ProjectIntro = styled.div`
@@ -36,7 +37,8 @@ export const Settings = styled(Setting)``;
 export const ProjectTextArea = styled.div`
   display: flex;
   flex-direction: column;
-  height: 90%;
+  min-height: 90%;
+  box-sizing: border-box;
   width: 100%;
   border: 1.5px solid transparent; // 투명한 테두리 설정
   overflow-y: auto;
@@ -58,9 +60,9 @@ export const Textarea = styled.textarea`
   resize: none;
   min-height: 100px;
   overflow: hidden;
+  box-sizing: border-box;
 `;
 export const StyledImg = styled.img`
-  /* margin-top: 10px; */
   max-width: 100%;
   width: 400px;
   height: 300px;
@@ -121,6 +123,20 @@ export const TagDiv = styled.div`
   height: 5%;
   display: flex;
   align-items: center;
+`;
+export const TagWrapper = styled.div`
+  margin-top: 10px;
+  padding-left: 30px;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
+`;
+
+export const Tag = styled.div`
+  padding: 5px 10px;
+  background-color: #e0e0e0;
+  border-radius: 5px;
+  font-size: 14px;
 `;
 
 export const Input = styled.input`
@@ -204,11 +220,12 @@ export const GreenInputDiv = styled.div`
   }
 `;
 export const QuestionDiv = styled.div`
-  width: 90%;
-  height: 150px;
+  width: 100%;
+  height: auto;
+  padding: 10px 20px;
   border-radius: 8px;
   border: 2px solid transparent;
-  background: linear-gradient(#fff, #fff), /* 내부 백그라운드 */ linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc); /* 외부 그라데이션 */
+  background: linear-gradient(#fff, #fff), linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc);
   background-clip: padding-box, border-box;
   background-origin: padding-box, border-box;
 `;
