@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Title } from '../../main/MainStyle';
 import {
   BlueText,
@@ -14,14 +14,28 @@ import { LinkText } from '../../../components/user/UserStyle';
 import Gifticon from '../../../components/user/Gifticon';
 import PaymentModal from '../../../components/user/PaymentModal';
 import CoinLog from '../../../components/user/CoinLog';
-import { userPointStore } from '../../../states/user/PointStore';
-import { FetchPayment, FetchPointHistory } from '../../../services/StoreApi';
+import { useGifticonStore, userPointStore } from '../../../states/user/PointStore';
+import { FetchGiftList, FetchPayment, FetchPointHistory } from '../../../services/StoreApi';
 
 export default function Store() {
   const pointStore = userPointStore();
+  const { setGifticons } = useGifticonStore();
   const [openPayment, setOpenPayment] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState('');
   const [openLog, setOpenLog] = useState(false);
+  //기프티콘 리스트 호출
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const gifticonData = await FetchGiftList();
+        setGifticons(gifticonData);
+      } catch (error) {
+        console.error('기프티콘 데이터 호출 실패:', error);
+      }
+    };
+
+    fetchData();
+  }, [setGifticons]);
   //포인트 구매
   const SelectAmount = (amount: string) => {
     setSelectedAmount(amount);

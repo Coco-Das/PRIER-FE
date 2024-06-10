@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-
+//포인트
 interface Transaction {
   transactionId: string;
   amount: string;
@@ -23,4 +23,24 @@ export const userPointStore = create<UserPointStore>(set => ({
       point: transaction.balance,
       transactions: [...state.transactions, transaction],
     })),
+}));
+
+//기프티콘
+interface Gifticon {
+  productId: string;
+  productName: string;
+  price: string;
+  description: string;
+  stock: string;
+  imageUrl: string;
+}
+
+interface GifticonStore {
+  gifticons: Gifticon[];
+  setGifticons: (gifticons: Gifticon[]) => void;
+}
+
+export const useGifticonStore = create<GifticonStore>(set => ({
+  gifticons: [],
+  setGifticons: gifticons => set({ gifticons }),
 }));
