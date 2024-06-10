@@ -62,10 +62,13 @@ export const SearchInputWrapper = styled.div`
 }
 }`;
 
-const SearchInput: React.FC = () => (
+const SearchInput: React.FC<{
+  searchTerm: string;
+  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+}> = ({ searchTerm, handleSearchChange }) => (
   <>
     <SearchInputWrapper className="search">
-      <input type="text" placeholder=" " />
+      <input type="text" value={searchTerm} onChange={handleSearchChange} />
       <div>
         <svg>
           <use xlinkHref="#path" />

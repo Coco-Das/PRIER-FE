@@ -29,6 +29,8 @@ interface NavigationBarProps {
   handleCategoryClick: (category: string) => void;
   handleFilterClick: (filter: string) => void;
   title: string;
+  searchTerm: string;
+  handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const NavigationBar: React.FC<NavigationBarProps> = ({
@@ -37,6 +39,8 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   handleCategoryClick,
   handleFilterClick,
   title,
+  searchTerm,
+  handleSearchChange,
 }) => {
   return (
     <Navigation>
@@ -68,7 +72,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             My Posts
           </CategoryButton>
         </CategoryButtonsContainer>
-        <SearchInput />
+        <SearchInput searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
         <Button as={Link} to="/CreateBoard">
           <ButtonText>새 글 작성하기</ButtonText>
         </Button>
