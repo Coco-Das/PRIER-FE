@@ -15,6 +15,7 @@ import Gifticon from '../../../components/user/Gifticon';
 import PaymentModal from '../../../components/user/PaymentModal';
 import CoinLog from '../../../components/user/CoinLog';
 import { userPointStore } from '../../../states/user/PointStore';
+import { FetchPointHistory } from '../../../services/StoreApi';
 
 export default function Store() {
   const pointStore = userPointStore();
@@ -26,8 +27,13 @@ export default function Store() {
   const CancleCharge = () => {
     setOpenPayment(false);
   };
-  const OpenLog = () => {
+  const OpenLog = async () => {
     setOpenLog(true);
+    try {
+      await FetchPointHistory();
+    } catch (error) {
+      console.error('포인트 로그 호출 실패:', error);
+    }
   };
   const CancleLog = () => {
     setOpenLog(false);

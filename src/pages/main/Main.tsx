@@ -15,13 +15,29 @@ import {
 import ProjectPreview from '../../components/user/ProjectPreview';
 import { FetchMyPage } from '../../services/UserApi';
 import { useUserStore } from '../../states/user/UserStore';
+import { CheckPoint } from '../../services/StoreApi';
+import { userPointStore } from '../../states/user/PointStore';
 
 export default function Main() {
   const [activeButton, setActiveButton] = useState('인기순');
   const userProfile = useUserStore(state => state.userProfile);
+  const { setUserProfile } = useUserStore();
+  const pointStore = userPointStore();
+
   useEffect(() => {
-    // FetchMyPage();
-  }, []);
+    const fetchData = async () => {
+      try {
+        const userProfileData = await FetchMyPage();
+        setUserProfile(userProfileData);
+        const pointsData = await CheckPoint();
+        pointStore.setPoint(pointsData);
+      } catch (error) {
+        console.error('메인 페이지 호출 실패:', error);
+      }
+    };
+
+    fetchData();
+  }, [setUserProfile, pointStore.setPoint]);
   return (
     <div className="flex-col cursor-pointer" style={{ margin: '1% 7%' }}>
       <MainContainer>
