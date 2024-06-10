@@ -42,15 +42,18 @@ export const AccountLink = styled.a`
   color: #828282;
   cursor: pointer;
 `;
+export const EditAccountText = styled.p`
+  display: flex;
+  font-size: 18px;
+  color: #315af1;
+  cursor: pointer;
+`;
 export const StyledInput = styled.input`
   font-size: 18px;
-`;
-export const AccountInput = styled.input`
-  font-size: 18px;
+  background-color: #f3f8ff;
   border-bottom: 1px solid #828282;
-  width: 100px;
-  max-width: 100px;
-  z-index: 1;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
 `;
 export const ProfileAccountContainer = styled.div`
   display: flex;

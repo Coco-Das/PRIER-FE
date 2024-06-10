@@ -27,7 +27,7 @@ import {
   StyledInput,
   AccountLink,
   AccountIcon,
-  AccountInput,
+  EditAccountText,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
@@ -51,6 +51,7 @@ import BlogIcon from '../../../assets/blog.png';
 import GithubIcon from '../../../assets/github.png';
 import FigmaIcon from '../../../assets/figma.png';
 import NotionIcon from '../../../assets/notion.png';
+import AccountEdit from '../../../components/user/AccountEdit';
 
 export default function MyPage() {
   const navigate = useNavigate();
@@ -74,6 +75,7 @@ export default function MyPage() {
   const [showEditNotionAlert, setShowEditNotionAlert] = useState(false);
   const [isEditingNotion, setIsEditingNotion] = useState(false);
   const [newNotion, setNewNotion] = useState<string>('');
+  const [isEditingAccount, setIsEditingAccount] = useState(false);
   const [showEditIntroAlert, setShowEditIntroAlert] = useState(false);
   const [isEditingIntro, setIsEditingIntro] = useState(false);
   const [newIntro, setNewIntro] = useState<string>('');
@@ -109,6 +111,7 @@ export default function MyPage() {
     try {
       await EditNickName(newNickName);
       setIsEditingName(false);
+      setShowEditNameAlert(false);
     } catch (error) {
       alert('닉네임 수정 중 오류 발생:');
     }
@@ -132,6 +135,7 @@ export default function MyPage() {
     try {
       await EditBelonging(newBelonging);
       setIsEditingBelonging(false);
+      setShowEditBelongingAlert(false);
     } catch (error) {
       alert('소속 수정 중 오류 발생:');
     }
@@ -156,6 +160,7 @@ export default function MyPage() {
     try {
       await EditBlog(newBlog);
       setIsEditingBlog(false);
+      setShowEditBlogAlert(false);
     } catch (error) {
       alert('블로그 주소 수정 실패');
     }
@@ -177,7 +182,7 @@ export default function MyPage() {
   };
   const saveEditGithub = async () => {
     try {
-      await EditGithub(newBlog);
+      await EditGithub(newGithub);
       setIsEditingGithub(false);
     } catch (error) {
       alert('깃허브 주소 수정 실패');
@@ -200,7 +205,7 @@ export default function MyPage() {
   };
   const saveEditFigma = async () => {
     try {
-      await EditFigma(newBlog);
+      await EditFigma(newFigma);
       setIsEditingFigma(false);
     } catch (error) {
       alert('피그마 주소 수정 실패');
@@ -233,6 +238,20 @@ export default function MyPage() {
     setIsEditingNotion(false);
     setShowEditNotionAlert(false);
     setNewNotion('');
+  };
+  const EditAccount = () => {
+    setIsEditingAccount(true);
+    setEditBlog();
+    setEditGithub();
+    setEditFigma();
+    setEditNotion();
+  };
+  const cancleEditingAccount = () => {
+    setIsEditingAccount(false);
+    setIsEditingBlog(false);
+    setIsEditingGithub(false);
+    setIsEditingFigma(false);
+    setIsEditingNotion(false);
   };
 
   //자기 소개 수정
@@ -270,23 +289,37 @@ export default function MyPage() {
         <CustomAlert message="소속을 수정 하시겠습니까?" onConfirm={saveEditBelonging} onCancel={cancleEditBelonging} />
       )}
       {showEditBlogAlert && (
-        <CustomAlert message="블로그 주소를 수정 하시겠습니까?" onConfirm={saveEditBlog} onCancel={cancleEditBlog} />
+        <>
+          <AccountEdit
+            message="블로그 주소를 수정 하시겠습니까?"
+            onConfirm={saveEditBlog}
+            onCancel={cancleEditBlog}
+            onInput={BlogInputChange}
+          />
+        </>
       )}
       {showEditGithubAlert && (
-        <CustomAlert
+        <AccountEdit
           message="Github 주소를 수정 하시겠습니까?"
           onConfirm={saveEditGithub}
           onCancel={cancleEditGithub}
+          onInput={GithubInputChange}
         />
       )}
       {showEditFigmaAlert && (
-        <CustomAlert message="Figma 주소를 수정 하시겠습니까?" onConfirm={saveEditFigma} onCancel={cancleEditFigma} />
+        <AccountEdit
+          message="Figma 주소를 수정 하시겠습니까?"
+          onConfirm={saveEditFigma}
+          onCancel={cancleEditFigma}
+          onInput={FigmaInputChange}
+        />
       )}
       {showEditNotionAlert && (
-        <CustomAlert
+        <AccountEdit
           message="Notion 주소를 수정 하시겠습니까?"
           onConfirm={saveEditNotion}
           onCancel={cancleEditNotion}
+          onInput={NotionInputChange}
         />
       )}
       {showEditIntroAlert && (
@@ -346,10 +379,10 @@ export default function MyPage() {
             <ProfileAccountContainer>
               <div className="flex items-center gap-5">
                 {isEditingBlog ? (
-                  <>
+                  <EditAccountText onClick={ConfirmEditBlog}>
                     <AccountIcon src={BlogIcon}></AccountIcon>
-                    <AccountInput type="text" value={newBlog} onChange={BlogInputChange}></AccountInput>
-                  </>
+                    Blog
+                  </EditAccountText>
                 ) : (
                   <AccountLink href={userProfile.blog} target="_blank">
                     <AccountIcon src={BlogIcon}></AccountIcon>
@@ -357,10 +390,10 @@ export default function MyPage() {
                   </AccountLink>
                 )}
                 {isEditingGithub ? (
-                  <>
+                  <EditAccountText onClick={ConfirmEditGithub}>
                     <AccountIcon src={GithubIcon}></AccountIcon>
-                    <AccountInput type="text" value={newGithub} onChange={GithubInputChange}></AccountInput>
-                  </>
+                    Github
+                  </EditAccountText>
                 ) : (
                   <AccountLink href={userProfile.github} target="_blank">
                     <AccountIcon src={GithubIcon}></AccountIcon>
@@ -368,10 +401,10 @@ export default function MyPage() {
                   </AccountLink>
                 )}
                 {isEditingFigma ? (
-                  <>
+                  <EditAccountText onClick={ConfirmEditFigma}>
                     <AccountIcon src={FigmaIcon}></AccountIcon>
-                    <AccountInput type="text" value={newFigma} onChange={FigmaInputChange}></AccountInput>
-                  </>
+                    Figma
+                  </EditAccountText>
                 ) : (
                   <AccountLink href={userProfile.figma} target="_blank">
                     <AccountIcon src={FigmaIcon}></AccountIcon>
@@ -379,10 +412,10 @@ export default function MyPage() {
                   </AccountLink>
                 )}
                 {isEditingNotion ? (
-                  <>
+                  <EditAccountText onClick={ConfirmEditNotion}>
                     <AccountIcon src={NotionIcon}></AccountIcon>
-                    <AccountInput type="text" value={newNotion} onChange={NotionInputChange}></AccountInput>
-                  </>
+                    Notion
+                  </EditAccountText>
                 ) : (
                   <AccountLink href={userProfile.notion} target="_blank">
                     <AccountIcon src={NotionIcon}></AccountIcon>
@@ -390,12 +423,12 @@ export default function MyPage() {
                   </AccountLink>
                 )}
               </div>
-              {isEditingBlog ? (
-                <CorrectText className="text-end" onClick={ConfirmEditBlog}>
-                  확인
+              {isEditingAccount ? (
+                <CorrectText className="text-end" onClick={cancleEditingAccount}>
+                  수정 모드 끝내기
                 </CorrectText>
               ) : (
-                <CorrectText className="text-end" onClick={setEditBlog}>
+                <CorrectText className="text-end" onClick={EditAccount}>
                   수정 하기
                 </CorrectText>
               )}
