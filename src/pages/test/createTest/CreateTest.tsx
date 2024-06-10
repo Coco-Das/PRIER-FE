@@ -23,7 +23,10 @@ import {
   Project,
   Question,
   QuestionDiv,
+  TagWrapper,
+  Tag,
 } from './CreateTestStyles';
+import { ToggleBtn } from '../../../components/utils/Toggle';
 
 const AutoResizeTextarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElement>> = props => {
   const [value, setValue] = useState('');
@@ -36,19 +39,66 @@ const AutoResizeTextarea: React.FC<React.TextareaHTMLAttributes<HTMLTextAreaElem
   useEffect(() => {
     const textarea = textareaRef.current;
     if (textarea) {
-      textarea.style.height = 'auto'; // 높이를 자동으로 설정하여 높이 초기화
-      textarea.style.height = `${textarea.scrollHeight}px`; // 스크롤 높이만큼 높이 설정
+      textarea.style.height = 'auto';
+      textarea.style.height = `${textarea.scrollHeight}px`;
     }
   }, [value]);
 
   return <Textarea ref={textareaRef} value={value} onChange={handleChange} {...props} />;
 };
 
+interface Question {
+  id: number;
+  type: 'subjective' | 'objective';
+  content: string;
+  options?: string[]; // 객관식 질문의 선택지
+  selectedOption?: string; // 사용자가 선택한 선택지
+}
+
 export const CreateTest = () => {
   const [mainImageUrl, setMainImageUrl] = useState<string | null>(null);
   const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>([]);
   const mainFileInputRef = useRef<HTMLInputElement>(null);
   const additionalFileInputRef = useRef<HTMLInputElement>(null);
+
+  const [questions, setQuestions] = useState<Question[]>([
+    { id: 1, type: 'subjective', content: '' },
+    { id: 2, type: 'objective', content: '', options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] },
+  ]);
+  const [tags, setTags] = useState<string[]>([]);
+  const [tagInput, setTagInput] = useState<string>('');
+  const addQuestion = () => {
+    setQuestions(prevQuestions => [
+      ...prevQuestions,
+      { id: prevQuestions.length + 1, type: 'subjective', content: '' },
+    ]);
+  };
+  const toggleQuestionType = (id: number) => {
+    setQuestions(prevQuestions =>
+      prevQuestions.map(question =>
+        question.id === id
+          ? {
+              ...question,
+              type: question.type === 'subjective' ? 'objective' : 'subjective',
+              options: question.type === 'subjective' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
+              selectedOption: undefined,
+            }
+          : question,
+      ),
+    );
+  };
+
+  const handleQuestionChange = (id: number, content: string) => {
+    setQuestions(prevQuestions =>
+      prevQuestions.map(question => (question.id === id ? { ...question, content } : question)),
+    );
+  };
+
+  const handleOptionChange = (id: number, selectedOption: string) => {
+    setQuestions(prevQuestions =>
+      prevQuestions.map(question => (question.id === id ? { ...question, selectedOption } : question)),
+    );
+  };
 
   const handleMainImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -90,6 +140,17 @@ export const CreateTest = () => {
   const handleAdditionalButtonClick = () => {
     additionalFileInputRef.current?.click();
   };
+  const handleTagInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTagInput(event.target.value);
+  };
+
+  const handleTagInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter' && tagInput.trim()) {
+      event.preventDefault();
+      setTags(prevTags => [...prevTags, tagInput.trim()]);
+      setTagInput('');
+    }
+  };
 
   return (
     <CreateWrapper>
@@ -101,7 +162,7 @@ export const CreateTest = () => {
               테스트를 진행할 프로젝트에 대해 설명해주세요
             </span>
           </div>
-          <ProjectTextArea className="mt-4">
+          <ProjectTextArea className="mt-2">
             <p>프로젝트 소개</p>
             <AutoResizeTextarea placeholder="프로젝트 소개를 입력하세요..." />
             <p>프로젝트 목표</p>
@@ -135,8 +196,19 @@ export const CreateTest = () => {
         </ProjectDiv>
         <ProjectIntro>
           <TagDiv className="mt-20">
-            <span className="font-bold">태그</span> <Input className="ml-4" />
+            <span className="font-bold">태그</span>{' '}
+            <Input
+              className="ml-4"
+              value={tagInput}
+              onChange={handleTagInputChange}
+              onKeyDown={handleTagInputKeyDown}
+            />
           </TagDiv>
+          <TagWrapper>
+            {tags.map((tag, index) => (
+              <Tag key={index}>{tag}</Tag>
+            ))}
+          </TagWrapper>
           <OrangeDiv className="mt-3">
             <span className="font-bold">개발일정</span>
             <OrangeInputDiv>
@@ -194,15 +266,89 @@ export const CreateTest = () => {
         </div>
         <div
           style={{
-            padding: '10px 10px',
+            padding: '0px 10px 20px 10px',
             display: 'flex',
             flexDirection: 'column',
             width: '100%',
             alignItems: 'center',
           }}
         >
-          <QuestionDiv className="mt-4"></QuestionDiv>
-          <QuestionDiv className="mt-4"></QuestionDiv>
+          {questions.map((question, index) => (
+            <QuestionDiv key={question.id} className="mt-4">
+              {question.type === 'subjective' ? (
+                <div>
+                  <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                    {index + 1}번 문항
+                    <input
+                      placeholder="질문을 입력하세요"
+                      style={{
+                        marginLeft: '20px',
+                        fontSize: '20px',
+                        outline: 'none',
+                        fontWeight: 'bold',
+                        width: '80%',
+                      }}
+                    />
+                    <div style={{ marginLeft: 'auto' }}>
+                      <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
+                    </div>
+                  </div>
+                  <AutoResizeTextarea
+                    placeholder="주관식 답변을 입력하세요..."
+                    value={question.content}
+                    onChange={e => handleQuestionChange(question.id, e.target.value)}
+                    style={{
+                      marginTop: '10px',
+                      marginLeft: '75px',
+                      overflowY: 'auto',
+                      width: '80%',
+                    }}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                    {index + 1}번 문항
+                    <input
+                      placeholder="질문을 입력하세요"
+                      style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
+                    />
+                    <div style={{ marginLeft: 'auto' }}>
+                      <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      marginLeft: '75px',
+                      marginTop: '50px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      gap: '10rem',
+                      marginBottom: '40px',
+                      fontSize: '20px',
+                      width: '85%',
+                    }}
+                  >
+                    {question.options?.map((option, i) => (
+                      <div key={i}>
+                        <label>
+                          <input
+                            type="radio"
+                            name={`question-${question.id}`}
+                            value={option}
+                            checked={question.selectedOption === option}
+                            onChange={e => handleOptionChange(question.id, e.target.value)}
+                          />{' '}
+                          {option}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </QuestionDiv>
+          ))}
+          <CustomButton onClick={addQuestion}>질문 추가</CustomButton>
         </div>
       </Question>
     </CreateWrapper>
