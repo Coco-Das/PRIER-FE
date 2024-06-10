@@ -22,3 +22,22 @@ export async function FetchPointHistory() {
     throw error;
   }
 }
+
+export async function FetchPayment(amount: string) {
+  try {
+    const response = await API_BASE_URL.post(
+      '/points/recharge',
+      { amount },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    console.log('포인트 구매 요청 성공', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('포인트 구매 요청 실패', error);
+    throw error;
+  }
+}

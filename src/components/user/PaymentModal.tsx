@@ -2,6 +2,8 @@ import React from 'react';
 import { keyframes, styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 interface PaymentModalProps {
+  amount: string;
+  onConfirm: (amount: string) => void;
   onCancel: () => void;
 }
 
@@ -73,15 +75,17 @@ const Tooltip = styled.div`
     }
   }
 `;
-const PaymentModal: React.FC<PaymentModalProps> = ({ onCancel }) => {
+const PaymentModal: React.FC<PaymentModalProps> = ({ amount, onConfirm, onCancel }) => {
   return (
     <PaymentOverlay>
       <PaymentContainer>
         <PointIcon className="w-20" />
-        <PaymentText>{}코어를 충전하시겠습니까?</PaymentText>
+        <PaymentText>{amount} 원을 충전하시겠습니까?</PaymentText>
         <span className="flex mt-36 gap-10">
           <Tooltip>카카오 페이로 결제하기</Tooltip>
-          <PaymentButton className="relative">결제</PaymentButton>
+          <PaymentButton className="relative" onClick={() => onConfirm(amount)}>
+            결제
+          </PaymentButton>
           <PaymentButton onClick={onCancel}>취소</PaymentButton>
         </span>
       </PaymentContainer>
