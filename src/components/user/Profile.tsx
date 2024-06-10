@@ -11,11 +11,12 @@ import {
   Title,
 } from './UserStyle';
 import { useUserStore } from '../../states/user/UserStore';
+import { userPointStore } from '../../states/user/PointStore';
 
 export default function Profile() {
   const [progress] = useState(50);
   const userProfile = useUserStore(state => state.userProfile);
-
+  const pointStore = userPointStore();
   return (
     <ProfileContainer>
       <div className="flex justify-between items-center gap-10 mb-3">
@@ -33,7 +34,7 @@ export default function Profile() {
           <StyledPointIcon></StyledPointIcon>
           <MiddleText>포인트</MiddleText>
         </div>
-        <PointText className="text-center">{} 120000 코어 보유</PointText>
+        <PointText className="text-center">{pointStore.point} 코어 보유</PointText>
         <Link to="/store">
           <LinkText className="text-right">상점 바로가기 &gt;</LinkText>
         </Link>

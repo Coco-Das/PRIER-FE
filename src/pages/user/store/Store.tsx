@@ -14,8 +14,10 @@ import { LinkText } from '../../../components/user/UserStyle';
 import Gifticon from '../../../components/user/Gifticon';
 import PaymentModal from '../../../components/user/PaymentModal';
 import CoinLog from '../../../components/user/CoinLog';
+import { userPointStore } from '../../../states/user/PointStore';
 
 export default function Store() {
+  const pointStore = userPointStore();
   const [openPayment, setOpenPayment] = useState(false);
   const [openLog, setOpenLog] = useState(false);
   const ChargeCoin = () => {
@@ -40,7 +42,7 @@ export default function Store() {
           <StyledPointIcon></StyledPointIcon>
           <div className="flex-col">
             <PointText className="mb-5">포인트</PointText>
-            <BlueText className="mb-5">{} 120000 코어 보유</BlueText>
+            <BlueText className="mb-5">{pointStore.point} 코어 보유</BlueText>
             <LinkText className="text-end" onClick={OpenLog}>
               사용 로그 보기 &gt;
             </LinkText>
