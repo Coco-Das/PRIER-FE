@@ -1,48 +1,38 @@
-// components/PostDetail.tsx
-import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Container, PostDetailContainer, PostContentContainer, CommentsContainer } from './BoardStyles';
-import NavigationBar from '../../components/board/NavigationBar';
+import React from 'react';
+import { PostDetailContainer, PostContentContainer, CommentsContainer } from './BoardStyles';
+import { posts as initialPosts } from '../../states/board/BoardStore';
+import { comments as initialComments } from '../../states/board/ChatStore';
 
-const PostDetail: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<string>('it-news');
-  const [activeFilter, setActiveFilter] = useState<string>('all');
-  const [title, setTitle] = useState<string>('Community');
+interface PostDetailProps {
+  postId: number;
+  onBackToList: () => void;
+}
 
-  const { postId } = useParams<{ postId: string }>();
-  // 게시물 정보를 가져오기 위해 postId를 사용합니다.
-  // 여기서 데이터를 가져오는 로직을 추가할 수 있습니다.
+const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
+  const post = initialPosts.find(post => post.boardId === postId);
+  const postComments = initialComments.filter(comment => comment.boardId === postId);
 
-  const handleCategoryClick = (category: string) => {
-    console.log(`Category clicked: ${category}`);
-  };
-
-  const handleFilterClick = (filter: string) => {
-    console.log(`Filter clicked: ${filter}`);
-  };
+  if (!post) {
+    return <div>게시글을 찾을 수 없습니다.</div>;
+  }
 
   return (
-    <Container>
-      <NavigationBar
-        activeCategory={activeCategory}
-        activeFilter={activeFilter}
-        handleCategoryClick={handleCategoryClick}
-        handleFilterClick={handleFilterClick}
-        title={title}
-      />
-      <PostDetailContainer>
-        <PostContentContainer>
-          {/* 게시물 상세 내용 */}
-          <h1>Post Title</h1>
-          <p>Post content goes here...</p>
-        </PostContentContainer>
-        <CommentsContainer>
-          {/* 댓글 박스 */}
-          <h2>Comments</h2>
-          <p>Comment section...</p>
-        </CommentsContainer>
-      </PostDetailContainer>
-    </Container>
+    <PostDetailContainer>
+      <button onClick={onBackToList}>Back to List</button>
+      <PostContentContainer>
+        <h1>{post.title}</h1>
+        <p>{post.content}</p>
+      </PostContentContainer>
+      <CommentsContainer>
+        <h2>Comments</h2>
+        {postComments.map(comment => (
+          <div key={comment.commentId}>
+            <p>{comment.content}</p>
+            <small>{comment.createdAt}</small>
+          </div>
+        ))}
+      </CommentsContainer>
+    </PostDetailContainer>
   );
 };
 

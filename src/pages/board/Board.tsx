@@ -1,31 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import {
-  Container,
-  PostBox,
-  UserContainer,
-  Avatar,
-  AvatarImage,
-  AuthorContainer,
-  Author,
-  CreatedAt,
-  ContentContainer,
-  Image,
-  LikesContainer,
-  Likes,
-  LikeButton,
-  LikeIcon,
-  NoPostsMessage,
-} from './BoardStyles';
+import { useNavigate, useParams } from 'react-router-dom';
+import { Container, NoPostsMessage } from './BoardStyles';
 import { posts as initialPosts, Post } from '../../states/board/BoardStore';
 import PaginationComponent from '../../components/board/PaginationComponent';
-import userAvatar from '../../assets/user.svg';
-import UnLike from '../../assets/UnLike.svg';
-import Like from '../../assets/Like.svg';
 import PostSkeleton from '../../components/board/PostSkeleton';
 import NavigationBar from '../../components/board/NavigationBar';
+import PostList from './PostList';
+import PostDetail from './PostDetail'; // 상세보기 컴포넌트를 import
 
 const Board: React.FC = () => {
+  const { postId } = useParams<{ postId: string }>();
   const [activeCategory, setActiveCategory] = useState<string>('it-news');
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [posts, setPosts] = useState<Post[]>([]);
@@ -34,31 +18,32 @@ const Board: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
 
+  // 좋아요 토글 함수
   const toggleLike = (postId: number) => {
-    setPosts(prevPosts => {
-      const updatedPosts = prevPosts.map(post =>
-        post.boardId === postId ? { ...post, likedByUser: !post.likedByUser } : post,
-      );
-      return updatedPosts;
-    });
+    setPosts(prevPosts =>
+      prevPosts.map(post => (post.boardId === postId ? { ...post, likedByUser: !post.likedByUser } : post)),
+    );
   };
 
+  // 카테고리 변경을 처리하는 함수
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
+    setActiveFilter('all'); // 카테고리 변경 시 필터를 초기화
   };
 
+  // 필터 변경을 처리하는 함수
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
     setTitle(filter === 'all' ? 'Community' : filter === 'likes' ? 'Likes' : 'My Posts');
   };
 
+  // 데이터 로딩 및 정렬
   useEffect(() => {
-    // 로딩 지연을 시뮬레이션
     setLoading(true);
     setTimeout(() => {
       setPosts(initialPosts);
       setLoading(false);
-    }, 2000); // 지연 시간을 조정하세요
+    }, 2000); // 로딩 시간을 조정할 수 있습니다.
   }, []);
 
   useEffect(() => {
@@ -68,15 +53,17 @@ const Board: React.FC = () => {
       updatedPosts = updatedPosts.filter(post => post.category === activeCategory);
     } else if (activeFilter === 'likes') {
       updatedPosts = updatedPosts.filter(post => post.likedByUser && post.category === activeCategory);
-    } else if (activeFilter === 'myposts') {
-      updatedPosts = updatedPosts.filter(post => post.myPost && post.category === activeCategory);
     }
 
     setFilteredPosts(updatedPosts);
   }, [activeCategory, activeFilter, posts]);
 
   const handlePostClick = (postId: number) => {
-    navigate(`/post/${postId}`);
+    navigate(`/board/post/${postId}`); // postId를 URL로 전달하여 페이지를 이동합니다.
+  };
+
+  const handleBackToList = () => {
+    navigate('/board'); // 상세보기에서 목록으로 돌아가기
   };
 
   return (
@@ -94,33 +81,10 @@ const Board: React.FC = () => {
           <PostSkeleton />
           <PostSkeleton />
         </>
+      ) : postId ? (
+        <PostDetail postId={Number(postId)} onBackToList={handleBackToList} />
       ) : filteredPosts.length > 0 ? (
-        filteredPosts.map(post => (
-          <PostBox key={post.boardId} onClick={() => handlePostClick(post.boardId)}>
-            <UserContainer>
-              <Avatar>
-                <AvatarImage src={userAvatar} alt="Avatar" />
-              </Avatar>
-              <AuthorContainer>
-                <Author>{`작성자 ${post.memberId}`}</Author>
-                <CreatedAt>{post.createdAt}</CreatedAt>
-              </AuthorContainer>
-            </UserContainer>
-            <ContentContainer>{post.content}</ContentContainer>
-            <Image src="image.png" alt="Content" />
-            <LikesContainer>
-              <Likes>{post.likes} likes</Likes>
-              <LikeButton
-                onClick={(e: any) => {
-                  e.stopPropagation();
-                  toggleLike(post.boardId);
-                }}
-              >
-                <LikeIcon src={post.likedByUser ? Like : UnLike} alt="like/unlike" />
-              </LikeButton>
-            </LikesContainer>
-          </PostBox>
-        ))
+        <PostList posts={filteredPosts} onPostClick={handlePostClick} toggleLike={toggleLike} />
       ) : (
         <NoPostsMessage>해당 포스트가 없습니다.</NoPostsMessage>
       )}
