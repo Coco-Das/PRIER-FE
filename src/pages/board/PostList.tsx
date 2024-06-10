@@ -16,10 +16,11 @@ import {
 } from './BoardStyles';
 import { Post } from '../../states/board/BoardStore';
 import userAvatar from '../../assets/user.svg';
-import announcementAvatar from '../../assets/Announcement.svg'; // 공지사항 아바타 이미지 추가
+import announcementAvatar from '../../assets/Announcement.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
-import useFormatDate from '../../hooks/UseFormatDate'; // 경로 수정
+import useFormatDate from '../../hooks/UseFormatDate';
+import PositionedMenu from '../../components/board/PositionedMenu';
 
 interface PostListProps {
   posts: Post[];
@@ -33,11 +34,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
   return (
     <>
       {posts.map(post => (
-        <PostBox
-          key={post.boardId}
-          onClick={() => onPostClick(post.boardId)}
-          category={post.category} // 카테고리 props 추가
-        >
+        <PostBox key={post.boardId} onClick={() => onPostClick(post.boardId)} category={post.category}>
           <UserContainer>
             <Avatar category={post.category}>
               <AvatarImage src={post.category === 'Notice' ? announcementAvatar : userAvatar} alt="Avatar" />
@@ -48,9 +45,15 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
               </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
+            {post.memberId === 1 && ( // memberId가 1일 때만 메뉴바를 렌더링
+              <div style={{ marginLeft: 'auto' }} onClick={(e: any) => e.stopPropagation()}>
+                {/* 메뉴를 오른쪽에 배치하고 클릭 이벤트 버블링 방지 */}
+                <PositionedMenu />
+              </div>
+            )}
           </UserContainer>
           <ContentContainer>{post.title}</ContentContainer>
-          <Image src="image.png" alt="Content" category={post.category} /> {/* category prop 추가 */}
+          <Image src="image.png" alt="Content" category={post.category} />
           <LikesContainer>
             <Likes>likes {post.likes}</Likes>
             <LikeButton
