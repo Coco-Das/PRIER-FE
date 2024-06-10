@@ -36,15 +36,33 @@ export const CorrectText = styled.p`
     font-weight: 400;
   }
 `;
+export const AccountLink = styled.a`
+  display: flex;
+  font-size: 18px;
+  color: #828282;
+  cursor: pointer;
+`;
+export const EditAccountText = styled.p`
+  display: flex;
+  font-size: 18px;
+  color: #315af1;
+  cursor: pointer;
+`;
 export const StyledInput = styled.input`
   font-size: 18px;
+  background-color: #f3f8ff;
+  border-bottom: 1px solid #828282;
+  border-top-right-radius: 4px;
+  border-top-left-radius: 4px;
 `;
 export const ProfileAccountContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
   margin-left: 10px;
-  margin-bottom: 10px;
+`;
+export const AccountIcon = styled.img`
+  width: 30px;
 `;
 export const IntroduceContainer = styled.div`
   width: 100%;

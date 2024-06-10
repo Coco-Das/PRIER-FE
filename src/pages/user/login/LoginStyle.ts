@@ -62,15 +62,12 @@ export const RandomText = styled.div`
 export const ScrollerItem = styled.div`
   display: flex;
   height: 66px;
-  animation: ${scroll} 15s ease-in infinite;
+  animation: ${scroll} 16s ease-in infinite;
 `;
 
 export const CTALink = styled.a`
   color: #315af1;
   text-decoration: none;
-  &:hover {
-    text-decoration: underline;
-  }
 `;
 
 export const LoginContainer = styled.div`
