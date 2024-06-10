@@ -1,4 +1,3 @@
-// Routers.tsx
 import React from 'react';
 import { createBrowserRouter, RouterProvider } from 'react-router-dom';
 import { Layout } from './Layout';
@@ -12,7 +11,6 @@ import Feedback from '../pages/test/feedback/Feedback';
 import ResponseTest from '../pages/test/responseTest/ResponseTest';
 import TestList from '../pages/test/testList/TestList';
 import CreateBoard from '../pages/board/CreateBoard';
-import PostDetail from '../pages/board/PostDetail';
 import Board from '../pages/board/Board';
 import { CreateTest } from '../pages/test/createTest/CreateTest';
 
@@ -64,9 +62,10 @@ const router = createBrowserRouter([
         path: '/board',
         element: <Board />,
       },
+      // postId를 URL 파라미터로 받기 위해 Board 컴포넌트에서 PostDetail을 렌더링
       {
-        path: '/post/:postId',
-        element: <PostDetail />,
+        path: '/board/post/:postId',
+        element: <Board />,
       },
     ],
   },

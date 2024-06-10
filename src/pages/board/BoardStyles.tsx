@@ -29,7 +29,7 @@ export const Title = styled.div`
 // 네비게이션 스타일
 export const Navigation = styled.div`
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   display: flex;
   flex-direction: column;
   margin-bottom: 20px;
@@ -145,7 +145,7 @@ export const PostBox = styled.div`
   background: #ffffff;
   border-radius: 15px;
   width: 100%;
-  max-width: 1000px;
+  max-width: 1200px;
   padding: 1vh;
   margin-bottom: 20px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -261,28 +261,66 @@ export const PostDetailContainer = styled.div`
   display: flex;
   justify-content: space-between;
   width: 100%;
-  max-width: 960px;
-  margin: 0 auto;
-  padding: 20px;
-  box-sizing: border-box;
+  max-width: 1200px;
+  align-items: flex-start;
 `;
 
-export const PostContentContainer = styled.div`
+export const PostContentContainer = styled(PostBox)`
   width: 100%;
-  max-width: 680px;
-  box-sizing: border-box;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  max-width: 730px;
+  padding: 3vh 2vh;
+  min-height: 500px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
-export const CommentsContainer = styled.div`
+export const LikeBackContainer = styled.div`
   width: 100%;
-  max-width: 280px;
-  box-sizing: border-box;
-  padding: 20px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center; /* 가운데 정렬 */
 `;
 
-// 다른 기존 스타일들도 유지합니다.
+export const CommentsContainer = styled(PostBox)`
+  width: 100%;
+  max-width: 430px;
+  align-self: flex-start;
+  padding: 3vh 2vh;
+`;
+
+export const Backto = styled.img`
+  width: 24px;
+  height: 24px;
+`;
+
+export const CommentContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+`;
+
+export const CommentAvatar = styled(Avatar)`
+  width: 40px;
+  height: 40px;
+`;
+
+export const CommentContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  margin-left: 10px;
+`;
+
+export const CommentAuthor = styled(Author)`
+  font-size: 14px;
+`;
+
+export const CommentText = styled.div`
+  font-size: 14px;
+  color: #000;
+`;
+
+export const CommentCreatedAt = styled(CreatedAt)`
+  font-size: 12px;
+  color: #828282;
+`;

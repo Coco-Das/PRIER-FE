@@ -1,48 +1,134 @@
-// components/PostDetail.tsx
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
-import { Container, PostDetailContainer, PostContentContainer, CommentsContainer } from './BoardStyles';
-import NavigationBar from '../../components/board/NavigationBar';
+import {
+  PostDetailContainer,
+  PostContentContainer,
+  CommentsContainer,
+  Backto,
+  UserContainer,
+  Avatar,
+  AvatarImage,
+  AuthorContainer,
+  Author,
+  CreatedAt,
+  ContentContainer,
+  Image,
+  LikesContainer,
+  Likes,
+  LikeButton,
+  LikeIcon,
+  CommentContainer,
+  CommentAvatar,
+  CommentContent,
+  CommentAuthor,
+  CommentText,
+  CommentCreatedAt,
+  LikeBackContainer,
+} from './BoardStyles';
+import { Post } from '../../states/board/BoardStore';
+import { comments as initialComments } from '../../states/board/ChatStore';
+import { members } from '../../states/board/MemberStore'; // 멤버 데이터를 가져옵니다
+import backto from '../../assets/BackTo.svg';
+import userAvatar from '../../assets/user.svg'; // 기본 아바타 이미지
+import UnLike from '../../assets/UnLike.svg';
+import Like from '../../assets/Like.svg';
+import PostDetailSkeleton from '../../components/board/PostDetailSkeleton'; // PostDetailSkeleton 가져오기
+import useFormatDate from '../../hooks/UseFormatDate'; // 경로 수정
 
-const PostDetail: React.FC = () => {
-  const [activeCategory, setActiveCategory] = useState<string>('it-news');
-  const [activeFilter, setActiveFilter] = useState<string>('all');
-  const [title, setTitle] = useState<string>('Community');
+interface PostDetailProps {
+  postId: number;
+  onBackToList: () => void;
+  toggleLike: (postId: number) => void;
+  posts: Post[]; // posts 상태 추가
+}
 
-  const { postId } = useParams<{ postId: string }>();
-  // 게시물 정보를 가져오기 위해 postId를 사용합니다.
-  // 여기서 데이터를 가져오는 로직을 추가할 수 있습니다.
+const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLike, posts }) => {
+  const post = posts.find(post => post.boardId === postId);
+  const postComments = initialComments.filter(comment => comment.boardId === postId);
 
-  const handleCategoryClick = (category: string) => {
-    console.log(`Category clicked: ${category}`);
-  };
+  const [loading, setLoading] = useState(true);
+  const formatDate = useFormatDate();
 
-  const handleFilterClick = (filter: string) => {
-    console.log(`Filter clicked: ${filter}`);
+  useEffect(() => {
+    setLoading(true);
+    setTimeout(() => {
+      setLoading(false);
+    }, 2000); // 로딩 시간을 조정할 수 있습니다.
+  }, [postId]);
+
+  if (!post) {
+    return <div>게시글을 찾을 수 없습니다.</div>;
+  }
+
+  const getMemberById = (memberId: number) => {
+    return members.find(member => member.memberId === memberId);
   };
 
   return (
-    <Container>
-      <NavigationBar
-        activeCategory={activeCategory}
-        activeFilter={activeFilter}
-        handleCategoryClick={handleCategoryClick}
-        handleFilterClick={handleFilterClick}
-        title={title}
-      />
-      <PostDetailContainer>
+    <PostDetailContainer>
+      {loading ? (
+        <PostDetailSkeleton />
+      ) : (
         <PostContentContainer>
-          {/* 게시물 상세 내용 */}
-          <h1>Post Title</h1>
-          <p>Post content goes here...</p>
+          <UserContainer>
+            <Avatar>
+              <AvatarImage src={userAvatar} alt="Avatar" />
+            </Avatar>
+            <AuthorContainer>
+              <Author>{`작성자 ${post.memberId}`}</Author>
+              <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
+            </AuthorContainer>
+          </UserContainer>
+          <ContentContainer>
+            <h1>{post.title}</h1>
+            <p>{post.content}</p>
+          </ContentContainer>
+          <Image src="image.png" alt="Content" />
+          <LikeBackContainer>
+            <button onClick={onBackToList}>
+              <Backto src={backto} />
+            </button>
+            <LikesContainer>
+              <Likes>likes {post.likes}</Likes>
+              <LikeButton
+                onClick={(e: any) => {
+                  e.stopPropagation();
+                  toggleLike(post.boardId);
+                }}
+              >
+                <LikeIcon src={post.likedByUser ? Like : UnLike} alt="like/unlike" />
+              </LikeButton>
+            </LikesContainer>
+          </LikeBackContainer>
         </PostContentContainer>
-        <CommentsContainer>
-          {/* 댓글 박스 */}
-          <h2>Comments</h2>
-          <p>Comment section...</p>
-        </CommentsContainer>
-      </PostDetailContainer>
-    </Container>
+      )}
+      <CommentsContainer>
+        {loading ? (
+          <PostDetailSkeleton />
+        ) : postComments.length === 0 ? (
+          <p>댓글이 없습니다.</p>
+        ) : (
+          postComments.map(comment => {
+            const member = getMemberById(comment.memberId);
+            return (
+              <CommentContainer key={comment.commentId}>
+                {member && (
+                  <CommentAvatar>
+                    <AvatarImage src={member.profilePicture} alt={member.name} />
+                  </CommentAvatar>
+                )}
+                <CommentContent>
+                  <div className="flex flex-row items-center space-x-2">
+                    <CommentAuthor>{member?.name}</CommentAuthor>
+                    <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
+                  </div>
+                  <CommentText>{comment.content}</CommentText>
+                </CommentContent>
+              </CommentContainer>
+            );
+          })
+        )}
+      </CommentsContainer>
+    </PostDetailContainer>
   );
 };
 

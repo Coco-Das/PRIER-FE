@@ -13,7 +13,7 @@ const SkeletonPostBox = styled.div`
   background: #ffffff;
   border-radius: 15px;
   width: 100%;
-  max-width: 1200px;
+  max-width: 680px;
   padding: 1vh;
   margin-bottom: 20px;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -44,8 +44,8 @@ const SkeletonAvatar = styled(SkeletonLoading)`
   border-radius: 50%;
   margin-right: 10px;
   margin-top: 2px;
-  width: 45px;
-  height: 45px;
+  width: 50px;
+  height: 50px;
 `;
 
 const SkeletonText = styled(SkeletonLoading)<{ width?: string; height?: string }>`
@@ -60,7 +60,7 @@ const SkeletonImage = styled(SkeletonLoading)`
   width: 100%;
   border-radius: 5px;
   margin-top: 5px;
-  height: 40px;
+  height: 300px;
 `;
 
 const SkeletonContentContainer = styled.div`
@@ -74,8 +74,23 @@ const SkeletonLikesContainer = styled.div`
   margin-top: 5px;
 `;
 
+const SkeletonCommentContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-left: 2px;
+`;
+
+const SkeletonCommentAvatar = styled(SkeletonLoading)`
+  border-radius: 50%;
+  margin-right: 10px;
+  margin-top: 2px;
+  width: 40px;
+  height: 40px;
+`;
+
 // PostSkeleton 컴포넌트
-const PostSkeleton: React.FC = () => {
+const PostDetailSkeleton: React.FC = () => {
   return (
     <SkeletonPostBox>
       <SkeletonUserContainer>
@@ -96,4 +111,4 @@ const PostSkeleton: React.FC = () => {
   );
 };
 
-export default PostSkeleton;
+export default PostDetailSkeleton;

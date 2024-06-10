@@ -10,8 +10,8 @@ import {
   CategoryButtonsContainer,
   CategoryButton,
   Title,
-  TopContainer, // 추가된 부분
-  BottomContainer, // 추가된 부분
+  TopContainer,
+  BottomContainer,
 } from '../../pages/board/BoardStyles';
 import SearchInput from './SearchInput';
 
