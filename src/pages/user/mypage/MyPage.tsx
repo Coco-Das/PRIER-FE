@@ -44,6 +44,7 @@ import {
   EditNotion,
   FetchLogout,
   FetchMyPage,
+  SendQuest,
 } from '../../../services/UserApi';
 import { useUserStore } from '../../../states/user/UserStore';
 import CustomAlert from '../../../components/utils/CustomAlert';
@@ -277,6 +278,16 @@ export default function MyPage() {
     setShowEditIntroAlert(false);
     setNewIntro('');
   };
+
+  //퀘스트
+  const QuestClick = async (sequence: string) => {
+    const success = await SendQuest(sequence);
+
+    if (success) {
+      useUserStore.getState().setQuest(String(sequence));
+    }
+  };
+
   return (
     <div className="flex-col" style={{ margin: '1% 7%' }}>
       {showLogoutAlert && (
@@ -456,17 +467,17 @@ export default function MyPage() {
           <QuestContainer>
             <h1 className="mb-2 cursor-pointer">오늘의 퀘스트</h1>
             <StepsContainer>
-              <Step>
+              <Step onClick={() => QuestClick('1')}>
                 <StepLabel completed={parseInt(userProfile.quest) >= 1}>출석하기</StepLabel>
                 <StepCircle completed={parseInt(userProfile.quest) >= 1} color="#8e8ae3" />
               </Step>
               <StepLine />
-              <Step>
+              <Step onClick={() => QuestClick('2')}>
                 <StepLabel completed={parseInt(userProfile.quest) >= 2}>댓글 작성하기</StepLabel>
                 <StepCircle completed={parseInt(userProfile.quest) >= 2} color="#f4c542" />
               </Step>
               <StepLine />
-              <Step>
+              <Step onClick={() => QuestClick('3')}>
                 <StepLabel completed={parseInt(userProfile.quest) >= 3}>피드백 참여하기</StepLabel>
                 <StepCircle completed={parseInt(userProfile.quest) >= 3} color="#4188FE" />
               </Step>

@@ -25,6 +25,7 @@ interface UserStore {
   setFigma: (figma: string) => void;
   setNotion: (notion: string) => void;
   setIntro: (intro: string) => void;
+  setQuest: (quest: string) => void;
 }
 
 const initialProfile: UserProfile = {
@@ -98,6 +99,11 @@ export const useUserStore = create<UserStore>(set => ({
   setIntro: (intro: string) => {
     set(state => ({
       userProfile: { ...state.userProfile, intro },
+    }));
+  },
+  setQuest: (quest: string) => {
+    set(state => ({
+      userProfile: { ...state.userProfile, quest },
     }));
   },
 }));
