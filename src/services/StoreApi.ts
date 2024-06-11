@@ -52,3 +52,23 @@ export async function FetchGiftList() {
     throw error;
   }
 }
+export async function DescriptionGift(productId: string) {
+  try {
+    const response = await API_BASE_URL.get(`/store/products/${productId}`);
+    console.log('기프티콘 설명 요청 성공', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('기프티콘 설명 요청 실패', error);
+    throw error;
+  }
+}
+export async function PurchaseGift(productId: string) {
+  try {
+    const response = await API_BASE_URL.post(`/store/purchase/${productId}`);
+    console.log('기프티콘 구매 요청 성공', response.data);
+    return response.data;
+  } catch (error) {
+    console.error('기프티콘 구매 요청 실패', error);
+    throw error;
+  }
+}
