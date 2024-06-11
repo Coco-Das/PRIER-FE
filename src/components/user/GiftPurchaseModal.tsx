@@ -1,5 +1,5 @@
 import React from 'react';
-import { keyframes, styled } from 'styled-components';
+import { styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 interface PaymentModalProps {
   productName: string;
@@ -46,35 +46,7 @@ const PaymentButton = styled.button`
     border: 1px solid #315af1;
   }
 `;
-const bounce = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(-10px);
-    opacity: 1;
-  }
-`;
-const Tooltip = styled.div`
-  position: absolute;
-  bottom: 390px; // 버튼 위에 위치하도록 조정
-  background-color: white;
-  border: 1px solid red;
-  border-radius: 50px;
-  padding: 5px 10px;
-  color: red;
-  font-size: 12px;
-  font-weight: 300;
-  white-space: nowrap;
-  animation: ${bounce} 0.6s ease-in-out 3, fadeOut 0.6s forwards 4s;
 
-  @keyframes fadeOut {
-    to {
-      opacity: 0;
-    }
-  }
-`;
 const GiftPurchaseModal: React.FC<PaymentModalProps> = ({ productName, onConfirm, onCancel }) => {
   return (
     <PaymentOverlay>
