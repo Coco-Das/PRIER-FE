@@ -8,7 +8,7 @@ export const Layout = () => {
     height: '100vh',
     overflowY: 'auto',
   };
-  const hideHeaderPaths = ['/login', '/firstmain', '/', '/kakao/callback'];
+  const hideHeaderPaths = ['/login', '/firstmain', '/', '/api/kakao/callback'];
   const showHeader = !hideHeaderPaths.includes(location.pathname);
 
   return (
