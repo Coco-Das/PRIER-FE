@@ -1,4 +1,4 @@
-import { styled } from 'styled-components';
+import { css, styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 
 export const ProjectContainer = styled.div`
@@ -119,7 +119,8 @@ export const ReviewTeam = styled.h2`
 `;
 
 //기프티콘
-export const GifticonContainer = styled.div`
+export const CardContainer = styled.div`
+  perspective: 1000px;
   display: flex;
   width: 40rem;
   max-height: 20rem;
@@ -128,6 +129,39 @@ export const GifticonContainer = styled.div`
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
 `;
+
+export const Card = styled.div<{ isFlipped: boolean }>`
+  width: 100%;
+  height: 100%;
+  position: relative;
+  transform-style: preserve-3d;
+  transition: transform 0.6s;
+  ${props =>
+    props.isFlipped &&
+    css`
+      transform: rotateY(180deg);
+    `}
+`;
+export const CardFront = styled.div`
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+`;
+
+export const CardBack = styled.div`
+  width: 100%;
+  height: 100%;
+  backface-visibility: hidden;
+  position: absolute;
+  top: 0;
+  left: 0;
+  transform: rotateY(180deg);
+  background: linear-gradient(45deg, rgba(49, 90, 241, 0.3), rgba(35, 190, 135, 0.3), rgba(119, 60, 209, 0.3));
+`;
+
 export const GiftTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
@@ -139,9 +173,14 @@ export const GiftImg = styled.img`
   width: 40%;
   margin-right: 20px;
 `;
+export const DescriptionText = styled.p`
+  font-size: 18px;
+`;
 
 export const SoldOutContainer = styled.div`
   display: flex;
+  align-items: center;
+  justify-content: center;
   width: 50%;
   max-height: 20%;
   padding: 20px;
