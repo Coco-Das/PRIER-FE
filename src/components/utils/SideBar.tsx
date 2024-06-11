@@ -5,12 +5,15 @@ import List from '@mui/material/List';
 import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButton';
-import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import InboxIcon from '@mui/icons-material/MoveToInbox';
-import MailIcon from '@mui/icons-material/Mail';
 import { styled, keyframes } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
+import sidebar1 from '../../assets/sidebar1.svg';
+import sidebar2 from '../../assets/sidebar2.svg';
+import sidebar3 from '../../assets/sidebar3.svg';
+import sidebar4 from '../../assets/sidebar4.svg';
+import sidebar5 from '../../assets/sidebar5.svg';
+import sidebar6 from '../../assets/sidebar6.svg';
 
 interface SideBarProps {
   open: boolean;
@@ -22,6 +25,10 @@ const CustomDrawer = styled(Drawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
     backgroundColor: '#F3F5FB',
     fontFamily: 'Paybooc, sans-serif',
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%', // Drawer height set to 100%
   },
 }));
 
@@ -40,32 +47,62 @@ const CustomListItemButton = styled(ListItemButton, {
 })<CustomListItemButtonProps>(({ theme, current }) => ({
   '&:hover': {
     backgroundColor: '#D1E0FC',
-    '& .MuiListItemIcon-root': {
+    '& img': {
       animation: `${tilt} 0.3s`,
     },
   },
   backgroundColor: current ? '#D1E0FC' : 'inherit',
+  padding: '8px 16px', // 버튼 크기 줄이기
 }));
 
-const Spacer = styled('div')(({ theme }) => ({
-  flexGrow: 1,
+const CustomListItemIcon = styled('img')({
+  width: 24,
+  height: 24,
+  marginRight: 20, // 이미지와 텍스트 사이 간격 줄이기
+});
+
+const LogoutButton = styled(ListItemButton)(({ theme }) => ({
+  '&:hover': {
+    backgroundColor: 'inherit',
+    '& .MuiListItemText-root': {
+      color: theme.palette.primary.main,
+      textDecoration: 'underline',
+    },
+  },
+  '&.Mui-selected': {
+    backgroundColor: 'inherit',
+    '& .MuiListItemText-root': {
+      color: theme.palette.primary.main,
+    },
+  },
+  '&.Mui-focusVisible': {
+    backgroundColor: 'inherit',
+  },
+  '&.Mui-selected:hover': {
+    backgroundColor: 'inherit',
+  },
+  '&:active': {
+    backgroundColor: 'inherit',
+  },
 }));
 
 const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) => {
   const navigate = useNavigate();
   const menuItems = [
-    { text: '프로젝트 리스트', path: '/main' },
-    { text: '테스트 생성하기', path: '/createtest' },
-    { text: '테스트한 프로젝트', path: '/testlist' },
-    { text: '커뮤니티', path: '/board' },
-    { text: '상점', path: '/store' },
-    { text: '마이페이지', path: '/mypage' },
-    { text: '로그아웃', path: '/' },
+    { text: '프로젝트 리스트', path: '/main', icon: sidebar1 },
+    { text: '테스트 생성하기', path: '/createtest', icon: sidebar2 },
+    { text: '테스트한 프로젝트', path: '/testlist', icon: sidebar3 },
+    { text: '커뮤니티', path: '/board', icon: sidebar4 },
+    { text: '상점', path: '/store', icon: sidebar5 },
+    { text: '마이페이지', path: '/mypage', icon: sidebar6 },
   ];
+  const logoutItem = { text: '로그아웃', path: '/' };
+
   const handleNavigation = (path: string) => {
     navigate(path);
     toggleDrawer(false); // 메뉴를 닫기 위해 추가
   };
+
   return (
     <CustomDrawer
       anchor="left"
@@ -90,18 +127,26 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
       }}
       variant="temporary"
     >
-      <Box sx={{ width: 250 }} role="presentation">
+      <Box sx={{ width: 250, display: 'flex', flexDirection: 'column', height: '100%' }} role="presentation">
         <List>
           {menuItems.map((item, index) => (
             <ListItem key={item.text} disablePadding>
               <CustomListItemButton current={currentPath === item.path} onClick={() => handleNavigation(item.path)}>
-                <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
+                <CustomListItemIcon src={item.icon} alt={`${item.text} icon`} />
                 <ListItemText primary={item.text} />
               </CustomListItemButton>
             </ListItem>
           ))}
         </List>
-        <Divider />
+        <Box sx={{ mt: 'auto' }}>
+          <List>
+            <ListItem disablePadding>
+              <LogoutButton onClick={() => handleNavigation(logoutItem.path)}>
+                <ListItemText primary={logoutItem.text} />
+              </LogoutButton>
+            </ListItem>
+          </List>
+        </Box>
       </Box>
     </CustomDrawer>
   );
