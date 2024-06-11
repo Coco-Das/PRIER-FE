@@ -5,7 +5,8 @@ import { ReactComponent as GraphIcon } from '../../../assets/Graph.svg';
 export const ProfileContainer = styled.div`
   display: flex;
   justify-content: flex-start;
-  width: 50%;
+  width: 650px;
+  height: 300px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 10px;
@@ -65,7 +66,7 @@ export const AccountIcon = styled.img`
   width: 30px;
 `;
 export const IntroduceContainer = styled.div`
-  width: 100%;
+  width: 650px;
   height: 40%;
   max-height: 40%;
   border: 1px solid #e0e0e0;
@@ -77,6 +78,7 @@ export const IntroduceContainer = styled.div`
 `;
 export const QuestContainer = styled.div`
   width: 100%;
+  height: 54%;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin-left: 15px;
@@ -121,12 +123,13 @@ export const ProjectContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 75%;
+  height: 50%;
   margin-right: 20px;
 `;
 export const LinkProject = styled.div`
   width: 260px;
   max-width: 260px;
-  height: auto;
+  height: 28%;
   border: none;
   border-radius: 15px;
   background-color: white;
@@ -136,8 +139,10 @@ export const LinkProject = styled.div`
   margin-right: 20px;
 `;
 export const FeedbackContainer = styled.div`
+  display: flex;
+  flex-direction: column;
   background-color: #e8e0f1;
-  height: 50%;
+  height: 15rem;
   width: 260px;
   max-width: 260px;
   border: none;
@@ -150,7 +155,7 @@ export const StaticContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 320px;
-  height: 80%;
+  height: 23rem;
   max-width: 320px;
   border: none;
   border-radius: 15px;
@@ -162,15 +167,20 @@ export const AIReportContainer = styled.div`
   background-color: #e1f9f0;
   display: flex;
   flex-direction: column;
-  width: 320px;
-  max-width: 320px;
-  height: 80%;
+  align-items: center;
+  width: 23rem;
+  max-width: 23rem;
+  height: 23rem;
   border: none;
   border-radius: 15px;
   padding: 20px;
   cursor: default;
 `;
-
+export const AIBestText = styled.h1`
+  color: #315af1;
+  font-weight: 600;
+  font-size: 1.2em;
+`;
 export const ReviewWrapper = styled.div`
   cursor: defualt;
   display: flex;
@@ -196,6 +206,6 @@ export const MypageChartIcon = styled(ChartIcon)`
   transform: scaleX(-1);
 `;
 export const StyledGraphIcon = styled(GraphIcon)`
-  margin: 0px;
   width: 45px;
+  height: 50px;
 `;
