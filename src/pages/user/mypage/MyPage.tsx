@@ -301,7 +301,7 @@ export default function MyPage() {
   };
 
   return (
-    <div className="flex-col" style={{ margin: '1% 7%' }}>
+    <div className="flex-col" style={{ margin: '1% 7% 0 7%' }}>
       {showLogoutAlert && (
         <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
       )}
@@ -497,7 +497,7 @@ export default function MyPage() {
           </QuestContainer>
         </div>
       </div>
-      <div className="flex justify-between mt-5">
+      <div className="flex justify-between mt-5 w-full">
         <ProjectContainer>
           <div className="flex items-baseline justify-between">
             <Title>진행 중인 프로젝트</Title>

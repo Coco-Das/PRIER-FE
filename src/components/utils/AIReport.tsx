@@ -57,7 +57,7 @@ export default function AIReport() {
     <div
       style={{
         position: 'relative',
-        width: '330px',
+        width: '400px',
         height: '300px',
       }}
       ref={canvasRef}
