@@ -16,6 +16,7 @@ import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import { styled } from 'styled-components';
 import { useGifticonStore } from '../../states/user/PointStore';
 import { DescriptionGift, PurchaseGift } from '../../services/StoreApi';
+import GiftPurchaseModal from './GiftPurchaseModal';
 
 const StyledCoinIcon = styled(PointIcon)`
   width: 40px;
@@ -27,6 +28,8 @@ export default function Gifticon() {
   const { gifticons } = useGifticonStore();
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
   const [details, setDetails] = useState<string | null>(null);
+  const [showPurchaseAlert, setShowPurchaseAlert] = useState(false);
+  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
 
   const handleFlip = async (index: number, productId: string) => {
     if (index === flippedIndex) {
@@ -42,16 +45,37 @@ export default function Gifticon() {
       }
     }
   };
-  const handlePurchase = (productId: string) => async () => {
-    try {
-      const response = await PurchaseGift(productId);
-      console.log(response);
-    } catch (error) {
-      console.error('기프티콘 구매 요청 실패:', error);
+
+  const handlePurchaseClick = (productId: string) => {
+    setSelectedProductId(productId);
+    setShowPurchaseAlert(true);
+  };
+
+  const ConfirmPurchase = async () => {
+    if (selectedProductId) {
+      try {
+        const response = await PurchaseGift(selectedProductId);
+        console.log(response);
+        setShowPurchaseAlert(false);
+      } catch (error) {
+        console.error('기프티콘 구매 요청 실패:', error);
+      }
     }
   };
+
+  const CancelPurchase = () => {
+    setShowPurchaseAlert(false);
+  };
+
   return (
     <>
+      {showPurchaseAlert && (
+        <GiftPurchaseModal
+          productName={gifticons.find(g => g.productId === selectedProductId)?.productName || ''}
+          onConfirm={ConfirmPurchase}
+          onCancel={CancelPurchase}
+        />
+      )}
       {gifticons.map((gifticon, index) => (
         <CardContainer key={gifticon.productId} onClick={() => handleFlip(index, gifticon.productId)}>
           <Card isFlipped={flippedIndex === index}>
@@ -88,7 +112,13 @@ export default function Gifticon() {
                 <GiftTextWrapper>
                   <Title>{gifticon.productName}</Title>
                   <DescriptionText>{details}</DescriptionText>
-                  <LinkText className="text-end" onClick={handlePurchase(gifticon.productId)}>
+                  <LinkText
+                    className="text-end"
+                    onClick={e => {
+                      e.stopPropagation();
+                      handlePurchaseClick(gifticon.productId);
+                    }}
+                  >
                     구매하기 &gt;
                   </LinkText>
                 </GiftTextWrapper>
