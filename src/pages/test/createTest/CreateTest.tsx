@@ -34,6 +34,7 @@ import {
 import { ToggleBtn } from '../../../components/utils/Toggle';
 import { DropDownContainer } from '../../../components/utils/DropDown';
 import { API_BASE_URL } from '../../../const/TokenApi';
+import CustomAlert from '../../../components/utils/CustomAlert';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
@@ -91,7 +92,7 @@ export const CreateTest = () => {
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
-
+  const [showAlert, setShowAlert] = useState(false);
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -171,7 +172,10 @@ export const CreateTest = () => {
         setTags(prevTags => [...prevTags, { tag: tagInput.trim(), color: getRandomColor() }]);
         setTagInput('');
       } else {
-        alert('태그는 최대 2개까지 추가할 수 있습니다.');
+        setShowAlert(true);
+        setTimeout(() => {
+          setShowAlert(false);
+        }, 800);
       }
     }
   };
@@ -336,6 +340,7 @@ export const CreateTest = () => {
               onKeyDown={handleTagInputKeyDown}
             />
           </TagDiv>
+          {showAlert && <CustomAlert message="태그는 최대 2개까지 설정할 수 있습니다." showButtons={false} />}
           <TagWrapper>
             {tags.map((tagIndex, index) => (
               <Tag key={index} bgColor={tagIndex.color}>
@@ -362,14 +367,14 @@ export const CreateTest = () => {
                 onChange={(date: Date) => setStartDate(date)}
                 dateFormat="yyyy-MM-dd"
                 placeholderText="시작 날짜"
-                customInput={<Input style={{ width: '90%', textAlign: 'center' }} />}
+                customInput={<Input style={{ width: '90%', textAlign: 'center', cursor: 'pointer' }} />}
               />
               <DatePicker
                 selected={endDate}
                 onChange={(date: Date) => setEndDate(date)}
                 dateFormat="yyyy-MM-dd"
                 placeholderText="종료 날짜"
-                customInput={<Input style={{ width: '90%', textAlign: 'center' }} />}
+                customInput={<Input style={{ width: '90%', textAlign: 'center', cursor: 'pointer' }} />}
               />
             </OrangeInputDiv>
             <OrangeInputDiv style={{ height: '27%' }}>
