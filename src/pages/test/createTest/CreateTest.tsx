@@ -28,8 +28,11 @@ import {
   QuestionDiv,
   TagWrapper,
   Tag,
+  AddButton,
+  QuestionDeleteButton,
 } from './CreateTestStyles';
 import { ToggleBtn } from '../../../components/utils/Toggle';
+import { DropDownContainer } from '../../../components/utils/DropDown';
 import { API_BASE_URL } from '../../../const/TokenApi';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -61,6 +64,10 @@ interface Question {
   options?: string[]; // 객관식 질문의 선택지(고정)
   // selectedOption?: string; // 사용자가 선택한 선택지
 }
+interface Tag {
+  tag: string;
+  color: string;
+}
 
 export const CreateTest = () => {
   const [mainImageUrl, setMainImageUrl] = useState<string | null>(null);
@@ -72,7 +79,7 @@ export const CreateTest = () => {
     { id: 1, type: 'subjective', content: '' },
     { id: 2, type: 'objective', content: '', options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] },
   ]);
-  const [tags, setTags] = useState<string[]>([]);
+  const [tags, setTags] = useState<Tag[]>([]);
   const [tagInput, setTagInput] = useState<string>('');
   const [step, setStep] = useState('');
   const [introduce, setIntroduce] = useState('');
@@ -81,11 +88,15 @@ export const CreateTest = () => {
   const [teamDescription, setTeamDescription] = useState('');
   const [teamMate, setTeamMate] = useState('');
   const [link, setLink] = useState('');
-  const [github, setGithub] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const [sub, setSub] = useState('');
-  const [obj, setObj] = useState('');
+  const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
+
+  //태그 색상 랜덤 설정
+  const getRandomColor = () => {
+    const randomIndex = Math.floor(Math.random() * colors.length);
+    return colors[randomIndex];
+  };
 
   const addQuestion = () => {
     setQuestions(prevQuestions => [
@@ -156,10 +167,18 @@ export const CreateTest = () => {
   const handleTagInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && tagInput.trim()) {
       event.preventDefault();
-      setTags(prevTags => [...prevTags, tagInput.trim()]);
-      setTagInput('');
+      if (tags.length < 2) {
+        setTags(prevTags => [...prevTags, { tag: tagInput.trim(), color: getRandomColor() }]);
+        setTagInput('');
+      } else {
+        alert('태그는 최대 2개까지 추가할 수 있습니다.');
+      }
     }
   };
+  const handleQuestionDelete = (id: number) => {
+    setQuestions(prevQuestions => prevQuestions.filter(question => question.id !== id));
+  };
+
   const handleIntroduceChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setIntroduce(event.target.value);
   };
@@ -171,8 +190,8 @@ export const CreateTest = () => {
     setTitle(event.target.value);
   };
 
-  const handleStepChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setStep(event.target.value);
+  const handleStepChange = (selectedStep: string) => {
+    setStep(selectedStep);
   };
 
   const handleTeamNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -191,22 +210,17 @@ export const CreateTest = () => {
     setLink(event.target.value);
   };
 
-  const handleGithubChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setGithub(event.target.value);
-  };
-  const handleSubChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setSub(event.target.value);
-  };
-  const handleObjChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setObj(event.target.value);
-  };
-
   const handleQuestionContentChange = (id: number, content: string) => {
     setQuestions(prevQuestions =>
       prevQuestions.map(question => (question.id === id ? { ...question, content } : question)),
     );
   };
 
+  const handleDeleteTag = (index: number) => {
+    setTags(tags => tags.filter((_, i) => i !== index));
+  };
+
+  //제출하기 버튼
   const handleSubmit = async () => {
     const formData = new FormData();
 
@@ -219,8 +233,8 @@ export const CreateTest = () => {
             introduce,
             goal,
             tags,
-            startDate: '2024-06-10',
-            endDate: '2024-07-21',
+            startDate: startDate,
+            endDate: endDate,
             status: step === '배포완료' ? 0 : step === '개발 중' ? 1 : 2,
             teamName,
             teamDescription,
@@ -323,8 +337,21 @@ export const CreateTest = () => {
             />
           </TagDiv>
           <TagWrapper>
-            {tags.map((tag, index) => (
-              <Tag key={index}>{tag}</Tag>
+            {tags.map((tagIndex, index) => (
+              <Tag key={index} bgColor={tagIndex.color}>
+                {tagIndex.tag}
+                <DeleteButton
+                  style={{
+                    top: '-3px',
+                    right: '-5px',
+                    width: '15px',
+                    height: '15px',
+                  }}
+                  onClick={() => handleDeleteTag(index)}
+                >
+                  x
+                </DeleteButton>
+              </Tag>
             ))}
           </TagWrapper>
           <OrangeDiv className="mt-3">
@@ -335,24 +362,19 @@ export const CreateTest = () => {
                 onChange={(date: Date) => setStartDate(date)}
                 dateFormat="yyyy-MM-dd"
                 placeholderText="시작 날짜"
-                customInput={<Input style={{ width: '100%', textAlign: 'center' }} />}
+                customInput={<Input style={{ width: '90%', textAlign: 'center' }} />}
               />
               <DatePicker
                 selected={endDate}
                 onChange={(date: Date) => setEndDate(date)}
                 dateFormat="yyyy-MM-dd"
                 placeholderText="종료 날짜"
-                customInput={<Input style={{ width: '100%', textAlign: 'center' }} />}
+                customInput={<Input style={{ width: '90%', textAlign: 'center' }} />}
               />
             </OrangeInputDiv>
-            <OrangeInputDiv>
-              <span>진행단계 :</span>
-              <Input
-                placeholder="배포완료 / 개발 중 / 기획 중 선택"
-                onChange={handleStepChange}
-                value={step}
-                style={{ width: '60%' }}
-              />
+            <OrangeInputDiv style={{ height: '27%' }}>
+              <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>진행단계 :</div>
+              <DropDownContainer onSelect={handleStepChange} />
             </OrangeInputDiv>
           </OrangeDiv>
           <BlueDiv className="mt-2">
@@ -386,10 +408,6 @@ export const CreateTest = () => {
             <GreenInputDiv>
               <span className="font-bold">배포 링크</span>
               <Input style={{ width: '60%' }} onChange={handleLinkChange} value={link} />
-            </GreenInputDiv>
-            <GreenInputDiv>
-              <span className="font-bold">깃허브</span>
-              <Input style={{ width: '60%' }} onChange={handleGithubChange} value={github} />
             </GreenInputDiv>
           </GreenDiv>
         </ProjectIntro>
@@ -441,6 +459,9 @@ export const CreateTest = () => {
                       width: '80%',
                     }}
                   />
+                  <div style={{ display: 'flex', justifyContent: 'right' }}>
+                    <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
+                  </div>
                 </div>
               ) : (
                 <div>
@@ -476,11 +497,14 @@ export const CreateTest = () => {
                       </div>
                     ))}
                   </div>
+                  <div style={{ display: 'flex', justifyContent: 'right' }}>
+                    <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
+                  </div>
                 </div>
               )}
             </QuestionDiv>
           ))}
-          <CustomButton onClick={addQuestion}>질문 추가</CustomButton>
+          <AddButton onClick={addQuestion}>질문 추가</AddButton>
           <div style={{ width: '100%', display: 'flex' }}>
             <CustomButton onClick={handleSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
               제출하기

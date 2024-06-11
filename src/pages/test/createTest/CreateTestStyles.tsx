@@ -1,5 +1,7 @@
 import styled from 'styled-components';
 import { ReactComponent as Setting } from '../../../assets/Setting.svg';
+import { ReactComponent as AddBtn } from '../../../assets/AddBtn.svg';
+import { ReactComponent as DeleteBtn } from '../../../assets/DeleteBtn.svg';
 
 export const CreateWrapper = styled.div`
   /* min-height: 91vh; */
@@ -33,6 +35,16 @@ export const ProjectIntro = styled.div`
   width: 35%;
 `;
 export const Settings = styled(Setting)``;
+export const AddButton = styled(AddBtn)`
+  margin-top: 5%;
+`;
+export const QuestionDeleteButton = styled(DeleteBtn)`
+  width: 25px;
+  height: 25px;
+  &:hover {
+    cursor: pointer;
+  }
+`;
 
 export const ProjectTextArea = styled.div`
   display: flex;
@@ -131,12 +143,16 @@ export const TagWrapper = styled.div`
   flex-wrap: wrap;
   gap: 5px;
 `;
+interface TagProps {
+  bgColor: string;
+}
 
-export const Tag = styled.div`
+export const Tag = styled.div<TagProps>`
   padding: 5px 10px;
-  background-color: #e0e0e0;
-  border-radius: 5px;
-  font-size: 14px;
+  position: relative;
+  background-color: ${props => props.bgColor};
+  border-radius: 20px;
+  font-size: 12px;
 `;
 
 export const Input = styled.input`
@@ -166,7 +182,6 @@ export const OrangeInputDiv = styled.div`
   width: 100%;
   display: flex;
   gap: 15px;
-  align-items: center;
   input {
     border: 1px solid #ffba6b;
   }
@@ -196,7 +211,7 @@ export const BlueInputDiv = styled.div`
 export const GreenDiv = styled.div`
   margin-left: 30px;
   border-radius: 8px;
-  height: 15%;
+  height: 14%;
   background-color: #e1f9f0;
   font-size: 15px;
   padding: 5px 20px 0px 20px;
@@ -229,5 +244,3 @@ export const QuestionDiv = styled.div`
   background-clip: padding-box, border-box;
   background-origin: padding-box, border-box;
 `;
-
-export const SubmitBtn = styled.button``;
