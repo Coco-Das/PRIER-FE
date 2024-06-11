@@ -2,8 +2,9 @@ import React from 'react';
 import styled from 'styled-components';
 interface CustomAlertProps {
   message: string;
-  onConfirm: () => void;
-  onCancel: () => void;
+  showButtons?: boolean;
+  onConfirm?: () => void;
+  onCancel?: () => void;
 }
 
 const ModalOverlay = styled.div`
@@ -59,15 +60,17 @@ const DisagreeButton = styled.button`
   }
 `;
 
-const CustomAlert: React.FC<CustomAlertProps> = ({ message, onConfirm, onCancel }) => {
+const CustomAlert: React.FC<CustomAlertProps> = ({ message, showButtons = true, onConfirm, onCancel }) => {
   return (
     <ModalOverlay>
       <ModalContent>
         <p>{message}</p>
-        <span className="flex justify-center items-center gap-7">
-          <AgreeButton onClick={onConfirm}>확인</AgreeButton>
-          <DisagreeButton onClick={onCancel}>취소</DisagreeButton>
-        </span>
+        {showButtons && (
+          <span className="flex justify-center items-center gap-7">
+            <AgreeButton onClick={onConfirm}>확인</AgreeButton>
+            <DisagreeButton onClick={onCancel}>취소</DisagreeButton>
+          </span>
+        )}
       </ModalContent>
     </ModalOverlay>
   );
