@@ -55,7 +55,7 @@ export const useUserStore = create<UserStore>(set => ({
     intro: '',
     quest: '0',
     statistic: '',
-    AIReport: [],
+    AIReport: ['사과', '망고', '애플망고', '샤인머스캣', '블러드 오렌지'],
   },
   setUserProfile: (profile: UserProfile) => {
     sessionStorage.setItem('nickname', profile.nickname);

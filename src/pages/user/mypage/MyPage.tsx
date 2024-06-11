@@ -28,6 +28,7 @@ import {
   AccountLink,
   AccountIcon,
   EditAccountText,
+  AIBestText,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
@@ -53,6 +54,7 @@ import GithubIcon from '../../../assets/github.png';
 import FigmaIcon from '../../../assets/figma.png';
 import NotionIcon from '../../../assets/notion.png';
 import AccountEdit from '../../../components/user/AccountEdit';
+import AIReport from '../../../components/utils/AIReport';
 
 export default function MyPage() {
   const navigate = useNavigate();
@@ -347,7 +349,7 @@ export default function MyPage() {
         <CustomAlert message="한 줄 소개를 수정 하시겠습니까?" onConfirm={saveEditIntro} onCancel={cancleEditIntro} />
       )}
 
-      <div className="flex w-full">
+      <div className="flex w-full h-full">
         <ProfileContainer>
           <StyledUserIcon></StyledUserIcon>
           <div className="flex-col mt-3 w-full">
@@ -531,10 +533,27 @@ export default function MyPage() {
               <MypageChartIcon></MypageChartIcon>
             </StaticContainer>
             <AIReportContainer>
-              <div className="flex gap-4">
-                <TitleText>AI 분석 Report</TitleText>
-                <StyledGraphIcon></StyledGraphIcon>
-              </div>
+              {userProfile.AIReport && userProfile.AIReport.length > 0 ? (
+                <>
+                  <div className="flex-col items-start w-full">
+                    <span className="flex items-center">
+                      <TitleText>AI 분석 Report</TitleText>
+                      <StyledGraphIcon></StyledGraphIcon>
+                    </span>
+                    <AIBestText>&quot; {userProfile.AIReport[0]} &quot;</AIBestText>
+                    <LinkText>&quot; {userProfile.AIReport[0]} &quot; 라는 단어가 가장 많이 응답되었습니다.</LinkText>
+                  </div>
+                  <AIReport />
+                </>
+              ) : (
+                <>
+                  <div className="flex gap-4 items-start w-full">
+                    <TitleText>AI 분석 Report</TitleText>
+                    <StyledGraphIcon></StyledGraphIcon>
+                  </div>
+                  <AIBestText>아직 생성한 테스트가 없습니다.</AIBestText>
+                </>
+              )}
             </AIReportContainer>
           </div>
         </ProjectContainer>
