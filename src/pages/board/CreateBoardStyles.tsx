@@ -2,13 +2,11 @@ import styled from 'styled-components';
 
 export const Container = styled.div`
   background: #f3f6fd;
-  width: 100%;
-  height: calc(100vh - 64px);
   display: flex;
   flex-direction: column;
   align-self: center;
   justify-content: center;
-  overflow-y: auto; /* Container에 스크롤을 추가합니다 */
+  overflow-y: auto;
 `;
 
 export const CreateContainer = styled.div`
@@ -20,13 +18,23 @@ export const CreateContainer = styled.div`
   max-width: 1000px;
 `;
 
-// 포스트 박스 스타일
+export const Header = styled.div`
+  top: 0;
+  width: 100%;
+  max-width: 1000px;
+  background: #f3f6fd;
+  z-index: 1;
+  padding: 30px 0 0 0;
+  display: flex;
+  flex-direction: column;
+  align-items: right;
+`;
+
 export const PostBox = styled.div`
   background: #ffffff;
   border-radius: 15px;
   width: 100%;
   max-width: 1000px;
-  min-height: 65vh;
   padding: 1vh;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   display: flex;
@@ -34,8 +42,6 @@ export const PostBox = styled.div`
   position: relative;
   align-self: center;
   margin-bottom: 1rem;
-  max-height: 1000px; /* 최대 높이를 1000px로 제한합니다 */
-  overflow: hidden; /* PostBox 자체에는 스크롤을 숨깁니다 */
 `;
 
 export const UserContainer = styled.div`
@@ -74,7 +80,7 @@ export const Author = styled.div`
   line-height: 150%;
   font-weight: 700;
 `;
-// 버튼 스타일
+
 export const Button = styled.div`
   background: #bb68fd;
   border-radius: 8px;
@@ -85,14 +91,13 @@ export const Button = styled.div`
   justify-content: center;
   height: 40px;
   width: 100px;
+  margin-bottom: 30px;
 `;
 
-// 버튼 텍스트 스타일
 export const ButtonText = styled.div`
   color: #ffffff;
   text-align: left;
   font-size: 16px;
-  line-height: 150%;
   font-weight: 700;
 `;
 
@@ -101,8 +106,8 @@ export const ContentContainer = styled.div`
   flex-direction: column;
   margin-top: 20px;
   border-radius: 5px;
-  height: 100%;
-  overflow: hidden; /* ContentContainer의 스크롤을 숨깁니다 */
+  height: auto;
+  overflow: visible;
 `;
 
 export const Title = styled.input`
@@ -116,8 +121,65 @@ export const ContentText = styled.textarea`
   padding: 10px;
   border-radius: 5px;
   font-size: 16px;
-  height: 100%;
-  resize: vertical;
-  max-height: calc(1000px - 200px); /* 최대 높이를 1000px에서 나머지 요소들의 높이를 뺀 값으로 설정합니다 */
-  overflow-y: auto; /* 스크롤이 생기도록 설정합니다 */
+  height: 400px; /* 기본 높이 설정 */
+  overflow-y: visible; /* 스크롤 숨김 */
+  resize: none; /* 크기 조절 불가 */
+`;
+
+export const ImageWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-top: 10px;
+  width: 400px;
+  max-width: 100%;
+`;
+
+export const StyledImg = styled.img`
+  max-width: 100%;
+  width: 400px;
+  height: 300px;
+  object-fit: contain;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+`;
+
+export const DeleteButton = styled.button`
+  position: absolute;
+  top: 10px;
+  right: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: lightgray;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  width: 20px;
+  height: 20px;
+  cursor: pointer;
+`;
+
+export const FileCount = styled.div`
+  margin-top: 10px;
+  font-size: 15px;
+  color: #31af1;
+`;
+
+export const CreateWrapper = styled.div`
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+`;
+
+export const CustomButton = styled.button`
+  padding: 8px 16px;
+  cursor: pointer;
+  background-color: #315af1;
+  border: none;
+  width: 6rem;
+  border-radius: 5px;
+  margin-top: 10px;
+  margin-left: 10px;
+  white-space: nowrap;
+  text-align: center;
 `;
