@@ -158,7 +158,7 @@ export const PostListPostBox = styled.div<{ category?: string; isActive?: boolea
   ${({ isActive }) =>
     isActive &&
     css`
-      transform: scale(1.05);
+      transform: scale(1.02);
       &::before {
         content: '';
         position: absolute;
@@ -176,7 +176,7 @@ export const PostListPostBox = styled.div<{ category?: string; isActive?: boolea
     `}
 
   &:hover {
-    transform: scale(1.05);
+    transform: scale(1.02);
   }
 
   @keyframes borderAnimation {
