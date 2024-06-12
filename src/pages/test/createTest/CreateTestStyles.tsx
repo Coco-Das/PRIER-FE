@@ -4,13 +4,14 @@ import { ReactComponent as AddBtn } from '../../../assets/AddBtn.svg';
 import { ReactComponent as DeleteBtn } from '../../../assets/DeleteBtn.svg';
 
 export const CreateWrapper = styled.div`
-  /* min-height: 91vh; */
   width: 100%;
-  height: auto;
   display: flex;
   overflow-y: auto;
+  overflow-x: hidden;
   flex-direction: column;
+  border: 1px solid blue;
   padding: 0px 30px 0px 30px;
+  margin-right: 0 !important;
 `;
 export const Project = styled.div`
   width: 100%;
@@ -37,6 +38,9 @@ export const ProjectIntro = styled.div`
 export const Settings = styled(Setting)``;
 export const AddButton = styled(AddBtn)`
   margin-top: 5%;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 export const QuestionDeleteButton = styled(DeleteBtn)`
   width: 25px;
