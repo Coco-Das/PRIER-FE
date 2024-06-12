@@ -8,7 +8,7 @@ import KakaoLoading from '../pages/user/auth/KakaoLoading';
 import Store from '../pages/user/store/Store';
 import MyPage from '../pages/user/mypage/MyPage';
 import Feedback from '../pages/test/feedback/Feedback';
-import ResponseTest from '../pages/test/responseTest/ResponseTest';
+import { ResponseTest } from '../pages/test/responseTest/ResponseTest';
 import TestList from '../pages/test/testList/TestList';
 import CreateBoard from '../pages/board/CreateBoard';
 import Board from '../pages/board/Board';
