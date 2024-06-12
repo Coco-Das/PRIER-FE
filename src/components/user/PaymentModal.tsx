@@ -2,8 +2,8 @@ import React from 'react';
 import { keyframes, styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 interface PaymentModalProps {
-  amount: string;
-  onConfirm: (amount: string) => void;
+  amount: number;
+  onConfirm: (amount: number) => void;
   onCancel: () => void;
 }
 

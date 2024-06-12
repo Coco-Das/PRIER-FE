@@ -1,21 +1,21 @@
 import { create } from 'zustand';
 //포인트
 interface Transaction {
-  transactionId: string;
-  amount: string;
+  transactionId: number;
+  amount: number;
   transactionType: string;
   createdAt: string;
-  balance: string;
-  userId: string;
+  balance: number;
+  userId: number;
 }
 interface UserPointStore {
-  point: string;
+  point: number;
   transactions: Transaction[];
-  setPoint: (point: string) => void;
+  setPoint: (point: number) => void;
   updatePoint: (transaction: Transaction) => void;
 }
 export const userPointStore = create<UserPointStore>(set => ({
-  point: '0',
+  point: 0,
   transactions: [],
   setPoint: point => set({ point }),
   updatePoint: transaction =>
@@ -27,11 +27,11 @@ export const userPointStore = create<UserPointStore>(set => ({
 
 //기프티콘
 interface Gifticon {
-  productId: string;
+  productId: number;
   productName: string;
-  price: string;
+  price: number;
   description: string;
-  stock: string;
+  stock: number;
   imageUrl: string;
 }
 
