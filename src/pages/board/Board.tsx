@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Container, NoPostsMessage } from './BoardStyles';
-import { posts as initialPosts, Post } from '../../states/board/BoardStore';
+import { posts as initialPosts, BoardPost } from '../../states/board/BoardStore'; // Post를 BoardPost로 변경
 import PaginationComponent from '../../components/board/PaginationComponent';
 import PostSkeleton from '../../components/board/PostSkeleton';
 import NavigationBar from '../../components/board/NavigationBar';
@@ -12,8 +12,8 @@ import PostDetailSkeleton from '../../components/board/PostDetailSkeleton';
 const Board: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const location = useLocation();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<BoardPost[]>([]); // Post를 BoardPost로 변경
+  const [filteredPosts, setFilteredPosts] = useState<BoardPost[]>([]); // Post를 BoardPost로 변경
   const [activeCategory, setActiveCategory] = useState<string>('ITNews');
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');

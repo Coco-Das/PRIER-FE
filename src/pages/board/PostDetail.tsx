@@ -24,23 +24,23 @@ import {
   CommentCreatedAt,
   LikeBackContainer,
 } from './BoardStyles';
-import { Post } from '../../states/board/BoardStore';
+import { BoardPost } from '../../states/board/BoardStore'; // 수정된 인터페이스 임포트
 import { comments as initialComments } from '../../states/board/ChatStore';
-import { members } from '../../states/board/MemberStore'; // 멤버 데이터를 가져옵니다
+import { members } from '../../states/board/MemberStore';
 import backto from '../../assets/BackTo.svg';
-import userAvatar from '../../assets/user.svg'; // 기본 아바타 이미지
+import userAvatar from '../../assets/user.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
-import PostDetailSkeleton from '../../components/board/PostDetailSkeleton'; // PostDetailSkeleton 가져오기
-import useFormatDate from '../../hooks/UseFormatDate'; // 경로 수정
-import PositionedMenu from '../../components/board/PositionedMenu'; // PositionedMenu 컴포넌트 가져오기
+import PostDetailSkeleton from '../../components/board/PostDetailSkeleton';
+import useFormatDate from '../../hooks/UseFormatDate';
+import PositionedMenu from '../../components/board/PositionedMenu';
 import { useNavigate } from 'react-router-dom';
 
 interface PostDetailProps {
   postId: number;
   onBackToList: () => void;
   toggleLike: (postId: number) => void;
-  posts: Post[]; // posts 상태 추가
+  posts: BoardPost[]; // 수정된 인터페이스 사용
 }
 
 const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLike, posts }) => {
@@ -55,7 +55,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
     setLoading(true);
     setTimeout(() => {
       setLoading(false);
-    }, 2000); // 로딩 시간을 조정할 수 있습니다.
+    }, 2000);
   }, [postId]);
 
   if (!post) {
@@ -67,8 +67,8 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
   };
 
   const handleProfileClick = (e: React.MouseEvent, memberId: number) => {
-    e.stopPropagation(); // Prevent triggering the onPostClick event
-    navigate(`/mypage`); // Navigate to the user's profile page
+    e.stopPropagation();
+    navigate(`/mypage`);
   };
 
   return (
@@ -85,17 +85,19 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
               <Author onClick={e => handleProfileClick(e, post.memberId)}>{`작성자 ${post.memberId}`}</Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
-            {post.memberId === 1 && ( // memberId가 1일 때만 메뉴바를 렌더링
+            {post.memberId === 1 && (
               <div className="ml-auto">
                 <PositionedMenu />
               </div>
             )}
           </UserContainer>
-          <ContentContainer>
+          <ContentContainer className="flex flex-col items-start">
             <h1>{post.title}</h1>
             <p>{post.content}</p>
+            {post.images &&
+              post.images.map((image, index) => <Image key={index} src={image} alt={`Content image ${index + 1}`} />)}
           </ContentContainer>
-          <Image src="image.png" alt="Content" />
+
           <LikeBackContainer>
             <button onClick={onBackToList}>
               <Backto src={backto} />
@@ -140,7 +142,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
                       </CommentAuthor>
                       <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
                     </div>
-                    {comment.memberId === 1 && ( // 임시 유저 memberId가 1일 때만 메뉴바를 렌더링
+                    {comment.memberId === 1 && (
                       <div>
                         <PositionedMenu />
                       </div>

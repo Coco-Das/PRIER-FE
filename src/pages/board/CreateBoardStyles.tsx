@@ -175,7 +175,7 @@ export const CustomButton = styled.button`
   cursor: pointer;
   background-color: #315af1;
   border: none;
-  width: 6rem;
+  width: 8rem;
   border-radius: 5px;
   margin-top: 10px;
   margin-left: 10px;

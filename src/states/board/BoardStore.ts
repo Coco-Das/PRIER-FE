@@ -1,17 +1,18 @@
 // 게시물 인터페이스 정의
-export interface Post {
+export interface BoardPost {
   boardId: number;
   memberId: number;
   category: string;
-  title: string; // 제목 추가
+  title: string;
   content: string;
   createdAt: string;
   likes: number;
-  likedByUser: boolean; // 게시물이 사용자가 좋아요를 눌렀는지 여부
+  likedByUser: boolean;
+  images?: string[]; // 이미지 배열 추가
 }
 
 // 게시물 데이터
-export const posts: Post[] = [
+export const posts: BoardPost[] = [
   // ITNews 카테고리
   {
     boardId: 1,
@@ -22,6 +23,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:23:04',
     likes: 10,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image1', 'https://via.placeholder.com/300.png?text=Image2'],
   },
   {
     boardId: 2,
@@ -32,6 +34,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:24:05',
     likes: 20,
     likedByUser: false,
+    images: [],
   },
   {
     boardId: 3,
@@ -42,6 +45,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:25:06',
     likes: 5,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image3'],
   },
   {
     boardId: 4,
@@ -52,6 +56,11 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:26:07',
     likes: 15,
     likedByUser: false,
+    images: [
+      'https://via.placeholder.com/300.png?text=Image4',
+      'https://via.placeholder.com/300.png?text=Image5',
+      'https://via.placeholder.com/300.png?text=Image6',
+    ],
   },
   {
     boardId: 5,
@@ -62,6 +71,13 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:27:08',
     likes: 8,
     likedByUser: false,
+    images: [
+      'https://via.placeholder.com/300.png?text=Image7',
+      'https://via.placeholder.com/300.png?text=Image8',
+      'https://via.placeholder.com/300.png?text=Image9',
+      'https://via.placeholder.com/300.png?text=Image10',
+      'https://via.placeholder.com/300.png?text=Image11',
+    ],
   },
 
   // Daily 카테고리
@@ -74,6 +90,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:33:14',
     likes: 10,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image12', 'https://via.placeholder.com/300.png?text=Image13'],
   },
   {
     boardId: 7,
@@ -84,6 +101,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:34:15',
     likes: 20,
     likedByUser: false,
+    images: [],
   },
   {
     boardId: 8,
@@ -94,6 +112,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:35:16',
     likes: 5,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image14'],
   },
   {
     boardId: 9,
@@ -104,6 +123,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:36:17',
     likes: 15,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image15', 'https://via.placeholder.com/300.png?text=Image16'],
   },
   {
     boardId: 10,
@@ -114,6 +134,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:37:18',
     likes: 8,
     likedByUser: false,
+    images: [],
   },
 
   // Tech 카테고리
@@ -126,6 +147,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:43:24',
     likes: 10,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image17'],
   },
   {
     boardId: 12,
@@ -136,6 +158,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:44:25',
     likes: 20,
     likedByUser: false,
+    images: [],
   },
   {
     boardId: 13,
@@ -146,6 +169,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:45:26',
     likes: 5,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image18', 'https://via.placeholder.com/300.png?text=Image19'],
   },
   {
     boardId: 14,
@@ -156,6 +180,11 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:46:27',
     likes: 15,
     likedByUser: false,
+    images: [
+      'https://via.placeholder.com/300.png?text=Image20',
+      'https://via.placeholder.com/300.png?text=Image21',
+      'https://via.placeholder.com/300.png?text=Image22',
+    ],
   },
   {
     boardId: 15,
@@ -166,6 +195,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:47:28',
     likes: 8,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image23', 'https://via.placeholder.com/300.png?text=Image24'],
   },
 
   // InternShip 카테고리
@@ -178,6 +208,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:53:34',
     likes: 10,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image25'],
   },
   {
     boardId: 17,
@@ -188,6 +219,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:54:35',
     likes: 20,
     likedByUser: false,
+    images: [],
   },
   {
     boardId: 18,
@@ -198,6 +230,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:55:36',
     likes: 5,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image26', 'https://via.placeholder.com/300.png?text=Image27'],
   },
   {
     boardId: 19,
@@ -208,6 +241,11 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:56:37',
     likes: 15,
     likedByUser: false,
+    images: [
+      'https://via.placeholder.com/300.png?text=Image28',
+      'https://via.placeholder.com/300.png?text=Image29',
+      'https://via.placeholder.com/300.png?text=Image30',
+    ],
   },
   {
     boardId: 20,
@@ -218,6 +256,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T14:57:38',
     likes: 8,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image31', 'https://via.placeholder.com/300.png?text=Image32'],
   },
 
   // Notice 카테고리
@@ -230,6 +269,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T15:03:44',
     likes: 10,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image33'],
   },
   {
     boardId: 22,
@@ -240,6 +280,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T15:04:45',
     likes: 20,
     likedByUser: false,
+    images: [],
   },
   {
     boardId: 23,
@@ -250,6 +291,7 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T15:05:46',
     likes: 5,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image34', 'https://via.placeholder.com/300.png?text=Image35'],
   },
   {
     boardId: 24,
@@ -260,6 +302,11 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T15:06:47',
     likes: 15,
     likedByUser: false,
+    images: [
+      'https://via.placeholder.com/300.png?text=Image36',
+      'https://via.placeholder.com/300.png?text=Image37',
+      'https://via.placeholder.com/300.png?text=Image38',
+    ],
   },
   {
     boardId: 25,
@@ -270,5 +317,6 @@ export const posts: Post[] = [
     createdAt: '2024-06-03T15:07:48',
     likes: 8,
     likedByUser: false,
+    images: ['https://via.placeholder.com/300.png?text=Image39', 'https://via.placeholder.com/300.png?text=Image40'],
   },
 ];

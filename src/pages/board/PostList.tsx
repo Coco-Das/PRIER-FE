@@ -14,7 +14,7 @@ import {
   LikeButton,
   LikeIcon,
 } from './BoardStyles';
-import { Post } from '../../states/board/BoardStore';
+import { BoardPost } from '../../states/board/BoardStore'; // Post를 BoardPost로 변경
 import userAvatar from '../../assets/user.svg';
 import announcementAvatar from '../../assets/Announcement.svg';
 import UnLike from '../../assets/UnLike.svg';
@@ -24,7 +24,7 @@ import PositionedMenu from '../../components/board/PositionedMenu';
 import { useNavigate } from 'react-router-dom';
 
 interface PostListProps {
-  posts: Post[];
+  posts: BoardPost[]; // Post를 BoardPost로 변경
   onPostClick: (postId: number) => void;
   toggleLike: (postId: number) => void;
 }
@@ -81,7 +81,11 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
             )}
           </UserContainer>
           <ContentContainer>{post.title}</ContentContainer>
-          <Image src="image.png" alt="Content" category={post.category} />
+          {post.images &&
+            post.images.length > 0 &&
+            post.images.map((image, index) => (
+              <Image key={index} src={image} alt={`Content image ${index + 1}`} category={post.category} />
+            ))}
           <LikesContainer>
             <Likes>likes {post.likes}</Likes>
             <LikeButton
