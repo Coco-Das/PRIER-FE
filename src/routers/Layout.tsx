@@ -7,6 +7,7 @@ export const Layout = () => {
   const style: React.CSSProperties = {
     height: '100vh',
     overflowY: 'auto',
+    boxSizing: 'border-box',
   };
   const hideHeaderPaths = ['/login', '/firstmain', '/', '/kakao/callback'];
   const showHeader = !hideHeaderPaths.includes(location.pathname);
