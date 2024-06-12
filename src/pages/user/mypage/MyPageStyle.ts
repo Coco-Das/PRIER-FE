@@ -64,10 +64,9 @@ export const ProfileAccountContainer = styled.div`
   display: flex;
   flex-direction: column;
   width: 100%;
-  margin-left: 10px;
 `;
 export const AccountIcon = styled.img`
-  width: 30px;
+  width: 2.5rem;
 `;
 //자기소개
 export const IntroduceContainer = styled.div`

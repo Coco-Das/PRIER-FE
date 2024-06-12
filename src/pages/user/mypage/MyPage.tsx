@@ -213,6 +213,7 @@ export default function MyPage() {
     try {
       await EditGithub(newGithub);
       setIsEditingGithub(false);
+      setShowEditGithubAlert(false);
     } catch (error) {
       alert('깃허브 주소 수정 실패');
     }
@@ -236,6 +237,7 @@ export default function MyPage() {
     try {
       await EditFigma(newFigma);
       setIsEditingFigma(false);
+      setShowEditFigmaAlert(false);
     } catch (error) {
       alert('피그마 주소 수정 실패');
     }
@@ -259,6 +261,7 @@ export default function MyPage() {
     try {
       await EditNotion(newNotion);
       setIsEditingNotion(false);
+      setShowEditNotionAlert(false);
     } catch (error) {
       alert('노션 주소 수정 실패');
     }
@@ -461,7 +464,6 @@ export default function MyPage() {
                 ) : (
                   <AccountLink href={userProfile.notion} target="_blank">
                     <AccountIcon src={NotionIcon}></AccountIcon>
-                    Notion
                   </AccountLink>
                 )}
               </div>
