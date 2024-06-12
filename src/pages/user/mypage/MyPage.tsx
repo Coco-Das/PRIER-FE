@@ -57,6 +57,7 @@ import AccountEdit from '../../../components/user/AccountEdit';
 import AIReport from '../../../components/utils/AIReport';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material';
+import QuestSuccess from '../../../components/user/QuestSuccess';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -98,6 +99,7 @@ export default function MyPage() {
   const [isEditingIntro, setIsEditingIntro] = useState(false);
   const [newIntro, setNewIntro] = useState<string>('');
   const UseFetchLogout = FetchLogout();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -308,10 +310,13 @@ export default function MyPage() {
   //퀘스트
   const QuestClick = async (sequence: string) => {
     const success = await SendQuest(sequence);
-
+    setShowSuccess(true);
     if (success) {
       useUserStore.getState().setQuest(String(sequence));
     }
+  };
+  const closeSuccessMessage = () => {
+    setShowSuccess(false);
   };
 
   return (
@@ -515,6 +520,7 @@ export default function MyPage() {
               </LightTooltip>
             </StepsContainer>
           </QuestContainer>
+          {showSuccess && <QuestSuccess onClose={closeSuccessMessage} />}
         </div>
       </div>
       <div className="flex justify-between mt-5 w-full">
@@ -538,8 +544,8 @@ export default function MyPage() {
               </Link>
               <FeedbackContainer>
                 <Link to="/feedback">
-                  <TitleText>제출된 피드백</TitleText>
-                  <UniqueText>34</UniqueText>
+                  <TitleText className="mb-4">제출된 피드백</TitleText>
+                  <UniqueText className="mb-4">34</UniqueText>
                   <DetailText>+ {} 34개의 피드백이 추가로 제출되었습니다.</DetailText>
                   <LinkText className="text-end">모아보기 &gt;</LinkText>
                 </Link>
