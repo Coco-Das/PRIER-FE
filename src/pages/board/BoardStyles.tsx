@@ -1,4 +1,4 @@
-import styled, { css } from 'styled-components';
+import styled, { css, keyframes } from 'styled-components';
 
 // 전체 컨테이너 스타일
 export const Container = styled.div`
@@ -88,7 +88,7 @@ export const SegmentedControl = styled.div`
   gap: 5px;
   display: flex;
   flex-direction: row;
-  align-items: center; /* 가운데 정렬 */
+  align-items: center;
   justify-content: flex-start;
   flex-shrink: 0;
   height: 46px;
@@ -139,68 +139,74 @@ export const MenuItem = styled.div<MenuItemProps>`
   }
   font-size: 15px;
 `;
+const huerotate = keyframes`
+  0% {
+    filter: hue-rotate(0deg);
+  }
+  100% {
+    filter: hue-rotate(360deg);
+  }
+`;
 
-// PostList에서 사용하는 PostBox 스타일
-export const PostListPostBox = styled.div<{ category?: string; isActive?: boolean }>`
-  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
-  border: 2px solid transparent; /* 기본 테두리 설정 */
-  padding: 1vh;
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+export const BackgroundContainer = styled.div<{ isActive?: boolean }>`
+  position: relative;
+  border-radius: 20px;
+  margin-bottom: 20px;
   width: 100%;
   max-width: 1200px;
-  margin-bottom: 20px;
-  display: flex;
-  flex-direction: column;
-  position: relative;
-  align-self: center; /* 가운데 정렬 */
-  transition: transform 0.3s, border 0.3s;
+  transition: transform 0.3s;
+
+  &::before {
+    content: '';
+    position: absolute;
+    top: -2px;
+    left: -2px;
+    right: -2px;
+    bottom: -2px;
+    border-radius: 21px;
+    border: 2px solid transparent;
+    background-clip: border-box;
+    z-index: -1;
+    display: none; /* 기본적으로 숨기기 */
+  }
 
   ${({ isActive }) =>
     isActive &&
     css`
       transform: scale(1.02);
       &::before {
-        content: '';
-        position: absolute;
-        top: -2px;
-        left: -2px;
-        width: calc(100% + 4px);
-        height: calc(100% + 4px);
-        border-radius: 15px;
-        border: 2px solid;
-        border-image: linear-gradient(90deg, #315af1, #23be87, #773cd1) 1;
-        animation: borderAnimation 2s linear forwards;
-        pointer-events: none;
-        z-index: 1;
+        display: block; /* 활성화 시 보이게 */
+        background-image: linear-gradient(45deg, #315af1, #23be87, #773cd1);
+        filter: hue-rotate(0deg);
+        animation: ${huerotate} 3s infinite linear;
+      }
+
+      &:hover {
+        transform: scale(1.02); /* 클릭 상태일 때는 호버 시 더 커지지 않도록 유지 */
       }
     `}
 
-  &:hover {
-    transform: scale(1.02);
-  }
+  ${({ isActive }) =>
+    !isActive &&
+    css`
+      &:hover {
+        transform: scale(1.02); /* 클릭 상태가 아닐 때는 호버 시 커지도록 설정 */
+      }
+    `}
+`;
 
-  @keyframes borderAnimation {
-    0% {
-      border-radius: 15px;
-      clip-path: polygon(0 100%, 0 100%, 0 100%, 0 100%);
-    }
-    25% {
-      border-radius: 15px;
-      clip-path: polygon(0 100%, 0 0, 0 0, 0 100%);
-    }
-    50% {
-      border-radius: 15px;
-      clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
-    }
-    75% {
-      border-radius: 15px;
-      clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%, 0 100%);
-    }
-    100% {
-      border-radius: 15px;
-      clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%, 0 100%);
-    }
-  }
+export const PostListPostBox = styled.div<{ category?: string }>`
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
+  padding: 1vh;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-self: center;
+  border-radius: 20px;
+  z-index: 0;
+  min-height: 150px; // 최소 높이 설정
 `;
 // 기존 스타일 유지하면서 필요한 스타일 추가
 export const PostBox = styled.div<{ category?: string }>`
@@ -215,6 +221,7 @@ export const PostBox = styled.div<{ category?: string }>`
   flex-direction: column;
   position: relative;
   align-self: center; /* 가운데 정렬 */
+  border-radius: 15px;
 `;
 
 export const UserContainer = styled.div`
@@ -224,7 +231,7 @@ export const UserContainer = styled.div`
 `;
 
 export const Avatar = styled.div<{ category?: string }>`
-  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#f7f7f7')};
+  background: ${props => (props.category === 'Notice' ? '#4188fe' : '#f7f7f7')};
   border-radius: 1000px;
   width: 50.58px;
   height: 50.58px;
@@ -233,14 +240,14 @@ export const Avatar = styled.div<{ category?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
-  curser: pointer;
+  cursor: pointer;
 `;
 
 export const AvatarImage = styled.img`
   width: 90%;
   height: 90%;
   object-fit: cover;
-  curser: pointer;
+  cursor: pointer;
 `;
 
 export const AuthorContainer = styled.div`
@@ -249,11 +256,11 @@ export const AuthorContainer = styled.div`
 `;
 
 export const Author = styled.div<{ category?: string }>`
-  color: ${props => (props.category === 'Notice' ? '#4188fe' : '#000000')};
+  color: #000000;
   font-size: 16px;
   line-height: 150%;
   font-weight: 700;
-  curser: pointer;
+  cursor: pointer;
 `;
 
 export const CreatedAt = styled.div`
@@ -340,13 +347,14 @@ export const PostContentContainer = styled(PostBox)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
 `;
 
 export const LikeBackContainer = styled.div`
   width: 100%;
   display: flex;
   justify-content: space-between;
-  align-items: center; /* 가운데 정렬 */
+  align-items: center;
 `;
 
 export const CommentsContainer = styled(PostBox)`

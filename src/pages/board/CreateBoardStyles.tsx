@@ -40,6 +40,7 @@ export const PostBox = styled.div`
   flex-direction: column;
   position: relative;
   align-self: center;
+  border-radius: 15px;
   margin-bottom: 1rem;
 `;
 

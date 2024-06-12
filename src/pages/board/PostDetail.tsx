@@ -24,23 +24,23 @@ import {
   CommentCreatedAt,
   LikeBackContainer,
 } from './BoardStyles';
-import { BoardPost } from '../../states/board/BoardStore'; // 수정된 인터페이스 임포트
+import { BoardPost } from '../../states/board/BoardStore';
 import { comments as initialComments } from '../../states/board/ChatStore';
 import { members } from '../../states/board/MemberStore';
 import backto from '../../assets/BackTo.svg';
 import userAvatar from '../../assets/user.svg';
+import announcementAvatar from '../../assets/Announcement.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
-import PostDetailSkeleton from '../../components/board/PostDetailSkeleton';
 import useFormatDate from '../../hooks/UseFormatDate';
 import PositionedMenu from '../../components/board/PositionedMenu';
 import { useNavigate } from 'react-router-dom';
-
+import { Loading } from '../../components/utils/Loading';
 interface PostDetailProps {
   postId: number;
   onBackToList: () => void;
   toggleLike: (postId: number) => void;
-  posts: BoardPost[]; // 수정된 인터페이스 사용
+  posts: BoardPost[];
 }
 
 const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLike, posts }) => {
@@ -52,10 +52,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
   const navigate = useNavigate();
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 2000);
+    setLoading(false); // 상세보기 로딩 제거
   }, [postId]);
 
   if (!post) {
@@ -74,15 +71,17 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
   return (
     <PostDetailContainer>
       {loading ? (
-        <PostDetailSkeleton />
+        <Loading />
       ) : (
-        <PostContentContainer>
+        <PostContentContainer category={post.category}>
           <UserContainer>
-            <Avatar onClick={e => handleProfileClick(e, post.memberId)}>
-              <AvatarImage src={userAvatar} alt="Avatar" />
+            <Avatar onClick={e => handleProfileClick(e, post.memberId)} category={post.category}>
+              <AvatarImage src={post.category === 'Notice' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author onClick={e => handleProfileClick(e, post.memberId)}>{`작성자 ${post.memberId}`}</Author>
+              <Author onClick={e => handleProfileClick(e, post.memberId)} category={post.category}>
+                {post.category === 'Notice' ? '공지사항' : `작성자 ${post.memberId}`}
+              </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
             {post.memberId === 1 && (
@@ -95,9 +94,10 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
             <h1>{post.title}</h1>
             <p>{post.content}</p>
             {post.images &&
-              post.images.map((image, index) => <Image key={index} src={image} alt={`Content image ${index + 1}`} />)}
+              post.images.map((image, index) => (
+                <Image key={index} src={image} alt={`Content image ${index + 1}`} category={post.category} />
+              ))}
           </ContentContainer>
-
           <LikeBackContainer>
             <button onClick={onBackToList}>
               <Backto src={backto} />
@@ -118,7 +118,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       )}
       <CommentsContainer>
         {loading ? (
-          <PostDetailSkeleton />
+          <Loading />
         ) : postComments.length === 0 ? (
           <div className="flex flex-col items-center">
             <p className="text-lg font-semibold">아직 댓글이 없습니다.</p>
@@ -137,7 +137,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
                 <CommentContent className="flex-1">
                   <div className="flex flex-row items-center space-x-2 justify-between">
                     <div className="flex flex-row items-center space-x-2">
-                      <CommentAuthor onClick={e => handleProfileClick(e, comment.memberId)}>
+                      <CommentAuthor onClick={e => handleProfileClick(e, comment.memberId)} category={post.category}>
                         {member?.name}
                       </CommentAuthor>
                       <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
