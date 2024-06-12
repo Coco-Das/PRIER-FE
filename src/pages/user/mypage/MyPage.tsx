@@ -55,6 +55,20 @@ import FigmaIcon from '../../../assets/figma.png';
 import NotionIcon from '../../../assets/notion.png';
 import AccountEdit from '../../../components/user/AccountEdit';
 import AIReport from '../../../components/utils/AIReport';
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+import { styled } from '@mui/material';
+
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(() => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#F3F8FF',
+    color: '#4188FE',
+    borderRounded: '10px',
+    border: '1px solid #CEE7FF',
+    fontSize: 12,
+  },
+}));
 
 export default function MyPage() {
   const navigate = useNavigate();
@@ -477,22 +491,28 @@ export default function MyPage() {
             </IntroduceContainer>
           )}
           <QuestContainer>
-            <h1 className="mb-2 cursor-pointer">오늘의 퀘스트</h1>
+            <h1 className="mb-5 cursor-pointer">오늘의 퀘스트</h1>
             <StepsContainer>
-              <Step onClick={() => QuestClick('1')}>
-                <StepLabel completed={parseInt(userProfile.quest) >= 1}>출석하기</StepLabel>
-                <StepCircle completed={parseInt(userProfile.quest) >= 1} color="#8e8ae3" />
-              </Step>
+              <LightTooltip title="+ 1코어" placement="top">
+                <Step onClick={() => QuestClick('1')}>
+                  <StepLabel completed={parseInt(userProfile.quest) >= 1}>출석하기</StepLabel>
+                  <StepCircle completed={parseInt(userProfile.quest) >= 1} color="#8e8ae3" />
+                </Step>
+              </LightTooltip>
               <StepLine />
-              <Step onClick={() => QuestClick('2')}>
-                <StepLabel completed={parseInt(userProfile.quest) >= 2}>댓글 작성하기</StepLabel>
-                <StepCircle completed={parseInt(userProfile.quest) >= 2} color="#f4c542" />
-              </Step>
+              <LightTooltip title="+ 2코어" placement="top">
+                <Step onClick={() => QuestClick('2')}>
+                  <StepLabel completed={parseInt(userProfile.quest) >= 2}>댓글 작성하기</StepLabel>
+                  <StepCircle completed={parseInt(userProfile.quest) >= 2} color="#f4c542" />
+                </Step>
+              </LightTooltip>
               <StepLine />
-              <Step onClick={() => QuestClick('3')}>
-                <StepLabel completed={parseInt(userProfile.quest) >= 3}>피드백 참여하기</StepLabel>
-                <StepCircle completed={parseInt(userProfile.quest) >= 3} color="#4188FE" />
-              </Step>
+              <LightTooltip title="+ 3코어" placement="top">
+                <Step onClick={() => QuestClick('3')}>
+                  <StepLabel completed={parseInt(userProfile.quest) >= 3}>피드백 참여하기</StepLabel>
+                  <StepCircle completed={parseInt(userProfile.quest) >= 3} color="#4188FE" />
+                </Step>
+              </LightTooltip>
             </StepsContainer>
           </QuestContainer>
         </div>

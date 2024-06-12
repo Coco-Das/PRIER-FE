@@ -2,6 +2,8 @@ import { styled } from 'styled-components';
 import { ReactComponent as UserIcon } from '../../../assets/userProfile.svg';
 import { ReactComponent as ChartIcon } from '../../../assets/main_chart.svg';
 import { ReactComponent as GraphIcon } from '../../../assets/Graph.svg';
+
+//프로필
 export const ProfileContainer = styled.div`
   display: flex;
   justify-content: flex-start;
@@ -51,10 +53,12 @@ export const EditAccountText = styled.p`
 `;
 export const StyledInput = styled.input`
   font-size: 18px;
-  background-color: #f3f8ff;
   border-bottom: 1px solid #828282;
-  border-top-right-radius: 4px;
-  border-top-left-radius: 4px;
+  &:focus {
+    outline: none;
+    border-bottom: 1.5px solid #4188fe;
+    transition: 0.2s;
+  }
 `;
 export const ProfileAccountContainer = styled.div`
   display: flex;
@@ -65,6 +69,7 @@ export const ProfileAccountContainer = styled.div`
 export const AccountIcon = styled.img`
   width: 30px;
 `;
+//자기소개
 export const IntroduceContainer = styled.div`
   width: 650px;
   height: 40%;
@@ -76,6 +81,7 @@ export const IntroduceContainer = styled.div`
   padding: 20px;
   background-color: #e6f3ff;
 `;
+//퀘스트
 export const QuestContainer = styled.div`
   width: 100%;
   height: 54%;
@@ -119,6 +125,7 @@ export const StepLine = styled.div`
   background-color: #828282;
 `;
 
+//프로젝트 컨테이너
 export const ProjectContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -126,6 +133,7 @@ export const ProjectContainer = styled.div`
   height: 50%;
   margin-right: 20px;
 `;
+//최근 프로젝트 링크
 export const LinkProject = styled.div`
   width: 260px;
   max-width: 260px;
@@ -138,6 +146,7 @@ export const LinkProject = styled.div`
   margin-bottom: 20px;
   margin-right: 20px;
 `;
+//피드백 수
 export const FeedbackContainer = styled.div`
   display: flex;
   flex-direction: column;
@@ -150,6 +159,7 @@ export const FeedbackContainer = styled.div`
   padding: 20px;
   margin-right: 20px;
 `;
+//통계
 export const StaticContainer = styled.div`
   background-color: #f3f5fb;
   display: flex;
@@ -163,6 +173,7 @@ export const StaticContainer = styled.div`
   margin-right: 20px;
   cursor: default;
 `;
+
 export const AIReportContainer = styled.div`
   background-color: #e1f9f0;
   display: flex;
