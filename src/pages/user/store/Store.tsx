@@ -21,7 +21,7 @@ export default function Store() {
   const pointStore = userPointStore();
   const { setGifticons } = useGifticonStore();
   const [openPayment, setOpenPayment] = useState(false);
-  const [selectedAmount, setSelectedAmount] = useState('');
+  const [selectedAmount, setSelectedAmount] = useState(0);
   const [openLog, setOpenLog] = useState(false);
   //기프티콘 리스트 호출
   useEffect(() => {
@@ -37,12 +37,12 @@ export default function Store() {
     fetchData();
   }, [setGifticons]);
   //포인트 구매
-  const SelectAmount = (amount: string) => {
+  const SelectAmount = (amount: number) => {
     setSelectedAmount(amount);
     setOpenPayment(true);
   };
 
-  const ChargeCoin = async (amount: string) => {
+  const ChargeCoin = async (amount: number) => {
     try {
       const transactionData = await FetchPayment(amount);
       pointStore.updatePoint(transactionData);
@@ -85,15 +85,15 @@ export default function Store() {
         <ChargeContainer>
           <PointText>코어 충전하기</PointText>
           <div className="flex items-center justify-center gap-10">
-            <span onClick={() => SelectAmount('1000')}>
+            <span onClick={() => SelectAmount(1000)}>
               <StyledPointIcon></StyledPointIcon>
               <PriceText>100코어 : 1000원</PriceText>
             </span>
-            <span onClick={() => SelectAmount('5000')}>
+            <span onClick={() => SelectAmount(5000)}>
               <StyledPointIcon></StyledPointIcon>
               <PriceText>500코어 : 5000원</PriceText>
             </span>
-            <span onClick={() => SelectAmount('10000')}>
+            <span onClick={() => SelectAmount(10000)}>
               <StyledPointIcon></StyledPointIcon>
               <PriceText>1000코어 : 10000원</PriceText>
             </span>

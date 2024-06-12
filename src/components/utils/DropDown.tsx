@@ -7,7 +7,7 @@ const ListWrapper = styled.ul`
   display: flex;
   flex-direction: column;
   align-items: center;
-  z-index: 10;
+  z-index: 4;
   position: absolute;
   border-radius: 0px 0px 10px 10px;
   border: 1px solid #ffba6b;

@@ -23,7 +23,7 @@ export async function FetchPointHistory() {
   }
 }
 
-export async function FetchPayment(amount: string) {
+export async function FetchPayment(amount: number) {
   try {
     const response = await API_BASE_URL.post(
       '/points/recharge',
@@ -52,7 +52,7 @@ export async function FetchGiftList() {
     throw error;
   }
 }
-export async function DescriptionGift(productId: string) {
+export async function DescriptionGift(productId: number) {
   try {
     const response = await API_BASE_URL.get(`/store/products/${productId}`);
     console.log('기프티콘 설명 요청 성공', response.data);
@@ -62,7 +62,7 @@ export async function DescriptionGift(productId: string) {
     throw error;
   }
 }
-export async function PurchaseGift(productId: string) {
+export async function PurchaseGift(productId: number) {
   try {
     const response = await API_BASE_URL.post(`/store/purchase/${productId}`);
     console.log('기프티콘 구매 요청 성공', response.data);

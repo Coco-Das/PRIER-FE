@@ -29,9 +29,9 @@ export default function Gifticon() {
   const [flippedIndex, setFlippedIndex] = useState<number | null>(null);
   const [details, setDetails] = useState<string | null>(null);
   const [showPurchaseAlert, setShowPurchaseAlert] = useState(false);
-  const [selectedProductId, setSelectedProductId] = useState<string | null>(null);
+  const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
 
-  const handleFlip = async (index: number, productId: string) => {
+  const handleFlip = async (index: number, productId: number) => {
     if (index === flippedIndex) {
       setFlippedIndex(null);
       setDetails(null);
@@ -46,7 +46,7 @@ export default function Gifticon() {
     }
   };
 
-  const handlePurchaseClick = (productId: string) => {
+  const handlePurchaseClick = (productId: number) => {
     setSelectedProductId(productId);
     setShowPurchaseAlert(true);
   };
@@ -80,7 +80,7 @@ export default function Gifticon() {
         <CardContainer key={gifticon.productId} onClick={() => handleFlip(index, gifticon.productId)}>
           <Card isFlipped={flippedIndex === index}>
             <CardFront>
-              {gifticon.stock === '0' ? (
+              {gifticon.stock === 0 ? (
                 <SoldOutContainer>
                   <GiftImg src={gifticon.imageUrl} alt={gifticon.productName} />
                   <GiftTextWrapper>
