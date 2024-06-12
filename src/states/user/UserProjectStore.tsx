@@ -1,14 +1,10 @@
 import { create } from 'zustand';
 //메인페이지
-interface AllProjectState {
-  totalPages: number; //총 페이지 수
-  totalElements: number; //이건 총 몇 개인지 알려주는거
-  first: boolean; //첫 페이지 여부
-  last: boolean; //마지막 페이지 여부
-  size: number; // 한 페이지에 최대 몇 개 들어가는지
-  content: Content[];
-  setProjects: (projects: AllProjectState) => void;
+interface Tag {
+  tagId: number;
+  tagName: string;
 }
+
 interface Content {
   projectId: number;
   title: string;
@@ -17,11 +13,19 @@ interface Content {
   tags: Tag[];
   score: number;
 }
-interface Tag {
-  tagId: number;
-  tagName: string;
+
+interface ProjectData {
+  totalPages: number;
+  totalElements: number;
+  first: boolean;
+  last: boolean;
+  size: number;
+  content: Content[];
 }
 
+interface AllProjectState extends ProjectData {
+  setProjects: (projects: ProjectData) => void;
+}
 export const useAllProjectStore = create<AllProjectState>(set => ({
   totalPages: 0,
   totalElements: 0,
@@ -29,7 +33,7 @@ export const useAllProjectStore = create<AllProjectState>(set => ({
   last: false,
   size: 0,
   content: [],
-  setProjects: projects => set(projects),
+  setProjects: projects => set(() => projects),
 }));
 
 //마이페이지
