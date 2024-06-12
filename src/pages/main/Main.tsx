@@ -31,6 +31,7 @@ export default function Main() {
         setUserProfile(userProfileData);
         const pointsData = await CheckPoint();
         pointStore.setPoint(pointsData);
+        console.log(pointStore.point);
       } catch (error) {
         console.error('메인 페이지 호출 실패:', error);
       }
