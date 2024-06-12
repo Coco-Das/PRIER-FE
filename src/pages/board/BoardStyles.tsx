@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { css } from 'styled-components';
 
 // 전체 컨테이너 스타일
 export const Container = styled.div`
@@ -140,10 +140,71 @@ export const MenuItem = styled.div<MenuItemProps>`
   font-size: 15px;
 `;
 
-// 포스트 박스 스타일
+// PostList에서 사용하는 PostBox 스타일
+export const PostListPostBox = styled.div<{ category?: string; isActive?: boolean }>`
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
+  border: 2px solid transparent; /* 기본 테두리 설정 */
+  padding: 1vh;
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  width: 100%;
+  max-width: 1200px;
+  margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  align-self: center; /* 가운데 정렬 */
+  transition: transform 0.3s, border 0.3s;
+
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      transform: scale(1.05);
+      &::before {
+        content: '';
+        position: absolute;
+        top: -2px;
+        left: -2px;
+        width: calc(100% + 4px);
+        height: calc(100% + 4px);
+        border-radius: 15px;
+        border: 2px solid;
+        border-image: linear-gradient(90deg, #315af1, #23be87, #773cd1) 1;
+        animation: borderAnimation 2s linear forwards;
+        pointer-events: none;
+        z-index: 1;
+      }
+    `}
+
+  &:hover {
+    transform: scale(1.05);
+  }
+
+  @keyframes borderAnimation {
+    0% {
+      border-radius: 15px;
+      clip-path: polygon(0 100%, 0 100%, 0 100%, 0 100%);
+    }
+    25% {
+      border-radius: 15px;
+      clip-path: polygon(0 100%, 0 0, 0 0, 0 100%);
+    }
+    50% {
+      border-radius: 15px;
+      clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%);
+    }
+    75% {
+      border-radius: 15px;
+      clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%, 0 100%);
+    }
+    100% {
+      border-radius: 15px;
+      clip-path: polygon(0 100%, 0 0, 100% 0, 100% 100%, 0 100%);
+    }
+  }
+`;
+// 기존 스타일 유지하면서 필요한 스타일 추가
 export const PostBox = styled.div<{ category?: string }>`
   background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
-  border-radius: 15px;
   border: none;
   padding: 1vh;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -172,12 +233,14 @@ export const Avatar = styled.div<{ category?: string }>`
   display: flex;
   align-items: center;
   justify-content: center;
+  curser: pointer;
 `;
 
 export const AvatarImage = styled.img`
   width: 90%;
   height: 90%;
   object-fit: cover;
+  curser: pointer;
 `;
 
 export const AuthorContainer = styled.div`
@@ -190,6 +253,7 @@ export const Author = styled.div<{ category?: string }>`
   font-size: 16px;
   line-height: 150%;
   font-weight: 700;
+  curser: pointer;
 `;
 
 export const CreatedAt = styled.div`
