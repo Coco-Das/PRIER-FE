@@ -122,12 +122,9 @@ export const ReviewTeam = styled.h2`
 export const CardContainer = styled.div`
   perspective: 1000px;
   display: flex;
-  width: 40rem;
-  max-height: 20rem;
-  padding: 20px;
-  border: 1px solid transparent;
-  border-radius: 20px;
-  background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
+  width: 35rem;
+  height: 13rem;
+  max-height: 13rem;
 `;
 
 export const Card = styled.div<{ isFlipped: boolean }>`
@@ -147,8 +144,13 @@ export const CardFront = styled.div`
   height: 100%;
   backface-visibility: hidden;
   position: absolute;
+  display: flex;
   top: 0;
   left: 0;
+  padding: 20px;
+  border: 1px solid transparent;
+  border-radius: 20px;
+  background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
 `;
 
 export const CardBack = styled.div`
@@ -158,20 +160,24 @@ export const CardBack = styled.div`
   position: absolute;
   top: 0;
   left: 0;
+  padding: 30px;
   transform: rotateY(180deg);
+  border-radius: 20px;
   background: linear-gradient(45deg, rgba(49, 90, 241, 0.3), rgba(35, 190, 135, 0.3), rgba(119, 60, 209, 0.3));
 `;
 
 export const GiftTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 50rem;
+  width: 100%;
   gap: 1em;
 `;
 
 export const GiftImg = styled.img`
   width: 40%;
   margin-right: 20px;
+  border: none;
+  border-radius: 15px;
 `;
 export const DescriptionText = styled.p`
   font-size: 18px;
@@ -179,21 +185,30 @@ export const DescriptionText = styled.p`
 
 export const SoldOutContainer = styled.div`
   display: flex;
-  align-items: center;
   justify-content: center;
-  width: 50%;
-  max-height: 20%;
-  padding: 20px;
-  border: 1px solid transparent;
+  align-items: center;
+  width: 100%;
+  height: 100%;
   border-radius: 20px;
-  background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
-  backdrop-filter: blur(10px);
+  backdrop-filter: blur(50px);
+  position: relative;
+  &:before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(255, 255, 255, 0.8);
+  }
 `;
 export const SoldOutFlag = styled.div`
-  border: none;
-  border-radius: 20px;
-  width: 40px;
-  padding: 10px;
-  background-color: #f55b66 55%;
+  text-align: center;
+  border: 1px solid #a4000c;
+  border-radius: 5px;
+  padding: 0.5em 1em;
+  background: rgba(245, 91, 102, 0.5);
   color: #a4000c;
+  z-index: 3;
+  position: absolute;
 `;

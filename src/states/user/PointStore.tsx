@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 //포인트
 interface Transaction {
-  transactionId: number;
   amount: number;
-  transactionType: string;
-  createdAt: string;
   balance: number;
+  createdAt: string;
+  transactionId: number;
+  transactionType: string;
   userId: number;
 }
 interface UserPointStore {

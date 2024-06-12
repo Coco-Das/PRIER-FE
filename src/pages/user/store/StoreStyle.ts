@@ -47,8 +47,8 @@ export const ChargeContainer = styled.div`
   padding: 20px;
 `;
 export const GiftWrapper = styled.div`
-  margin: 0 7%;
+  margin: 1% 7% 0 9%;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 5rem;
 `;

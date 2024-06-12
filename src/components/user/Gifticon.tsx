@@ -77,18 +77,25 @@ export default function Gifticon() {
         />
       )}
       {gifticons.map((gifticon, index) => (
-        <CardContainer key={gifticon.productId} onClick={() => handleFlip(index, gifticon.productId)}>
+        <CardContainer key={gifticon.productId} onClick={() => gifticon.stock && handleFlip(index, gifticon.productId)}>
           <Card isFlipped={flippedIndex === index}>
             <CardFront>
               {gifticon.stock === 0 ? (
                 <SoldOutContainer>
-                  <GiftImg src={gifticon.imageUrl} alt={gifticon.productName} />
-                  <GiftTextWrapper>
-                    <div className="flex items-center justify-between">
-                      <Title>{gifticon.productName}</Title>
-                      <SoldOutFlag>일시 품절</SoldOutFlag>
-                    </div>
-                  </GiftTextWrapper>
+                  <div className="flex">
+                    <GiftImg src={gifticon.imageUrl} alt={gifticon.productName} />
+                    <GiftTextWrapper>
+                      <div className="flex items-center justify-between">
+                        <Title>{gifticon.productName}</Title>
+                        <LinkText>{gifticon.stock} 개 남음</LinkText>
+                      </div>
+                      <div className="flex items-center">
+                        <StyledCoinIcon />
+                        <p>{gifticon.price} 코어</p>
+                      </div>
+                    </GiftTextWrapper>
+                  </div>
+                  <SoldOutFlag>일시 품절</SoldOutFlag>
                 </SoldOutContainer>
               ) : (
                 <>

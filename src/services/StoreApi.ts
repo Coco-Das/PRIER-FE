@@ -16,7 +16,13 @@ export async function FetchPointHistory() {
     const response = await API_BASE_URL.get('/points/history');
     console.log('포인트 사용 내역 요청 성공', response.data);
     const updatePoint = userPointStore.getState().updatePoint;
-    updatePoint(response.data);
+    if (Array.isArray(response.data)) {
+      response.data.forEach(transaction => {
+        updatePoint(transaction);
+      });
+    } else {
+      console.error('Unexpected response format:', response.data);
+    }
   } catch (error) {
     console.log('포인트 사용 내역 요청 실패', error);
     throw error;
