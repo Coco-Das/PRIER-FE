@@ -8,9 +8,15 @@ const PaginationWrapper = styled.span`
   margin-top: 16px;
 `;
 
-const PaginationComponent = () => (
+interface PaginationComponentProps {
+  count: number;
+  page: number;
+  onChange: (event: React.ChangeEvent<unknown>, page: number) => void;
+}
+
+const PaginationComponent: React.FC<PaginationComponentProps> = ({ count, page, onChange }) => (
   <PaginationWrapper>
-    <Pagination count={5} color="primary" size="large" />
+    <Pagination count={count} page={page} onChange={onChange} color="primary" size="large" />
   </PaginationWrapper>
 );
 
