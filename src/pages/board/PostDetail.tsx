@@ -86,7 +86,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
             {post.memberId === 1 && ( // memberId가 1일 때만 메뉴바를 렌더링
-              <div style={{ marginLeft: 'auto' }}>
+              <div className="ml-auto">
                 <PositionedMenu />
               </div>
             )}
@@ -118,7 +118,10 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
         {loading ? (
           <PostDetailSkeleton />
         ) : postComments.length === 0 ? (
-          <p>댓글이 없습니다.</p>
+          <div className="flex flex-col items-center">
+            <p className="text-lg font-semibold">아직 댓글이 없습니다.</p>
+            <p className="text-sm text-gray-600 mt-2">댓글을 남겨보세요.</p>
+          </div>
         ) : (
           postComments.map(comment => {
             const member = getMemberById(comment.memberId);
