@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
-  PostBox,
+  PostListPostBox as PostBox,
   UserContainer,
   Avatar,
   AvatarImage,
@@ -21,6 +21,7 @@ import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
 import useFormatDate from '../../hooks/UseFormatDate';
 import PositionedMenu from '../../components/board/PositionedMenu';
+import { useNavigate } from 'react-router-dom';
 
 interface PostListProps {
   posts: Post[];
@@ -30,17 +31,40 @@ interface PostListProps {
 
 const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) => {
   const formatDate = useFormatDate();
+  const navigate = useNavigate();
+  const [activePostId, setActivePostId] = useState<number | null>(null);
+
+  const handleProfileClick = (e: React.MouseEvent, memberId: number) => {
+    e.stopPropagation(); // Prevent triggering the onPostClick event
+    navigate(`/profile/${memberId}`); // Navigate to the user's profile page
+  };
+
+  const handlePostClick = (postId: number) => {
+    setActivePostId(postId);
+    onPostClick(postId);
+  };
 
   return (
     <>
       {posts.map(post => (
-        <PostBox key={post.boardId} onClick={() => onPostClick(post.boardId)} category={post.category}>
+        <PostBox
+          key={post.boardId}
+          onClick={() => handlePostClick(post.boardId)}
+          category={post.category}
+          isActive={post.boardId === activePostId}
+        >
           <UserContainer>
-            <Avatar category={post.category}>
+            <Avatar
+              category={post.category}
+              onClick={e => post.category !== 'Notice' && handleProfileClick(e, post.memberId)}
+            >
               <AvatarImage src={post.category === 'Notice' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author category={post.category}>
+              <Author
+                category={post.category}
+                onClick={e => post.category !== 'Notice' && handleProfileClick(e, post.memberId)}
+              >
                 {post.category === 'Notice' ? '공지사항' : `작성자 ${post.memberId}`}
               </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
