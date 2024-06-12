@@ -36,12 +36,16 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
 
   const handleProfileClick = (e: React.MouseEvent, memberId: number) => {
     e.stopPropagation(); // Prevent triggering the onPostClick event
-    navigate(`/profile/${memberId}`); // Navigate to the user's profile page
+    navigate(`/mypage`); // Navigate to the user's profile page
   };
 
   const handlePostClick = (postId: number) => {
     setActivePostId(postId);
-    onPostClick(postId);
+    // 애니메이션을 3초 동안 보여준 후 상세 페이지로 이동
+    setTimeout(() => {
+      onPostClick(postId);
+      navigate(`/board/post/${postId}`);
+    }, 2000);
   };
 
   return (

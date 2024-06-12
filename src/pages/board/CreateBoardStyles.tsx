@@ -32,7 +32,6 @@ export const Header = styled.div`
 
 export const PostBox = styled.div`
   background: #ffffff;
-  border-radius: 15px;
   width: 100%;
   max-width: 1000px;
   padding: 1vh;

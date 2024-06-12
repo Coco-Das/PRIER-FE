@@ -34,6 +34,7 @@ import Like from '../../assets/Like.svg';
 import PostDetailSkeleton from '../../components/board/PostDetailSkeleton'; // PostDetailSkeleton 가져오기
 import useFormatDate from '../../hooks/UseFormatDate'; // 경로 수정
 import PositionedMenu from '../../components/board/PositionedMenu'; // PositionedMenu 컴포넌트 가져오기
+import { useNavigate } from 'react-router-dom';
 
 interface PostDetailProps {
   postId: number;
@@ -48,6 +49,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
 
   const [loading, setLoading] = useState(true);
   const formatDate = useFormatDate();
+  const navigate = useNavigate();
 
   useEffect(() => {
     setLoading(true);
@@ -64,6 +66,11 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
     return members.find(member => member.memberId === memberId);
   };
 
+  const handleProfileClick = (e: React.MouseEvent, memberId: number) => {
+    e.stopPropagation(); // Prevent triggering the onPostClick event
+    navigate(`/mypage`); // Navigate to the user's profile page
+  };
+
   return (
     <PostDetailContainer>
       {loading ? (
@@ -71,11 +78,11 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       ) : (
         <PostContentContainer>
           <UserContainer>
-            <Avatar>
+            <Avatar onClick={e => handleProfileClick(e, post.memberId)}>
               <AvatarImage src={userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author>{`작성자 ${post.memberId}`}</Author>
+              <Author onClick={e => handleProfileClick(e, post.memberId)}>{`작성자 ${post.memberId}`}</Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
             {post.memberId === 1 && ( // memberId가 1일 때만 메뉴바를 렌더링
@@ -118,14 +125,16 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
             return (
               <CommentContainer key={comment.commentId} className="flex justify-between">
                 {member && (
-                  <CommentAvatar>
+                  <CommentAvatar onClick={e => handleProfileClick(e, comment.memberId)}>
                     <AvatarImage src={member.profilePicture} alt={member.name} />
                   </CommentAvatar>
                 )}
                 <CommentContent className="flex-1">
                   <div className="flex flex-row items-center space-x-2 justify-between">
                     <div className="flex flex-row items-center space-x-2">
-                      <CommentAuthor>{member?.name}</CommentAuthor>
+                      <CommentAuthor onClick={e => handleProfileClick(e, comment.memberId)}>
+                        {member?.name}
+                      </CommentAuthor>
                       <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
                     </div>
                     {comment.memberId === 1 && ( // 임시 유저 memberId가 1일 때만 메뉴바를 렌더링
