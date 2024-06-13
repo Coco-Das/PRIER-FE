@@ -9,9 +9,7 @@ export const CreateWrapper = styled.div`
   overflow-y: auto;
   overflow-x: hidden;
   flex-direction: column;
-  border: 1px solid blue;
   padding: 0px 30px 0px 30px;
-  margin-right: 0 !important;
 `;
 export const Project = styled.div`
   width: 100%;
@@ -148,13 +146,13 @@ export const TagWrapper = styled.div`
   gap: 5px;
 `;
 interface TagProps {
-  bgColor: string;
+  bgcolor: string;
 }
 
 export const Tag = styled.div<TagProps>`
   padding: 5px 10px;
   position: relative;
-  background-color: ${props => props.bgColor};
+  background-color: ${props => props.bgcolor};
   border-radius: 20px;
   font-size: 12px;
 `;

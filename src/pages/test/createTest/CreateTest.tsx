@@ -2,6 +2,9 @@ import { useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import { format } from 'date-fns';
+import { useProjectStore } from '../../../states/projects/ProjectStore'; // zustand 스토어 임포트
+
 import {
   BlueDiv,
   CreateWrapper,
@@ -35,6 +38,7 @@ import { ToggleBtn } from '../../../components/utils/Toggle';
 import { DropDownContainer } from '../../../components/utils/DropDown';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import CustomAlert from '../../../components/utils/CustomAlert';
+import { useNavigate } from 'react-router-dom';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
@@ -55,7 +59,7 @@ const AutoResizeTextarea: React.FC<AutoResizeTextareaProps> = ({ value, ...props
 };
 
 AutoResizeTextarea.propTypes = {
-  value: PropTypes.string.isRequired,
+  value: PropTypes.string,
 };
 
 interface Question {
@@ -63,7 +67,6 @@ interface Question {
   type: 'subjective' | 'objective';
   content: string;
   options?: string[]; // 객관식 질문의 선택지(고정)
-  // selectedOption?: string; // 사용자가 선택한 선택지
 }
 interface Tag {
   tag: string;
@@ -93,6 +96,7 @@ export const CreateTest = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
   const [showAlert, setShowAlert] = useState(false);
+  const navigate = useNavigate();
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -227,31 +231,30 @@ export const CreateTest = () => {
   //제출하기 버튼
   const handleSubmit = async () => {
     const formData = new FormData();
+    const formattedStartDate = format(startDate ?? new Date(), 'yyyy-MM-dd');
+    const formattedEndDate = format(endDate ?? new Date(), 'yyyy-MM-dd');
+    const tagContents = tags.map(tag => tag.tag);
 
+    const jsonData = {
+      title,
+      introduce,
+      goal,
+      tags: tagContents,
+      startDate: formattedStartDate,
+      endDate: formattedEndDate,
+      status: step === '배포완료' ? 0 : step === '개발 중' ? 1 : 2,
+      teamName,
+      teamDescription,
+      teamMate,
+      link,
+      question: questions.map(q => q.content),
+      type: questions.map(q => q.type),
+    };
     formData.append(
       'form',
-      new Blob(
-        [
-          JSON.stringify({
-            title,
-            introduce,
-            goal,
-            tags,
-            startDate: startDate,
-            endDate: endDate,
-            status: step === '배포완료' ? 0 : step === '개발 중' ? 1 : 2,
-            teamName,
-            teamDescription,
-            teamMate,
-            link,
-            question: questions.map(q => q.content),
-            type: questions.map(q => q.type),
-          }),
-        ],
-        {
-          type: 'application/json',
-        },
-      ),
+      new Blob([JSON.stringify(jsonData)], {
+        type: 'application/json',
+      }),
     );
     if (mainFileInputRef.current?.files && mainFileInputRef.current.files.length > 0) {
       formData.append('mainImage', mainFileInputRef.current.files[0]);
@@ -261,7 +264,6 @@ export const CreateTest = () => {
         formData.append('contentImages', file);
       });
     }
-
     const config = {
       headers: {
         'Content-Type': 'multipart/form-data',
@@ -269,11 +271,18 @@ export const CreateTest = () => {
     };
 
     try {
-      const response = await API_BASE_URL.post('http://13.209.76.145:8080/api/projects', formData, config);
-      console.log(response.data);
-      // navigator('/')
+      const response = await API_BASE_URL.post('/projects', formData, config);
+      const projectId = response.data;
+      const setProjectId = useProjectStore.getState().setProjectId;
+      setProjectId(projectId);
+      console.log(projectId);
+
+      // console.log('JSON Data:', jsonData);
+      // console.log(startDate, endDate);
+      navigate(`/responsetest/${projectId}`);
     } catch (error) {
       console.error('에러:', error);
+      console.log('JSON Data:', jsonData);
     }
   };
 
@@ -343,7 +352,7 @@ export const CreateTest = () => {
           {showAlert && <CustomAlert message="태그는 최대 2개까지 설정할 수 있습니다." showButtons={false} />}
           <TagWrapper>
             {tags.map((tagIndex, index) => (
-              <Tag key={index} bgColor={tagIndex.color}>
+              <Tag key={index} bgcolor={tagIndex.color}>
                 {tagIndex.tag}
                 <DeleteButton
                   style={{
