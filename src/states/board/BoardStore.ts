@@ -1,7 +1,7 @@
 // 게시물 인터페이스 정의
 export interface BoardPost {
   boardId: number;
-  memberId: number;
+  nickname: number;
   category: string;
   title: string;
   content: string;
@@ -16,7 +16,7 @@ export const posts: BoardPost[] = [
   // ITNews 카테고리
   {
     boardId: 1,
-    memberId: 1,
+    nickname: 1,
     category: 'ITNews',
     title: 'IT 소식 제목 1',
     content: 'IT 소식 내용 1',
@@ -27,7 +27,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 2,
-    memberId: 2,
+    nickname: 2,
     category: 'ITNews',
     title: 'IT 소식 제목 2',
     content: 'IT 소식 내용 2',
@@ -38,7 +38,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 3,
-    memberId: 3,
+    nickname: 3,
     category: 'ITNews',
     title: 'IT 소식 제목 3',
     content: 'IT 소식 내용 3',
@@ -49,7 +49,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 4,
-    memberId: 4,
+    nickname: 4,
     category: 'ITNews',
     title: 'IT 소식 제목 4',
     content: 'IT 소식 내용 4',
@@ -64,7 +64,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 5,
-    memberId: 5,
+    nickname: 5,
     category: 'ITNews',
     title: 'IT 소식 제목 5',
     content: 'IT 소식 내용 5',
@@ -83,7 +83,7 @@ export const posts: BoardPost[] = [
   // Daily 카테고리
   {
     boardId: 6,
-    memberId: 1,
+    nickname: 1,
     category: 'Daily',
     title: '잡담 제목 1',
     content: '잡담 내용 1',
@@ -94,7 +94,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 7,
-    memberId: 2,
+    nickname: 2,
     category: 'Daily',
     title: '잡담 제목 2',
     content: '잡담 내용 2',
@@ -105,7 +105,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 8,
-    memberId: 3,
+    nickname: 3,
     category: 'Daily',
     title: '잡담 제목 3',
     content: '잡담 내용 3',
@@ -116,7 +116,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 9,
-    memberId: 4,
+    nickname: 4,
     category: 'Daily',
     title: '잡담 제목 4',
     content: '잡담 내용 4',
@@ -127,7 +127,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 10,
-    memberId: 5,
+    nickname: 5,
     category: 'Daily',
     title: '잡담 제목 5',
     content: '잡담 내용 5',
@@ -140,7 +140,7 @@ export const posts: BoardPost[] = [
   // Tech 카테고리
   {
     boardId: 11,
-    memberId: 1,
+    nickname: 1,
     category: 'Tech',
     title: '기술 제목 1',
     content: '기술 내용 1',
@@ -151,7 +151,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 12,
-    memberId: 2,
+    nickname: 2,
     category: 'Tech',
     title: '기술 제목 2',
     content: '기술 내용 2',
@@ -162,7 +162,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 13,
-    memberId: 3,
+    nickname: 3,
     category: 'Tech',
     title: '기술 제목 3',
     content: '기술 내용 3',
@@ -173,7 +173,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 14,
-    memberId: 4,
+    nickname: 4,
     category: 'Tech',
     title: '기술 제목 4',
     content: '기술 내용 4',
@@ -188,7 +188,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 15,
-    memberId: 5,
+    nickname: 5,
     category: 'Tech',
     title: '기술 제목 5',
     content: '기술 내용 5',
@@ -201,7 +201,7 @@ export const posts: BoardPost[] = [
   // InternShip 카테고리
   {
     boardId: 16,
-    memberId: 1,
+    nickname: 1,
     category: 'InternShip',
     title: '인턴십 제목 1',
     content: '인턴십 내용 1',
@@ -212,7 +212,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 17,
-    memberId: 2,
+    nickname: 2,
     category: 'InternShip',
     title: '인턴십 제목 2',
     content: '인턴십 내용 2',
@@ -223,7 +223,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 18,
-    memberId: 3,
+    nickname: 3,
     category: 'InternShip',
     title: '인턴십 제목 3',
     content: '인턴십 내용 3',
@@ -234,7 +234,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 19,
-    memberId: 4,
+    nickname: 4,
     category: 'InternShip',
     title: '인턴십 제목 4',
     content: '인턴십 내용 4',
@@ -249,7 +249,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 20,
-    memberId: 5,
+    nickname: 5,
     category: 'InternShip',
     title: '인턴십 제목 5',
     content: '인턴십 내용 5',
@@ -262,7 +262,7 @@ export const posts: BoardPost[] = [
   // Notice 카테고리
   {
     boardId: 21,
-    memberId: 1,
+    nickname: 1,
     category: 'Notice',
     title: '공지사항 제목 1',
     content: '공지사항 내용 1',
@@ -273,7 +273,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 22,
-    memberId: 2,
+    nickname: 2,
     category: 'Notice',
     title: '공지사항 제목 2',
     content: '공지사항 내용 2',
@@ -284,7 +284,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 23,
-    memberId: 3,
+    nickname: 3,
     category: 'Notice',
     title: '공지사항 제목 3',
     content: '공지사항 내용 3',
@@ -295,7 +295,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 24,
-    memberId: 4,
+    nickname: 4,
     category: 'Notice',
     title: '공지사항 제목 4',
     content: '공지사항 내용 4',
@@ -310,7 +310,7 @@ export const posts: BoardPost[] = [
   },
   {
     boardId: 25,
-    memberId: 5,
+    nickname: 5,
     category: 'Notice',
     title: '공지사항 제목 5',
     content: '공지사항 내용 5',
