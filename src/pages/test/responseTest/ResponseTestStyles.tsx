@@ -77,22 +77,24 @@ export const Textarea = styled.textarea`
   min-height: 100px;
   overflow: hidden;
   box-sizing: border-box;
+  border: 1px solid red;
 `;
 export const StyledImg = styled.img`
-  max-width: 100%;
-  width: 400px;
-  height: 300px;
+  width: 90%;
+  height: 90%;
   object-fit: contain;
   border: 1px solid #ccc;
   border-radius: 20px;
 `;
 
 export const ImageWrapper = styled.div`
-  position: relative;
+  gap: 15px;
   display: inline-block;
-  margin-top: 10px;
-  width: 400px;
-  max-width: 100%;
+  width: 100%;
+  height: auto;
+  flex-direction: column;
+  display: flex;
+  align-items: center;
 `;
 
 export const DeleteButton = styled.button`
@@ -149,14 +151,11 @@ export const TagWrapper = styled.div`
   margin-bottom: 10px;
   gap: 5px;
 `;
-interface TagProps {
-  bgColor: string;
-}
 
-export const Tag = styled.div<TagProps>`
+export const Tag = styled.div<{ $bgColor: string }>`
   padding: 5px 10px;
   position: relative;
-  background-color: ${props => props.bgColor};
+  background-color: ${props => props.$bgColor};
   border-radius: 20px;
   font-size: 12px;
 `;
@@ -239,6 +238,9 @@ export const WhiteDiv = styled.div`
   padding: 15px 20px 0px 20px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
+  display: flex;
+  gap: 10px;
+  flex-direction: column;
   margin-left: 30px;
 `;
 export const QuestionDiv = styled.div`
