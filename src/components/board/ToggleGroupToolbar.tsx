@@ -1,5 +1,5 @@
 import React from 'react';
-import { EditorState, RichUtils, DraftInlineStyleType, Modifier } from 'draft-js';
+import { EditorState, RichUtils, DraftInlineStyleType, Modifier, SelectionState } from 'draft-js';
 import { ToggleButtonGroup, ToggleButton } from '@mui/material';
 import { FormatBold, FormatItalic, FormatUnderlined, FormatSize, FormatColorText } from '@mui/icons-material';
 
@@ -16,8 +16,21 @@ const ToggleGroupToolbar: React.FC<ToggleGroupToolbarProps> = ({ editorState, on
     const contentState = editorState.getCurrentContent();
 
     if (selection.isCollapsed()) {
-      const nextContentState = Modifier.applyInlineStyle(contentState, selection, style);
-      onEditorChange(EditorState.push(editorState, nextContentState, 'change-inline-style'));
+      const currentContent = editorState.getCurrentContent();
+      const newContentState = Modifier.insertText(
+        currentContent,
+        selection,
+        ' ',
+        editorState.getCurrentInlineStyle().add(style),
+      );
+
+      const newEditorState = EditorState.push(editorState, newContentState, 'insert-characters');
+      const newSelection = newEditorState.getSelection().merge({
+        anchorOffset: selection.getAnchorOffset() + 1,
+        focusOffset: selection.getFocusOffset() + 1,
+      }) as SelectionState;
+
+      onEditorChange(EditorState.forceSelection(newEditorState, newSelection));
     } else {
       onEditorChange(RichUtils.toggleInlineStyle(editorState, style));
     }

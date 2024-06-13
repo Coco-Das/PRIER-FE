@@ -9,6 +9,8 @@ import {
   KeyBindingUtil,
   Modifier,
   DraftHandleValue,
+  ContentState,
+  SelectionState,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import {
@@ -50,13 +52,10 @@ const styleMap = {
 
 // Helper function to find link entities
 const findLinkEntities = (contentBlock: any, callback: any, contentState: any) => {
-  contentBlock.findEntityRanges(
-    (character: any) => {
-      const entityKey = character.getEntity();
-      return entityKey !== null && contentState.getEntity(entityKey).getType() === 'LINK';
-    },
-    callback
-  );
+  contentBlock.findEntityRanges((character: any) => {
+    const entityKey = character.getEntity();
+    return entityKey !== null && contentState.getEntity(entityKey).getType() === 'LINK';
+  }, callback);
 };
 
 // Component to render link
@@ -128,7 +127,7 @@ const CreateBoard: React.FC = () => {
         state.getCurrentContent(),
         state.getSelection(),
         chars,
-        currentStyle
+        currentStyle,
       );
       handleEditorChange(EditorState.push(state, newContentState, 'insert-characters'));
       return 'handled';
@@ -137,20 +136,27 @@ const CreateBoard: React.FC = () => {
   };
 
   const handleReturn = (e: React.KeyboardEvent, state: EditorState): DraftHandleValue => {
+    // 현재 스타일을 가져옵니다.
     const currentStyle = state.getCurrentInlineStyle();
+
+    // 현재 콘텐츠 상태에서 새로운 줄을 추가합니다.
     const newContentState = Modifier.splitBlock(state.getCurrentContent(), state.getSelection());
 
-    const newEditorState = EditorState.push(state, newContentState, 'split-block');
+    // 새로운 에디터 상태를 생성합니다.
+    let newEditorState = EditorState.push(state, newContentState, 'split-block');
+
+    // 현재 선택 상태를 가져옵니다.
     const selection = newEditorState.getSelection();
 
-    const newContentStateWithStyles = currentStyle.reduce((contentState, style) => {
-      if (contentState) {
-        return Modifier.applyInlineStyle(contentState, selection, style);
+    // 스타일을 새로운 줄에 적용합니다.
+    currentStyle.forEach(style => {
+      if (style) {
+        newEditorState = RichUtils.toggleInlineStyle(newEditorState, style);
       }
-      return contentState;
-    }, newEditorState.getCurrentContent());
+    });
 
-    handleEditorChange(EditorState.push(newEditorState, newContentStateWithStyles, 'change-inline-style'));
+    // 새로운 선택 상태를 강제 적용합니다.
+    handleEditorChange(EditorState.forceSelection(newEditorState, selection));
     return 'handled';
   };
 
@@ -162,8 +168,8 @@ const CreateBoard: React.FC = () => {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const fileArray = Array.from(event.target.files).map((file) => URL.createObjectURL(file));
-      setImages((prevImages) => [...prevImages, ...fileArray]);
+      const fileArray = Array.from(event.target.files).map(file => URL.createObjectURL(file));
+      setImages(prevImages => [...prevImages, ...fileArray]);
     }
   };
 
@@ -229,7 +235,7 @@ const CreateBoard: React.FC = () => {
             />
           </UserContainer>
           <ContentContainer>
-            <Title placeholder="제목을 입력하세요" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
             <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '10px', minHeight: '400px' }}>
               <Editor
                 editorState={editorState}
