@@ -9,8 +9,6 @@ import {
   KeyBindingUtil,
   Modifier,
   DraftHandleValue,
-  ContentState,
-  SelectionState,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import {
@@ -37,20 +35,26 @@ import userAvatar from '../../assets/user.svg';
 import Select, { selectClasses } from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
-import ToggleGroupToolbar from '../../components/board/ToggleGroupToolbar';
+import TextEditorToolbar from '../../components/board/TextEditorToolbar';
 import CustomAlert from '../../components/utils/CustomAlert';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
-// Custom style map
+// 커스텀 스타일 맵
 const styleMap = {
   RED: {
     color: 'red',
   },
-  // Add more custom styles here
+  BLUE: {
+    color: 'blue',
+  },
+  BACKGROUND_YELLOW: {
+    backgroundColor: 'yellow',
+  },
+  // 추가 스타일 여기에 정의
 };
 
-// Helper function to find link entities
+// 링크 엔티티를 찾는 헬퍼 함수
 const findLinkEntities = (contentBlock: any, callback: any, contentState: any) => {
   contentBlock.findEntityRanges((character: any) => {
     const entityKey = character.getEntity();
@@ -58,7 +62,7 @@ const findLinkEntities = (contentBlock: any, callback: any, contentState: any) =
   }, callback);
 };
 
-// Component to render link
+// 링크를 렌더링하는 컴포넌트
 const Link = (props: any) => {
   const { url } = props.contentState.getEntity(props.entityKey).getData();
   return (
@@ -68,7 +72,7 @@ const Link = (props: any) => {
   );
 };
 
-// Decorator for links
+// 링크를 위한 데코레이터
 const decorator = new CompositeDecorator([
   {
     strategy: findLinkEntities,
@@ -135,37 +139,31 @@ const CreateBoard: React.FC = () => {
     return 'not-handled';
   };
 
+  // 엔터를 쳐서 새 줄을 생성하는 함수
   const handleReturn = (e: React.KeyboardEvent, state: EditorState): DraftHandleValue => {
-    // 현재 스타일을 가져옵니다.
-    const currentStyle = state.getCurrentInlineStyle();
+    const currentStyle = state.getCurrentInlineStyle(); // 현재 스타일 가져오기
+    const newContentState = Modifier.splitBlock(state.getCurrentContent(), state.getSelection()); // 새 줄 추가
+    let newEditorState = EditorState.push(state, newContentState, 'split-block'); // 새 에디터 상태 생성
 
-    // 현재 콘텐츠 상태에서 새로운 줄을 추가합니다.
-    const newContentState = Modifier.splitBlock(state.getCurrentContent(), state.getSelection());
-
-    // 새로운 에디터 상태를 생성합니다.
-    let newEditorState = EditorState.push(state, newContentState, 'split-block');
-
-    // 현재 선택 상태를 가져옵니다.
-    const selection = newEditorState.getSelection();
-
-    // 스타일을 새로운 줄에 적용합니다.
+    const selection = newEditorState.getSelection(); // 현재 선택 상태 가져오기
     currentStyle.forEach(style => {
       if (style) {
-        newEditorState = RichUtils.toggleInlineStyle(newEditorState, style);
+        newEditorState = RichUtils.toggleInlineStyle(newEditorState, style); // 새로운 줄에 스타일 적용
       }
     });
 
-    // 새로운 선택 상태를 강제 적용합니다.
-    handleEditorChange(EditorState.forceSelection(newEditorState, selection));
+    handleEditorChange(EditorState.forceSelection(newEditorState, selection)); // 새로운 선택 상태 강제 적용
     return 'handled';
   };
 
+  // 이미지 업로드 버튼 클릭 핸들러
   const handleImageUpload = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
+  // 파일 입력 변경 핸들러
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const fileArray = Array.from(event.target.files).map(file => URL.createObjectURL(file));
@@ -173,15 +171,18 @@ const CreateBoard: React.FC = () => {
     }
   };
 
+  // 이미지 삭제 핸들러
   const handleDeleteImage = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
   };
 
+  // 게시물 업로드 확인 핸들러
   const confirmCreateBoard = () => {
     setShowCreateBoardAlert(false);
     navigate('/board');
   };
 
+  // 게시물 업로드 취소 핸들러
   const cancelCreateBoard = () => {
     setShowCreateBoardAlert(false);
   };
@@ -221,7 +222,7 @@ const CreateBoard: React.FC = () => {
             <AuthorContainer>
               <Author>개발자1</Author>
             </AuthorContainer>
-            <ToggleGroupToolbar editorState={editorState} onEditorChange={handleEditorChange} />
+            <TextEditorToolbar editorState={editorState} onEditorChange={handleEditorChange} />
             <CustomButton onClick={handleImageUpload}>
               <ButtonText>이미지 업로드</ButtonText>
             </CustomButton>
