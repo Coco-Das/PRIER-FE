@@ -52,7 +52,7 @@ const router = createBrowserRouter([
         element: <ResponseTest />,
       },
       {
-        path: '/responsequestions',
+        path: '/responsequestions/:projectId',
         element: <ResponseQuestion />,
       },
       {

@@ -276,12 +276,8 @@ export const CreateTest = () => {
       const setProjectId = useProjectStore.getState().setProjectId;
       setProjectId(projectId);
       console.log(projectId);
-
-      // console.log('JSON Data:', jsonData);
-      // console.log(startDate, endDate);
       navigate(`/responsetest/${projectId}`);
       console.log(response.data);
-      // navigator('/')
     } catch (error) {
       console.error('에러:', error);
       console.log('JSON Data:', jsonData);
