@@ -235,19 +235,21 @@ export const CreateTest = () => {
     const formattedEndDate = format(endDate ?? new Date(), 'yyyy-MM-dd');
     const tagContents = tags.map(tag => tag.tag);
 
+    const replaceEmptyStringWithNull = (value: string) => (value.trim() === '' ? null : value.trim());
+
     const jsonData = {
-      title,
-      introduce,
-      goal,
+      title: replaceEmptyStringWithNull(title),
+      introduce: replaceEmptyStringWithNull(introduce),
+      goal: replaceEmptyStringWithNull(goal),
       tags: tagContents,
       startDate: formattedStartDate,
       endDate: formattedEndDate,
       status: step === '배포완료' ? 0 : step === '개발 중' ? 1 : 2,
-      teamName,
-      teamDescription,
-      teamMate,
-      link,
-      question: questions.map(q => q.content),
+      teamName: replaceEmptyStringWithNull(teamName),
+      teamDescription: replaceEmptyStringWithNull(teamDescription),
+      teamMate: replaceEmptyStringWithNull(teamMate),
+      link: replaceEmptyStringWithNull(link),
+      question: questions.map(q => replaceEmptyStringWithNull(q.content)),
       type: questions.map(q => q.type),
     };
     formData.append(
@@ -275,9 +277,7 @@ export const CreateTest = () => {
       const projectId = response.data;
       const setProjectId = useProjectStore.getState().setProjectId;
       setProjectId(projectId);
-      console.log(projectId);
       navigate(`/responsetest/${projectId}`);
-      console.log(response.data);
     } catch (error) {
       console.error('에러:', error);
       console.log('JSON Data:', jsonData);
@@ -368,7 +368,7 @@ export const CreateTest = () => {
           </TagWrapper>
           <OrangeDiv className="mt-3">
             <span className="font-bold">개발일정</span>
-            <OrangeInputDiv>
+            <OrangeInputDiv style={{ gap: '0px' }}>
               <DatePicker
                 selected={startDate}
                 onChange={(date: Date) => setStartDate(date)}
@@ -397,7 +397,11 @@ export const CreateTest = () => {
             </BlueInputDiv>
             <BlueInputDiv>
               <span>한줄소개 :</span>
-              <Input style={{ width: '61%' }} onChange={handleTeamDescriptionChange} value={teamDescription} />
+              <Input
+                style={{ width: '61%', overflowY: 'auto' }}
+                onChange={handleTeamDescriptionChange}
+                value={teamDescription}
+              />
             </BlueInputDiv>
             <BlueInputDiv style={{ alignItems: 'normal' }}>
               <span>팀원 :</span>
@@ -413,7 +417,7 @@ export const CreateTest = () => {
                 }}
                 onChange={handleTeamMateChange}
                 value={teamMate}
-              ></Textarea>
+              />
             </BlueInputDiv>
           </BlueDiv>
           <GreenDiv className="mt-2">
@@ -470,6 +474,7 @@ export const CreateTest = () => {
                       overflowY: 'auto',
                       width: '80%',
                     }}
+                    readOnly
                   />
                   <div style={{ display: 'flex', justifyContent: 'right' }}>
                     <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
@@ -504,7 +509,8 @@ export const CreateTest = () => {
                     {question.options?.map((option, i) => (
                       <div key={i}>
                         <label>
-                          <input type="radio" name={`question-${question.id}`} value={option} /> {option}
+                          <input type="radio" name={`question-${question.id}`} value={option} checked={false} />{' '}
+                          {option}
                         </label>
                       </div>
                     ))}
