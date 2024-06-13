@@ -13,6 +13,7 @@ import TestList from '../pages/test/testList/TestList';
 import CreateBoard from '../pages/board/CreateBoard';
 import Board from '../pages/board/Board';
 import { CreateTest } from '../pages/test/createTest/CreateTest';
+import { ResponseQuestion } from '../pages/test/responseTest/ResponseQuestion';
 
 const router = createBrowserRouter([
   {
@@ -47,8 +48,12 @@ const router = createBrowserRouter([
         element: <Feedback />,
       },
       {
-        path: '/responsetest',
+        path: '/responsetest/:projectId',
         element: <ResponseTest />,
+      },
+      {
+        path: '/responsequestions',
+        element: <ResponseQuestion />,
       },
       {
         path: '/testlist',
