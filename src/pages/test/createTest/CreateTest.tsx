@@ -269,7 +269,7 @@ export const CreateTest = () => {
     };
 
     try {
-      const response = await API_BASE_URL.post('http://13.209.76.145:8080/api/projects', formData, config);
+      const response = await API_BASE_URL.post('/projects', formData, config);
       console.log(response.data);
       // navigator('/')
     } catch (error) {
