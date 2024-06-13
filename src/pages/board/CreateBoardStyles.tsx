@@ -178,9 +178,8 @@ export const CustomButton = styled.button`
   border: none;
   width: 8rem;
   border-radius: 5px;
-  margin-top: 10px;
+  margin-top: 0px;
   margin-left: 10px;
   white-space: nowrap;
   text-align: center;
-  align-self: center;
 `;
