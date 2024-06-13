@@ -36,6 +36,7 @@ import useFormatDate from '../../hooks/UseFormatDate';
 import PositionedMenu from '../../components/board/PositionedMenu';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../../components/utils/Loading';
+
 interface PostDetailProps {
   postId: number;
   onBackToList: () => void;
@@ -75,18 +76,18 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       ) : (
         <PostContentContainer category={post.category}>
           <UserContainer>
-            <Avatar onClick={e => handleProfileClick(e, post.memberId)} category={post.category}>
+            <Avatar onClick={e => handleProfileClick(e, post.nickname)} category={post.category}>
               <AvatarImage src={post.category === 'Notice' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author onClick={e => handleProfileClick(e, post.memberId)} category={post.category}>
-                {post.category === 'Notice' ? '공지사항' : `작성자 ${post.memberId}`}
+              <Author onClick={e => handleProfileClick(e, post.nickname)} category={post.category}>
+                {post.category === 'Notice' ? '공지사항' : `작성자 ${post.nickname}`}
               </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
-            {post.memberId === 1 && (
+            {post.nickname === 1 && (
               <div className="ml-auto">
-                <PositionedMenu />
+                <PositionedMenu postId={post.boardId} />
               </div>
             )}
           </UserContainer>
@@ -144,7 +145,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
                     </div>
                     {comment.memberId === 1 && (
                       <div>
-                        <PositionedMenu />
+                        <PositionedMenu postId={comment.commentId} />
                       </div>
                     )}
                   </div>

@@ -103,7 +103,7 @@ const decorator = new CompositeDecorator([
   },
 ]);
 
-const CreateBoard: React.FC = () => {
+const ModifyBoard: React.FC = () => {
   const navigate = useNavigate();
   const [title, setTitle] = useState<string>(''); // 제목 상태 변수
   const [editorState, setEditorState] = useState(EditorState.createEmpty(decorator)); // 에디터 상태 변수
@@ -323,11 +323,11 @@ const CreateBoard: React.FC = () => {
             }}
             className="ml-auto"
           >
-            <ButtonText>완료</ButtonText>
+            <ButtonText>수정</ButtonText>
           </Button>
           {showCreateBoardAlert && (
             <CustomAlert
-              message="게시물을 업로드 하시겠습니까?"
+              message="게시물을 수정하시겠습니까?"
               onConfirm={confirmCreateBoard}
               onCancel={cancelCreateBoard}
             />
@@ -338,4 +338,4 @@ const CreateBoard: React.FC = () => {
   );
 };
 
-export default CreateBoard;
+export default ModifyBoard;
