@@ -26,7 +26,7 @@ const PaymentContainer = styled.div`
   width: 30%;
   height: 60%;
   padding: 20px;
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   border-radius: 10px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
   cursor: pointer;

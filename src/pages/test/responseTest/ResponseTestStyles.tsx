@@ -145,6 +145,8 @@ export const TagWrapper = styled.div`
   padding-left: 30px;
   display: flex;
   flex-wrap: wrap;
+  margin-top: 60px;
+  margin-bottom: 10px;
   gap: 5px;
 `;
 interface TagProps {
@@ -185,10 +187,8 @@ export const OrangeDiv = styled.div`
 export const OrangeInputDiv = styled.div`
   width: 100%;
   display: flex;
-  gap: 15px;
-  input {
-    border: 1px solid #ffba6b;
-  }
+  gap: 10px;
+  font-weight: bold;
 `;
 export const BlueDiv = styled.div`
   margin-left: 30px;
@@ -209,9 +209,13 @@ export const BlueDiv = styled.div`
 export const BlueInputDiv = styled.div`
   display: flex;
   width: 100%;
-  gap: 15px;
+  gap: 10px;
   display: flex;
-  align-items: center;
+  flex-direction: column;
+  span {
+    color: #828282;
+    font-weight: bold;
+  }
 `;
 export const GreenDiv = styled.div`
   margin-left: 30px;
@@ -221,21 +225,11 @@ export const GreenDiv = styled.div`
   font-size: 15px;
   padding: 15px 20px 0px 20px;
   display: flex;
-  align-items: center;
   gap: 5px;
   border: 1px solid #e0e0e0;
   flex-direction: column;
   input {
     border: 1px solid #23be87;
-  }
-`;
-export const GreenInputDiv = styled.div`
-  display: flex;
-  align-items: center;
-  width: 100%;
-  gap: 20px;
-  span {
-    width: 15%;
   }
 `;
 
