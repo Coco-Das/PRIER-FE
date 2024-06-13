@@ -1,5 +1,16 @@
-import React, { useState, useRef, ChangeEvent, useEffect } from 'react';
+import React, { useState, useRef, ChangeEvent } from 'react';
 import { useNavigate } from 'react-router-dom';
+import {
+  Editor,
+  EditorState,
+  RichUtils,
+  CompositeDecorator,
+  getDefaultKeyBinding,
+  KeyBindingUtil,
+  Modifier,
+  DraftHandleValue,
+} from 'draft-js';
+import 'draft-js/dist/Draft.css';
 import {
   Container,
   CreateContainer,
@@ -14,7 +25,6 @@ import {
   ButtonText,
   ContentContainer,
   Title,
-  ContentText,
   ImageWrapper,
   StyledImg,
   DeleteButton,
@@ -28,21 +38,121 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import ToggleGroupToolbar from '../../components/board/ToggleGroupToolbar';
 import CustomAlert from '../../components/utils/CustomAlert';
 
-function CreateBoard() {
+const { hasCommandModifier } = KeyBindingUtil;
+
+// Custom style map
+const styleMap = {
+  RED: {
+    color: 'red',
+  },
+  // Add more custom styles here
+};
+
+// Helper function to find link entities
+const findLinkEntities = (contentBlock: any, callback: any, contentState: any) => {
+  contentBlock.findEntityRanges(
+    (character: any) => {
+      const entityKey = character.getEntity();
+      return entityKey !== null && contentState.getEntity(entityKey).getType() === 'LINK';
+    },
+    callback
+  );
+};
+
+// Component to render link
+const Link = (props: any) => {
+  const { url } = props.contentState.getEntity(props.entityKey).getData();
+  return (
+    <a href={url} style={{ color: '#3b5998', textDecoration: 'underline' }}>
+      {props.children}
+    </a>
+  );
+};
+
+// Decorator for links
+const decorator = new CompositeDecorator([
+  {
+    strategy: findLinkEntities,
+    component: Link,
+  },
+]);
+
+const CreateBoard: React.FC = () => {
   const navigate = useNavigate();
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [showCreateBoardAlert, setShowCreateBoardAlert] = useState(false);
+  const [title, setTitle] = useState<string>('');
+  const [editorState, setEditorState] = useState(EditorState.createEmpty(decorator));
+  const [showCreateBoardAlert, setShowCreateBoardAlert] = useState<boolean>(false);
   const [images, setImages] = useState<string[]>([]);
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const contentTextRef = useRef<HTMLTextAreaElement>(null);
 
-  useEffect(() => {
-    if (contentTextRef.current) {
-      contentTextRef.current.style.height = '400px';
-      contentTextRef.current.style.height = `${contentTextRef.current.scrollHeight}px`;
+  const handleEditorChange = (state: EditorState) => {
+    setEditorState(state);
+  };
+
+  const handleKeyCommand = (command: string, state: EditorState): DraftHandleValue => {
+    const newState = RichUtils.handleKeyCommand(state, command);
+    if (newState) {
+      handleEditorChange(newState);
+      return 'handled';
     }
-  }, [content]);
+    return 'not-handled';
+  };
+
+  const mapKeyToEditorCommand = (e: React.KeyboardEvent): string | null => {
+    if (e.keyCode === 9 /* TAB */) {
+      const newEditorState = RichUtils.onTab(e, editorState, 4 /* maxDepth */);
+      if (newEditorState !== editorState) {
+        handleEditorChange(newEditorState);
+      }
+      return null;
+    }
+    if (hasCommandModifier(e)) {
+      switch (e.key) {
+        case 'b':
+          return 'bold';
+        case 'i':
+          return 'italic';
+        case 'u':
+          return 'underline';
+        default:
+          return getDefaultKeyBinding(e);
+      }
+    }
+    return getDefaultKeyBinding(e);
+  };
+
+  const handleBeforeInput = (chars: string, state: EditorState): DraftHandleValue => {
+    const currentStyle = state.getCurrentInlineStyle();
+    if (currentStyle.size > 0) {
+      const newContentState = Modifier.replaceText(
+        state.getCurrentContent(),
+        state.getSelection(),
+        chars,
+        currentStyle
+      );
+      handleEditorChange(EditorState.push(state, newContentState, 'insert-characters'));
+      return 'handled';
+    }
+    return 'not-handled';
+  };
+
+  const handleReturn = (e: React.KeyboardEvent, state: EditorState): DraftHandleValue => {
+    const currentStyle = state.getCurrentInlineStyle();
+    const newContentState = Modifier.splitBlock(state.getCurrentContent(), state.getSelection());
+
+    const newEditorState = EditorState.push(state, newContentState, 'split-block');
+    const selection = newEditorState.getSelection();
+
+    const newContentStateWithStyles = currentStyle.reduce((contentState, style) => {
+      if (contentState) {
+        return Modifier.applyInlineStyle(contentState, selection, style);
+      }
+      return contentState;
+    }, newEditorState.getCurrentContent());
+
+    handleEditorChange(EditorState.push(newEditorState, newContentStateWithStyles, 'change-inline-style'));
+    return 'handled';
+  };
 
   const handleImageUpload = () => {
     if (fileInputRef.current) {
@@ -52,8 +162,8 @@ function CreateBoard() {
 
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
-      const fileArray = Array.from(event.target.files).map(file => URL.createObjectURL(file));
-      setImages(prevImages => [...prevImages, ...fileArray]);
+      const fileArray = Array.from(event.target.files).map((file) => URL.createObjectURL(file));
+      setImages((prevImages) => [...prevImages, ...fileArray]);
     }
   };
 
@@ -105,7 +215,7 @@ function CreateBoard() {
             <AuthorContainer>
               <Author>개발자1</Author>
             </AuthorContainer>
-            <ToggleGroupToolbar />
+            <ToggleGroupToolbar editorState={editorState} onEditorChange={handleEditorChange} />
             <CustomButton onClick={handleImageUpload}>
               <ButtonText>이미지 업로드</ButtonText>
             </CustomButton>
@@ -119,13 +229,19 @@ function CreateBoard() {
             />
           </UserContainer>
           <ContentContainer>
-            <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
-            <ContentText
-              ref={contentTextRef}
-              placeholder="내용을 입력하세요"
-              value={content}
-              onChange={e => setContent(e.target.value)}
-            />
+            <Title placeholder="제목을 입력하세요" value={title} onChange={(e) => setTitle(e.target.value)} />
+            <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '10px', minHeight: '400px' }}>
+              <Editor
+                editorState={editorState}
+                customStyleMap={styleMap}
+                handleKeyCommand={handleKeyCommand}
+                keyBindingFn={mapKeyToEditorCommand}
+                onChange={handleEditorChange}
+                handleBeforeInput={handleBeforeInput}
+                handleReturn={handleReturn}
+                placeholder="내용을 입력하세요"
+              />
+            </div>
           </ContentContainer>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
             {images.map((image, index) => (
@@ -157,6 +273,6 @@ function CreateBoard() {
       </CreateContainer>
     </Container>
   );
-}
+};
 
 export default CreateBoard;

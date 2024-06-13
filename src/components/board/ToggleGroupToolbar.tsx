@@ -1,122 +1,59 @@
-// ToggleGroupToolbar.js 또는 ToggleGroupToolbar.jsx
-import * as React from 'react';
-import AspectRatio from '@mui/joy/AspectRatio';
-import Box from '@mui/joy/Box';
-import Button from '@mui/joy/Button';
-import Divider from '@mui/joy/Divider';
-import Sheet from '@mui/joy/Sheet';
-import IconButton from '@mui/joy/IconButton';
-import ToggleButtonGroup from '@mui/joy/ToggleButtonGroup';
-import SvgIcon from '@mui/joy/SvgIcon';
-import FormatAlignLeftIcon from '@mui/icons-material/FormatAlignLeft';
-import FormatAlignCenterIcon from '@mui/icons-material/FormatAlignCenter';
-import FormatAlignRightIcon from '@mui/icons-material/FormatAlignRight';
-import FormatAlignJustifyIcon from '@mui/icons-material/FormatAlignJustify';
-import FormatBoldIcon from '@mui/icons-material/FormatBold';
-import FormatItalicIcon from '@mui/icons-material/FormatItalic';
-import FormatUnderlinedIcon from '@mui/icons-material/FormatUnderlined';
+import React from 'react';
+import { EditorState, RichUtils, DraftInlineStyleType, Modifier } from 'draft-js';
+import { ToggleButtonGroup, ToggleButton } from '@mui/material';
+import { FormatBold, FormatItalic, FormatUnderlined, FormatSize, FormatColorText } from '@mui/icons-material';
 
-export default function ToggleGroupToolbar() {
-  const [alignment, setAlignment] = React.useState<string | null>('left');
-  const [formats, setFormats] = React.useState(() => ['italic']);
-  const [color, setColor] = React.useState('#ff5252');
+interface ToggleGroupToolbarProps {
+  editorState: EditorState;
+  onEditorChange: (editorState: EditorState) => void;
+}
+
+const ToggleGroupToolbar: React.FC<ToggleGroupToolbarProps> = ({ editorState, onEditorChange }) => {
+  const currentStyle = editorState.getCurrentInlineStyle();
+
+  const applyStyle = (style: DraftInlineStyleType) => {
+    const selection = editorState.getSelection();
+    const contentState = editorState.getCurrentContent();
+
+    if (selection.isCollapsed()) {
+      const nextContentState = Modifier.applyInlineStyle(contentState, selection, style);
+      onEditorChange(EditorState.push(editorState, nextContentState, 'change-inline-style'));
+    } else {
+      onEditorChange(RichUtils.toggleInlineStyle(editorState, style));
+    }
+  };
+
+  const applyBlockType = (blockType: string) => {
+    onEditorChange(RichUtils.toggleBlockType(editorState, blockType));
+  };
 
   return (
-    <Sheet variant="outlined" sx={{ borderRadius: 'md', display: 'flex', gap: 2, p: 0.5 }}>
-      <ToggleButtonGroup
-        variant="plain"
-        spacing={0.5}
-        value={alignment}
-        onChange={(event, newAlignment) => {
-          setAlignment(newAlignment);
-        }}
-        aria-label="text alignment"
+    <ToggleButtonGroup size="small" exclusive>
+      <ToggleButton value="bold" selected={currentStyle.has('BOLD')} onClick={() => applyStyle('BOLD')}>
+        <FormatBold />
+      </ToggleButton>
+      <ToggleButton value="italic" selected={currentStyle.has('ITALIC')} onClick={() => applyStyle('ITALIC')}>
+        <FormatItalic />
+      </ToggleButton>
+      <ToggleButton value="underline" selected={currentStyle.has('UNDERLINE')} onClick={() => applyStyle('UNDERLINE')}>
+        <FormatUnderlined />
+      </ToggleButton>
+      <ToggleButton
+        value="header-one"
+        selected={RichUtils.getCurrentBlockType(editorState) === 'header-one'}
+        onClick={() => applyBlockType('header-one')}
       >
-        <IconButton value="left" aria-label="left aligned">
-          <FormatAlignLeftIcon />
-        </IconButton>
-        <IconButton value="center" aria-label="centered">
-          <FormatAlignCenterIcon />
-        </IconButton>
-        <IconButton value="right" aria-label="right aligned">
-          <FormatAlignRightIcon />
-        </IconButton>
-        <IconButton value="justify" aria-label="justified" disabled>
-          <FormatAlignJustifyIcon />
-        </IconButton>
-      </ToggleButtonGroup>
-      <Divider orientation="vertical" sx={{ height: '60%', alignSelf: 'center' }} />
-      <ToggleButtonGroup
-        variant="plain"
-        spacing={0.5}
-        value={formats}
-        onChange={(event, newFormats) => {
-          setFormats(newFormats);
-        }}
-        aria-label="text formatting"
+        <FormatSize />
+      </ToggleButton>
+      <ToggleButton
+        value="color"
+        selected={currentStyle.has('RED')}
+        onClick={() => applyStyle('RED' as DraftInlineStyleType)}
       >
-        <IconButton value="bold" aria-label="bold">
-          <FormatBoldIcon />
-        </IconButton>
-        <IconButton value="italic" aria-label="italic">
-          <FormatItalicIcon />
-        </IconButton>
-        <IconButton value="underlined" aria-label="underlined">
-          <FormatUnderlinedIcon />
-        </IconButton>
-      </ToggleButtonGroup>
-      <Divider orientation="vertical" sx={{ height: '60%', alignSelf: 'center' }} />
-      <Button
-        component="label"
-        tabIndex={-1}
-        role={undefined}
-        aria-label="fill color"
-        variant="outlined"
-        color="neutral"
-        endDecorator={
-          <SvgIcon fontSize="md">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              fill="none"
-              viewBox="0 0 24 24"
-              strokeWidth={2}
-              stroke="currentColor"
-            >
-              <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 8.25l-7.5 7.5-7.5-7.5" />
-            </svg>
-          </SvgIcon>
-        }
-        sx={{ pl: 1 }}
-      >
-        <AspectRatio
-          variant="plain"
-          ratio="1"
-          sx={{
-            borderRadius: '50%',
-            width: '1.5em',
-            bgcolor: color,
-          }}
-        >
-          <div />
-        </AspectRatio>
-        <Box
-          component="input"
-          type="color"
-          value={color}
-          onChange={event => setColor(event.target.value)}
-          sx={{
-            clip: 'rect(0 0 0 0)',
-            clipPath: 'inset(50%)',
-            height: '1px',
-            overflow: 'hidden',
-            position: 'absolute',
-            bottom: 0,
-            left: 0,
-            whiteSpace: 'nowrap',
-            width: '1px',
-          }}
-        />
-      </Button>
-    </Sheet>
+        <FormatColorText />
+      </ToggleButton>
+    </ToggleButtonGroup>
   );
-}
+};
+
+export default ToggleGroupToolbar;
