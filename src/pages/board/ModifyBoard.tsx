@@ -42,7 +42,7 @@ import CustomAlert from '../../components/utils/CustomAlert';
 const { hasCommandModifier } = KeyBindingUtil;
 
 // 서버 주소 상수
-const BASE_URL = 'http://your-server-address.com';
+const BASE_URL = 'http://52.79.227.237:8080';
 
 const styleMap = {
   RED: {
