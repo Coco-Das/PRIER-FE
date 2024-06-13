@@ -182,4 +182,5 @@ export const CustomButton = styled.button`
   margin-left: 10px;
   white-space: nowrap;
   text-align: center;
+  align-self: center;
 `;

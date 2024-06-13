@@ -40,21 +40,39 @@ import CustomAlert from '../../components/utils/CustomAlert';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
-// 커스텀 스타일 맵
 const styleMap = {
   RED: {
     color: 'red',
   },
+  ORANGE: {
+    color: 'orange',
+  },
+  YELLOW: {
+    color: 'yellow',
+  },
+  GREEN: {
+    color: 'green',
+  },
   BLUE: {
     color: 'blue',
+  },
+  INDIGO: {
+    color: 'indigo',
+  },
+  VIOLET: {
+    color: 'violet',
+  },
+  BLACK: {
+    color: 'black',
+  },
+  WHITE: {
+    color: 'white',
   },
   BACKGROUND_YELLOW: {
     backgroundColor: 'yellow',
   },
-  // 추가 스타일 여기에 정의
 };
 
-// 링크 엔티티를 찾는 헬퍼 함수
 const findLinkEntities = (contentBlock: any, callback: any, contentState: any) => {
   contentBlock.findEntityRanges((character: any) => {
     const entityKey = character.getEntity();
@@ -62,7 +80,6 @@ const findLinkEntities = (contentBlock: any, callback: any, contentState: any) =
   }, callback);
 };
 
-// 링크를 렌더링하는 컴포넌트
 const Link = (props: any) => {
   const { url } = props.contentState.getEntity(props.entityKey).getData();
   return (
@@ -72,7 +89,6 @@ const Link = (props: any) => {
   );
 };
 
-// 링크를 위한 데코레이터
 const decorator = new CompositeDecorator([
   {
     strategy: findLinkEntities,
@@ -139,31 +155,28 @@ const CreateBoard: React.FC = () => {
     return 'not-handled';
   };
 
-  // 엔터를 쳐서 새 줄을 생성하는 함수
   const handleReturn = (e: React.KeyboardEvent, state: EditorState): DraftHandleValue => {
-    const currentStyle = state.getCurrentInlineStyle(); // 현재 스타일 가져오기
-    const newContentState = Modifier.splitBlock(state.getCurrentContent(), state.getSelection()); // 새 줄 추가
-    let newEditorState = EditorState.push(state, newContentState, 'split-block'); // 새 에디터 상태 생성
+    const currentStyle = state.getCurrentInlineStyle();
+    const newContentState = Modifier.splitBlock(state.getCurrentContent(), state.getSelection());
+    let newEditorState = EditorState.push(state, newContentState, 'split-block');
 
-    const selection = newEditorState.getSelection(); // 현재 선택 상태 가져오기
+    const selection = newEditorState.getSelection();
     currentStyle.forEach(style => {
       if (style) {
-        newEditorState = RichUtils.toggleInlineStyle(newEditorState, style); // 새로운 줄에 스타일 적용
+        newEditorState = RichUtils.toggleInlineStyle(newEditorState, style);
       }
     });
 
-    handleEditorChange(EditorState.forceSelection(newEditorState, selection)); // 새로운 선택 상태 강제 적용
+    handleEditorChange(EditorState.forceSelection(newEditorState, selection));
     return 'handled';
   };
 
-  // 이미지 업로드 버튼 클릭 핸들러
   const handleImageUpload = () => {
     if (fileInputRef.current) {
       fileInputRef.current.click();
     }
   };
 
-  // 파일 입력 변경 핸들러
   const handleFileChange = (event: ChangeEvent<HTMLInputElement>) => {
     if (event.target.files) {
       const fileArray = Array.from(event.target.files).map(file => URL.createObjectURL(file));
@@ -171,18 +184,15 @@ const CreateBoard: React.FC = () => {
     }
   };
 
-  // 이미지 삭제 핸들러
   const handleDeleteImage = (index: number) => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-  // 게시물 업로드 확인 핸들러
   const confirmCreateBoard = () => {
     setShowCreateBoardAlert(false);
     navigate('/board');
   };
 
-  // 게시물 업로드 취소 핸들러
   const cancelCreateBoard = () => {
     setShowCreateBoardAlert(false);
   };
