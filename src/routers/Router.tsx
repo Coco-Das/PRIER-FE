@@ -11,6 +11,7 @@ import Feedback from '../pages/test/feedback/Feedback';
 import { ResponseTest } from '../pages/test/responseTest/ResponseTest';
 import TestList from '../pages/test/testList/TestList';
 import CreateBoard from '../pages/board/CreateBoard';
+import ModifyBoard from '../pages/board/ModifyBoard';
 import Board from '../pages/board/Board';
 import { CreateTest } from '../pages/test/createTest/CreateTest';
 import { ResponseQuestion } from '../pages/test/responseTest/ResponseQuestion';
@@ -62,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: '/createBoard',
         element: <CreateBoard />,
+      },
+      {
+        path: '/modifyBoard/:postId',
+        element: <ModifyBoard />,
       },
       {
         path: '/board',

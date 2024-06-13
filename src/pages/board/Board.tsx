@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Container, NoPostsMessage } from './BoardStyles';
-import { posts as initialPosts, BoardPost } from '../../states/board/BoardStore';
+import { BoardPost } from '../../states/board/BoardStore';
 import PaginationComponent from '../../components/board/PaginationComponent';
 import PostSkeleton from '../../components/board/PostSkeleton';
 import NavigationBar from '../../components/board/NavigationBar';
@@ -9,6 +9,9 @@ import PostList from './PostList';
 import PostDetail from './PostDetail';
 import PostDetailSkeleton from '../../components/board/PostDetailSkeleton';
 import usePagination from '../../hooks/UsePagination';
+
+// 서버 주소 상수
+const BASE_URL = 'http://your-server-address.com';
 
 const Board: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -31,14 +34,23 @@ const Board: React.FC = () => {
   } = usePagination(filteredPosts, POSTS_PER_PAGE);
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      const sortedPosts = initialPosts.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-      setPosts(sortedPosts);
-      setLoading(false);
-    }, 2000); // 로딩 시간을 조정할 수 있습니다.
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const response = await fetch(`${BASE_URL}/api/boards`); // 서버 주소 사용
+        const data = await response.json();
+        const sortedPosts = data.sort(
+          (a: BoardPost, b: BoardPost) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
+        setPosts(sortedPosts);
+        setLoading(false);
+      } catch (error) {
+        console.error('Failed to fetch posts:', error);
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   useEffect(() => {
@@ -49,7 +61,7 @@ const Board: React.FC = () => {
       } else if (activeFilter === 'likes') {
         updatedPosts = posts.filter(post => post.category === activeCategory && post.likedByUser);
       } else if (activeFilter === 'myposts') {
-        updatedPosts = posts.filter(post => post.category === activeCategory && post.memberId === 1); // 임의로 memberId를 1로 설정
+        updatedPosts = posts.filter(post => post.category === activeCategory && post.nickname === 1);
       }
 
       if (searchTerm) {
@@ -61,16 +73,14 @@ const Board: React.FC = () => {
       setFilteredPosts(updatedPosts);
       setPage(1);
     }
-  }, [posts, activeCategory, activeFilter, searchTerm, postId]);
+  }, [posts, activeCategory, activeFilter, searchTerm, postId, setPage]);
 
-  // 좋아요 토글 함수
   const toggleLike = (postId: number) => {
     setPosts(prevPosts =>
       prevPosts.map(post => (post.boardId === postId ? { ...post, likedByUser: !post.likedByUser } : post)),
     );
   };
 
-  // 카테고리 변경을 처리하는 함수
   const handleCategoryClick = (category: string) => {
     if (activeFilter === 'myposts' && category === 'Notice') {
       setActiveFilter('all');
@@ -79,18 +89,17 @@ const Board: React.FC = () => {
     navigate(`/board?category=${category}&filter=${activeFilter}`);
   };
 
-  // 필터 변경을 처리하는 함수
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
     navigate(`/board?category=${activeCategory}&filter=${filter}`);
   };
 
   const handlePostClick = (postId: number) => {
-    navigate(`/board/post/${postId}`); // postId를 URL로 전달하여 페이지를 이동합니다.
+    navigate(`/board/post/${postId}`);
   };
 
   const handleBackToList = () => {
-    navigate(`/board?category=${activeCategory}&filter=${activeFilter}`); // 상세보기에서 목록으로 돌아가기
+    navigate(`/board?category=${activeCategory}&filter=${activeFilter}`);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
