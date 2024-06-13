@@ -38,43 +38,21 @@ import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import TextEditorToolbar from '../../components/board/TextEditorToolbar';
 import CustomAlert from '../../components/utils/CustomAlert';
+import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
 
 const { hasCommandModifier } = KeyBindingUtil;
 
-// 서버 주소 상수
-const BASE_URL = 'http://your-server-address.com';
-
 const styleMap = {
-  RED: {
-    color: 'red',
-  },
-  ORANGE: {
-    color: 'orange',
-  },
-  YELLOW: {
-    color: 'yellow',
-  },
-  GREEN: {
-    color: 'green',
-  },
-  BLUE: {
-    color: 'blue',
-  },
-  INDIGO: {
-    color: 'indigo',
-  },
-  VIOLET: {
-    color: 'violet',
-  },
-  BLACK: {
-    color: 'black',
-  },
-  WHITE: {
-    color: 'white',
-  },
-  BACKGROUND_YELLOW: {
-    backgroundColor: 'yellow',
-  },
+  RED: { color: 'red' },
+  ORANGE: { color: 'orange' },
+  YELLOW: { color: 'yellow' },
+  GREEN: { color: 'green' },
+  BLUE: { color: 'blue' },
+  INDIGO: { color: 'indigo' },
+  VIOLET: { color: 'violet' },
+  BLACK: { color: 'black' },
+  WHITE: { color: 'white' },
+  BACKGROUND_YELLOW: { backgroundColor: 'yellow' },
 };
 
 // 링크 엔티티를 찾는 전략을 정의합니다.
@@ -211,24 +189,29 @@ const CreateBoard: React.FC = () => {
     const contentState = editorState.getCurrentContent();
     const contentRaw = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
     const formData = new FormData();
-    formData.append('dto', JSON.stringify({ title, content: contentRaw, category }));
+    formData.append(
+      'dto',
+      new Blob([JSON.stringify({ title, content: contentRaw, category })], { type: 'application/json' }),
+    );
 
     images.forEach(file => {
       formData.append('media', file);
     });
 
     try {
-      const response = await fetch(`${BASE_URL}/api/boards`, {
-        method: 'POST',
-        body: formData,
+      const response = await API_BASE_URL.post('/boards', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      if (response.ok) {
+      if (response.status === 202) {
         console.log('게시물 작성 성공');
         console.log('보낸 데이터:', { title, content: contentRaw, category, images });
         navigate('/board');
       } else {
         console.error('게시물 작성 실패');
+        console.log('응답 상태 코드:', response.status);
         console.log('보낸 데이터:', { title, content: contentRaw, category, images });
       }
     } catch (error) {
