@@ -107,7 +107,8 @@ export default function MyPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await RecentProject();
+        const response = await RecentProject();
+        console.log('호출 성공', response);
         const userProfileData = await FetchMyPage();
         setUserProfile(userProfileData);
       } catch (error) {
