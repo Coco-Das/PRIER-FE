@@ -7,7 +7,7 @@ import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import { styled } from 'styled-components';
 import { useAllProjectStore } from '../../states/user/UserProjectStore';
-import { FetchAllProject } from '../../services/MainPageApi';
+import { FetchAllProject, FetchLatestProject } from '../../services/MainPageApi';
 
 export default function ProjectPreview() {
   const { content, setProjects } = useAllProjectStore();
@@ -23,6 +23,7 @@ export default function ProjectPreview() {
     const fetchProjects = async () => {
       try {
         await FetchAllProject(0, 0);
+        //await FetchLatestProject();
       } catch (error) {
         console.error('프로젝트 데이터 가져오기 실패:', error);
       }
