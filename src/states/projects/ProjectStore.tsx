@@ -1,7 +1,11 @@
-import React from 'react';
+import { create } from 'zustand';
 
-function ProjectStore() {
-  return <div></div>;
+interface ProjectState {
+  projectId: string | null;
+  setProjectId: (id: string) => void;
 }
 
-export default ProjectStore;
+export const useProjectStore = create<ProjectState>(set => ({
+  projectId: null,
+  setProjectId: id => set({ projectId: id }),
+}));
