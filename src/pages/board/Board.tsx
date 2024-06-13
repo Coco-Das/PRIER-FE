@@ -1,24 +1,34 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Container, NoPostsMessage } from './BoardStyles';
-import { posts as initialPosts, Post } from '../../states/board/BoardStore';
+import { posts as initialPosts, BoardPost } from '../../states/board/BoardStore';
 import PaginationComponent from '../../components/board/PaginationComponent';
 import PostSkeleton from '../../components/board/PostSkeleton';
 import NavigationBar from '../../components/board/NavigationBar';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
 import PostDetailSkeleton from '../../components/board/PostDetailSkeleton';
+import usePagination from '../../hooks/UsePagination';
 
 const Board: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const location = useLocation();
-  const [posts, setPosts] = useState<Post[]>([]);
-  const [filteredPosts, setFilteredPosts] = useState<Post[]>([]);
+  const [posts, setPosts] = useState<BoardPost[]>([]);
+  const [filteredPosts, setFilteredPosts] = useState<BoardPost[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('ITNews');
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const navigate = useNavigate();
+
+  const POSTS_PER_PAGE = 3;
+  const {
+    currentPage,
+    paginatedData: paginatedPosts,
+    totalPageCount,
+    handlePageChange,
+    setPage,
+  } = usePagination(filteredPosts, POSTS_PER_PAGE);
 
   useEffect(() => {
     setLoading(true);
@@ -49,6 +59,7 @@ const Board: React.FC = () => {
       }
 
       setFilteredPosts(updatedPosts);
+      setPage(1);
     }
   }, [posts, activeCategory, activeFilter, searchTerm, postId]);
 
@@ -113,19 +124,17 @@ const Board: React.FC = () => {
           <PostSkeleton />
         </>
       ) : postId ? (
-        loading ? (
-          <PostDetailSkeleton />
-        ) : (
-          <PostDetail postId={Number(postId)} onBackToList={handleBackToList} toggleLike={toggleLike} posts={posts} />
-        )
+        <PostDetail postId={Number(postId)} onBackToList={handleBackToList} toggleLike={toggleLike} posts={posts} />
       ) : filteredPosts.length > 0 ? (
-        <PostList posts={filteredPosts} onPostClick={handlePostClick} toggleLike={toggleLike} />
+        <PostList posts={paginatedPosts} onPostClick={handlePostClick} toggleLike={toggleLike} />
       ) : searchTerm ? (
         <NoPostsMessage>{searchTerm} (이)가 포함된 게시물이 없습니다.</NoPostsMessage>
       ) : (
         <NoPostsMessage>해당 게시물이 없습니다.</NoPostsMessage>
       )}
-      {!postId && <PaginationComponent />}
+      {!postId && filteredPosts.length > POSTS_PER_PAGE && (
+        <PaginationComponent count={totalPageCount} page={currentPage} onChange={handlePageChange} />
+      )}
     </Container>
   );
 };

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { useCallback } from 'react';
 import { useUserStore } from '../states/user/UserStore';
 import { API_BASE_URL, KAKAO_ACCESS_TOKEN } from '../const/TokenApi';
+import { RecentProjectStore } from '../states/user/UserProjectStore';
 
 export async function FetchMyPage() {
   try {
@@ -190,3 +191,14 @@ export const SendQuest = async (sequence: string) => {
   }
   return false;
 };
+
+export async function RecentProject() {
+  try {
+    const response = await API_BASE_URL.get('/projects/my-recent-project');
+    console.log('최근 프로젝트 요청 성공', response.data);
+    RecentProjectStore.getState().setProjects(response.data);
+  } catch (error) {
+    console.error('최근 프로젝트 요청 실패', error);
+    throw error;
+  }
+}

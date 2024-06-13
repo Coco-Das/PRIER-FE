@@ -280,6 +280,8 @@ export const CreateTest = () => {
       // console.log('JSON Data:', jsonData);
       // console.log(startDate, endDate);
       navigate(`/responsetest/${projectId}`);
+      console.log(response.data);
+      // navigator('/')
     } catch (error) {
       console.error('에러:', error);
       console.log('JSON Data:', jsonData);

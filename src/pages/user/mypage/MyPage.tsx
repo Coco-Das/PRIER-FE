@@ -45,6 +45,7 @@ import {
   EditNotion,
   FetchLogout,
   FetchMyPage,
+  RecentProject,
   SendQuest,
 } from '../../../services/UserApi';
 import { useUserStore } from '../../../states/user/UserStore';
@@ -57,6 +58,8 @@ import AccountEdit from '../../../components/user/AccountEdit';
 import AIReport from '../../../components/utils/AIReport';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material';
+import QuestSuccess from '../../../components/user/QuestSuccess';
+import { RecentProjectStore } from '../../../states/user/UserProjectStore';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -74,6 +77,7 @@ export default function MyPage() {
   const navigate = useNavigate();
   const userProfile = useUserStore(state => state.userProfile);
   const { setUserProfile } = useUserStore();
+  const LatestProject = RecentProjectStore();
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [showEditNameAlert, setShowEditNameAlert] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -98,10 +102,13 @@ export default function MyPage() {
   const [isEditingIntro, setIsEditingIntro] = useState(false);
   const [newIntro, setNewIntro] = useState<string>('');
   const UseFetchLogout = FetchLogout();
+  const [showSuccess, setShowSuccess] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
+        const response = await RecentProject();
+        console.log('호출 성공', response);
         const userProfileData = await FetchMyPage();
         setUserProfile(userProfileData);
       } catch (error) {
@@ -211,6 +218,7 @@ export default function MyPage() {
     try {
       await EditGithub(newGithub);
       setIsEditingGithub(false);
+      setShowEditGithubAlert(false);
     } catch (error) {
       alert('깃허브 주소 수정 실패');
     }
@@ -234,6 +242,7 @@ export default function MyPage() {
     try {
       await EditFigma(newFigma);
       setIsEditingFigma(false);
+      setShowEditFigmaAlert(false);
     } catch (error) {
       alert('피그마 주소 수정 실패');
     }
@@ -257,6 +266,7 @@ export default function MyPage() {
     try {
       await EditNotion(newNotion);
       setIsEditingNotion(false);
+      setShowEditNotionAlert(false);
     } catch (error) {
       alert('노션 주소 수정 실패');
     }
@@ -308,10 +318,13 @@ export default function MyPage() {
   //퀘스트
   const QuestClick = async (sequence: string) => {
     const success = await SendQuest(sequence);
-
+    setShowSuccess(true);
     if (success) {
       useUserStore.getState().setQuest(String(sequence));
     }
+  };
+  const closeSuccessMessage = () => {
+    setShowSuccess(false);
   };
 
   return (
@@ -456,7 +469,6 @@ export default function MyPage() {
                 ) : (
                   <AccountLink href={userProfile.notion} target="_blank">
                     <AccountIcon src={NotionIcon}></AccountIcon>
-                    Notion
                   </AccountLink>
                 )}
               </div>
@@ -515,6 +527,7 @@ export default function MyPage() {
               </LightTooltip>
             </StepsContainer>
           </QuestContainer>
+          {showSuccess && <QuestSuccess onClose={closeSuccessMessage} />}
         </div>
       </div>
       <div className="flex justify-between mt-5 w-full">
@@ -527,20 +540,20 @@ export default function MyPage() {
           </div>
           <div className="flex ">
             <div className="flex-col">
-              <Link to="/createtest">
+              <Link to={`/createtest/${LatestProject.projectId}`}>
                 <LinkProject>
                   <div className="flex items-center gap-3">
                     <TeamProfile />
-                    <p className="text-lg">COCODAS</p>
+                    <p className="text-lg">{LatestProject.teamName}</p>
                   </div>
-                  <p className="text-gray-600 text-center mt-2">웹 IDE 프로젝트</p>
+                  <p className="text-gray-600 text-center mt-2">{LatestProject.title}</p>
                 </LinkProject>
               </Link>
               <FeedbackContainer>
                 <Link to="/feedback">
-                  <TitleText>제출된 피드백</TitleText>
-                  <UniqueText>34</UniqueText>
-                  <DetailText>+ {} 34개의 피드백이 추가로 제출되었습니다.</DetailText>
+                  <TitleText className="mb-4">제출된 피드백</TitleText>
+                  <UniqueText className="mb-4">{LatestProject.feedbackAmount}</UniqueText>
+                  <DetailText>{LatestProject.feedbackAmount}개의 피드백이 제출되었습니다.</DetailText>
                   <LinkText className="text-end">모아보기 &gt;</LinkText>
                 </Link>
               </FeedbackContainer>
@@ -549,7 +562,7 @@ export default function MyPage() {
               <TitleText>통계</TitleText>
               <UniqueText>평점</UniqueText>
               <UniqueText>{userProfile.statistic} % </UniqueText>
-              <DetailText>평점 4의 별점</DetailText>
+              <DetailText>평점 {LatestProject.score}의 별점</DetailText>
               <MypageChartIcon></MypageChartIcon>
             </StaticContainer>
             <AIReportContainer>
