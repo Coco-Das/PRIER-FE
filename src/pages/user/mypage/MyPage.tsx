@@ -29,6 +29,7 @@ import {
   AccountIcon,
   EditAccountText,
   AIBestText,
+  EmptyContainer,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
@@ -45,6 +46,7 @@ import {
   EditNotion,
   FetchLogout,
   FetchMyPage,
+  FetchMyReview,
   RecentProject,
   SendQuest,
 } from '../../../services/UserApi';
@@ -108,7 +110,9 @@ export default function MyPage() {
     const fetchData = async () => {
       try {
         const response = await RecentProject();
-        console.log('호출 성공', response);
+        console.log('최근 프로젝트 호출 성공', response);
+        const reviews = await FetchMyReview();
+        console.log('리뷰 호출 성공', reviews);
         const userProfileData = await FetchMyPage();
         setUserProfile(userProfileData);
       } catch (error) {
@@ -328,7 +332,7 @@ export default function MyPage() {
   };
 
   return (
-    <div className="flex-col" style={{ margin: '1% 7% 0 7%' }}>
+    <div className="flex-col overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
       {showLogoutAlert && (
         <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
       )}
@@ -376,7 +380,7 @@ export default function MyPage() {
         <CustomAlert message="한 줄 소개를 수정 하시겠습니까?" onConfirm={saveEditIntro} onCancel={cancleEditIntro} />
       )}
 
-      <div className="flex w-full h-full">
+      <div className="flex w-full h-[40%] mb-5">
         <ProfileContainer>
           <StyledUserIcon></StyledUserIcon>
           <div className="flex-col mt-3 w-full">
@@ -469,6 +473,7 @@ export default function MyPage() {
                 ) : (
                   <AccountLink href={userProfile.notion} target="_blank">
                     <AccountIcon src={NotionIcon}></AccountIcon>
+                    Notion
                   </AccountLink>
                 )}
               </div>
@@ -484,7 +489,7 @@ export default function MyPage() {
             </ProfileAccountContainer>
           </div>
         </ProfileContainer>
-        <div className="flex-col" style={{ width: '50%' }}>
+        <div className="flex-col w-[50%]">
           {isEditingIntro ? (
             <IntroduceContainer>
               <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
@@ -530,71 +535,69 @@ export default function MyPage() {
           {showSuccess && <QuestSuccess onClose={closeSuccessMessage} />}
         </div>
       </div>
-      <div className="flex justify-between mt-5 w-full">
+      <div className="flex w-screen h-[60%]">
         <ProjectContainer>
-          <div className="flex items-baseline justify-between">
-            <Title>진행 중인 프로젝트</Title>
-            <Link to="/testlist">
-              <LinkText>전체 프로젝트 &gt;</LinkText>
-            </Link>
-          </div>
-          <div className="flex ">
-            <div className="flex-col">
-              <Link to={`/createtest/${LatestProject.projectId}`}>
-                <LinkProject>
-                  <div className="flex items-center gap-3">
-                    <TeamProfile />
-                    <p className="text-lg">{LatestProject.teamName}</p>
-                  </div>
-                  <p className="text-gray-600 text-center mt-2">{LatestProject.title}</p>
-                </LinkProject>
-              </Link>
-              <FeedbackContainer>
-                <Link to="/feedback">
-                  <TitleText className="mb-4">제출된 피드백</TitleText>
-                  <UniqueText className="mb-4">{LatestProject.feedbackAmount}</UniqueText>
-                  <DetailText>{LatestProject.feedbackAmount}개의 피드백이 제출되었습니다.</DetailText>
-                  <LinkText className="text-end">모아보기 &gt;</LinkText>
+          <Title>진행 중인 프로젝트</Title>
+          {LatestProject.projectId !== 0 ? (
+            <div className="flex w-full h-full">
+              <div className="flex-col w-[30%] h-full">
+                <Link to={`/createtest/${LatestProject.projectId}`}>
+                  <LinkProject>
+                    <div className="flex items-center gap-3">
+                      <TeamProfile />
+                      <p className="text-lg">{LatestProject.teamName}</p>
+                    </div>
+                    <p className="text-gray-600 text-center mt-2">{LatestProject.title}</p>
+                  </LinkProject>
                 </Link>
-              </FeedbackContainer>
+                <FeedbackContainer>
+                  <Link to="/feedback">
+                    <TitleText className="mb-4">제출된 피드백</TitleText>
+                    <UniqueText className="mb-4">{LatestProject.feedbackAmount}</UniqueText>
+                    <DetailText>{LatestProject.feedbackAmount}개의 피드백이 제출되었습니다.</DetailText>
+                    <LinkText className="text-end">모아보기 &gt;</LinkText>
+                  </Link>
+                </FeedbackContainer>
+              </div>
+              <StaticContainer>
+                <TitleText>통계</TitleText>
+                <UniqueText>평점</UniqueText>
+                <UniqueText>{userProfile.statistic} % </UniqueText>
+                <DetailText>평점 {LatestProject.score}의 별점</DetailText>
+                <MypageChartIcon></MypageChartIcon>
+              </StaticContainer>
+              <AIReportContainer>
+                {userProfile.AIReport && userProfile.AIReport.length > 0 ? (
+                  <>
+                    <div className="flex-col items-start w-full">
+                      <span className="flex items-center">
+                        <TitleText>AI 분석 Report</TitleText>
+                        <StyledGraphIcon></StyledGraphIcon>
+                      </span>
+                      <AIBestText>&quot; {userProfile.AIReport[0]} &quot;</AIBestText>
+                      <LinkText>&quot; {userProfile.AIReport[0]} &quot; 라는 단어가 가장 많이 응답되었습니다.</LinkText>
+                    </div>
+                    <AIReport />
+                  </>
+                ) : (
+                  <></>
+                )}
+              </AIReportContainer>
             </div>
-            <StaticContainer>
-              <TitleText>통계</TitleText>
-              <UniqueText>평점</UniqueText>
-              <UniqueText>{userProfile.statistic} % </UniqueText>
-              <DetailText>평점 {LatestProject.score}의 별점</DetailText>
-              <MypageChartIcon></MypageChartIcon>
-            </StaticContainer>
-            <AIReportContainer>
-              {userProfile.AIReport && userProfile.AIReport.length > 0 ? (
-                <>
-                  <div className="flex-col items-start w-full">
-                    <span className="flex items-center">
-                      <TitleText>AI 분석 Report</TitleText>
-                      <StyledGraphIcon></StyledGraphIcon>
-                    </span>
-                    <AIBestText>&quot; {userProfile.AIReport[0]} &quot;</AIBestText>
-                    <LinkText>&quot; {userProfile.AIReport[0]} &quot; 라는 단어가 가장 많이 응답되었습니다.</LinkText>
-                  </div>
-                  <AIReport />
-                </>
-              ) : (
-                <>
-                  <div className="flex gap-4 items-start w-full">
-                    <TitleText>AI 분석 Report</TitleText>
-                    <StyledGraphIcon></StyledGraphIcon>
-                  </div>
-                  <AIBestText>아직 생성한 테스트가 없습니다.</AIBestText>
-                </>
-              )}
-            </AIReportContainer>
-          </div>
+          ) : (
+            <Link to="/createtest">
+              <EmptyContainer>
+                <p>생성한 테스트가 없습니다.</p>
+                <p className="text-end hover:text-[#315af1] mt-[5%]">테스트 생성하기 &gt;</p>
+              </EmptyContainer>
+            </Link>
+          )}
         </ProjectContainer>
         <ReviewWrapper>
           <Title>{userProfile.nickname} 님의 리뷰</Title>
-          <ul>
+          <span className="scroll-m-0 overflow-y-auto">
             <MyReview />
-          </ul>
+          </span>
         </ReviewWrapper>
       </div>
     </div>

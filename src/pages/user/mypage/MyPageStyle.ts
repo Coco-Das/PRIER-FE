@@ -7,8 +7,7 @@ import { ReactComponent as GraphIcon } from '../../../assets/Graph.svg';
 export const ProfileContainer = styled.div`
   display: flex;
   justify-content: flex-start;
-  width: 650px;
-  height: 300px;
+  width: 50%;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   padding: 10px;
@@ -70,23 +69,21 @@ export const AccountIcon = styled.img`
 `;
 //자기소개
 export const IntroduceContainer = styled.div`
-  width: 650px;
   height: 40%;
   max-height: 40%;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin-bottom: 15px;
-  margin-left: 15px;
+  margin-left: 20px;
   padding: 20px;
   background-color: #e6f3ff;
 `;
 //퀘스트
 export const QuestContainer = styled.div`
-  width: 100%;
   height: 54%;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
-  margin-left: 15px;
+  margin-left: 20px;
   padding: 20px;
 `;
 export const StepsContainer = styled.div`
@@ -128,49 +125,48 @@ export const StepLine = styled.div`
 export const ProjectContainer = styled.div`
   display: flex;
   flex-direction: column;
-  width: 75%;
-  height: 50%;
+  width: 65%;
+  height: 100%;
   margin-right: 20px;
+  box-sizing: border-box;
 `;
 //최근 프로젝트 링크
 export const LinkProject = styled.div`
-  width: 260px;
-  max-width: 260px;
-  height: 28%;
-  border: none;
+  height: 7rem;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   background-color: white;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: 2px 6px 10px rgba(0, 0, 0, 0.1);
   padding: 10px;
   margin-bottom: 20px;
   margin-right: 20px;
+  box-sizing: border-box;
 `;
 //피드백 수
 export const FeedbackContainer = styled.div`
+  height: 14.5rem;
   display: flex;
   flex-direction: column;
   background-color: #e8e0f1;
-  height: 15rem;
-  width: 260px;
-  max-width: 260px;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   padding: 20px;
   margin-right: 20px;
+  box-sizing: border-box;
 `;
 //통계
 export const StaticContainer = styled.div`
   background-color: #f3f5fb;
   display: flex;
   flex-direction: column;
-  width: 320px;
+  width: 35%;
   height: 23rem;
-  max-width: 320px;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 15px;
   padding: 20px;
   margin-right: 20px;
   cursor: default;
+  box-sizing: border-box;
 `;
 
 export const AIReportContainer = styled.div`
@@ -178,13 +174,13 @@ export const AIReportContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 23rem;
-  max-width: 23rem;
+  width: 40%;
   height: 23rem;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 15px;
-  padding: 20px;
+  padding: 10px 20px;
   cursor: default;
+  box-sizing: border-box;
 `;
 export const AIBestText = styled.h1`
   color: #315af1;
@@ -195,8 +191,9 @@ export const ReviewWrapper = styled.div`
   cursor: defualt;
   display: flex;
   flex-direction: column;
-  width: 25%;
-  max-width: 25%;
+  width: 30%;
+  height: 100%;
+  box-sizing: border-box;
 `;
 export const TitleText = styled.h2`
   font-weight: 700;
@@ -214,8 +211,19 @@ export const MypageChartIcon = styled(ChartIcon)`
   width: 100px;
   height: 200px;
   transform: scaleX(-1);
+  align-self: flex-end;
 `;
 export const StyledGraphIcon = styled(GraphIcon)`
   width: 45px;
   height: 50px;
+`;
+
+export const EmptyContainer = styled.div`
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px;
+  background-color: white;
+  width: 22rem;
+  height: 9rem;
+  padding: 20px;
+  box-sizing: border-box;
 `;
