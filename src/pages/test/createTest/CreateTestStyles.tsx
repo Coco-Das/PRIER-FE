@@ -7,7 +7,6 @@ export const CreateWrapper = styled.div`
   width: 100%;
   display: flex;
   overflow-y: auto;
-  overflow-x: hidden;
   flex-direction: column;
   padding: 0px 30px 0px 30px;
 `;

@@ -15,25 +15,36 @@ import {
   Tag,
   WhiteDiv,
   BlueInputDiv,
+  ImageWrapper,
+  StyledImg,
 } from './ResponseTestStyles';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
 import { Link } from 'react-router-dom';
+import StarRating from '../../../components/utils/StarRating';
 
 interface Tag {
   tagName: string;
   color: string;
 }
+interface Media {
+  id: number;
+  main: boolean;
+  mediaType: string;
+  metadata: string;
+  orderIndex: number;
+  url: string;
+}
 
 export const ResponseTest = () => {
-  const { projectId } = useParams<{ projectId: string }>(); // URL 경로에서 projectId 추출
+  const { projectId } = useParams<{ projectId: string }>();
   const setProjectId = useProjectStore(state => state.setProjectId);
   // const [projectData, setProjectData] = useState(null);
   const [mainImageUrl, setMainImageUrl] = useState<string | null>(null);
   const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>([]);
-  const mainFileInputRef = useRef<HTMLInputElement>(null);
-  const additionalFileInputRef = useRef<HTMLInputElement>(null);
+  // const mainFileInputRef = useRef<HTMLInputElement>(null);
+  // const additionalFileInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<Tag[]>([]);
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
@@ -48,6 +59,8 @@ export const ResponseTest = () => {
   const [teamDescription, setTeamDescription] = useState('');
   const [teamMate, setTeamMate] = useState('');
   const [teamName, setTeamName] = useState('');
+  const [score, setScore] = useState<number>(0);
+
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -66,7 +79,7 @@ export const ResponseTest = () => {
     try {
       const response = await API_BASE_URL.get(`/projects/${projectId}`);
       const Data = response.data;
-      console.log(Data);
+
       setTeamName(Data.teamName);
       setTitle(Data.title);
       setIntroduce(Data.introduce);
@@ -78,6 +91,12 @@ export const ResponseTest = () => {
       setTags(Data.tags.map((tag: { tagName: string }) => ({ tagName: tag.tagName, color: getRandomColor() })));
       setStatus(Data.status);
       setLink(Data.link);
+      setScore(Data.score);
+
+      const mainMedia = Data.media.find((item: Media) => item.main);
+      setMainImageUrl(mainMedia ? mainMedia.url : null);
+      const addMedia = Data.media.filter((item: Media) => !item.main);
+      setAdditionalImageUrls(addMedia.map((item: Media) => item.url));
     } catch (error) {
       console.error('에러:', error);
     }
@@ -124,12 +143,21 @@ export const ResponseTest = () => {
             <span className="mt-3" style={{ fontSize: '16px' }}>
               {goal}
             </span>
+            <ImageWrapper className="mt-5">
+              {mainImageUrl && <StyledImg src={mainImageUrl} alt="메인 이미지" />}
+
+              {additionalImageUrls.map((url, index) => (
+                <>
+                  <StyledImg key={index} src={url} alt={`추가 이미지 ${index + 1}`} />
+                </>
+              ))}
+            </ImageWrapper>
           </ProjectTextArea>
         </ProjectDiv>
         <ProjectIntro>
           <TagWrapper>
             {tags.map((tag, index) => (
-              <Tag key={index} bgColor={tag.color}>
+              <Tag key={index} $bgColor={tag.color}>
                 {tag.tagName}
               </Tag>
             ))}
@@ -164,10 +192,12 @@ export const ResponseTest = () => {
           )}
           <WhiteDiv className="mt-2">
             <span className="font-bold">댓글 달기</span>
+            <span style={{ color: '#828282' }}>한줄 평</span>
+            <StarRating score={score} />
           </WhiteDiv>
           <CustomButton
             style={{ height: '6%', marginLeft: 'auto', width: '30%' }}
-            onClick={() => navigate('/responsequestions')}
+            onClick={() => navigate(`/responsequestions/${projectId}`)}
           >
             테스트폼 참여하기
           </CustomButton>
