@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled, { css } from 'styled-components';
 import PropTypes from 'prop-types';
 
@@ -71,11 +71,19 @@ const DropDownButton = styled.button`
 
 interface DropDownContainerProps {
   onSelect: (item: string) => void;
+  select?: string;
 }
 
-export const DropDownContainer: React.FC<DropDownContainerProps> = ({ onSelect }) => {
+export const DropDownContainer: React.FC<DropDownContainerProps> = ({ onSelect, select }) => {
   const [isDropdownView, setDropdownView] = useState(false);
-  const [selectedItem, setSelectedItem] = useState('선택');
+
+  const [selectedItem, setSelectedItem] = useState(select);
+
+  useEffect(() => {
+    if (select) {
+      setSelectedItem(select);
+    }
+  }, [select]);
 
   const handleClickContainer = () => {
     setDropdownView(!isDropdownView);
@@ -105,4 +113,5 @@ export const DropDownContainer: React.FC<DropDownContainerProps> = ({ onSelect }
 
 DropDownContainer.propTypes = {
   onSelect: PropTypes.func.isRequired,
+  select: PropTypes.string,
 };
