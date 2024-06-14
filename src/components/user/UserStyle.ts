@@ -1,12 +1,53 @@
 import { css, styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
-
 export const ProjectContainer = styled.div`
   border: none;
   border-radius: 15px;
   padding: 0.5rem;
   width: max-content;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
+`;
+export const LatestProjectContainer = styled.div`
+  position: relative;
+  width: 22%;
+  height: 30%;
+  background-color: #ffffff;
+  display: flex;
+  flex-direction: column;
+  justify-content: end;
+  padding: 12px;
+  gap: 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: -5px;
+    margin: auto;
+    width: 21%;
+    height: 31%;
+    border-radius: 10px;
+    background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
+    z-index: -10;
+    pointer-events: none;
+    transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  }
+  &::after {
+    content: '';
+    z-index: -1;
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100%);
+    transform: translate3d(0, 0, 0) scale(0.95);
+    filter: blur(20px);
+  }
+  &:hover::after {
+    filter: blur(30px);
+  }
+  &:hover::before {
+    transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
+  }
 `;
 export const LinkText = styled.p`
   font-size: 15px;

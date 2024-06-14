@@ -17,7 +17,7 @@ import { FetchMyPage } from '../../services/UserApi';
 import { useUserStore } from '../../states/user/UserStore';
 import { CheckPoint } from '../../services/StoreApi';
 import { userPointStore } from '../../states/user/PointStore';
-
+import LatestProject from '../../components/user/LatestProject';
 export default function Main() {
   const [activeButton, setActiveButton] = useState('인기순');
   const userProfile = useUserStore(state => state.userProfile);
@@ -47,8 +47,8 @@ export default function Main() {
           <div className="flex flex-col" style={{ marginTop: '3%', marginLeft: '4%' }}>
             <PointText className="mt-2">반갑습니다 {userProfile.nickname} 님</PointText>
             <MainText>
-              새로운 아이디어를 시험해보고, 실제 사용자의 피드백으로 완성도를 높이세요. <br></br>
-              여기, 사용자와 함께 성장하는 첫 걸음을 내딛을 수 있는 공간입니다.
+              새로운 아이디어를 시험해보고, 실제 사용자의 피드백으로 완성도를 높이세요. <br />
+              사용자와 함께 성장하는 첫 걸음을 내딛을 수 있는 공간입니다.
             </MainText>
             <LinkButton>
               <Link to="/createtest">지금 바로 등록하기</Link>
@@ -57,7 +57,7 @@ export default function Main() {
         </GreetingContainer>
       </MainContainer>
       <Title>신규 프로젝트</Title>
-      <ProjectPreview />
+      <LatestProject />
       <Title>모든 프로젝트</Title>
       <div className="flex justify-between mb-2">
         <div className="flex gap-2">

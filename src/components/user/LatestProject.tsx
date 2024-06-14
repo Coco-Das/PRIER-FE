@@ -1,15 +1,15 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
-import { LinkText, ProjectContainer } from './UserStyle';
+import { LatestProjectContainer, LinkText, ProjectContainer } from './UserStyle';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import { styled } from 'styled-components';
 import { useAllProjectStore } from '../../states/user/UserProjectStore';
-import { FetchAllProject } from '../../services/MainPageApi';
+import { FetchLatestProject } from '../../services/MainPageApi';
 
-export default function ProjectPreview() {
+export default function LatestProject() {
   const { content, setProjects } = useAllProjectStore();
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
@@ -22,9 +22,9 @@ export default function ProjectPreview() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        await FetchAllProject(0, 0);
+        await FetchLatestProject();
       } catch (error) {
-        console.error('프로젝트 데이터 가져오기 실패:', error);
+        console.error('최근 프로젝트 데이터 가져오기 실패:', error);
       }
     };
 
@@ -33,7 +33,7 @@ export default function ProjectPreview() {
   return (
     <div>
       {content.map(project => (
-        <ProjectContainer key={project.projectId}>
+        <LatestProjectContainer key={project.projectId}>
           <div className="flex items-center mt-2 justify-between w-full">
             <div className="flex items-center">
               <TeamProfile />
@@ -65,7 +65,7 @@ export default function ProjectPreview() {
               </Link>
             </div>
           </div>
-        </ProjectContainer>
+        </LatestProjectContainer>
       ))}
     </div>
   );
