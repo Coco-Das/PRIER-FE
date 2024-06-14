@@ -61,14 +61,12 @@ interface MyReviewState {
   teamName: string;
   content: string;
   score: number;
-  setReview: (reviews: MyReviewState) => void;
 }
-
-export const MyReviewStore = create<MyReviewState>(set => ({
-  commentId: 0,
-  projectTitle: '',
-  teamName: '',
-  content: '',
-  score: 0,
-  setReview: reviews => set(reviews),
+interface ReviewsState {
+  reviews: MyReviewState[];
+  setReview: (reviews: MyReviewState[]) => void;
+}
+export const MyReviewStore = create<ReviewsState>(set => ({
+  reviews: [],
+  setReview: reviews => set({ reviews }),
 }));

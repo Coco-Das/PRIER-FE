@@ -207,7 +207,11 @@ export async function FetchMyReview() {
   try {
     const response = await API_BASE_URL.get('/projects/comment/my-comments');
     console.log('리뷰 요청 성공', response.data);
-    MyReviewStore.getState().setReview(response.data);
+    if (Array.isArray(response.data)) {
+      MyReviewStore.getState().setReview(response.data);
+    } else {
+      console.error('Unexpected response format:', response.data);
+    }
   } catch (error) {
     console.log('리뷰 요청 실패', error);
   }
