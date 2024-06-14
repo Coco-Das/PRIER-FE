@@ -14,7 +14,7 @@ interface PositionedMenuProps {
   postId: number;
 }
 
-const PositionedMenu: React.FC<PositionedMenuProps> = ({ postId }) => {
+const PostMenu: React.FC<PositionedMenuProps> = ({ postId }) => {
   const navigate = useNavigate();
 
   const handleEditClick = () => {
@@ -47,4 +47,4 @@ const PositionedMenu: React.FC<PositionedMenuProps> = ({ postId }) => {
   );
 };
 
-export default PositionedMenu;
+export default PostMenu;

@@ -20,7 +20,7 @@ import announcementAvatar from '../../assets/Announcement.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
 import useFormatDate from '../../hooks/UseFormatDate';
-import PositionedMenu from '../../components/board/PositionedMenu';
+import PositionedMenu from '../../components/board/PostMenu';
 import { useNavigate } from 'react-router-dom';
 
 interface PostListProps {

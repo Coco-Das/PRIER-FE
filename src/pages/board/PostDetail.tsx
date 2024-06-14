@@ -36,7 +36,8 @@ import announcementAvatar from '../../assets/Announcement.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
 import useFormatDate from '../../hooks/UseFormatDate';
-import PositionedMenu from '../../components/board/PositionedMenu';
+import PostMenu from '../../components/board/PostMenu';
+import CommentMenu from '../../components/board/CommentMenu';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../../components/utils/Loading';
 
@@ -53,6 +54,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
 
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const formatDate = useFormatDate();
   const navigate = useNavigate();
 
@@ -79,9 +81,23 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
 
   const handleCommentSubmit = () => {
     if (newComment.trim()) {
-      // 여기에 댓글 전송 로직을 추가하세요.
-      console.log('New comment submitted:', newComment);
+      if (editingCommentId !== null) {
+        // 여기에 댓글 수정 로직을 추가하세요.
+        console.log('Comment edited:', editingCommentId, newComment);
+        setEditingCommentId(null);
+      } else {
+        // 여기에 댓글 전송 로직을 추가하세요.
+        console.log('New comment submitted:', newComment);
+      }
       setNewComment('');
+    }
+  };
+
+  const handleEditComment = (commentId: number) => {
+    const comment = postComments.find(c => c.commentId === commentId);
+    if (comment) {
+      setNewComment(comment.content);
+      setEditingCommentId(commentId);
     }
   };
 
@@ -103,7 +119,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
             </AuthorContainer>
             {post.nickname === 1 && (
               <div className="ml-auto">
-                <PositionedMenu postId={post.postId} />
+                <PostMenu postId={post.postId} />
               </div>
             )}
           </UserContainer>
@@ -161,7 +177,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
                     </div>
                     {comment.memberId === 1 && (
                       <div>
-                        <PositionedMenu postId={comment.commentId} />
+                        <CommentMenu commentId={comment.commentId} onEditClick={handleEditComment} />
                       </div>
                     )}
                   </div>
@@ -173,7 +189,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
         )}
         <CommentInputContainer>
           <CommentInput type="text" value={newComment} onChange={handleCommentChange} placeholder="댓글 달기..." />
-          <CommentButton onClick={handleCommentSubmit}>게시</CommentButton>
+          <CommentButton onClick={handleCommentSubmit}>{editingCommentId !== null ? '수정' : '게시'}</CommentButton>
         </CommentInputContainer>
       </CommentsContainer>
     </PostDetailContainer>
