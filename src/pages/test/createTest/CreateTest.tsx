@@ -64,12 +64,12 @@ AutoResizeTextarea.propTypes = {
 
 interface Question {
   id: number;
-  type: 'subjective' | 'objective';
+  type: 'SUBJECTIVE' | 'OBJECTIVE';
   content: string;
   options?: string[]; // 객관식 질문의 선택지(고정)
 }
 interface Tag {
-  tag: string;
+  tagName: string;
   color: string;
 }
 
@@ -80,8 +80,8 @@ export const CreateTest = () => {
   const additionalFileInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
   const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, type: 'subjective', content: '' },
-    { id: 2, type: 'objective', content: '', options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] },
+    { id: 1, type: 'SUBJECTIVE', content: '' },
+    { id: 2, type: 'OBJECTIVE', content: '', options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] },
   ]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [tagInput, setTagInput] = useState<string>('');
@@ -106,7 +106,7 @@ export const CreateTest = () => {
   const addQuestion = () => {
     setQuestions(prevQuestions => [
       ...prevQuestions,
-      { id: prevQuestions.length + 1, type: 'subjective', content: '' },
+      { id: prevQuestions.length + 1, type: 'SUBJECTIVE', content: '' },
     ]);
   };
 
@@ -116,8 +116,8 @@ export const CreateTest = () => {
         question.id === id
           ? {
               ...question,
-              type: question.type === 'subjective' ? 'objective' : 'subjective',
-              options: question.type === 'subjective' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
+              type: question.type === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
+              options: question.type === 'SUBJECTIVE' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
               content: '',
             }
           : question,
@@ -173,7 +173,7 @@ export const CreateTest = () => {
     if (event.key === 'Enter' && tagInput.trim()) {
       event.preventDefault();
       if (tags.length < 2) {
-        setTags(prevTags => [...prevTags, { tag: tagInput.trim(), color: getRandomColor() }]);
+        setTags(prevTags => [...prevTags, { tagName: tagInput.trim(), color: getRandomColor() }]);
         setTagInput('');
       } else {
         setShowAlert(true);
@@ -233,7 +233,7 @@ export const CreateTest = () => {
     const formData = new FormData();
     const formattedStartDate = format(startDate ?? new Date(), 'yyyy-MM-dd');
     const formattedEndDate = format(endDate ?? new Date(), 'yyyy-MM-dd');
-    const tagContents = tags.map(tag => tag.tag);
+    const tagContents = tags.map(tag => tag.tagName);
 
     const replaceEmptyStringWithNull = (value: string) => (value.trim() === '' ? null : value.trim());
 
@@ -301,7 +301,7 @@ export const CreateTest = () => {
               className="mb-10 font-semibold"
               onChange={handleTitleChange}
               value={title}
-            ></input>
+            />
             <p>프로젝트 소개</p>
             <AutoResizeTextarea
               value={introduce}
@@ -349,9 +349,9 @@ export const CreateTest = () => {
           </TagDiv>
           {showAlert && <CustomAlert message="태그는 최대 2개까지 설정할 수 있습니다." showButtons={false} />}
           <TagWrapper>
-            {tags.map((tagIndex, index) => (
-              <Tag key={index} $bgColor={tagIndex.color}>
-                {tagIndex.tag}
+            {tags.map((tag, index) => (
+              <Tag key={index} $bgColor={tag.color}>
+                {tag.tagName}
                 <DeleteButton
                   style={{
                     top: '-3px',
@@ -435,105 +435,91 @@ export const CreateTest = () => {
             상세한 피드백을 위한 원하는 질문 폼을 작성해주세요
           </span>
         </div>
-        <div
-          style={{
-            padding: '0px 10px 20px 10px',
-            display: 'flex',
-            flexDirection: 'column',
-            width: '100%',
-            alignItems: 'center',
-          }}
-        >
-          {questions.map((question, index) => (
-            <QuestionDiv key={question.id} className="mt-4">
-              {question.type === 'subjective' ? (
-                <div>
-                  <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                    {index + 1}번 문항
-                    <input
-                      placeholder="질문을 입력하세요"
-                      style={{
-                        marginLeft: '20px',
-                        fontSize: '20px',
-                        outline: 'none',
-                        fontWeight: 'bold',
-                        width: '80%',
-                      }}
-                      value={question.content}
-                      onChange={e => handleQuestionContentChange(question.id, e.target.value)}
-                    />
-                    <div style={{ marginLeft: 'auto' }}>
-                      <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
-                    </div>
-                  </div>
-                  <AutoResizeTextarea
-                    placeholder="주관식 답변을 입력하세요..."
+        {questions.map((question, index) => (
+          <QuestionDiv key={question.id} className="mt-4">
+            {question.type === 'SUBJECTIVE' ? (
+              <div>
+                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                  {index + 1}번 문항
+                  <input
+                    placeholder="질문을 입력하세요"
                     style={{
-                      marginTop: '10px',
-                      marginLeft: '75px',
-                      overflowY: 'auto',
+                      marginLeft: '20px',
+                      fontSize: '20px',
+                      outline: 'none',
+                      fontWeight: 'bold',
                       width: '80%',
                     }}
-                    readOnly
+                    value={question.content}
+                    onChange={e => handleQuestionContentChange(question.id, e.target.value)}
                   />
-                  <div style={{ display: 'flex', justifyContent: 'right' }}>
-                    <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
+                  <div style={{ marginLeft: 'auto' }}>
+                    <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
                   </div>
                 </div>
-              ) : (
-                <div>
-                  <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                    {index + 1}번 문항
-                    <input
-                      placeholder="질문을 입력하세요"
-                      style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
-                      onChange={e => handleQuestionContentChange(question.id, e.target.value)}
-                      value={question.content}
-                    />
-                    <div style={{ marginLeft: 'auto' }}>
-                      <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
+                <AutoResizeTextarea
+                  placeholder="주관식 답변을 입력하세요..."
+                  style={{
+                    marginTop: '10px',
+                    marginLeft: '75px',
+                    overflowY: 'auto',
+                    width: '80%',
+                  }}
+                  readOnly
+                />
+                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                  {index + 1}번 문항
+                  <input
+                    placeholder="질문을 입력하세요"
+                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
+                    onChange={e => handleQuestionContentChange(question.id, e.target.value)}
+                    value={question.content}
+                  />
+                  <div style={{ marginLeft: 'auto' }}>
+                    <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
+                  </div>
+                </div>
+                <div
+                  style={{
+                    marginLeft: '75px',
+                    marginTop: '50px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '10rem',
+                    marginBottom: '40px',
+                    fontSize: '20px',
+                    width: '85%',
+                  }}
+                >
+                  {question.options?.map((option, i) => (
+                    <div key={i}>
+                      <label>
+                        <input type="radio" name={`question-${question.id}`} value={option} checked={false} readOnly />{' '}
+                        {option}
+                      </label>
                     </div>
-                  </div>
-                  <div
-                    style={{
-                      marginLeft: '75px',
-                      marginTop: '50px',
-                      display: 'flex',
-                      justifyContent: 'center',
-                      gap: '10rem',
-                      marginBottom: '40px',
-                      fontSize: '20px',
-                      width: '85%',
-                    }}
-                  >
-                    {question.options?.map((option, i) => (
-                      <div key={i}>
-                        <label>
-                          <input
-                            type="radio"
-                            name={`question-${question.id}`}
-                            value={option}
-                            checked={false}
-                            readOnly
-                          />{' '}
-                          {option}
-                        </label>
-                      </div>
-                    ))}
-                  </div>
-                  <div style={{ display: 'flex', justifyContent: 'right' }}>
-                    <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
-                  </div>
+                  ))}
                 </div>
-              )}
-            </QuestionDiv>
-          ))}
+                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
+                </div>
+              </div>
+            )}
+          </QuestionDiv>
+        ))}
+        <div style={{ display: 'flex', justifyContent: 'center' }}>
           <AddButton onClick={addQuestion}>질문 추가</AddButton>
-          <div style={{ width: '100%', display: 'flex' }}>
-            <CustomButton onClick={handleSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
-              제출하기
-            </CustomButton>
-          </div>
+        </div>
+        <div style={{ width: '100%', display: 'flex', marginBottom: '20px' }}>
+          <CustomButton onClick={handleSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
+            제출하기
+          </CustomButton>
         </div>
       </Question>
     </CreateWrapper>

@@ -119,7 +119,7 @@ export const ResponseTest = () => {
       case 'DEVELOPING':
         return '개발 중';
       case 'PLANNING':
-        return '기획 중';
+        return '기획';
       default:
         return status;
     }
@@ -133,9 +133,6 @@ export const ResponseTest = () => {
     } catch (error) {
       console.error('에러:', error);
     }
-  };
-  const handleCancle = () => {
-    setShowAlert(false);
   };
 
   return (
@@ -173,10 +170,16 @@ export const ResponseTest = () => {
               }}
             >
               <div style={{ display: 'flex', marginLeft: 'auto', gap: '15px' }}>
-                <EditButton />
+                <EditButton onClick={() => navigate(`/editproject/${projectId}`)} />
                 <DeleteButton onClick={() => setShowAlert(true)} />
                 {showAlert && (
-                  <CustomAlert message="삭제하시겠습니까?" onConfirm={handleDelete} onCancel={handleCancle} />
+                  <CustomAlert
+                    message="삭제하시겠습니까?"
+                    onConfirm={handleDelete}
+                    onCancel={() => {
+                      setShowAlert(false);
+                    }}
+                  />
                 )}
               </div>
             </div>
