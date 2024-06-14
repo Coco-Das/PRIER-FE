@@ -15,6 +15,7 @@ import ModifyBoard from '../pages/board/ModifyBoard';
 import Board from '../pages/board/Board';
 import { CreateTest } from '../pages/test/createTest/CreateTest';
 import { ResponseQuestion } from '../pages/test/responseTest/ResponseQuestion';
+import { Comment } from '../pages/test/comment/Comment';
 
 const router = createBrowserRouter([
   {
@@ -55,6 +56,10 @@ const router = createBrowserRouter([
       {
         path: '/responsequestions/:projectId',
         element: <ResponseQuestion />,
+      },
+      {
+        path: '/review/:projectId',
+        element: <Comment />,
       },
       {
         path: '/testlist',
