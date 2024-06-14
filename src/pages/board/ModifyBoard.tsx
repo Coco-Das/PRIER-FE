@@ -1,5 +1,5 @@
-import React, { useState, useRef, ChangeEvent } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect, useRef, ChangeEvent } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import {
   Editor,
   EditorState,
@@ -10,6 +10,7 @@ import {
   Modifier,
   DraftHandleValue,
   convertToRaw,
+  convertFromRaw,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import {
@@ -38,43 +39,21 @@ import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import TextEditorToolbar from '../../components/board/TextEditorToolbar';
 import CustomAlert from '../../components/utils/CustomAlert';
+import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
 
 const { hasCommandModifier } = KeyBindingUtil;
 
-// 서버 주소 상수
-const BASE_URL = 'http://52.79.227.237:8080';
-
 const styleMap = {
-  RED: {
-    color: 'red',
-  },
-  ORANGE: {
-    color: 'orange',
-  },
-  YELLOW: {
-    color: 'yellow',
-  },
-  GREEN: {
-    color: 'green',
-  },
-  BLUE: {
-    color: 'blue',
-  },
-  INDIGO: {
-    color: 'indigo',
-  },
-  VIOLET: {
-    color: 'violet',
-  },
-  BLACK: {
-    color: 'black',
-  },
-  WHITE: {
-    color: 'white',
-  },
-  BACKGROUND_YELLOW: {
-    backgroundColor: 'yellow',
-  },
+  RED: { color: 'red' },
+  ORANGE: { color: 'orange' },
+  YELLOW: { color: 'yellow' },
+  GREEN: { color: 'green' },
+  BLUE: { color: 'blue' },
+  INDIGO: { color: 'indigo' },
+  VIOLET: { color: 'violet' },
+  BLACK: { color: 'black' },
+  WHITE: { color: 'white' },
+  BACKGROUND_YELLOW: { backgroundColor: 'yellow' },
 };
 
 // 링크 엔티티를 찾는 전략을 정의합니다.
@@ -105,12 +84,31 @@ const decorator = new CompositeDecorator([
 
 const ModifyBoard: React.FC = () => {
   const navigate = useNavigate();
+  const { postId } = useParams();
   const [title, setTitle] = useState<string>(''); // 제목 상태 변수
   const [editorState, setEditorState] = useState(EditorState.createEmpty(decorator)); // 에디터 상태 변수
   const [category, setCategory] = useState<string>(''); // 카테고리 상태 변수
   const [showCreateBoardAlert, setShowCreateBoardAlert] = useState<boolean>(false); // 알림 표시 상태 변수
   const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 상태 변수
+  const [existingImages, setExistingImages] = useState<string[]>([]); // 기존 이미지 상태 변수 초기화
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
+
+  useEffect(() => {
+    const fetchPost = async () => {
+      try {
+        const response = await API_BASE_URL.get(`/posts/${postId}`);
+        const post = response.data;
+        setTitle(post.title);
+        setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(post.content)), decorator));
+        setCategory(post.category);
+        setExistingImages(post.images || []); // 초기 상태를 빈 배열로 설정
+      } catch (error) {
+        console.error('Error fetching post:', error);
+      }
+    };
+
+    fetchPost();
+  }, [postId]);
 
   // 에디터 변경 핸들러
   const handleEditorChange = (state: EditorState) => {
@@ -204,40 +202,50 @@ const ModifyBoard: React.FC = () => {
     setImages(images.filter((_, i) => i !== index));
   };
 
-  // 게시물 생성 확인 핸들러
+  const handleDeleteExistingImage = (index: number) => {
+    setExistingImages(existingImages.filter((_, i) => i !== index));
+  };
+
+  // 게시물 수정 확인 핸들러
   const confirmCreateBoard = async () => {
     setShowCreateBoardAlert(false);
 
     const contentState = editorState.getCurrentContent();
     const contentRaw = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
+    const contentString = JSON.stringify(contentRaw); // Raw 데이터를 문자열로 변환
     const formData = new FormData();
-    formData.append('dto', JSON.stringify({ title, content: contentRaw, category }));
+    formData.append(
+      'dto',
+      new Blob([JSON.stringify({ title, content: contentString, category })], { type: 'application/json' }),
+    );
 
     images.forEach(file => {
       formData.append('media', file);
     });
 
     try {
-      const response = await fetch(`${BASE_URL}/api/boards`, {
-        method: 'POST',
-        body: formData,
+      const response = await API_BASE_URL.put(`/posts/${postId}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
       });
 
-      if (response.ok) {
+      if (response.status === 200) {
         console.log('게시물 작성 성공');
-        console.log('보낸 데이터:', { title, content: contentRaw, category, images });
+        console.log('보낸 데이터:', { title, content: contentString, category, images });
         navigate('/board');
       } else {
         console.error('게시물 작성 실패');
-        console.log('보낸 데이터:', { title, content: contentRaw, category, images });
+        console.log('응답 상태 코드:', response.status);
+        console.log('보낸 데이터:', { title, content: contentString, category, images });
       }
     } catch (error) {
       console.error('에러:', error);
-      console.log('보낸 데이터:', { title, content: contentRaw, category, images });
+      console.log('보낸 데이터:', { title, content: contentString, category, images });
     }
   };
 
-  // 게시물 생성 취소 핸들러
+  // 게시물 수정 취소 핸들러
   const cancelCreateBoard = () => {
     setShowCreateBoardAlert(false);
   };
@@ -261,6 +269,7 @@ const ModifyBoard: React.FC = () => {
               }}
               className="ml-auto"
               onChange={(event, newValue) => setCategory(newValue as string)}
+              value={category}
             >
               <Option value="ITNEWS">IT 지식</Option>
               <Option value="DAILY">잡담/일상</Option>
@@ -307,6 +316,12 @@ const ModifyBoard: React.FC = () => {
             </div>
           </ContentContainer>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
+            {existingImages.map((image, index) => (
+              <ImageWrapper key={index}>
+                <StyledImg src={image} alt={`Existing image ${index}`} />
+                <DeleteButton onClick={() => handleDeleteExistingImage(index)}>×</DeleteButton>
+              </ImageWrapper>
+            ))}
             {images.map((image, index) => (
               <ImageWrapper key={index}>
                 <StyledImg src={URL.createObjectURL(image)} alt={`Uploaded image ${index}`} />
@@ -314,7 +329,7 @@ const ModifyBoard: React.FC = () => {
               </ImageWrapper>
             ))}
           </div>
-          <FileCount>업로드된 이미지 수: {images.length}</FileCount>
+          <FileCount>업로드된 이미지 수: {images.length + existingImages.length}</FileCount>
         </PostBox>
         <div>
           <Button

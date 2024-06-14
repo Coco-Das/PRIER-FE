@@ -196,7 +196,7 @@ export const BackgroundContainer = styled.div<{ isActive?: boolean }>`
 `;
 
 export const PostListPostBox = styled.div<{ category?: string }>`
-  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
+  background: ${props => (props.category === 'NOTICE' ? '#e1f9f0' : '#ffffff')};
   padding: 1vh;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   width: 100%;
@@ -210,7 +210,7 @@ export const PostListPostBox = styled.div<{ category?: string }>`
 `;
 // 기존 스타일 유지하면서 필요한 스타일 추가
 export const PostBox = styled.div<{ category?: string }>`
-  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
+  background: ${props => (props.category === 'NOTICE' ? '#e1f9f0' : '#ffffff')};
   border: none;
   padding: 1vh;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -231,7 +231,7 @@ export const UserContainer = styled.div`
 `;
 
 export const Avatar = styled.div<{ category?: string }>`
-  background: ${props => (props.category === 'Notice' ? '#4188fe' : '#f7f7f7')};
+  background: #f7f7f7;
   border-radius: 1000px;
   width: 50.58px;
   height: 50.58px;
@@ -347,7 +347,7 @@ export const PostContentContainer = styled(PostBox)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
+  background: ${props => (props.category === 'NOTICE' ? '#e1f9f0' : '#ffffff')};
 `;
 
 export const LikeBackContainer = styled.div`
@@ -398,4 +398,47 @@ export const CommentText = styled.div`
 export const CommentCreatedAt = styled(CreatedAt)`
   font-size: 12px;
   color: #828282;
+`;
+export const CommentInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+`;
+
+export const CommentInput = styled.input`
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+`;
+
+export const CommentButton = styled.button`
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+  background: #4188fe;
+  border-radius: 4px;
+  height: 40px;
+  display: flex;
+  padding: 0 10px;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #ffffff;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 5px;
+
+  &:hover {
+    background: #d1e0fc;
+    color: #4188fe;
+  }
 `;

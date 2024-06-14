@@ -9,16 +9,14 @@ import PostList from './PostList';
 import PostDetail from './PostDetail';
 import PostDetailSkeleton from '../../components/board/PostDetailSkeleton';
 import usePagination from '../../hooks/UsePagination';
-
-// 서버 주소 상수
-const BASE_URL = 'http://your-server-address.com';
+import { API_BASE_URL } from '../../const/TokenApi';
 
 const Board: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const location = useLocation();
   const [posts, setPosts] = useState<BoardPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BoardPost[]>([]);
-  const [activeCategory, setActiveCategory] = useState<string>('ITNews');
+  const [activeCategory, setActiveCategory] = useState<string>('ITNEWS');
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
@@ -37,15 +35,14 @@ const Board: React.FC = () => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
-        const response = await fetch(`${BASE_URL}/api/boards`); // 서버 주소 사용
-        const data = await response.json();
-        const sortedPosts = data.sort(
+        const response = await API_BASE_URL.get('/posts');
+        const sortedPosts = response.data.sort(
           (a: BoardPost, b: BoardPost) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
         setPosts(sortedPosts);
-        setLoading(false);
       } catch (error) {
-        console.error('Failed to fetch posts:', error);
+        console.error('Error fetching posts:', error);
+      } finally {
         setLoading(false);
       }
     };
@@ -61,7 +58,7 @@ const Board: React.FC = () => {
       } else if (activeFilter === 'likes') {
         updatedPosts = posts.filter(post => post.category === activeCategory && post.likedByUser);
       } else if (activeFilter === 'myposts') {
-        updatedPosts = posts.filter(post => post.category === activeCategory && post.nickname === 1);
+        updatedPosts = posts.filter(post => post.category === activeCategory && post.nickname === '이인지');
       }
 
       if (searchTerm) {
@@ -73,22 +70,25 @@ const Board: React.FC = () => {
       setFilteredPosts(updatedPosts);
       setPage(1);
     }
-  }, [posts, activeCategory, activeFilter, searchTerm, postId, setPage]);
+  }, [posts, activeCategory, activeFilter, searchTerm, postId]);
 
+  // 좋아요 토글 함수
   const toggleLike = (postId: number) => {
     setPosts(prevPosts =>
-      prevPosts.map(post => (post.boardId === postId ? { ...post, likedByUser: !post.likedByUser } : post)),
+      prevPosts.map(post => (post.postId === postId ? { ...post, likedByUser: !post.likedByUser } : post)),
     );
   };
 
+  // 카테고리 변경을 처리하는 함수
   const handleCategoryClick = (category: string) => {
-    if (activeFilter === 'myposts' && category === 'Notice') {
+    if (activeFilter === 'myposts' && category === 'NOTICE') {
       setActiveFilter('all');
     }
     setActiveCategory(category);
     navigate(`/board?category=${category}&filter=${activeFilter}`);
   };
 
+  // 필터 변경을 처리하는 함수
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
     navigate(`/board?category=${activeCategory}&filter=${filter}`);

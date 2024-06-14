@@ -23,6 +23,9 @@ import {
   CommentText,
   CommentCreatedAt,
   LikeBackContainer,
+  CommentInputContainer,
+  CommentInput,
+  CommentButton,
 } from './BoardStyles';
 import { BoardPost } from '../../states/board/BoardStore';
 import { comments as initialComments } from '../../states/board/ChatStore';
@@ -33,9 +36,12 @@ import announcementAvatar from '../../assets/Announcement.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
 import useFormatDate from '../../hooks/UseFormatDate';
-import PositionedMenu from '../../components/board/PositionedMenu';
+import PostMenu from '../../components/board/PostMenu';
+import CommentMenu from '../../components/board/CommentMenu';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../../components/utils/Loading';
+import axios from 'axios'; // 추가된 부분
+import { API_BASE_URL } from '../../const/TokenApi'; // 추가된 부분
 
 interface PostDetailProps {
   postId: number;
@@ -45,10 +51,12 @@ interface PostDetailProps {
 }
 
 const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLike, posts }) => {
-  const post = posts.find(post => post.boardId === postId);
+  const post = posts.find(post => post.postId === postId);
   const postComments = initialComments.filter(comment => comment.boardId === postId);
 
   const [loading, setLoading] = useState(true);
+  const [newComment, setNewComment] = useState('');
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const formatDate = useFormatDate();
   const navigate = useNavigate();
 
@@ -69,6 +77,57 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
     navigate(`/mypage`);
   };
 
+  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewComment(e.target.value);
+  };
+
+  const handleCommentSubmit = async () => {
+    if (newComment.trim()) {
+      try {
+        if (editingCommentId !== null) {
+          // 댓글 수정 로직
+          const response = await API_BASE_URL.put(`/posts/${postId}/comment/${editingCommentId}`, {
+            content: newComment,
+          });
+
+          if (response.status === 200) {
+            console.log('Comment edited:', editingCommentId, newComment);
+            // 댓글 수정 후 UI를 업데이트하기 위한 추가 로직을 작성하세요.
+            setEditingCommentId(null);
+          } else {
+            console.error('댓글 수정 실패:', response.status);
+            console.log(newComment);
+          }
+        } else {
+          // 댓글 전송 로직
+          const response = await API_BASE_URL.post(`/posts/${postId}/comment`, {
+            content: newComment,
+          });
+
+          if (response.status === 202) {
+            // 댓글이 성공적으로 생성되었음을 나타내는 상태 코드는 201입니다.
+            console.log('New comment submitted:', newComment);
+            // 댓글 제출 후 UI를 업데이트하기 위한 추가 로직을 작성하세요.
+          } else {
+            console.error('댓글 전송 실패:', response.status);
+            console.log(newComment);
+          }
+        }
+        setNewComment('');
+      } catch (error) {
+        console.error('댓글 전송 중 오류 발생:', error, newComment);
+      }
+    }
+  };
+
+  const handleEditComment = (commentId: number) => {
+    const comment = postComments.find(c => c.commentId === commentId);
+    if (comment) {
+      setNewComment(comment.content);
+      setEditingCommentId(commentId);
+    }
+  };
+
   return (
     <PostDetailContainer>
       {loading ? (
@@ -76,28 +135,25 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       ) : (
         <PostContentContainer category={post.category}>
           <UserContainer>
-            <Avatar onClick={e => handleProfileClick(e, post.nickname)} category={post.category}>
-              <AvatarImage src={post.category === 'Notice' ? announcementAvatar : userAvatar} alt="Avatar" />
+            <Avatar onClick={e => handleProfileClick(e, 1)} category={post.category}>
+              <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author onClick={e => handleProfileClick(e, post.nickname)} category={post.category}>
-                {post.category === 'Notice' ? '공지사항' : `작성자 ${post.nickname}`}
+              <Author onClick={e => handleProfileClick(e, 1)} category={post.category}>
+                {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
               </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
-            {post.nickname === 1 && (
+            {post.nickname === '이인지' && (
               <div className="ml-auto">
-                <PositionedMenu postId={post.boardId} />
+                <PostMenu postId={post.postId} />
               </div>
             )}
           </UserContainer>
           <ContentContainer className="flex flex-col items-start">
             <h1>{post.title}</h1>
             <p>{post.content}</p>
-            {post.images &&
-              post.images.map((image, index) => (
-                <Image key={index} src={image} alt={`Content image ${index + 1}`} category={post.category} />
-              ))}
+            {post.media && post.media.length > 0 && <Image src={post.media[0].s3Url} alt={post.media[0].metadata} />}
           </ContentContainer>
           <LikeBackContainer>
             <button onClick={onBackToList}>
@@ -108,7 +164,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
               <LikeButton
                 onClick={(e: any) => {
                   e.stopPropagation();
-                  toggleLike(post.boardId);
+                  toggleLike(post.postId);
                 }}
               >
                 <LikeIcon src={post.likedByUser ? Like : UnLike} alt="like/unlike" />
@@ -145,7 +201,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
                     </div>
                     {comment.memberId === 1 && (
                       <div>
-                        <PositionedMenu postId={comment.commentId} />
+                        <CommentMenu commentId={comment.commentId} onEditClick={handleEditComment} />
                       </div>
                     )}
                   </div>
@@ -155,6 +211,10 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
             );
           })
         )}
+        <CommentInputContainer>
+          <CommentInput type="text" value={newComment} onChange={handleCommentChange} placeholder="댓글 달기..." />
+          <CommentButton onClick={handleCommentSubmit}>{editingCommentId !== null ? '수정' : '게시'}</CommentButton>
+        </CommentInputContainer>
       </CommentsContainer>
     </PostDetailContainer>
   );

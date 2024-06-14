@@ -16,11 +16,11 @@ import {
 import SearchInput from './SearchInput';
 
 const categoryLabels: { [key: string]: string } = {
-  ITNews: 'IT 지식',
-  Daily: '잡담/일상',
-  Tech: '기술',
-  InternShip: '인턴십/공모전',
-  Notice: '공지사항',
+  ITNEWS: 'IT 지식',
+  DAILY: '잡담/일상',
+  TECH: '기술',
+  INTERNSHIP: '인턴십/공모전',
+  NOTICE: '공지사항',
 };
 
 interface NavigationBarProps {
@@ -42,7 +42,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   searchTerm,
   handleSearchChange,
 }) => {
-  const isNoticeCategory = activeCategory === 'Notice';
+  const isNoticeCategory = activeCategory === 'NOTICE';
 
   return (
     <Navigation>
@@ -57,7 +57,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
                 key={category}
                 active={activeCategory === category}
                 onClick={() => {
-                  if (activeFilter === 'myposts' && category === 'Notice') {
+                  if (activeFilter === 'myposts' && category === 'NOTICE') {
                     handleFilterClick('all');
                   }
                   handleCategoryClick(category);
