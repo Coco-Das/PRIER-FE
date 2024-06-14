@@ -17,12 +17,15 @@ import {
   BlueInputDiv,
   ImageWrapper,
   StyledImg,
+  DeleteButton,
+  EditButton,
 } from './ResponseTestStyles';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
 import { Link } from 'react-router-dom';
 import StarRating from '../../../components/utils/StarRating';
+import CustomAlert from '../../../components/utils/CustomAlert';
 
 interface Tag {
   tagName: string;
@@ -57,7 +60,7 @@ export const ResponseTest = () => {
   const [teamMate, setTeamMate] = useState('');
   const [teamName, setTeamName] = useState('');
   const [score, setScore] = useState<number>(0);
-
+  const [showAlert, setShowAlert] = useState(false);
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -67,6 +70,7 @@ export const ResponseTest = () => {
   useEffect(() => {
     if (projectId) {
       setProjectId(projectId); // URL 파라미터로부터 projectId를 상태로 설정
+      handleGetInfo();
     }
   }, [projectId, setProjectId]);
 
@@ -89,7 +93,7 @@ export const ResponseTest = () => {
       setStatus(Data.status);
       setLink(Data.link);
       setScore(Data.score);
-
+      setIsMine(Data.isMine);
       const mainMedia = Data.media.find((item: Media) => item.main);
       setMainImageUrl(mainMedia ? mainMedia.url : null);
       const addMedia = Data.media.filter((item: Media) => !item.main);
@@ -99,9 +103,9 @@ export const ResponseTest = () => {
     }
   };
 
-  useEffect(() => {
-    handleGetInfo();
-  }, [projectId]);
+  // useEffect(() => {
+  //   handleGetInfo();
+  // }, [projectId]);
 
   if (!projectId) {
     console.log(projectId);
@@ -119,6 +123,19 @@ export const ResponseTest = () => {
       default:
         return status;
     }
+  };
+  const handleDelete = async () => {
+    setShowAlert(true);
+    try {
+      const response = await API_BASE_URL.delete(`/projects/${projectId}`);
+      console.log('삭제 요청 성공', response.data);
+      navigate('/testlist');
+    } catch (error) {
+      console.error('에러:', error);
+    }
+  };
+  const handleCancle = () => {
+    setShowAlert(false);
   };
 
   return (
@@ -148,7 +165,23 @@ export const ResponseTest = () => {
           </ProjectTextArea>
         </ProjectDiv>
         <ProjectIntro>
-          <TagWrapper>
+          {isMine && (
+            <div
+              style={{
+                marginTop: '20px',
+                display: 'flex',
+              }}
+            >
+              <div style={{ display: 'flex', marginLeft: 'auto', gap: '15px' }}>
+                <EditButton />
+                <DeleteButton onClick={() => setShowAlert(true)} />
+                {showAlert && (
+                  <CustomAlert message="삭제하시겠습니까?" onConfirm={handleDelete} onCancel={handleCancle} />
+                )}
+              </div>
+            </div>
+          )}
+          <TagWrapper $isMine={isMine}>
             {tags.map((tag, index) => (
               <Tag key={index} $bgColor={tag.color}>
                 {tag.tagName}

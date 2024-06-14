@@ -1,7 +1,6 @@
 import styled from 'styled-components';
-import { ReactComponent as Setting } from '../../../assets/Setting.svg';
-import { ReactComponent as AddBtn } from '../../../assets/AddBtn.svg';
 import { ReactComponent as DeleteBtn } from '../../../assets/DeleteBtn.svg';
+import { ReactComponent as EditBtn } from '../../../assets/EditBtn.svg';
 
 export const CreateWrapper = styled.div`
   width: 100%;
@@ -16,12 +15,6 @@ export const Project = styled.div`
   height: 90vh;
   display: flex;
 `;
-export const Question = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  height: auto;
-`;
 
 export const ProjectDiv = styled.div`
   width: 65%;
@@ -34,20 +27,6 @@ export const ProjectIntro = styled.div`
   width: 35%;
   display: flex;
   flex-direction: column;
-`;
-export const Settings = styled(Setting)``;
-export const AddButton = styled(AddBtn)`
-  margin-top: 5%;
-  &:hover {
-    cursor: pointer;
-  }
-`;
-export const QuestionDeleteButton = styled(DeleteBtn)`
-  width: 25px;
-  height: 25px;
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 export const ProjectTextArea = styled.div`
@@ -97,24 +76,6 @@ export const ImageWrapper = styled.div`
   align-items: center;
 `;
 
-export const DeleteButton = styled.button`
-  position: absolute;
-  top: 10px;
-  right: 5px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background: lightgray;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 20px;
-  height: 20px;
-  cursor: pointer;
-`;
-export const HiddenInput = styled.input`
-  display: none;
-`;
 export const CustomButton = styled.button`
   display: inline-block;
   padding: 8px 16px;
@@ -130,24 +91,30 @@ export const CustomButton = styled.button`
   text-align: center;
 `;
 
-export const FileCount = styled.div`
-  margin-top: 10px;
-  font-size: 15px;
-  color: #315af1;
+export const DeleteButton = styled(DeleteBtn)`
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
-export const TagDiv = styled.div`
-  padding-left: 30px;
-  font-size: 15px;
-  height: 5%;
-  display: flex;
-  align-items: center;
+export const EditButton = styled(EditBtn)`
+  width: 20px;
+  height: 20px;
+  margin-left: auto;
+
+  &:hover {
+    cursor: pointer;
+  }
 `;
-export const TagWrapper = styled.div`
-  margin-top: 10px;
+
+export const TagWrapper = styled.div<{ $isMine: boolean }>`
+  margin-top: ${props => (props.$isMine ? '10px' : '60px')};
   padding-left: 30px;
   display: flex;
   flex-wrap: wrap;
-  margin-top: 60px;
   margin-bottom: 10px;
   gap: 5px;
 `;
@@ -160,17 +127,6 @@ export const Tag = styled.div<{ $bgColor: string }>`
   font-size: 12px;
 `;
 
-export const Input = styled.input`
-  width: 30%;
-  border-radius: 10px;
-  background-color: #f7f7f7;
-  height: 100%;
-  outline: none;
-  padding: 5px 10px;
-  &::placeholder {
-    text-align: center;
-  }
-`;
 export const OrangeDiv = styled.div`
   margin-left: 30px;
   border-radius: 8px;
@@ -245,14 +201,4 @@ export const WhiteDiv = styled.div`
   &:hover {
     cursor: pointer;
   }
-`;
-export const QuestionDiv = styled.div`
-  width: 100%;
-  height: auto;
-  padding: 10px 20px;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  background: linear-gradient(#fff, #fff), linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc);
-  background-clip: padding-box, border-box;
-  background-origin: padding-box, border-box;
 `;
