@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
 import { useEffect, useRef, useState } from 'react';
 import { API_BASE_URL } from '../../../const/TokenApi';
@@ -36,7 +36,7 @@ export const ResponseQuestion = () => {
   const setProjectId = useProjectStore(state => state.setProjectId);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [responses, setResponses] = useState<{ [key: number]: string }>({});
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (projectId) {
       setProjectId(projectId); // URL 파라미터로부터 projectId를 상태로 설정
@@ -81,8 +81,9 @@ export const ResponseQuestion = () => {
         questionId: Number(questionId),
         content: responses[Number(questionId)],
       }));
-      console.log(responsePayload);
-      await API_BASE_URL.post(`/projects/${projectId}/responses`, responsePayload);
+      const response = await API_BASE_URL.post(`/projects/${projectId}/feedbacks/responses`, responsePayload);
+      console.log(response);
+      navigate(`/responsetest/${projectId}`); //제출 후 다시 프로젝트 페이지로
     } catch (error) {
       console.error('에러:', error);
     }
@@ -163,7 +164,7 @@ export const ResponseQuestion = () => {
                         type="radio"
                         name={`question-${question.questionId}`}
                         value={option}
-                        // checked={responses[question.id] === option}
+                        checked={responses[question.questionId] === option}
                         onChange={() => OptionChange(question.questionId, option)}
                       />{' '}
                       {option}
