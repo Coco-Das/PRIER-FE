@@ -196,7 +196,7 @@ export const BackgroundContainer = styled.div<{ isActive?: boolean }>`
 `;
 
 export const PostListPostBox = styled.div<{ category?: string }>`
-  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
+  background: ${props => (props.category === 'NOTICE' ? '#e1f9f0' : '#ffffff')};
   padding: 1vh;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
   width: 100%;
@@ -210,7 +210,7 @@ export const PostListPostBox = styled.div<{ category?: string }>`
 `;
 // 기존 스타일 유지하면서 필요한 스타일 추가
 export const PostBox = styled.div<{ category?: string }>`
-  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
+  background: ${props => (props.category === 'NOTICE' ? '#e1f9f0' : '#ffffff')};
   border: none;
   padding: 1vh;
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -231,7 +231,7 @@ export const UserContainer = styled.div`
 `;
 
 export const Avatar = styled.div<{ category?: string }>`
-  background: ${props => (props.category === 'Notice' ? '#4188fe' : '#f7f7f7')};
+  background: #f7f7f7;
   border-radius: 1000px;
   width: 50.58px;
   height: 50.58px;
@@ -347,7 +347,7 @@ export const PostContentContainer = styled(PostBox)`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
-  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
+  background: ${props => (props.category === 'NOTICE' ? '#e1f9f0' : '#ffffff')};
 `;
 
 export const LikeBackContainer = styled.div`

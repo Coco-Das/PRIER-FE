@@ -22,6 +22,7 @@ import Like from '../../assets/Like.svg';
 import useFormatDate from '../../hooks/UseFormatDate';
 import PositionedMenu from '../../components/board/PostMenu';
 import { useNavigate } from 'react-router-dom';
+import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
 
 interface PostListProps {
   posts: BoardPost[];
@@ -47,6 +48,23 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
     }, 2000);
   };
 
+  const handleLikeClick = async (e: React.MouseEvent, postId: number, liked: boolean) => {
+    e.stopPropagation();
+    try {
+      const response = liked
+        ? await API_BASE_URL.delete(`/like/${postId}`)
+        : await API_BASE_URL.post(`/like/${postId}`);
+
+      if (response.status === 200) {
+        toggleLike(postId);
+      } else {
+        console.error(`Failed to ${liked ? 'unlike' : 'like'} the post`);
+      }
+    } catch (error) {
+      console.error(`Error ${liked ? 'unliking' : 'liking'} the post:`, error);
+    }
+  };
+
   return (
     <>
       {posts.map(post => (
@@ -68,7 +86,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
                   category={post.category}
                   onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.nickname)}
                 >
-                  {post.category === 'NOTICE' ? '공지사항' : `작성자 ${post.nickname}`}
+                  {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
                 </Author>
                 <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
               </AuthorContainer>
@@ -81,12 +99,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
             <ContentContainer>{post.title}</ContentContainer>
             <LikesContainer>
               <Likes>likes {post.likes}</Likes>
-              <LikeButton
-                onClick={(e: React.MouseEvent) => {
-                  e.stopPropagation();
-                  toggleLike(post.postId);
-                }}
-              >
+              <LikeButton onClick={(e: React.MouseEvent) => handleLikeClick(e, post.postId, post.likedByUser)}>
                 <LikeIcon src={post.likedByUser ? Like : UnLike} alt="like/unlike" />
               </LikeButton>
             </LikesContainer>

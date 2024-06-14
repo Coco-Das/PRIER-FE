@@ -109,11 +109,11 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
         <PostContentContainer category={post.category}>
           <UserContainer>
             <Avatar onClick={e => handleProfileClick(e, post.nickname)} category={post.category}>
-              <AvatarImage src={post.category === 'Notice' ? announcementAvatar : userAvatar} alt="Avatar" />
+              <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
               <Author onClick={e => handleProfileClick(e, post.nickname)} category={post.category}>
-                {post.category === 'Notice' ? '공지사항' : `작성자 ${post.nickname}`}
+                {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
               </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
