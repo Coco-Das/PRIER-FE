@@ -1,44 +1,46 @@
 import { useEffect, useRef, useState } from 'react';
-import PropTypes from 'prop-types';
+import 'react-datepicker/dist/react-datepicker.css';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
-import { useProjectStore } from '../../../states/projects/ProjectStore'; // zustand 스토어 임포트
-
+import PropTypes from 'prop-types';
 import {
   BlueDiv,
   CreateWrapper,
   CustomButton,
-  DeleteButton,
-  FileCount,
   GreenDiv,
-  HiddenInput,
-  ImageWrapper,
-  Input,
   OrangeDiv,
   OrangeInputDiv,
   ProjectDiv,
   ProjectIntro,
   ProjectTextArea,
-  Settings,
-  StyledImg,
-  TagDiv,
-  BlueInputDiv,
-  Textarea,
-  GreenInputDiv,
   Project,
-  Question,
-  QuestionDiv,
   TagWrapper,
   Tag,
-  AddButton,
+  BlueInputDiv,
+  ImageWrapper,
+  StyledImg,
+  Textarea,
+  Settings,
+  ImgDeleteButton,
+  FileCount,
+  TagDiv,
+  Input,
+  GreenInputDiv,
+  Question,
+  QuestionDiv,
   QuestionDeleteButton,
-} from './CreateTestStyles';
-import { ToggleBtn } from '../../../components/utils/Toggle';
-import { DropDownContainer } from '../../../components/utils/DropDown';
-import { API_BASE_URL } from '../../../const/TokenApi';
-import CustomAlert from '../../../components/utils/CustomAlert';
-import { useNavigate } from 'react-router-dom';
+  AddButton,
+} from './EditResponseStyles';
+import { API_BASE_URL } from '../../../../const/TokenApi';
+import { useNavigate, useParams } from 'react-router-dom';
+import { useProjectStore } from '../../../../states/projects/ProjectStore';
+import { Link } from 'react-router-dom';
+import StarRating from '../../../../components/utils/StarRating';
+import CustomAlert from '../../../../components/utils/CustomAlert';
+import { HiddenInput } from '../../createTest/CreateTestStyles';
+import { DropDownContainer } from '../../../../components/utils/DropDown';
+import { ToggleBtn } from '../../../../components/utils/Toggle';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
@@ -63,68 +65,129 @@ AutoResizeTextarea.propTypes = {
 };
 
 interface Question {
-  id: number;
-  type: 'SUBJECTIVE' | 'OBJECTIVE';
+  questionId: number;
+  category: string;
   content: string;
   options?: string[]; // 객관식 질문의 선택지(고정)
 }
+
 interface Tag {
   tagName: string;
   color: string;
 }
 
-export const CreateTest = () => {
+interface Media {
+  id: number;
+  main: boolean;
+  mediaType: string;
+  metadata: string;
+  orderIndex: number;
+  url: string;
+}
+
+export const EditResponse = () => {
+  const { projectId } = useParams<{ projectId: string }>();
+  const setProjectId = useProjectStore(state => state.setProjectId);
   const [mainImageUrl, setMainImageUrl] = useState<string | null>(null);
-  const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>([]);
   const mainFileInputRef = useRef<HTMLInputElement>(null);
+  const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>([]);
   const additionalFileInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
-  const [questions, setQuestions] = useState<Question[]>([
-    { id: 1, type: 'SUBJECTIVE', content: '' },
-    { id: 2, type: 'OBJECTIVE', content: '', options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] },
-  ]);
   const [tags, setTags] = useState<Tag[]>([]);
   const [tagInput, setTagInput] = useState<string>('');
-  const [step, setStep] = useState('');
-  const [introduce, setIntroduce] = useState('');
+  const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
+  const navigate = useNavigate();
   const [goal, setGoal] = useState('');
-  const [teamName, setTeamName] = useState('');
-  const [teamDescription, setTeamDescription] = useState('');
-  const [teamMate, setTeamMate] = useState('');
+  const [introduce, setIntroduce] = useState('');
+  const [isMine, setIsMine] = useState(false);
   const [link, setLink] = useState('');
   const [startDate, setStartDate] = useState<Date | null>(null);
   const [endDate, setEndDate] = useState<Date | null>(null);
-  const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
+  const [status, setStatus] = useState('');
+  const [teamDescription, setTeamDescription] = useState('');
+  const [teamMate, setTeamMate] = useState('');
+  const [teamName, setTeamName] = useState('');
   const [showAlert, setShowAlert] = useState(false);
-  const navigate = useNavigate();
+  const [questions, setQuestions] = useState<Question[]>([]);
+
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
     return colors[randomIndex];
   };
 
-  const addQuestion = () => {
-    setQuestions(prevQuestions => [
-      ...prevQuestions,
-      { id: prevQuestions.length + 1, type: 'SUBJECTIVE', content: '' },
-    ]);
+  useEffect(() => {
+    if (projectId) {
+      setProjectId(projectId); // URL 파라미터로부터 projectId를 상태로 설정
+      handleGetInfo();
+    }
+  }, [projectId, setProjectId]);
+
+  //정보 가져오기
+  const handleGetInfo = async () => {
+    if (!projectId) return;
+    try {
+      const response = await API_BASE_URL.get(`/projects/${projectId}`);
+      const Data = response.data;
+
+      setTeamName(Data.teamName);
+      setTitle(Data.title);
+      setIntroduce(Data.introduce);
+      setTeamDescription(Data.teamDescription);
+      setGoal(Data.goal);
+      setStartDate(new Date(Data.startDate));
+      setEndDate(new Date(Data.endDate));
+      setTeamMate(Data.teamMate);
+      setTags(Data.tags.map((tag: { tagName: string }) => ({ tagName: tag.tagName, color: getRandomColor() })));
+      setStatus(Data.status);
+      setLink(Data.link);
+      setIsMine(Data.isMine);
+      const mainMedia = Data.media.find((item: Media) => item.main);
+      setMainImageUrl(mainMedia ? mainMedia.url : null);
+      const addMedia = Data.media.filter((item: Media) => !item.main);
+      setAdditionalImageUrls(addMedia.map((item: Media) => item.url));
+      const updatedQuestions = Data.questions.map((question: Question) => {
+        if (question.category === 'OBJECTIVE' && !question.options) {
+          return {
+            ...question,
+            options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'],
+          };
+        }
+        return question;
+      });
+      setQuestions(updatedQuestions);
+    } catch (error) {
+      console.error('에러:', error);
+    }
   };
 
-  const toggleQuestionType = (id: number) => {
-    setQuestions(prevQuestions =>
-      prevQuestions.map(question =>
-        question.id === id
-          ? {
-              ...question,
-              type: question.type === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
-              options: question.type === 'SUBJECTIVE' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
-              content: '',
-            }
-          : question,
-      ),
-    );
+  if (!projectId) {
+    console.log(projectId);
+    return <div>Loading...</div>;
+  }
+
+  const getStatusText = (status: string) => {
+    switch (status) {
+      case 'DEPLOYMENT_COMPLETE':
+        return '배포 완료';
+      case 'DEVELOPING':
+        return '개발 중';
+      case 'PLANNING':
+        return '기획';
+      default:
+        return status;
+    }
   };
 
+  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setTitle(event.target.value);
+  };
+  const handleIntroduceChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setIntroduce(event.target.value);
+  };
+  const handleGoalChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setGoal(event.target.value);
+  };
   const handleMainImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -133,7 +196,12 @@ export const CreateTest = () => {
       reader.readAsDataURL(file);
     }
   };
-
+  const handleMainButtonClick = () => {
+    mainFileInputRef.current?.click();
+  };
+  const handleDeleteMainImage = () => {
+    setMainImageUrl(null);
+  };
   const handleAdditionalImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -149,21 +217,11 @@ export const CreateTest = () => {
       setAdditionalImageUrls(prevImageUrls => [...prevImageUrls, ...results]);
     }
   };
-
-  const handleDeleteMainImage = () => {
-    setMainImageUrl(null);
-  };
-
-  const handleDeleteAdditionalImage = (index: number) => {
-    setAdditionalImageUrls(prevImageUrls => prevImageUrls.filter((_, i) => i !== index));
-  };
-
-  const handleMainButtonClick = () => {
-    mainFileInputRef.current?.click();
-  };
-
   const handleAdditionalButtonClick = () => {
     additionalFileInputRef.current?.click();
+  };
+  const handleDeleteAdditionalImage = (index: number) => {
+    setAdditionalImageUrls(prevImageUrls => prevImageUrls.filter((_, i) => i !== index));
   };
   const handleTagInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(event.target.value);
@@ -183,25 +241,12 @@ export const CreateTest = () => {
       }
     }
   };
-  const handleQuestionDelete = (id: number) => {
-    setQuestions(prevQuestions => prevQuestions.filter(question => question.id !== id));
+  const handleDeleteTag = (index: number) => {
+    setTags(tags => tags.filter((_, i) => i !== index));
   };
-
-  const handleIntroduceChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setIntroduce(event.target.value);
-  };
-
-  const handleGoalChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setGoal(event.target.value);
-  };
-  const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTitle(event.target.value);
-  };
-
   const handleStepChange = (selectedStep: string) => {
-    setStep(selectedStep);
+    setStatus(selectedStep);
   };
-
   const handleTeamNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTeamName(event.target.value);
   };
@@ -209,34 +254,49 @@ export const CreateTest = () => {
   const handleTeamDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTeamDescription(event.target.value);
   };
-
   const handleTeamMateChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTeamMate(event.target.value);
   };
-
   const handleLinkChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLink(event.target.value);
   };
-
   const handleQuestionContentChange = (id: number, content: string) => {
     setQuestions(prevQuestions =>
-      prevQuestions.map(question => (question.id === id ? { ...question, content } : question)),
+      prevQuestions.map(question => (question.questionId === id ? { ...question, content } : question)),
     );
   };
-
-  const handleDeleteTag = (index: number) => {
-    setTags(tags => tags.filter((_, i) => i !== index));
+  const toggleQuestionType = (id: number) => {
+    setQuestions(prevQuestions =>
+      prevQuestions.map(question =>
+        question.questionId === id
+          ? {
+              ...question,
+              category: question.category === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
+              options:
+                question.category === 'SUBJECTIVE' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
+              content: '',
+            }
+          : question,
+      ),
+    );
+  };
+  const handleQuestionDelete = (id: number) => {
+    setQuestions(prevQuestions => prevQuestions.filter(question => question.questionId !== id));
   };
 
-  //제출하기 버튼
-  const handleSubmit = async () => {
+  const addQuestion = () => {
+    setQuestions(prevQuestions => [
+      ...prevQuestions,
+      { questionId: prevQuestions.length + 1, category: 'SUBJECTIVE', content: '' },
+    ]);
+  };
+  const handleEditSubmit = async () => {
     const formData = new FormData();
     const formattedStartDate = format(startDate ?? new Date(), 'yyyy-MM-dd');
     const formattedEndDate = format(endDate ?? new Date(), 'yyyy-MM-dd');
     const tagContents = tags.map(tag => tag.tagName);
 
     const replaceEmptyStringWithNull = (value: string) => (value.trim() === '' ? null : value.trim());
-
     const jsonData = {
       title: replaceEmptyStringWithNull(title),
       introduce: replaceEmptyStringWithNull(introduce),
@@ -244,13 +304,13 @@ export const CreateTest = () => {
       tags: tagContents,
       startDate: formattedStartDate,
       endDate: formattedEndDate,
-      status: step === '배포완료' ? 0 : step === '개발 중' ? 1 : 2,
+      status: status === '배포완료' ? 0 : status === '개발 중' ? 1 : 2,
       teamName: replaceEmptyStringWithNull(teamName),
       teamDescription: replaceEmptyStringWithNull(teamDescription),
       teamMate: replaceEmptyStringWithNull(teamMate),
       link: replaceEmptyStringWithNull(link),
-      question: questions.map(q => replaceEmptyStringWithNull(q.content)),
-      type: questions.map(q => q.type),
+      //   question: questions.map(q => replaceEmptyStringWithNull(q.content)),
+      type: questions.map(q => q.category),
     };
     formData.append(
       'form',
@@ -271,12 +331,9 @@ export const CreateTest = () => {
         'Content-Type': 'multipart/form-data',
       },
     };
-
     try {
       const response = await API_BASE_URL.post('/projects', formData, config);
-      const projectId = response.data;
-      const setProjectId = useProjectStore.getState().setProjectId;
-      setProjectId(projectId);
+      console.log(response.data);
       navigate(`/responsetest/${projectId}`);
     } catch (error) {
       console.error('에러:', error);
@@ -297,25 +354,25 @@ export const CreateTest = () => {
           <ProjectTextArea className="mt-2">
             <input
               style={{ fontSize: '25px', outline: 'none' }}
-              placeholder="프로젝트 제목을 입력하세요"
+              placeholder={title}
               className="mb-10 font-semibold"
               onChange={handleTitleChange}
               value={title}
             />
-            <p>프로젝트 소개</p>
+            <p className="font-extrabold">프로젝트 소개</p>
             <AutoResizeTextarea
               value={introduce}
               onChange={handleIntroduceChange}
               placeholder="프로젝트 소개를 입력하세요..."
             />
-            <p>프로젝트 목표</p>
+            <p className="font-extrabold mt-5">프로젝트 목표</p>
             <AutoResizeTextarea value={goal} onChange={handleGoalChange} placeholder="프로젝트 목표를 입력하세요..." />
             <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
             <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
             {mainImageUrl && (
-              <ImageWrapper>
+              <ImageWrapper className="mt-5">
                 <StyledImg src={mainImageUrl} alt="메인 이미지" />
-                <DeleteButton onClick={handleDeleteMainImage}>×</DeleteButton>
+                <ImgDeleteButton onClick={handleDeleteMainImage}>×</ImgDeleteButton>
               </ImageWrapper>
             )}
             <HiddenInput
@@ -331,7 +388,7 @@ export const CreateTest = () => {
               {additionalImageUrls.map((url, index) => (
                 <ImageWrapper key={index}>
                   <StyledImg src={url} alt={`추가 이미지 ${index + 1}`} />
-                  <DeleteButton onClick={() => handleDeleteAdditionalImage(index)}>×</DeleteButton>
+                  <ImgDeleteButton onClick={() => handleDeleteAdditionalImage(index)}>×</ImgDeleteButton>
                 </ImageWrapper>
               ))}
             </div>
@@ -348,11 +405,11 @@ export const CreateTest = () => {
             />
           </TagDiv>
           {showAlert && <CustomAlert message="태그는 최대 2개까지 설정할 수 있습니다." showButtons={false} />}
-          <TagWrapper>
+          <TagWrapper $isMine={isMine}>
             {tags.map((tag, index) => (
               <Tag key={index} $bgColor={tag.color}>
                 {tag.tagName}
-                <DeleteButton
+                <ImgDeleteButton
                   style={{
                     top: '-3px',
                     right: '-5px',
@@ -362,7 +419,7 @@ export const CreateTest = () => {
                   onClick={() => handleDeleteTag(index)}
                 >
                   x
-                </DeleteButton>
+                </ImgDeleteButton>
               </Tag>
             ))}
           </TagWrapper>
@@ -386,7 +443,7 @@ export const CreateTest = () => {
             </OrangeInputDiv>
             <OrangeInputDiv style={{ height: '27%' }}>
               <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>진행단계 :</div>
-              <DropDownContainer onSelect={handleStepChange} />
+              <DropDownContainer onSelect={handleStepChange} select={getStatusText(status)} />
             </OrangeInputDiv>
           </OrangeDiv>
           <BlueDiv className="mt-2">
@@ -426,6 +483,12 @@ export const CreateTest = () => {
               <Input style={{ width: '60%' }} onChange={handleLinkChange} value={link} />
             </GreenInputDiv>
           </GreenDiv>
+          <CustomButton
+            style={{ height: '6%', marginLeft: 'auto', width: '30%' }}
+            onClick={() => navigate(`/responsequestions/${projectId}`)}
+          >
+            테스트폼 참여하기
+          </CustomButton>
         </ProjectIntro>
       </Project>
       <Question>
@@ -436,8 +499,8 @@ export const CreateTest = () => {
           </span>
         </div>
         {questions.map((question, index) => (
-          <QuestionDiv key={question.id} className="mt-4">
-            {question.type === 'SUBJECTIVE' ? (
+          <QuestionDiv key={question.questionId} className="mt-4">
+            {question.category === 'SUBJECTIVE' ? (
               <div>
                 <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
                   {index + 1}번 문항
@@ -451,10 +514,13 @@ export const CreateTest = () => {
                       width: '80%',
                     }}
                     value={question.content}
-                    onChange={e => handleQuestionContentChange(question.id, e.target.value)}
+                    onChange={e => handleQuestionContentChange(question.questionId, e.target.value)}
                   />
                   <div style={{ marginLeft: 'auto' }}>
-                    <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
+                    <ToggleBtn
+                      currentType={question.category}
+                      onToggle={() => toggleQuestionType(question.questionId)}
+                    />
                   </div>
                 </div>
                 <AutoResizeTextarea
@@ -468,7 +534,7 @@ export const CreateTest = () => {
                   readOnly
                 />
                 <div style={{ display: 'flex', justifyContent: 'right' }}>
-                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
+                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.questionId)} />
                 </div>
               </div>
             ) : (
@@ -478,11 +544,14 @@ export const CreateTest = () => {
                   <input
                     placeholder="질문을 입력하세요"
                     style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
-                    onChange={e => handleQuestionContentChange(question.id, e.target.value)}
+                    onChange={e => handleQuestionContentChange(question.questionId, e.target.value)}
                     value={question.content}
                   />
                   <div style={{ marginLeft: 'auto' }}>
-                    <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
+                    <ToggleBtn
+                      currentType={question.category}
+                      onToggle={() => toggleQuestionType(question.questionId)}
+                    />
                   </div>
                 </div>
                 <div
@@ -500,14 +569,20 @@ export const CreateTest = () => {
                   {question.options?.map((option, i) => (
                     <div key={i}>
                       <label>
-                        <input type="radio" name={`question-${question.id}`} value={option} checked={false} readOnly />{' '}
+                        <input
+                          type="radio"
+                          name={`question-${question.questionId}`}
+                          value={option}
+                          checked={false}
+                          readOnly
+                        />{' '}
                         {option}
                       </label>
                     </div>
                   ))}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right' }}>
-                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
+                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.questionId)} />
                 </div>
               </div>
             )}
@@ -517,8 +592,8 @@ export const CreateTest = () => {
           <AddButton onClick={addQuestion}>질문 추가</AddButton>
         </div>
         <div style={{ width: '100%', display: 'flex', marginBottom: '20px' }}>
-          <CustomButton onClick={handleSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
-            제출하기
+          <CustomButton onClick={handleEditSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
+            수정하기
           </CustomButton>
         </div>
       </Question>
