@@ -9,13 +9,26 @@ import DeleteForever from '@mui/icons-material/DeleteForever';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios'; // Import axios
+import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
 
 interface CommentMenuProps {
   commentId: number;
+  postId: number; // Add postId prop
   onEditClick: (commentId: number) => void;
+  onDeleteSuccess: () => void; // Add a callback for successful deletion
 }
 
-const CommentMenu: React.FC<CommentMenuProps> = ({ commentId, onEditClick }) => {
+const CommentMenu: React.FC<CommentMenuProps> = ({ commentId, postId, onEditClick, onDeleteSuccess }) => {
+  const handleDelete = async () => {
+    try {
+      await API_BASE_URL.delete(`/posts/${postId}/comment/${commentId}`);
+      onDeleteSuccess(); // Notify parent component about successful deletion
+    } catch (error) {
+      console.error('Failed to delete the comment:', error);
+    }
+  };
+
   return (
     <Dropdown>
       <MenuButton
@@ -31,7 +44,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({ commentId, onEditClick }) => 
           </ListItemDecorator>
           수정하기
         </MenuItem>
-        <MenuItem variant="soft" color="danger">
+        <MenuItem variant="soft" color="danger" onClick={handleDelete}>
           <ListItemDecorator sx={{ color: 'inherit' }}>
             <DeleteForever />
           </ListItemDecorator>

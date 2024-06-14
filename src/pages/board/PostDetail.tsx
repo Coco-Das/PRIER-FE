@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import {
   PostDetailContainer,
   PostContentContainer,
@@ -27,7 +27,6 @@ import {
   CommentInput,
   CommentButton,
 } from './BoardStyles';
-import { BoardPost } from '../../states/board/BoardStore';
 import { members } from '../../states/board/MemberStore';
 import backto from '../../assets/BackTo.svg';
 import userAvatar from '../../assets/user.svg';
@@ -39,46 +38,67 @@ import PostMenu from '../../components/board/PostMenu';
 import CommentMenu from '../../components/board/CommentMenu';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../../components/utils/Loading';
+
 import axios from 'axios';
 import { API_BASE_URL } from '../../const/TokenApi';
+
+interface Media {
+  metadata: string;
+  mediaType: string;
+  s3Url: string;
+}
+
+interface Comment {
+  userId: number;
+  content: string;
+  createdAt: string;
+  updatedAt: string | null;
+  commentId: number;
+}
+
+interface Post {
+  userId: number;
+  postId: number;
+  title: string;
+  content: string;
+  nickname: string;
+  category: string;
+  media: Media[];
+  views: number;
+  likes: number;
+  createdAt: string;
+  updatedAt: string | null;
+  comments: Comment[];
+}
 
 interface PostDetailProps {
   postId: number;
   onBackToList: () => void;
   toggleLike: (postId: number) => void;
-  posts: BoardPost[];
 }
 
-interface Comment {
-  commentId: number;
-  userId: number;
-  content: string;
-  createdAt: string;
-  updatedAt: string | null;
-  memberId: number;
-}
-
-const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLike, posts }) => {
-  const post = posts.find(post => post.postId === postId);
+const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLike }) => {
+  const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
-  const [comments, setComments] = useState<Comment[]>([]);
   const [newComment, setNewComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const formatDate = useFormatDate();
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchComments = async () => {
+    const fetchPost = async () => {
+      setLoading(true);
       try {
-        const response = await axios.get(`${API_BASE_URL}/posts/${postId}/comment`);
-        setComments(response.data);
+        const response = await API_BASE_URL.get(`/posts/${postId}`);
+        setPost(response.data);
       } catch (error) {
-        console.error('Failed to fetch comments:', error);
+        console.error('게시글을 가져오는 중 오류 발생:', error);
+      } finally {
+        setLoading(false);
       }
-      setLoading(false);
     };
 
-    fetchComments();
+    fetchPost();
   }, [postId]);
 
   if (!post) {
@@ -89,7 +109,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
     return members.find(member => member.userId === memberId);
   };
 
-  const handleProfileClick = (e: React.MouseEvent, memberId: number) => {
+  const handleProfileClick = (e: React.MouseEvent, userId: number) => {
     e.stopPropagation();
     navigate(`/mypage`);
   };
@@ -103,52 +123,67 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       try {
         if (editingCommentId !== null) {
           // 댓글 수정 로직
-          const response = await axios.put(`${API_BASE_URL}/posts/${postId}/comment/${editingCommentId}`, {
+          const response = await API_BASE_URL.put(`/posts/${postId}/comment/${editingCommentId}`, {
             content: newComment,
           });
 
           if (response.status === 200) {
-            console.log('Comment edited:', editingCommentId, newComment);
-            // 댓글 수정 후 UI를 업데이트하기 위한 추가 로직을 작성하세요.
-            setEditingCommentId(null);
-            setComments(
-              comments.map(comment =>
-                comment.commentId === editingCommentId ? { ...comment, content: newComment } : comment,
-              ),
+            console.log('댓글 수정:', editingCommentId, newComment);
+            const updatedComments = post.comments.map(comment =>
+              comment.commentId === editingCommentId ? { ...comment, content: newComment } : comment,
             );
+            setPost({ ...post, comments: updatedComments });
+            setEditingCommentId(null);
           } else {
             console.error('댓글 수정 실패:', response.status);
-            console.log(newComment);
           }
         } else {
           // 댓글 전송 로직
-          console.log(newComment);
-
-          const response = await axios.post(`${API_BASE_URL}/posts/${postId}/comment`, {
+          const response = await API_BASE_URL.post(`/posts/${postId}/comment`, {
             content: newComment,
           });
 
-          if (response.status === 202) {
-            console.log('New comment submitted:', newComment);
-            // 댓글 제출 후 UI를 업데이트하기 위한 추가 로직을 작성하세요.
-            setComments([...comments, response.data]);
+          if (response.status === 201) {
+            console.log('새 댓글 제출:', newComment);
+            const newCommentData: Comment = {
+              userId: 1, // 실제 사용자 ID로 대체해야 합니다.
+              content: newComment,
+              createdAt: new Date().toISOString(),
+              updatedAt: null,
+              commentId: response.data.commentId,
+            };
+            setPost({ ...post, comments: [...post.comments, newCommentData] });
           } else {
             console.error('댓글 전송 실패:', response.status);
           }
         }
         setNewComment('');
       } catch (error) {
-        console.error('댓글 전송 중 오류 발생:', error, newComment);
-        console.log(postId, newComment);
+        console.error('댓글 전송 중 오류 발생:', error);
       }
     }
   };
 
   const handleEditComment = (commentId: number) => {
-    const comment = comments.find(c => c.commentId === commentId);
+    const comment = post.comments.find(c => c.commentId === commentId);
     if (comment) {
       setNewComment(comment.content);
       setEditingCommentId(commentId);
+    }
+  };
+
+  const handleDeleteComment = async (commentId: number) => {
+    try {
+      const response = await axios.delete(`${API_BASE_URL}/posts/${postId}/comment/${commentId}`);
+      if (response.status === 200) {
+        console.log('댓글 삭제:', commentId);
+        const updatedComments = post.comments.filter(comment => comment.commentId !== commentId);
+        setPost({ ...post, comments: updatedComments });
+      } else {
+        console.error('댓글 삭제 실패:', response.status);
+      }
+    } catch (error) {
+      console.error('댓글 삭제 중 오류 발생:', error);
     }
   };
 
@@ -190,9 +225,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
                   e.stopPropagation();
                   toggleLike(post.postId);
                 }}
-              >
-                <LikeIcon src={post.likedByUser ? Like : UnLike} alt="like/unlike" />
-              </LikeButton>
+              ></LikeButton>
             </LikesContainer>
           </LikeBackContainer>
         </PostContentContainer>
@@ -200,32 +233,37 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       <CommentsContainer>
         {loading ? (
           <Loading />
-        ) : comments.length === 0 ? (
+        ) : post.comments.length === 0 ? (
           <div className="flex flex-col items-center">
             <p className="text-lg font-semibold">아직 댓글이 없습니다.</p>
             <p className="text-sm text-gray-600 mt-2">댓글을 남겨보세요.</p>
           </div>
         ) : (
-          comments.map(comment => {
-            const member = getMemberById(comment.memberId);
+          post.comments.map(comment => {
+            const member = getMemberById(comment.userId);
             return (
               <CommentContainer key={comment.commentId} className="flex justify-between">
                 {member && (
-                  <CommentAvatar onClick={e => handleProfileClick(e, comment.memberId)}>
+                  <CommentAvatar onClick={e => handleProfileClick(e, comment.userId)}>
                     <AvatarImage src={member.profilePicture} alt={member.nickname} />
                   </CommentAvatar>
                 )}
                 <CommentContent className="flex-1">
                   <div className="flex flex-row items-center space-x-2 justify-between">
                     <div className="flex flex-row items-center space-x-2">
-                      <CommentAuthor onClick={e => handleProfileClick(e, comment.memberId)} category={post.category}>
+                      <CommentAuthor onClick={e => handleProfileClick(e, comment.userId)} category={post.category}>
                         {member?.nickname}
                       </CommentAuthor>
                       <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
                     </div>
-                    {comment.memberId === 1 && (
+                    {comment.userId === 1 && (
                       <div>
-                        <CommentMenu commentId={comment.commentId} onEditClick={handleEditComment} />
+                        <CommentMenu
+                          commentId={comment.commentId}
+                          postId={post.postId}
+                          onEditClick={handleEditComment}
+                          onDeleteSuccess={() => handleDeleteComment(comment.commentId)}
+                        />
                       </div>
                     )}
                   </div>
