@@ -100,17 +100,17 @@ export interface ProgressBarProps {
 // 리뷰
 
 export const ReviewContainer = styled.div`
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 6px rgba(0, 0, 0, 0.1);
-  backgroud-color: white;
-  width: 100%;
+  background-color: white;
+  width: 22rem;
+  height: 9rem;
   padding: 20px;
 `;
 
 export const ReviewProject = styled.h1`
   font-size: 20px;
-  margin-top: 5%;
+  margin-top: 1rem;
 `;
 
 export const ReviewTeam = styled.h2`

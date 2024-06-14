@@ -53,3 +53,20 @@ export const RecentProjectStore = create<RecentProjectState>(set => ({
   feedbackAmount: 0,
   setProjects: projects => set(projects),
 }));
+
+//리뷰
+interface MyReviewState {
+  commentId: number;
+  projectTitle: string;
+  teamName: string;
+  content: string;
+  score: number;
+}
+interface ReviewsState {
+  reviews: MyReviewState[];
+  setReview: (reviews: MyReviewState[]) => void;
+}
+export const MyReviewStore = create<ReviewsState>(set => ({
+  reviews: [],
+  setReview: reviews => set({ reviews }),
+}));
