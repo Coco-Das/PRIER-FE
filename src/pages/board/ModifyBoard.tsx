@@ -218,7 +218,7 @@ const ModifyBoard: React.FC = () => {
     });
 
     try {
-      const response = await fetch(`${BASE_URL}/api/boards`, {
+      const response = await fetch(`${BASE_URL}/api/boards/`, {
         method: 'POST',
         body: formData,
       });

@@ -399,3 +399,46 @@ export const CommentCreatedAt = styled(CreatedAt)`
   font-size: 12px;
   color: #828282;
 `;
+export const CommentInputContainer = styled.div`
+  display: flex;
+  align-items: center;
+  margin-top: 1rem;
+`;
+
+export const CommentInput = styled.input`
+  flex: 1;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  margin-right: 0.5rem;
+`;
+
+export const CommentButton = styled.button`
+  padding: 0.5rem 1rem;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: #0056b3;
+  }
+  background: #4188fe;
+  border-radius: 4px;
+  height: 40px;
+  display: flex;
+  padding: 0 10px;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  color: #ffffff;
+  font-weight: 500;
+  cursor: pointer;
+  margin-left: 5px;
+
+  &:hover {
+    background: #d1e0fc;
+    color: #4188fe;
+  }
+`;

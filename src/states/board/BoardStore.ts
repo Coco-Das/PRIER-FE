@@ -1,6 +1,6 @@
 // 게시물 인터페이스 정의
 export interface BoardPost {
-  boardId: number;
+  postId: number;
   nickname: number;
   category: string;
   title: string;
@@ -15,9 +15,9 @@ export interface BoardPost {
 export const posts: BoardPost[] = [
   // ITNews 카테고리
   {
-    boardId: 1,
+    postId: 1,
     nickname: 1,
-    category: 'ITNews',
+    category: 'ITNEWS',
     title: 'IT 소식 제목 1',
     content: 'IT 소식 내용 1',
     createdAt: '2024-06-03T14:23:04',
@@ -26,9 +26,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image1', 'https://via.placeholder.com/300.png?text=Image2'],
   },
   {
-    boardId: 2,
+    postId: 2,
     nickname: 2,
-    category: 'ITNews',
+    category: 'ITNEWS',
     title: 'IT 소식 제목 2',
     content: 'IT 소식 내용 2',
     createdAt: '2024-06-03T14:24:05',
@@ -37,9 +37,9 @@ export const posts: BoardPost[] = [
     images: [],
   },
   {
-    boardId: 3,
+    postId: 3,
     nickname: 3,
-    category: 'ITNews',
+    category: 'ITNEWS',
     title: 'IT 소식 제목 3',
     content: 'IT 소식 내용 3',
     createdAt: '2024-06-03T14:25:06',
@@ -48,9 +48,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image3'],
   },
   {
-    boardId: 4,
+    postId: 4,
     nickname: 4,
-    category: 'ITNews',
+    category: 'ITNEWS',
     title: 'IT 소식 제목 4',
     content: 'IT 소식 내용 4',
     createdAt: '2024-06-03T14:26:07',
@@ -63,9 +63,9 @@ export const posts: BoardPost[] = [
     ],
   },
   {
-    boardId: 5,
+    postId: 5,
     nickname: 5,
-    category: 'ITNews',
+    category: 'ITNEWS',
     title: 'IT 소식 제목 5',
     content: 'IT 소식 내용 5',
     createdAt: '2024-06-03T14:27:08',
@@ -82,9 +82,9 @@ export const posts: BoardPost[] = [
 
   // Daily 카테고리
   {
-    boardId: 6,
+    postId: 6,
     nickname: 1,
-    category: 'Daily',
+    category: 'DAILY',
     title: '잡담 제목 1',
     content: '잡담 내용 1',
     createdAt: '2024-06-03T14:33:14',
@@ -93,9 +93,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image12', 'https://via.placeholder.com/300.png?text=Image13'],
   },
   {
-    boardId: 7,
+    postId: 7,
     nickname: 2,
-    category: 'Daily',
+    category: 'DAILY',
     title: '잡담 제목 2',
     content: '잡담 내용 2',
     createdAt: '2024-06-03T14:34:15',
@@ -104,9 +104,9 @@ export const posts: BoardPost[] = [
     images: [],
   },
   {
-    boardId: 8,
+    postId: 8,
     nickname: 3,
-    category: 'Daily',
+    category: 'DAILY',
     title: '잡담 제목 3',
     content: '잡담 내용 3',
     createdAt: '2024-06-03T14:35:16',
@@ -115,9 +115,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image14'],
   },
   {
-    boardId: 9,
+    postId: 9,
     nickname: 4,
-    category: 'Daily',
+    category: 'DAILY',
     title: '잡담 제목 4',
     content: '잡담 내용 4',
     createdAt: '2024-06-03T14:36:17',
@@ -126,9 +126,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image15', 'https://via.placeholder.com/300.png?text=Image16'],
   },
   {
-    boardId: 10,
+    postId: 10,
     nickname: 5,
-    category: 'Daily',
+    category: 'DAILY',
     title: '잡담 제목 5',
     content: '잡담 내용 5',
     createdAt: '2024-06-03T14:37:18',
@@ -139,9 +139,9 @@ export const posts: BoardPost[] = [
 
   // Tech 카테고리
   {
-    boardId: 11,
+    postId: 11,
     nickname: 1,
-    category: 'Tech',
+    category: 'TECH',
     title: '기술 제목 1',
     content: '기술 내용 1',
     createdAt: '2024-06-03T14:43:24',
@@ -150,9 +150,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image17'],
   },
   {
-    boardId: 12,
+    postId: 12,
     nickname: 2,
-    category: 'Tech',
+    category: 'TECH',
     title: '기술 제목 2',
     content: '기술 내용 2',
     createdAt: '2024-06-03T14:44:25',
@@ -161,9 +161,9 @@ export const posts: BoardPost[] = [
     images: [],
   },
   {
-    boardId: 13,
+    postId: 13,
     nickname: 3,
-    category: 'Tech',
+    category: 'TECH',
     title: '기술 제목 3',
     content: '기술 내용 3',
     createdAt: '2024-06-03T14:45:26',
@@ -172,9 +172,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image18', 'https://via.placeholder.com/300.png?text=Image19'],
   },
   {
-    boardId: 14,
+    postId: 14,
     nickname: 4,
-    category: 'Tech',
+    category: 'TECH',
     title: '기술 제목 4',
     content: '기술 내용 4',
     createdAt: '2024-06-03T14:46:27',
@@ -187,9 +187,9 @@ export const posts: BoardPost[] = [
     ],
   },
   {
-    boardId: 15,
+    postId: 15,
     nickname: 5,
-    category: 'Tech',
+    category: 'TECH',
     title: '기술 제목 5',
     content: '기술 내용 5',
     createdAt: '2024-06-03T14:47:28',
@@ -200,9 +200,9 @@ export const posts: BoardPost[] = [
 
   // InternShip 카테고리
   {
-    boardId: 16,
+    postId: 16,
     nickname: 1,
-    category: 'InternShip',
+    category: 'INTERNSHIP',
     title: '인턴십 제목 1',
     content: '인턴십 내용 1',
     createdAt: '2024-06-03T14:53:34',
@@ -211,9 +211,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image25'],
   },
   {
-    boardId: 17,
+    postId: 17,
     nickname: 2,
-    category: 'InternShip',
+    category: 'INTERNSHIP',
     title: '인턴십 제목 2',
     content: '인턴십 내용 2',
     createdAt: '2024-06-03T14:54:35',
@@ -222,9 +222,9 @@ export const posts: BoardPost[] = [
     images: [],
   },
   {
-    boardId: 18,
+    postId: 18,
     nickname: 3,
-    category: 'InternShip',
+    category: 'INTERNSHIP',
     title: '인턴십 제목 3',
     content: '인턴십 내용 3',
     createdAt: '2024-06-03T14:55:36',
@@ -233,9 +233,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image26', 'https://via.placeholder.com/300.png?text=Image27'],
   },
   {
-    boardId: 19,
+    postId: 19,
     nickname: 4,
-    category: 'InternShip',
+    category: 'INTERNSHIP',
     title: '인턴십 제목 4',
     content: '인턴십 내용 4',
     createdAt: '2024-06-03T14:56:37',
@@ -248,9 +248,9 @@ export const posts: BoardPost[] = [
     ],
   },
   {
-    boardId: 20,
+    postId: 20,
     nickname: 5,
-    category: 'InternShip',
+    category: 'INTERNSHIP',
     title: '인턴십 제목 5',
     content: '인턴십 내용 5',
     createdAt: '2024-06-03T14:57:38',
@@ -261,9 +261,9 @@ export const posts: BoardPost[] = [
 
   // Notice 카테고리
   {
-    boardId: 21,
+    postId: 21,
     nickname: 1,
-    category: 'Notice',
+    category: 'NOTICE',
     title: '공지사항 제목 1',
     content: '공지사항 내용 1',
     createdAt: '2024-06-03T15:03:44',
@@ -272,9 +272,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image33'],
   },
   {
-    boardId: 22,
+    postId: 22,
     nickname: 2,
-    category: 'Notice',
+    category: 'NOTICE',
     title: '공지사항 제목 2',
     content: '공지사항 내용 2',
     createdAt: '2024-06-03T15:04:45',
@@ -283,9 +283,9 @@ export const posts: BoardPost[] = [
     images: [],
   },
   {
-    boardId: 23,
+    postId: 23,
     nickname: 3,
-    category: 'Notice',
+    category: 'NOTICE',
     title: '공지사항 제목 3',
     content: '공지사항 내용 3',
     createdAt: '2024-06-03T15:05:46',
@@ -294,9 +294,9 @@ export const posts: BoardPost[] = [
     images: ['https://via.placeholder.com/300.png?text=Image34', 'https://via.placeholder.com/300.png?text=Image35'],
   },
   {
-    boardId: 24,
+    postId: 24,
     nickname: 4,
-    category: 'Notice',
+    category: 'NOTICE',
     title: '공지사항 제목 4',
     content: '공지사항 내용 4',
     createdAt: '2024-06-03T15:06:47',
@@ -309,9 +309,9 @@ export const posts: BoardPost[] = [
     ],
   },
   {
-    boardId: 25,
+    postId: 25,
     nickname: 5,
-    category: 'Notice',
+    category: 'NOTICE',
     title: '공지사항 제목 5',
     content: '공지사항 내용 5',
     createdAt: '2024-06-03T15:07:48',

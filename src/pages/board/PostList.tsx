@@ -51,30 +51,30 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
     <>
       {posts.map(post => (
         <BackgroundContainer
-          key={post.boardId}
-          isActive={post.boardId === activePostId}
-          onClick={() => handlePostClick(post.boardId)}
+          key={post.postId}
+          isActive={post.postId === activePostId}
+          onClick={() => handlePostClick(post.postId)}
         >
           <PostBox category={post.category}>
             <UserContainer>
               <Avatar
                 category={post.category}
-                onClick={e => post.category !== 'Notice' && handleProfileClick(e, post.nickname)}
+                onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.nickname)}
               >
-                <AvatarImage src={post.category === 'Notice' ? announcementAvatar : userAvatar} alt="Avatar" />
+                <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
               </Avatar>
               <AuthorContainer>
                 <Author
                   category={post.category}
-                  onClick={e => post.category !== 'Notice' && handleProfileClick(e, post.nickname)}
+                  onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.nickname)}
                 >
-                  {post.category === 'Notice' ? '공지사항' : `작성자 ${post.nickname}`}
+                  {post.category === 'NOTICE' ? '공지사항' : `작성자 ${post.nickname}`}
                 </Author>
                 <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
               </AuthorContainer>
               {post.nickname === 1 && (
                 <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                  <PositionedMenu postId={post.boardId} />
+                  <PositionedMenu postId={post.postId} />
                 </div>
               )}
             </UserContainer>
@@ -84,7 +84,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
               <LikeButton
                 onClick={(e: React.MouseEvent) => {
                   e.stopPropagation();
-                  toggleLike(post.boardId);
+                  toggleLike(post.postId);
                 }}
               >
                 <LikeIcon src={post.likedByUser ? Like : UnLike} alt="like/unlike" />

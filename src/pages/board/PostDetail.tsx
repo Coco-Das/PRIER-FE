@@ -23,6 +23,9 @@ import {
   CommentText,
   CommentCreatedAt,
   LikeBackContainer,
+  CommentInputContainer,
+  CommentInput,
+  CommentButton,
 } from './BoardStyles';
 import { BoardPost } from '../../states/board/BoardStore';
 import { comments as initialComments } from '../../states/board/ChatStore';
@@ -45,10 +48,11 @@ interface PostDetailProps {
 }
 
 const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLike, posts }) => {
-  const post = posts.find(post => post.boardId === postId);
+  const post = posts.find(post => post.postId === postId);
   const postComments = initialComments.filter(comment => comment.boardId === postId);
 
   const [loading, setLoading] = useState(true);
+  const [newComment, setNewComment] = useState('');
   const formatDate = useFormatDate();
   const navigate = useNavigate();
 
@@ -69,6 +73,18 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
     navigate(`/mypage`);
   };
 
+  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setNewComment(e.target.value);
+  };
+
+  const handleCommentSubmit = () => {
+    if (newComment.trim()) {
+      // 여기에 댓글 전송 로직을 추가하세요.
+      console.log('New comment submitted:', newComment);
+      setNewComment('');
+    }
+  };
+
   return (
     <PostDetailContainer>
       {loading ? (
@@ -87,7 +103,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
             </AuthorContainer>
             {post.nickname === 1 && (
               <div className="ml-auto">
-                <PositionedMenu postId={post.boardId} />
+                <PositionedMenu postId={post.postId} />
               </div>
             )}
           </UserContainer>
@@ -108,7 +124,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
               <LikeButton
                 onClick={(e: any) => {
                   e.stopPropagation();
-                  toggleLike(post.boardId);
+                  toggleLike(post.postId);
                 }}
               >
                 <LikeIcon src={post.likedByUser ? Like : UnLike} alt="like/unlike" />
@@ -155,6 +171,10 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
             );
           })
         )}
+        <CommentInputContainer>
+          <CommentInput type="text" value={newComment} onChange={handleCommentChange} placeholder="댓글 달기..." />
+          <CommentButton onClick={handleCommentSubmit}>게시</CommentButton>
+        </CommentInputContainer>
       </CommentsContainer>
     </PostDetailContainer>
   );

@@ -191,7 +191,7 @@ const CreateBoard: React.FC = () => {
     const formData = new FormData();
     formData.append(
       'dto',
-      new Blob([JSON.stringify({ title, content: contentRaw, category })], { type: 'application/json' }),
+      new Blob([JSON.stringify({ title, content: '임의의 내용입니다.', category })], { type: 'application/json' }),
     );
 
     images.forEach(file => {
@@ -205,18 +205,18 @@ const CreateBoard: React.FC = () => {
         },
       });
 
-      if (response.status === 202) {
+      if (response.status === 201) {
         console.log('게시물 작성 성공');
-        console.log('보낸 데이터:', { title, content: contentRaw, category, images });
+        console.log('보낸 데이터:', { title, content: '임의의 내용입니다.', category, images });
         navigate('/board');
       } else {
         console.error('게시물 작성 실패');
         console.log('응답 상태 코드:', response.status);
-        console.log('보낸 데이터:', { title, content: contentRaw, category, images });
+        console.log('보낸 데이터:', { title, content: '임의의 내용입니다.', category, images });
       }
     } catch (error) {
       console.error('에러:', error);
-      console.log('보낸 데이터:', { title, content: contentRaw, category, images });
+      console.log('보낸 데이터:', { title, content: '임의의 내용입니다.', category, images });
     }
   };
 
