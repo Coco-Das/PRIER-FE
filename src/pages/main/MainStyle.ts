@@ -10,7 +10,7 @@ export const MainContainer = styled.div`
 export const GreetingContainer = styled.div`
   position: relative;
   display: flex;
-  border-radius: 20px;
+  border-radius: 11px;
   width: 100vw;
   padding: 0 3%;
   background-color: #f3f8ff;
@@ -18,25 +18,29 @@ export const GreetingContainer = styled.div`
   &::before {
     content: '';
     position: absolute;
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border-radius: 21px;
+    top: -4px;
+    left: -4px;
+    right: -4px;
+    bottom: -4px;
+    border-radius: 13px;
     border: 2px solid transparent;
-    background-image: linear-gradient(45deg, #315af1, #23be87, #773cd1);
+    background-size: 200% 200%;
+    background-image: linear-gradient(45deg, #315af1, #23be87, #773cd1, #315af1);
     background-clip: border-box;
     filter: hue-rotate(0deg);
-    animation: huerotate 3s infinite linear;
+    animation: gradientAnimation 6s ease infinite;
     z-index: -1;
   }
 
-  @keyframes huerotate {
+  @keyframes gradientAnimation {
     0% {
-      filter: hue-rotate(0deg);
+      background-position: 0% 50%;
+    }
+    50% {
+      background-position: 100% 50%;
     }
     100% {
-      filter: hue-rotate(360deg);
+      background-position: 0% 50%;
     }
   }
 `;
