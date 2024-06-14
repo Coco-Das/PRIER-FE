@@ -188,10 +188,11 @@ const CreateBoard: React.FC = () => {
 
     const contentState = editorState.getCurrentContent();
     const contentRaw = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
+    const contentString = JSON.stringify(contentRaw); // Raw 데이터를 문자열로 변환
     const formData = new FormData();
     formData.append(
       'dto',
-      new Blob([JSON.stringify({ title, content: '임의의 내용입니다.', category })], { type: 'application/json' }),
+      new Blob([JSON.stringify({ title, content: contentString, category })], { type: 'application/json' }),
     );
 
     images.forEach(file => {
@@ -199,7 +200,7 @@ const CreateBoard: React.FC = () => {
     });
 
     try {
-      const response = await API_BASE_URL.post('/boards', formData, {
+      const response = await API_BASE_URL.post('/posts', formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -207,16 +208,16 @@ const CreateBoard: React.FC = () => {
 
       if (response.status === 201) {
         console.log('게시물 작성 성공');
-        console.log('보낸 데이터:', { title, content: '임의의 내용입니다.', category, images });
+        console.log('보낸 데이터:', { title, content: contentString, category, images });
         navigate('/board');
       } else {
         console.error('게시물 작성 실패');
         console.log('응답 상태 코드:', response.status);
-        console.log('보낸 데이터:', { title, content: '임의의 내용입니다.', category, images });
+        console.log('보낸 데이터:', { title, content: contentString, category, images });
       }
     } catch (error) {
       console.error('에러:', error);
-      console.log('보낸 데이터:', { title, content: '임의의 내용입니다.', category, images });
+      console.log('보낸 데이터:', { title, content: contentString, category, images });
     }
   };
 

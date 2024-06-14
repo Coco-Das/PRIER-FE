@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Container, NoPostsMessage } from './BoardStyles';
-import { posts as initialPosts, BoardPost } from '../../states/board/BoardStore';
+import { BoardPost } from '../../states/board/BoardStore';
 import PaginationComponent from '../../components/board/PaginationComponent';
 import PostSkeleton from '../../components/board/PostSkeleton';
 import NavigationBar from '../../components/board/NavigationBar';
@@ -9,6 +9,7 @@ import PostList from './PostList';
 import PostDetail from './PostDetail';
 import PostDetailSkeleton from '../../components/board/PostDetailSkeleton';
 import usePagination from '../../hooks/UsePagination';
+import { API_BASE_URL } from '../../const/TokenApi';
 
 const Board: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -31,14 +32,22 @@ const Board: React.FC = () => {
   } = usePagination(filteredPosts, POSTS_PER_PAGE);
 
   useEffect(() => {
-    setLoading(true);
-    setTimeout(() => {
-      const sortedPosts = initialPosts.sort(
-        (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-      );
-      setPosts(sortedPosts);
-      setLoading(false);
-    }, 2000); // 로딩 시간을 조정할 수 있습니다.
+    const fetchPosts = async () => {
+      setLoading(true);
+      try {
+        const response = await API_BASE_URL.get('/posts');
+        const sortedPosts = response.data.sort(
+          (a: BoardPost, b: BoardPost) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+        );
+        setPosts(sortedPosts);
+      } catch (error) {
+        console.error('Error fetching posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPosts();
   }, []);
 
   useEffect(() => {
@@ -49,7 +58,7 @@ const Board: React.FC = () => {
       } else if (activeFilter === 'likes') {
         updatedPosts = posts.filter(post => post.category === activeCategory && post.likedByUser);
       } else if (activeFilter === 'myposts') {
-        updatedPosts = posts.filter(post => post.category === activeCategory && post.nickname === 1); // 임의로 memberId를 1로 설정
+        updatedPosts = posts.filter(post => post.category === activeCategory && post.nickname === '이인지');
       }
 
       if (searchTerm) {
@@ -86,11 +95,11 @@ const Board: React.FC = () => {
   };
 
   const handlePostClick = (postId: number) => {
-    navigate(`/board/post/${postId}`); // postId를 URL로 전달하여 페이지를 이동합니다.
+    navigate(`/board/post/${postId}`);
   };
 
   const handleBackToList = () => {
-    navigate(`/board?category=${activeCategory}&filter=${activeFilter}`); // 상세보기에서 목록으로 돌아가기
+    navigate(`/board?category=${activeCategory}&filter=${activeFilter}`);
   };
 
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {

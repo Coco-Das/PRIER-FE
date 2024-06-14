@@ -9,6 +9,9 @@ import DeleteForever from '@mui/icons-material/DeleteForever';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import { useNavigate } from 'react-router-dom';
+import axios from 'axios';
+
+import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
 
 interface PositionedMenuProps {
   postId: number;
@@ -19,6 +22,17 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId }) => {
 
   const handleEditClick = () => {
     navigate(`/modifyboard/${postId}`);
+  };
+
+  const handleDeleteClick = async () => {
+    try {
+      await API_BASE_URL.delete(`/posts/${postId}`);
+      alert('게시글이 삭제되었습니다.');
+      navigate('/board'); // 삭제 후 메인 페이지로 이동
+    } catch (error) {
+      console.error('게시글 삭제 중 오류가 발생했습니다:', error);
+      alert('게시글 삭제 중 오류가 발생했습니다.');
+    }
   };
 
   return (
@@ -36,7 +50,7 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId }) => {
           </ListItemDecorator>
           수정하기
         </MenuItem>
-        <MenuItem variant="soft" color="danger">
+        <MenuItem variant="soft" color="danger" onClick={handleDeleteClick}>
           <ListItemDecorator sx={{ color: 'inherit' }}>
             <DeleteForever />
           </ListItemDecorator>

@@ -40,6 +40,8 @@ import PostMenu from '../../components/board/PostMenu';
 import CommentMenu from '../../components/board/CommentMenu';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../../components/utils/Loading';
+import axios from 'axios'; // 추가된 부분
+import { API_BASE_URL } from '../../const/TokenApi'; // 추가된 부분
 
 interface PostDetailProps {
   postId: number;
@@ -79,17 +81,42 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
     setNewComment(e.target.value);
   };
 
-  const handleCommentSubmit = () => {
+  const handleCommentSubmit = async () => {
     if (newComment.trim()) {
-      if (editingCommentId !== null) {
-        // 여기에 댓글 수정 로직을 추가하세요.
-        console.log('Comment edited:', editingCommentId, newComment);
-        setEditingCommentId(null);
-      } else {
-        // 여기에 댓글 전송 로직을 추가하세요.
-        console.log('New comment submitted:', newComment);
+      try {
+        if (editingCommentId !== null) {
+          // 댓글 수정 로직
+          const response = await API_BASE_URL.put(`/posts/${postId}/comment/${editingCommentId}`, {
+            content: newComment,
+          });
+
+          if (response.status === 200) {
+            console.log('Comment edited:', editingCommentId, newComment);
+            // 댓글 수정 후 UI를 업데이트하기 위한 추가 로직을 작성하세요.
+            setEditingCommentId(null);
+          } else {
+            console.error('댓글 수정 실패:', response.status);
+            console.log(newComment);
+          }
+        } else {
+          // 댓글 전송 로직
+          const response = await API_BASE_URL.post(`/posts/${postId}/comment`, {
+            content: newComment,
+          });
+
+          if (response.status === 202) {
+            // 댓글이 성공적으로 생성되었음을 나타내는 상태 코드는 201입니다.
+            console.log('New comment submitted:', newComment);
+            // 댓글 제출 후 UI를 업데이트하기 위한 추가 로직을 작성하세요.
+          } else {
+            console.error('댓글 전송 실패:', response.status);
+            console.log(newComment);
+          }
+        }
+        setNewComment('');
+      } catch (error) {
+        console.error('댓글 전송 중 오류 발생:', error, newComment);
       }
-      setNewComment('');
     }
   };
 
@@ -108,16 +135,16 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       ) : (
         <PostContentContainer category={post.category}>
           <UserContainer>
-            <Avatar onClick={e => handleProfileClick(e, post.nickname)} category={post.category}>
+            <Avatar onClick={e => handleProfileClick(e, 1)} category={post.category}>
               <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author onClick={e => handleProfileClick(e, post.nickname)} category={post.category}>
+              <Author onClick={e => handleProfileClick(e, 1)} category={post.category}>
                 {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
               </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
-            {post.nickname === 1 && (
+            {post.nickname === '이인지' && (
               <div className="ml-auto">
                 <PostMenu postId={post.postId} />
               </div>
@@ -126,10 +153,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
           <ContentContainer className="flex flex-col items-start">
             <h1>{post.title}</h1>
             <p>{post.content}</p>
-            {post.images &&
-              post.images.map((image, index) => (
-                <Image key={index} src={image} alt={`Content image ${index + 1}`} category={post.category} />
-              ))}
+            {post.media && post.media.length > 0 && <Image src={post.media[0].s3Url} alt={post.media[0].metadata} />}
           </ContentContainer>
           <LikeBackContainer>
             <button onClick={onBackToList}>
