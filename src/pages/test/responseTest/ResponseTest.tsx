@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useEffect, useState } from 'react';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   BlueDiv,
@@ -40,11 +40,8 @@ interface Media {
 export const ResponseTest = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const setProjectId = useProjectStore(state => state.setProjectId);
-  // const [projectData, setProjectData] = useState(null);
   const [mainImageUrl, setMainImageUrl] = useState<string | null>(null);
   const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>([]);
-  // const mainFileInputRef = useRef<HTMLInputElement>(null);
-  // const additionalFileInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<Tag[]>([]);
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
@@ -82,12 +79,12 @@ export const ResponseTest = () => {
 
       setTeamName(Data.teamName);
       setTitle(Data.title);
-      setIntroduce(Data.introduce);
+      setIntroduce(Data.introduce.replace(/\n/g, '<br />'));
       setTeamDescription(Data.teamDescription);
-      setGoal(Data.goal);
+      setGoal(Data.goal.replace(/\n/g, '<br />'));
       setStartDate(Data.startDate);
       setEndDate(Data.endDate);
-      setTeamMate(Data.teamMate.replace(/\n/g, '<br />')); // 줄바꿈 문자를 <br />로 변환
+      setTeamMate(Data.teamMate.replace(/\n/g, '<br />'));
       setTags(Data.tags.map((tag: { tagName: string }) => ({ tagName: tag.tagName, color: getRandomColor() })));
       setStatus(Data.status);
       setLink(Data.link);
@@ -136,13 +133,9 @@ export const ResponseTest = () => {
           </div>
           <ProjectTextArea className="mt-2">
             <p className="font-extrabold">프로젝트 소개</p>
-            <span className="mt-3" style={{ fontSize: '16px' }}>
-              {introduce}
-            </span>
+            <span className="mt-3" style={{ fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: introduce }} />
             <p className="font-extrabold mt-5">프로젝트 목표</p>
-            <span className="mt-3" style={{ fontSize: '16px' }}>
-              {goal}
-            </span>
+            <span className="mt-3" style={{ fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: goal }} />
             <ImageWrapper className="mt-5">
               {mainImageUrl && <StyledImg src={mainImageUrl} alt="메인 이미지" />}
 
@@ -190,7 +183,7 @@ export const ResponseTest = () => {
               </Link>
             </GreenDiv>
           )}
-          <WhiteDiv className="mt-2">
+          <WhiteDiv className="mt-2" onClick={() => navigate(`/review/${projectId}`)}>
             <span className="font-bold">댓글 달기</span>
             <span style={{ color: '#828282' }}>한줄 평</span>
             <StarRating score={score} />

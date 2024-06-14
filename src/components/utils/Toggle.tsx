@@ -1,10 +1,5 @@
-import { useState } from 'react';
 import styled from 'styled-components';
 import PropTypes from 'prop-types';
-
-type ToggleType = {
-  latesSort: boolean;
-};
 
 type ToggleBtnProps = {
   currentType: string;
@@ -27,7 +22,7 @@ const Checkbox = styled.input`
   display: none;
 `;
 
-const BtnLabel = styled.label<ToggleType>`
+const BtnLabel = styled.label<{ $isSubjective: boolean }>`
   position: absolute;
   width: 4.5rem;
   height: 2rem;
@@ -35,13 +30,13 @@ const BtnLabel = styled.label<ToggleType>`
   background: #315af1;
   box-shadow: 1px 2px 8px rgba(0, 0, 0, 0.16);
   transition: all 0.2s ease-in-out;
-  left: ${props => (props.latesSort ? '0' : '4rem')};
+  left: ${props => (props.$isSubjective ? '0' : '4rem')};
   display: flex;
   align-items: center;
   justify-content: center;
   &::before {
     position: absolute;
-    content: ${props => (props.latesSort ? "'주관식'" : "'객관식'")};
+    content: ${props => (props.$isSubjective ? "'주관식'" : "'객관식'")};
     width: 100%;
     height: 60%;
     display: flex;
@@ -55,16 +50,12 @@ const BtnLabel = styled.label<ToggleType>`
 `;
 
 export const ToggleBtn: React.FC<ToggleBtnProps> = ({ currentType, onToggle }) => {
-  const [latesSort, setLatesSort] = useState(true);
-  const toggleHandle = () => {
-    setLatesSort(prev => !prev);
-  };
   return (
     <ToggleWrapper onClick={onToggle}>
       <div style={{ width: '50%', textAlign: 'center', color: 'gray' }}>주관식</div>
       <div style={{ width: '50%', textAlign: 'center', color: 'gray' }}>객관식</div>
-      <Checkbox type="checkbox" id="toggleBtn" onChange={toggleHandle} checked={currentType === 'subjective'} />
-      <BtnLabel htmlFor="toggleBtn" latesSort={currentType === 'subjective'}></BtnLabel>
+      <Checkbox type="checkbox" id="toggleBtn" checked={currentType === 'subjective'} readOnly />
+      <BtnLabel htmlFor="toggleBtn" $isSubjective={currentType === 'subjective'}></BtnLabel>
     </ToggleWrapper>
   );
 };
