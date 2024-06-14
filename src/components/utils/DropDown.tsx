@@ -45,15 +45,15 @@ DropDown.propTypes = {
   onSelect: PropTypes.func.isRequired,
 };
 
-const Container = styled.div<{ isDropdownView: boolean }>`
+const Container = styled.div<{ $isDropdownView: boolean }>`
   background-color: #f7f7f7;
   height: 100%;
   width: 120px;
   border-radius: 10px;
   border: 1px solid #ffba6b;
   position: relative; /* relative로 설정하여 드롭다운의 위치를 조정 */
-  ${({ isDropdownView }) =>
-    isDropdownView &&
+  ${({ $isDropdownView }) =>
+    $isDropdownView &&
     css`
       border-bottom-left-radius: 0px;
       border-bottom-right-radius: 0px;
@@ -93,7 +93,7 @@ export const DropDownContainer: React.FC<DropDownContainerProps> = ({ onSelect }
   };
 
   return (
-    <Container onBlur={handleBlurContainer} isDropdownView={isDropdownView}>
+    <Container onBlur={handleBlurContainer} $isDropdownView={isDropdownView}>
       <DropDownButton onClick={handleClickContainer}>
         {selectedItem}
         {isDropdownView ? '▲' : '▼'}

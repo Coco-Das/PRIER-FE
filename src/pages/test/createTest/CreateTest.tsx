@@ -350,7 +350,7 @@ export const CreateTest = () => {
           {showAlert && <CustomAlert message="태그는 최대 2개까지 설정할 수 있습니다." showButtons={false} />}
           <TagWrapper>
             {tags.map((tagIndex, index) => (
-              <Tag key={index} bgcolor={tagIndex.color}>
+              <Tag key={index} $bgColor={tagIndex.color}>
                 {tagIndex.tag}
                 <DeleteButton
                   style={{
@@ -509,7 +509,13 @@ export const CreateTest = () => {
                     {question.options?.map((option, i) => (
                       <div key={i}>
                         <label>
-                          <input type="radio" name={`question-${question.id}`} value={option} checked={false} />{' '}
+                          <input
+                            type="radio"
+                            name={`question-${question.id}`}
+                            value={option}
+                            checked={false}
+                            readOnly
+                          />{' '}
                           {option}
                         </label>
                       </div>

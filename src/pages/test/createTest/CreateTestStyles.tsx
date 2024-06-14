@@ -144,14 +144,11 @@ export const TagWrapper = styled.div`
   flex-wrap: wrap;
   gap: 5px;
 `;
-interface TagProps {
-  bgcolor: string;
-}
 
-export const Tag = styled.div<TagProps>`
+export const Tag = styled.div<{ $bgColor: string }>`
   padding: 5px 10px;
   position: relative;
-  background-color: ${props => props.bgcolor};
+  background-color: ${props => props.$bgColor};
   border-radius: 20px;
   font-size: 12px;
 `;
