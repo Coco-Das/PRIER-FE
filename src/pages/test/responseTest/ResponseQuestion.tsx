@@ -8,8 +8,8 @@ import PropTypes from 'prop-types';
 interface Question {
   content: string;
   category: string;
-  id: string;
-  options?: string[]; // 객관식 질문의 선택지(고정)
+  questionId: number;
+  options?: string[];
 }
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
@@ -54,7 +54,7 @@ export const ResponseQuestion = () => {
         if (question.category === 'OBJECTIVE' && !question.options) {
           return {
             ...question,
-            options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'], // 기본 선택지 설정
+            options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'],
           };
         }
         return question;
@@ -74,21 +74,27 @@ export const ResponseQuestion = () => {
     console.log(projectId);
     return <div>Loading...</div>;
   }
+
   const handleQuestionSubmit = async () => {
     try {
-      const response = await API_BASE_URL.post(`/projects/${projectId}/responses`);
+      const responsePayload = Object.keys(responses).map(questionId => ({
+        questionId: Number(questionId),
+        content: responses[Number(questionId)],
+      }));
+      console.log(responsePayload);
+      await API_BASE_URL.post(`/projects/${projectId}/responses`, responsePayload);
     } catch (error) {
       console.error('에러:', error);
     }
   };
 
-  const TextChange = (questionId: string, value: string) => {
+  const TextChange = (questionId: number, value: string) => {
     setResponses(prevResponses => ({
       ...prevResponses,
       [questionId]: value,
     }));
   };
-  const OptionChange = (questionId: string, value: string) => {
+  const OptionChange = (questionId: number, value: string) => {
     setResponses(prevResponses => ({
       ...prevResponses,
       [questionId]: value,
@@ -98,7 +104,7 @@ export const ResponseQuestion = () => {
   return (
     <Question>
       {questions.map((question, index) => (
-        <QuestionDiv key={question.id} className="mt-4">
+        <QuestionDiv key={question.questionId} className="mt-4">
           {question.category === 'SUBJECTIVE' ? (
             <div>
               <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
@@ -111,10 +117,11 @@ export const ResponseQuestion = () => {
                     fontWeight: 'bold',
                     width: '80%',
                   }}
-                  value={question.id}
+                  value={question.content}
                   readOnly
                 />
               </div>
+
               <AutoResizeTextarea
                 placeholder="주관식 답변을 입력하세요..."
                 style={{
@@ -123,8 +130,8 @@ export const ResponseQuestion = () => {
                   overflowY: 'auto',
                   width: '80%',
                 }}
-                onChange={e => TextChange(question.id, e.target.value)}
-                // value={responses[question.id] || ''}
+                onChange={e => TextChange(question.questionId, e.target.value)}
+                value={responses[question.questionId] || ''}
               />
             </div>
           ) : (
@@ -154,10 +161,10 @@ export const ResponseQuestion = () => {
                     <label>
                       <input
                         type="radio"
-                        name={`question-${question.id}`}
+                        name={`question-${question.questionId}`}
                         value={option}
                         // checked={responses[question.id] === option}
-                        onChange={() => OptionChange(question.id, option)}
+                        onChange={() => OptionChange(question.questionId, option)}
                       />{' '}
                       {option}
                     </label>
@@ -168,7 +175,7 @@ export const ResponseQuestion = () => {
           )}
         </QuestionDiv>
       ))}
-      <div style={{ width: '100%', display: 'flex' }}>
+      <div style={{ width: '100%', display: 'flex', marginBottom: '10px' }}>
         <CustomButton onClick={handleQuestionSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
           제출하기
         </CustomButton>
