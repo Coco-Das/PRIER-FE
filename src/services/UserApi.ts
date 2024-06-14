@@ -2,7 +2,7 @@ import axios from 'axios';
 import { useCallback } from 'react';
 import { useUserStore } from '../states/user/UserStore';
 import { API_BASE_URL, KAKAO_ACCESS_TOKEN } from '../const/TokenApi';
-import { RecentProjectStore } from '../states/user/UserProjectStore';
+import { MyReviewStore, RecentProjectStore } from '../states/user/UserProjectStore';
 
 export async function FetchMyPage() {
   try {
@@ -200,5 +200,15 @@ export async function RecentProject() {
   } catch (error) {
     console.error('최근 프로젝트 요청 실패', error);
     throw error;
+  }
+}
+
+export async function FetchMyReview() {
+  try {
+    const response = await API_BASE_URL.get('/projects/comment/my-comments');
+    console.log('리뷰 요청 성공', response.data);
+    MyReviewStore.getState().setReview(response.data);
+  } catch (error) {
+    console.log('리뷰 요청 실패', error);
   }
 }
