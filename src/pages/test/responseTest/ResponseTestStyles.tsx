@@ -242,6 +242,9 @@ export const WhiteDiv = styled.div`
   gap: 10px;
   flex-direction: column;
   margin-left: 30px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 export const QuestionDiv = styled.div`
   width: 100%;
