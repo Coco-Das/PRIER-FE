@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
 import { LinkText, ProjectContainer, ProjectWrapper, ProjectImg } from './UserStyle';
@@ -7,10 +7,9 @@ import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import { styled } from 'styled-components';
 import { useAllProjectStore } from '../../states/user/UserProjectStore';
-import { FetchAllProject } from '../../services/MainPageApi';
 
 export default function ProjectPreview() {
-  const { content, setProjects } = useAllProjectStore();
+  const { content } = useAllProjectStore();
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: 'black',
