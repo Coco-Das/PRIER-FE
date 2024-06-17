@@ -1,60 +1,89 @@
 import { css, styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
+export const LatestProjectWrapper = styled.div`
+  width: 100%;
+  height: 25rem;
+  gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(19rem, 1fr));
+`;
+export const ProjectWrapper = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(19rem, 1fr));
+  gap: 2rem;
+`;
 export const ProjectContainer = styled.div`
+  width: 18rem;
+  height: 22rem;
   border: none;
   border-radius: 15px;
   padding: 0.5rem;
-  width: max-content;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
 `;
 export const LatestProjectContainer = styled.div`
   position: relative;
-  width: 22%;
-  height: 30%;
+  width: 17rem;
+  height: 22rem;
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
-  justify-content: end;
+  justify-content: space-between;
   padding: 12px;
-  gap: 12px;
-  border-radius: 8px;
+  border-radius: 15px;
   cursor: pointer;
+
   &::before {
     content: '';
     position: absolute;
     inset: 0;
-    left: -5px;
+    left: -0.5rem;
     margin: auto;
-    width: 21%;
-    height: 31%;
-    border-radius: 10px;
-    background: linear-gradient(-45deg, #e81cff 0%, #40c9ff 100%);
+    width: 18rem;
+    height: 23rem;
+    border-radius: 17px;
     z-index: -10;
     pointer-events: none;
+    background: #f3f5fb;
     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
   }
-  &::after {
-    content: '';
-    z-index: -1;
-    position: absolute;
-    inset: 0;
-    background: linear-gradient(-45deg, #fc00ff 0%, #00dbde 100%);
-    transform: translate3d(0, 0, 0) scale(0.95);
-    filter: blur(20px);
-  }
+
   &:hover::after {
     filter: blur(30px);
   }
   &:hover::before {
-    transform: rotate(-90deg) scaleX(1.34) scaleY(0.77);
+    transform: rotate(-90deg) scaleX(1.3) scaleY(0.8);
+    background: linear-gradient(-45deg, #28b381 0%, #40c9ff 100%);
   }
+`;
+
+export const ProjectImg = styled.img`
+  border-radius: 10px;
+  margin-bottom: 0.5rem;
+  width: 10rem;
+  height: 10rem;
+  align-self: center;
 `;
 export const LinkText = styled.p`
   font-size: 15px;
   font-weight: 300;
   color: #828282;
   cursor: pointer;
+  :&hover  {
+    color: #454545;
+  }
 `;
+const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0', '#ACA4D5', '#4188FE'];
+
+export const TagContainer = styled.div`
+  font-size: 14px;
+  padding: 5px 0.5rem;
+  background-color: ${colors};
+  font-weight: 300;
+  border-radius: 20px;
+  margin-right: 10px;
+`;
+//프로필
 export const ProfileContainer = styled.div`
   position: absolute;
   top: 64px;
@@ -139,7 +168,6 @@ export interface ProgressBarProps {
   percentage: number;
 }
 // 리뷰
-
 export const ReviewContainer = styled.div`
   border: 1px solid rgba(0, 0, 0, 0.1);
   border-radius: 12px;

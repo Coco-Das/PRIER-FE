@@ -18,11 +18,17 @@ import { useUserStore } from '../../states/user/UserStore';
 import { CheckPoint } from '../../services/StoreApi';
 import { userPointStore } from '../../states/user/PointStore';
 import LatestProject from '../../components/user/LatestProject';
+import { useAllProjectStore } from '../../states/user/UserProjectStore';
+import { FetchAllProject, FetchLatestProject } from '../../services/MainPageApi';
+
 export default function Main() {
-  const [activeButton, setActiveButton] = useState('인기순');
   const userProfile = useUserStore(state => state.userProfile);
   const { setUserProfile } = useUserStore();
   const pointStore = userPointStore();
+  const { totalPages, setProjects } = useAllProjectStore();
+  const [activeButton, setActiveButton] = useState('인기순');
+  const [filter, setFilter] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -39,6 +45,43 @@ export default function Main() {
 
     fetchData();
   }, [setUserProfile, pointStore.setPoint]);
+  useEffect(() => {
+    const fetchProjects = async () => {
+      try {
+        const Latest = await FetchLatestProject();
+        console.log('최근 프로젝트 데이터 가져오기 :', Latest);
+        const AllProject = await FetchAllProject(0, 0);
+        console.log('모든 프로젝트 데이터 가져오기 :', AllProject);
+      } catch (error) {
+        console.error('프로젝트 데이터 가져오기 실패:', error);
+      }
+    };
+
+    fetchProjects();
+  }, [setProjects]);
+
+  const FilterChange = async (newFilter: number | null, buttonLabel: string) => {
+    if (newFilter) {
+      setFilter(newFilter);
+    }
+    setActiveButton(buttonLabel);
+    try {
+      const allProjects = await FetchAllProject(filter, 0);
+      console.log('모든 프로젝트 데이터 가져오기 :', allProjects);
+    } catch (error) {
+      console.error('프로젝트 데이터 가져오기 실패:', error);
+    }
+  };
+
+  const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
+    setCurrentPage(value);
+    try {
+      const allProjects = await FetchAllProject(filter, value);
+      console.log('페이지네이션 :', allProjects);
+    } catch (error) {
+      console.error('프로젝트 데이터 가져오기 실패:', error);
+    }
+  };
   return (
     <div className="flex-col cursor-pointer" style={{ margin: '1% 7%' }}>
       <MainContainer>
@@ -61,10 +104,10 @@ export default function Main() {
       <Title>모든 프로젝트</Title>
       <div className="flex justify-between mb-2">
         <div className="flex gap-2">
-          <OrderButton active={activeButton === '인기순'} onClick={() => setActiveButton('인기순')}>
+          <OrderButton active={activeButton === '인기순'} onClick={() => FilterChange(0, '인기순')}>
             인기순
           </OrderButton>
-          <OrderButton active={activeButton === '등록순'} onClick={() => setActiveButton('등록순')}>
+          <OrderButton active={activeButton === '등록순'} onClick={() => FilterChange(1, '등록순')}>
             등록순
           </OrderButton>
         </div>
@@ -80,7 +123,13 @@ export default function Main() {
       </div>
       <ProjectPreview />
       <span className="flex justify-center mt-6">
-        <Pagination count={5} color="primary" size="large" />
+        <Pagination
+          count={totalPages - 1}
+          page={currentPage}
+          color="primary"
+          size="large"
+          onChange={handlePageChange}
+        />
       </span>
       <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
         <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 28" id="path">

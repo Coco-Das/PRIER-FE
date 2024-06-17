@@ -120,6 +120,7 @@ export const Title = styled.h2`
     font-size: 24px;
   }
 `;
+
 interface OrderButtonProps {
   active: boolean;
 }
@@ -133,6 +134,7 @@ export const OrderButton = styled.button<OrderButtonProps>`
   font-weight: 300;
   background-color: ${props => (props.active ? '#315af1' : '#f0f0f0')};
   color: ${props => (props.active ? '#ffffff' : '#000000')};
+  transition: 0.4s;
 `;
 
 export const SearchInputWrapper = styled.div`

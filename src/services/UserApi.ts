@@ -180,7 +180,7 @@ export const EditIntro = async (newIntro: string) => {
 export const SendQuest = async (sequence: string) => {
   const date = new Date().toISOString().split('T')[0];
   try {
-    const response = await API_BASE_URL.get(`/quests/${date}/${sequence}`);
+    const response = await API_BASE_URL.put(`/quests/${date}/${sequence}`);
     console.log('퀘스트 전송 성공', response.data);
     if (response.status === 200) {
       return true;

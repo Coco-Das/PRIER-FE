@@ -34,11 +34,11 @@ export async function FetchAllProject(filter: number, page: number) {
   }
 }
 
-//메인 페이지 모든 프로젝트 요청
+//메인 페이지 신규 프로젝트 요청
 export async function FetchLatestProject() {
   try {
     const response = await API_BASE_URL.get(`/projects`);
-    console.log('최신순 프로젝트 요청 성공', response.data);
+    console.log('신규 프로젝트 요청 성공', response.data);
     const projectData = {
       totalPages: response.data.totalPages,
       totalElements: response.data.totalElements,
@@ -62,7 +62,7 @@ export async function FetchLatestProject() {
     useAllProjectStore.getState().setProjects(projectData);
     return projectData;
   } catch (error) {
-    console.error('최신순 프로젝트 요청 실패', error);
+    console.error('신규 프로젝트 요청 실패', error);
     throw error;
   }
 }
