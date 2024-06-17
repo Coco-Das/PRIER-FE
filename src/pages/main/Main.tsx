@@ -66,13 +66,8 @@ export default function Main() {
     }
     setActiveButton(buttonLabel);
     try {
-      if (buttonLabel === '최신순') {
-        const latestProjects = await FetchLatestProject();
-        console.log('최신 프로젝트 데이터 가져오기 :', latestProjects);
-      } else {
-        const allProjects = await FetchAllProject(filter, 0);
-        console.log('모든 프로젝트 데이터 가져오기 :', allProjects);
-      }
+      const allProjects = await FetchAllProject(filter, 0);
+      console.log('모든 프로젝트 데이터 가져오기 :', allProjects);
     } catch (error) {
       console.error('프로젝트 데이터 가져오기 실패:', error);
     }
@@ -112,9 +107,6 @@ export default function Main() {
           <OrderButton active={activeButton === '인기순'} onClick={() => FilterChange(0, '인기순')}>
             인기순
           </OrderButton>
-          <OrderButton active={activeButton === '최신순'} onClick={() => FilterChange(null, '최신순')}>
-            최신순
-          </OrderButton>
           <OrderButton active={activeButton === '등록순'} onClick={() => FilterChange(1, '등록순')}>
             등록순
           </OrderButton>
@@ -131,7 +123,13 @@ export default function Main() {
       </div>
       <ProjectPreview />
       <span className="flex justify-center mt-6">
-        <Pagination count={totalPages} page={currentPage} color="primary" size="large" onChange={handlePageChange} />
+        <Pagination
+          count={totalPages - 1}
+          page={currentPage}
+          color="primary"
+          size="large"
+          onChange={handlePageChange}
+        />
       </span>
       <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
         <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 28" id="path">
