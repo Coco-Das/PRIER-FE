@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
-import { LinkText, ProjectContainer } from './UserStyle';
+import { LinkText, ProjectContainer, ProjectWrapper, ProjectImg } from './UserStyle';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
@@ -19,19 +19,9 @@ export default function ProjectPreview() {
       color: '#315af1',
     },
   });
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        await FetchAllProject(0, 0);
-      } catch (error) {
-        console.error('프로젝트 데이터 가져오기 실패:', error);
-      }
-    };
 
-    fetchProjects();
-  }, [setProjects]);
   return (
-    <div>
+    <ProjectWrapper>
       {content.map(project => (
         <ProjectContainer key={project.projectId}>
           <div className="flex items-center mt-2 justify-between w-full">
@@ -45,7 +35,7 @@ export default function ProjectPreview() {
               </span>
             </div>
           </div>
-          <img src={project.mainImageUrl} alt="My Project" className="mb-2" style={{ width: '270px' }} />
+          <ProjectImg src={project.mainImageUrl} alt="My Project" />
           <div className="ml-3">
             <p className="font-light text-lg">
               {project.tags.map(tag => (
@@ -67,6 +57,6 @@ export default function ProjectPreview() {
           </div>
         </ProjectContainer>
       ))}
-    </div>
+    </ProjectWrapper>
   );
 }

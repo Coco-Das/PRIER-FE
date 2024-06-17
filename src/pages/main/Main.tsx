@@ -18,11 +18,14 @@ import { useUserStore } from '../../states/user/UserStore';
 import { CheckPoint } from '../../services/StoreApi';
 import { userPointStore } from '../../states/user/PointStore';
 import LatestProject from '../../components/user/LatestProject';
+import { useAllProjectStore } from '../../states/user/UserProjectStore';
+import { FetchAllProject, FetchLatestProject } from '../../services/MainPageApi';
 export default function Main() {
   const [activeButton, setActiveButton] = useState('인기순');
   const userProfile = useUserStore(state => state.userProfile);
   const { setUserProfile } = useUserStore();
   const pointStore = userPointStore();
+  const { setProjects } = useAllProjectStore();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -36,9 +39,21 @@ export default function Main() {
         console.error('메인 페이지 호출 실패:', error);
       }
     };
+    const fetchProjects = async () => {
+      try {
+        const Latest = await FetchLatestProject();
+        console.log('최근 프로젝트 데이터 가져오기 :', Latest);
+        const AllProject = await FetchAllProject(0, 0);
+        console.log('모든 프로젝트 데이터 가져오기 :', AllProject);
+      } catch (error) {
+        console.error('프로젝트 데이터 가져오기 실패:', error);
+      }
+    };
 
+    fetchProjects();
     fetchData();
-  }, [setUserProfile, pointStore.setPoint]);
+  }, [setUserProfile, pointStore.setPoint, setProjects]);
+
   return (
     <div className="flex-col cursor-pointer" style={{ margin: '1% 7%' }}>
       <MainContainer>

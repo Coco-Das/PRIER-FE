@@ -1,16 +1,15 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
-import { LatestProjectContainer, LinkText, ProjectContainer } from './UserStyle';
+import { LatestProjectContainer, LatestProjectWrapper, LinkText } from './UserStyle';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import { styled } from 'styled-components';
 import { useAllProjectStore } from '../../states/user/UserProjectStore';
-import { FetchLatestProject } from '../../services/MainPageApi';
 
 export default function LatestProject() {
-  const { content, setProjects } = useAllProjectStore();
+  const { content } = useAllProjectStore();
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: 'black',
@@ -19,19 +18,9 @@ export default function LatestProject() {
       color: '#315af1',
     },
   });
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        await FetchLatestProject();
-      } catch (error) {
-        console.error('최근 프로젝트 데이터 가져오기 실패:', error);
-      }
-    };
 
-    fetchProjects();
-  }, [setProjects]);
   return (
-    <div>
+    <LatestProjectWrapper>
       {content.map(project => (
         <LatestProjectContainer key={project.projectId}>
           <div className="flex items-center mt-2 justify-between w-full">
@@ -67,6 +56,6 @@ export default function LatestProject() {
           </div>
         </LatestProjectContainer>
       ))}
-    </div>
+    </LatestProjectWrapper>
   );
 }
