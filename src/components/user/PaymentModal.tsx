@@ -3,7 +3,8 @@ import { keyframes, styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 interface PaymentModalProps {
   amount: number;
-  onConfirm: (amount: number) => void;
+  itemName: string;
+  onConfirm: (amount: number, itemName: string) => void;
   onCancel: () => void;
 }
 
@@ -75,7 +76,7 @@ const Tooltip = styled.div`
     }
   }
 `;
-const PaymentModal: React.FC<PaymentModalProps> = ({ amount, onConfirm, onCancel }) => {
+const PaymentModal: React.FC<PaymentModalProps> = ({ amount, itemName, onConfirm, onCancel }) => {
   return (
     <PaymentOverlay>
       <PaymentContainer>
@@ -83,7 +84,7 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ amount, onConfirm, onCancel
         <PaymentText>{amount} 원을 충전하시겠습니까?</PaymentText>
         <span className="flex mt-36 gap-10">
           <Tooltip>카카오 페이로 결제하기</Tooltip>
-          <PaymentButton className="relative" onClick={() => onConfirm(amount)}>
+          <PaymentButton className="relative" onClick={() => onConfirm(amount, itemName)}>
             결제
           </PaymentButton>
           <PaymentButton onClick={onCancel}>취소</PaymentButton>
