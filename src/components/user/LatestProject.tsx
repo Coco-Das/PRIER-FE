@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
-import { LatestProjectContainer, LatestProjectWrapper, LinkText } from './UserStyle';
+import { LatestProjectContainer, LatestProjectWrapper, LinkText, ProjectImg, TagContainer } from './UserStyle';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
@@ -18,10 +18,11 @@ export default function LatestProject() {
       color: '#315af1',
     },
   });
+  const displayedProjects = content.slice(0, 4);
 
   return (
     <LatestProjectWrapper>
-      {content.map(project => (
+      {displayedProjects.map(project => (
         <LatestProjectContainer key={project.projectId}>
           <div className="flex items-center mt-2 justify-between w-full">
             <div className="flex items-center">
@@ -34,13 +35,14 @@ export default function LatestProject() {
               </span>
             </div>
           </div>
-          <img src={project.mainImageUrl} alt="My Project" className="mb-2" style={{ width: '270px' }} />
+          <ProjectImg src={project.mainImageUrl} alt="My Project" className="mb-2" style={{ width: '270px' }} />
           <div className="ml-3">
-            <p className="font-light text-lg">
+            <div className="flex">
               {project.tags.map(tag => (
-                <div key={tag.tagId}>{tag.tagName}</div>
-              ))}
-            </p>
+                <TagContainer key={tag.tagId}>{tag.tagName}</TagContainer>
+              ))}{' '}
+            </div>
+
             <div className="flex justify-between">
               <StyledRating
                 defaultValue={project.score}
