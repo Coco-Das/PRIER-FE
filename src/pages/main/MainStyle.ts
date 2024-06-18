@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { device } from '../../styles/Media';
 import { ReactComponent as ChartIcon } from '../../assets/main_chart.svg';
 
@@ -136,63 +136,54 @@ export const OrderButton = styled.button<OrderButtonProps>`
   color: ${props => (props.active ? '#ffffff' : '#000000')};
   transition: 0.4s;
 `;
+const expandInput = keyframes`
+  from {
+    width: var(--size-button);
+  }
+  to {
+    width: 200px;
+ box-shadow: 0.5px 0.5px 1px #0e0e0e, -0.5px -0.5px 1px #828282, inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #5f5e5e;
+  }
+`;
 
 export const SearchInputWrapper = styled.div`
-  input {
-    position: relative;
-    background: none;
-    border: none;
-    outline: none;
-    width: 160px;
-    padding: 0;
-    z-index: 1;
-    overflow: hidden;
-    line-height: 18px;
-    margin: 5px 0;
-    font-size: 18px;
-    -webkit-appearance: none;
-    transition: all 0.6s ease;
-    cursor: pointer;
-    & + div {
-      position: relative;
-      height: 28px;
-      width: 100%;
-      margin: -28px 0 0 0;
-      svg {
-        display: block;
-        position: absolute;
-        height: 28px;
-        width: 160px;
-        right: 0;
-        top: 0;
-        fill: none;
-        stroke: #315AF1;
-        stroke-width: 1.5px;
-        stroke-dashoffset: 212.908 + 59;
-        stroke-dasharray: 59 212.908;
-        transition: all 0.6s ease;
-      }
-    }
+  position: relative;
+  --size-button: 40px;
+  color: white;
+`;
 
-    &:focus {
-      width: 160px;
-      padding: 0 4px;
-      cursor: text;
-      & + div {
-        svg {
-          stroke-dasharray: 150 212.908;
-          stroke-dashoffset: 300;
-        }
-      }
-    }
-  }
-}
+export const StyledInput = styled.input`
+  padding-left: var(--size-button);
+  height: var(--size-button);
+  font-size: 15px;
+  border: none;
+  color: #fff;
+  outline: none;
+  width: var(--size-button);
+  transition: all ease 0.3s;
+  background-color: #315af1;
+  box-shadow: 0.5px 0.5px 1px #0e0e0e, -0.5px -0.5px 1px #828282, inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #5f5e5e;
+  border-radius: 50px;
+  cursor: pointer;
 
-* {
-  box-sizing: inherit;
-  &:before,
-  &:after {
-    box-sizing: inherit;
+  &:focus {
+    width: 200px;
+    cursor: text;
+    animation: ${expandInput} 0.3s forwards; /* 애니메이션 적용 */
   }
-}
-}`;
+`;
+
+export const IconWrapper = styled.div`
+  position: absolute;
+  width: var(--size-button);
+  height: var(--size-button);
+  top: 0;
+  left: 0;
+  padding: 8px;
+  pointer-events: none;
+
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
