@@ -118,7 +118,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
     setShowLogoutAlert(false);
     try {
       await logout();
-      navigate('/login');
+      navigate('/firstmain');
     } catch (error) {
       console.error('로그아웃 실패:', error);
     }
