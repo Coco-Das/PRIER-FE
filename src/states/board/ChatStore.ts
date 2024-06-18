@@ -1,12 +1,10 @@
-// 댓글 인터페이스 정의
-export interface Comment {
+interface Comment {
   commentId: number;
-  boardId: number;
-  memberId: number;
+  userId: number;
   content: string;
   createdAt: string;
+  updatedAt: string | null;
 }
-
 // 랜덤 댓글 생성 함수
 const generateRandomComments = (numComments: number, boardIds: number[]): Comment[] => {
   const comments: Comment[] = [];
@@ -16,10 +14,10 @@ const generateRandomComments = (numComments: number, boardIds: number[]): Commen
     const boardId = boardIds[Math.floor(Math.random() * boardIds.length)];
     comments.push({
       commentId: commentId++,
-      boardId: boardId,
-      memberId: Math.ceil(Math.random() * 3),
+      userId: Math.ceil(Math.random() * 3),
       content: `댓글 내용 ${i + 1}`,
       createdAt: new Date().toISOString(),
+      updatedAt: null,
     });
   }
 

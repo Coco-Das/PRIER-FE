@@ -133,7 +133,7 @@ const Board: React.FC = () => {
           <PostSkeleton />
         </>
       ) : postId ? (
-        <PostDetail postId={Number(postId)} onBackToList={handleBackToList} toggleLike={toggleLike} posts={posts} />
+        <PostDetail postId={Number(postId)} onBackToList={handleBackToList} toggleLike={toggleLike} />
       ) : filteredPosts.length > 0 ? (
         <PostList posts={paginatedPosts} onPostClick={handlePostClick} toggleLike={toggleLike} />
       ) : searchTerm ? (
