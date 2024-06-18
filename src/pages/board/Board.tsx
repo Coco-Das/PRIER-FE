@@ -1,3 +1,4 @@
+// src/pages/Board.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Container, NoPostsMessage } from './BoardStyles';
@@ -20,6 +21,7 @@ const Board: React.FC = () => {
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
+  const [USER_ID, setUserId] = useState<number | null>(null); // USER_ID를 상태로 관리
   const navigate = useNavigate();
 
   const POSTS_PER_PAGE = 3;
@@ -36,10 +38,11 @@ const Board: React.FC = () => {
       setLoading(true);
       try {
         const response = await API_BASE_URL.get('/posts');
-        const sortedPosts = response.data.sort(
+        const sortedPosts = response.data.posts.sort(
           (a: BoardPost, b: BoardPost) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
         setPosts(sortedPosts);
+        setUserId(response.data.userId); // USER_ID 설정
       } catch (error) {
         console.error('Error fetching posts:', error);
       } finally {
@@ -51,14 +54,15 @@ const Board: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!postId) {
+    if (!postId && USER_ID !== null) {
+      // USER_ID가 설정된 후에 필터링
       let updatedPosts = posts;
       if (activeFilter === 'all') {
         updatedPosts = posts.filter(post => post.category === activeCategory);
       } else if (activeFilter === 'likes') {
-        updatedPosts = posts.filter(post => post.category === activeCategory && post.likedByUser);
+        updatedPosts = posts.filter(post => post.category === activeCategory && post.isLikedByMe);
       } else if (activeFilter === 'myposts') {
-        updatedPosts = posts.filter(post => post.category === activeCategory && post.nickname === '이인지');
+        updatedPosts = posts.filter(post => post.category === activeCategory && post.userId === USER_ID);
       }
 
       if (searchTerm) {
@@ -70,16 +74,8 @@ const Board: React.FC = () => {
       setFilteredPosts(updatedPosts);
       setPage(1);
     }
-  }, [posts, activeCategory, activeFilter, searchTerm, postId]);
+  }, [posts, activeCategory, activeFilter, searchTerm, postId, USER_ID]); // USER_ID 의존성 추가
 
-  // 좋아요 토글 함수
-  const toggleLike = (postId: number) => {
-    setPosts(prevPosts =>
-      prevPosts.map(post => (post.postId === postId ? { ...post, likedByUser: !post.likedByUser } : post)),
-    );
-  };
-
-  // 카테고리 변경을 처리하는 함수
   const handleCategoryClick = (category: string) => {
     if (activeFilter === 'myposts' && category === 'NOTICE') {
       setActiveFilter('all');
@@ -88,7 +84,6 @@ const Board: React.FC = () => {
     navigate(`/board?category=${category}&filter=${activeFilter}`);
   };
 
-  // 필터 변경을 처리하는 함수
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
     navigate(`/board?category=${activeCategory}&filter=${filter}`);
@@ -133,9 +128,15 @@ const Board: React.FC = () => {
           <PostSkeleton />
         </>
       ) : postId ? (
-        <PostDetail postId={Number(postId)} onBackToList={handleBackToList} toggleLike={toggleLike} />
+        <PostDetail
+          postId={Number(postId)}
+          onBackToList={handleBackToList}
+          toggleLike={function (postId: number): void {
+            throw new Error('Function not implemented.');
+          }}
+        />
       ) : filteredPosts.length > 0 ? (
-        <PostList posts={paginatedPosts} onPostClick={handlePostClick} toggleLike={toggleLike} />
+        <PostList posts={paginatedPosts} onPostClick={handlePostClick} userId={USER_ID} />
       ) : searchTerm ? (
         <NoPostsMessage>{searchTerm} (이)가 포함된 게시물이 없습니다.</NoPostsMessage>
       ) : (

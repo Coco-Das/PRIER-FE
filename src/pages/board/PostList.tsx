@@ -1,3 +1,4 @@
+// src/components/board/PostList.tsx
 import React, { useState } from 'react';
 import {
   BackgroundContainer,
@@ -21,22 +22,23 @@ import announcementAvatar from '../../assets/Announcement.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
 import useFormatDate from '../../hooks/UseFormatDate';
-import PositionedMenu from '../../components/board/PostMenu';
+import PostMenu from '../../components/board/PostMenu';
 import { useNavigate } from 'react-router-dom';
-import { API_BASE_URL } from '../../const/TokenApi';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
+import useLike from '../../hooks/UseLike';
 
 interface PostListProps {
   posts: BoardPost[];
   onPostClick: (postId: number) => void;
-  toggleLike: (postId: number) => void;
+  userId: number | null; // userId를 props로 받음
 }
 
-const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) => {
+const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
   const formatDate = useFormatDate();
   const extractTextFromContent = useExtractTextFromContent();
   const navigate = useNavigate();
   const [activePostId, setActivePostId] = useState<number | null>(null);
+  const { likes, toggleLike } = useLike();
 
   const handleProfileClick = (e: React.MouseEvent, memberId: number) => {
     e.stopPropagation();
@@ -49,23 +51,6 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
       onPostClick(postId);
       navigate(`/board/post/${postId}`);
     }, 2000);
-  };
-
-  const handleLikeClick = async (e: React.MouseEvent, postId: number, liked: boolean) => {
-    e.stopPropagation();
-    try {
-      const response = liked
-        ? await API_BASE_URL.delete(`/like/${postId}`)
-        : await API_BASE_URL.post(`/like/${postId}`);
-
-      if (response.status === 200) {
-        toggleLike(postId);
-      } else {
-        console.error(`Failed to ${postId} ${liked ? 'unlike' : 'like'} the post`);
-      }
-    } catch (error) {
-      console.error(`Error ${liked ? 'unliking' : 'liking'} the post:`, error);
-    }
   };
 
   return (
@@ -87,9 +72,9 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
                 </Author>
                 <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
               </AuthorContainer>
-              {post.nickname === '이인지' && (
+              {userId === post.userId && ( // USER_ID와 post.userId가 같을 때만 PositionedMenu 표시
                 <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                  <PositionedMenu postId={post.postId} />
+                  <PostMenu postId={post.postId} />
                 </div>
               )}
             </UserContainer>
@@ -109,8 +94,8 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
             </ContentContainer>
             <LikesContainer>
               <Likes>likes {post.likes}</Likes>
-              <LikeButton onClick={(e: React.MouseEvent) => handleLikeClick(e, post.postId, post.likedByUser)}>
-                <LikeIcon src={post.likedByUser ? Like : UnLike} alt="like/unlike" />
+              <LikeButton onClick={(e: React.MouseEvent) => toggleLike(post.postId, post.isLikedByMe)}>
+                <LikeIcon src={likes[post.postId] ?? post.isLikedByMe ? Like : UnLike} alt="like/unlike" />
               </LikeButton>
             </LikesContainer>
           </PostBox>
