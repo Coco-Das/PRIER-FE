@@ -1,8 +1,7 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
-import Divider from '@mui/material/Divider';
 import ListItem from '@mui/material/ListItem';
 import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButton';
 import ListItemText from '@mui/material/ListItemText';
@@ -14,6 +13,8 @@ import sidebar3 from '../../assets/sidebar3.svg';
 import sidebar4 from '../../assets/sidebar4.svg';
 import sidebar5 from '../../assets/sidebar5.svg';
 import sidebar6 from '../../assets/sidebar6.svg';
+import CustomAlert from '../../components/utils/CustomAlert'; // 경로 업데이트
+import { FetchLogout as apiFetchLogout } from '../../services/UserApi'; // 로그아웃 API 호출 함수 임포트
 
 interface SideBarProps {
   open: boolean;
@@ -88,6 +89,8 @@ const LogoutButton = styled(ListItemButton)(({ theme }) => ({
 
 const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) => {
   const navigate = useNavigate();
+  const [showLogoutAlert, setShowLogoutAlert] = useState(false);
+
   const menuItems = [
     { text: '프로젝트 리스트', path: '/main', icon: sidebar1 },
     { text: '테스트 생성하기', path: '/createtest', icon: sidebar2 },
@@ -96,11 +99,28 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
     { text: '상점', path: '/store', icon: sidebar5 },
     { text: '마이페이지', path: '/mypage', icon: sidebar6 },
   ];
-  const logoutItem = { text: '로그아웃', path: '/' };
 
   const handleNavigation = (path: string) => {
     navigate(path);
     toggleDrawer(false); // 메뉴를 닫기 위해 추가
+  };
+
+  const handleLogout = async () => {
+    setShowLogoutAlert(false);
+    try {
+      await apiFetchLogout();
+      navigate('/login');
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  };
+
+  const confirmLogout = () => {
+    setShowLogoutAlert(true);
+  };
+
+  const cancelLogout = () => {
+    setShowLogoutAlert(false);
   };
 
   return (
@@ -128,8 +148,11 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
       variant="temporary"
     >
       <Box sx={{ width: 250, display: 'flex', flexDirection: 'column', height: '100%' }} role="presentation">
+        {showLogoutAlert && (
+          <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={handleLogout} onCancel={cancelLogout} />
+        )}
         <List>
-          {menuItems.map((item, index) => (
+          {menuItems.map(item => (
             <ListItem key={item.text} disablePadding>
               <CustomListItemButton current={currentPath === item.path} onClick={() => handleNavigation(item.path)}>
                 <CustomListItemIcon src={item.icon} alt={`${item.text} icon`} />
@@ -141,8 +164,8 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
         <Box sx={{ mt: 'auto' }}>
           <List>
             <ListItem disablePadding>
-              <LogoutButton onClick={() => handleNavigation(logoutItem.path)}>
-                <ListItemText primary={logoutItem.text} />
+              <LogoutButton onClick={confirmLogout}>
+                <ListItemText primary="로그아웃" />
               </LogoutButton>
             </ListItem>
           </List>

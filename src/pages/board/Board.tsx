@@ -1,4 +1,3 @@
-// src/pages/Board.tsx
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Container, NoPostsMessage } from './BoardStyles';
@@ -22,6 +21,7 @@ const Board: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [USER_ID, setUserId] = useState<number | null>(null); // USER_ID를 상태로 관리
+
   const navigate = useNavigate();
 
   const POSTS_PER_PAGE = 3;
@@ -33,16 +33,23 @@ const Board: React.FC = () => {
     setPage,
   } = usePagination(filteredPosts, POSTS_PER_PAGE);
 
+  // useEffect to set USER_ID from localStorage
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(Number(storedUserId));
+    }
+  }, []);
+
   useEffect(() => {
     const fetchPosts = async () => {
       setLoading(true);
       try {
         const response = await API_BASE_URL.get('/posts');
-        const sortedPosts = response.data.posts.sort(
+        const sortedPosts = response.data.sort(
           (a: BoardPost, b: BoardPost) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
         );
         setPosts(sortedPosts);
-        setUserId(response.data.userId); // USER_ID 설정
       } catch (error) {
         console.error('Error fetching posts:', error);
       } finally {
