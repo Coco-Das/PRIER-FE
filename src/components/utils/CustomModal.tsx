@@ -28,34 +28,58 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div<{ top: number; left: number }>`
-  padding: 30px;
+  /* padding: 30px 30px 0px 30px; */
   position: absolute;
-  padding-bottom: 0px;
+  border: 1px solid blue;
+
   width: 30%;
   height: 40%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+  justify-content: center;
+
   /* align-items: center; */
   /* justify-content: space-around; */
-  border: 1px solid transparent;
-  border-radius: 20px;
+  /* border: 1px solid transparent;
+  border-radius: 20px; */
   top: ${props => props.top}px;
   left: ${props => props.left}px;
-  background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
+  /* background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box; */
 `;
 
 const AgreeButton = styled.button`
   background-color: #4188fe;
   color: white;
   border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 5px;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   padding: 10px 20px;
   &:hover {
     background-color: #315af1;
     transition: 0.3s;
   }
+`;
+const BalloonSVG = styled.svg`
+  width: 100%;
+  position: relative;
+  height: 100%;
+`;
+
+const BalloonContent = styled.div`
+  position: absolute;
+  border: 1px solid black;
+  top: 20px;
+  left: 20px;
+  width: 80%;
+  height: 80%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 
 const DisagreeButton = styled.button`
@@ -63,8 +87,11 @@ const DisagreeButton = styled.button`
   color: #315af1;
   border: 1px solid #315af1;
   border-radius: 5px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   cursor: pointer;
-  font-size: 18px;
+  font-size: 16px;
   padding: 10px 20px;
   &:hover {
     background-color: #f3f8ff;
@@ -145,76 +172,93 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
   return (
     <ModalOverlay>
       <ModalContent top={top} left={left} onMouseLeave={onMouseLeave}>
-        <div
-          style={{
-            height: '70%',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'space-evenly',
-          }}
-        >
-          <p>내 포인트: {point}</p>
-          <p style={{ display: 'flex', alignItems: 'center' }}>
-            기간 연장:
-            <button
-              style={{
-                marginLeft: '10px',
-                marginRight: '5px',
-                borderRadius: '40%',
-                height: '30px',
-                width: '30px',
-                backgroundColor: '#315af1',
-                color: 'white',
-              }}
-              onClick={handleMinus}
-            >
-              -
-            </button>
-            {weeks}주
-            <button
-              style={{
-                marginLeft: '5px',
-                // marginRight: '5px',
-                borderRadius: '40%',
-                height: '30px',
-                width: '30px',
-                backgroundColor: '#315af1',
-                color: 'white',
-              }}
-              onClick={handlePlus}
-            >
-              +
-            </button>
-            <span style={{ marginLeft: '20px' }}>(-{used})</span>
-          </p>
-        </div>
-        <div
-          style={{
-            width: '100%',
-            display: 'flex',
-            flexDirection: 'column',
-            // justifyContent: 'flex-end',
-            marginTop: '20px',
-            // alignItems: 'center',
-            height: '25%',
-          }}
-        >
-          <div style={{ justifyContent: 'space-around', display: 'flex' }}>
-            <DisagreeButton style={{ width: '20%', fontSize: '16px' }} onClick={onCancel}>
-              취소
-            </DisagreeButton>
-            <ExtendsBtn $point={point} $used={used} onClick={handleExtend} style={{ fontSize: '16px' }}>
-              확인
-            </ExtendsBtn>
+        <BalloonSVG viewBox="0 0 300 200" xmlns="http://www.w3.org/2000/svg">
+          <defs>
+            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+              <stop offset="0%" style={{ stopColor: '#315af1', stopOpacity: 1 }} />
+              <stop offset="100%" style={{ stopColor: '#23be87', stopOpacity: 1 }} />
+            </linearGradient>
+          </defs>
+          <path
+            d="M10 10 H290 A10 10 0 0 1 300 20 V150 A10 10 0 0 1 290 160 H160 L150 180 L140 160 H10 A10 10 0 0 1 0 150 V20 A10 10 0 0 1 10 10 Z"
+            fill="white"
+            stroke="url(#gradient)"
+            strokeWidth="2"
+          />
+        </BalloonSVG>
+        <BalloonContent>
+          <div
+            style={{
+              height: '65%',
+              display: 'flex',
+              flexDirection: 'column',
+              justifyContent: 'space-around',
+            }}
+          >
+            <p>내 포인트: {point}</p>
+            <p style={{ display: 'flex', alignItems: 'center' }}>
+              기간 연장:
+              <button
+                style={{
+                  marginLeft: '10px',
+                  marginRight: '5px',
+                  borderRadius: '40%',
+                  height: '30px',
+                  width: '30px',
+                  backgroundColor: '#315af1',
+                  color: 'white',
+                }}
+                onClick={handleMinus}
+              >
+                -
+              </button>
+              {weeks}주
+              <button
+                style={{
+                  marginLeft: '5px',
+                  borderRadius: '40%',
+                  height: '30px',
+                  width: '30px',
+                  backgroundColor: '#315af1',
+                  color: 'white',
+                }}
+                onClick={handlePlus}
+              >
+                +
+              </button>
+              <span style={{ marginLeft: '20px' }}>{used > 0 && <span>(-{used})</span>}</span>
+            </p>
           </div>
-          <div style={{ display: 'flex', marginLeft: 'auto' }}>
-            {point < used && (
-              <Link to={'/store'} className="underline mt-2 font-bold" style={{ fontSize: '15px', color: ' #315af1' }}>
-                충전하러 가기 &rarr;
-              </Link>
-            )}
+          <div
+            style={{
+              width: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              marginTop: '20px',
+              height: '30%',
+            }}
+          >
+            <div style={{ justifyContent: 'space-around', display: 'flex', height: '50%' }}>
+              <DisagreeButton style={{ width: '20%' }} onClick={onCancel}>
+                취소
+              </DisagreeButton>
+              <ExtendsBtn $point={point} $used={used} onClick={handleExtend}>
+                확인
+              </ExtendsBtn>
+            </div>
+            <div style={{ display: 'flex', marginLeft: 'auto' }}>
+              {point < used && (
+                <Link
+                  to={'/store'}
+                  className="underline mt-2 font-bold"
+                  style={{ fontSize: '15px', color: ' #315af1' }}
+                >
+                  충전하러 가기 &rarr;
+                </Link>
+              )}
+            </div>
           </div>
-        </div>
+        </BalloonContent>
       </ModalContent>
     </ModalOverlay>
   );
