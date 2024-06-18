@@ -57,6 +57,7 @@ interface Comment {
 }
 
 interface Post {
+  isLikedByMe: any;
   userId: number;
   postId: number;
   title: string;
@@ -85,6 +86,8 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
   const formatDate = useFormatDate();
   const extractTextFromContent = useExtractTextFromContent();
   const navigate = useNavigate();
+  const storedUserId = localStorage.getItem('userId');
+  const USER_ID = storedUserId ? Number(storedUserId) : null;
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -147,12 +150,13 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
           if (response.status === 201) {
             console.log('새 댓글 제출:', newComment);
             const newCommentData: Comment = {
-              userId: 1, // 실제 사용자 ID로 대체해야 합니다.
+              userId: USER_ID!, // 실제 사용자 ID로 대체해야 합니다.
               content: newComment,
               createdAt: new Date().toISOString(),
               updatedAt: null,
               commentId: response.data.commentId,
             };
+
             setPost({ ...post, comments: [...post.comments, newCommentData] });
           } else {
             console.error('댓글 전송 실패:', response.status);
@@ -180,6 +184,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
         console.log('댓글 삭제:', commentId);
         const updatedComments = post.comments.filter(comment => comment.commentId !== commentId);
         setPost({ ...post, comments: updatedComments });
+        window.location.reload(); // 페이지 새로고침
       } else {
         console.error('댓글 삭제 실패:', response.status);
       }
@@ -195,17 +200,17 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       ) : (
         <PostContentContainer category={post.category}>
           <UserContainer>
-            <Avatar onClick={e => handleProfileClick(e, 1)} category={post.category}>
+            <Avatar onClick={e => handleProfileClick(e, post.userId)} category={post.category}>
               <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author onClick={e => handleProfileClick(e, 1)} category={post.category}>
+              <Author onClick={e => handleProfileClick(e, post.userId)} category={post.category}>
                 {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
               </Author>
               <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
             </AuthorContainer>
-            {post.nickname === '이인지' && (
-              <div className="ml-auto">
+            {USER_ID === post.userId && (
+              <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                 <PostMenu postId={post.postId} />
               </div>
             )}
@@ -235,7 +240,9 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
                   e.stopPropagation();
                   toggleLike(post.postId);
                 }}
-              ></LikeButton>
+              >
+                <LikeIcon src={post.isLikedByMe ? Like : UnLike} alt="like/unlike" />
+              </LikeButton>
             </LikesContainer>
           </LikeBackContainer>
         </PostContentContainer>
@@ -255,18 +262,18 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
               <CommentContainer key={comment.commentId} className="flex justify-between">
                 {member && (
                   <CommentAvatar onClick={e => handleProfileClick(e, comment.userId)}>
-                    <AvatarImage src={member.profilePicture} alt={member.nickname} />
+                    <AvatarImage src={userAvatar} alt="Avatar" />
                   </CommentAvatar>
                 )}
                 <CommentContent className="flex-1">
                   <div className="flex flex-row items-center space-x-2 justify-between">
                     <div className="flex flex-row items-center space-x-2">
                       <CommentAuthor onClick={e => handleProfileClick(e, comment.userId)} category={post.category}>
-                        {member?.nickname}
+                        {`${post.nickname}`}
                       </CommentAuthor>
                       <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
                     </div>
-                    {comment.userId === 1 && (
+                    {USER_ID === comment.userId && (
                       <div>
                         <CommentMenu
                           commentId={comment.commentId}
