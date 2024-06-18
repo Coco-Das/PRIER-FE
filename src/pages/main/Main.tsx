@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import Pagination from '@mui/material/Pagination';
 import {
   GreetingContainer,
+  IconWrapper,
   LinkButton,
   MainContainer,
   MainText,
@@ -10,6 +11,7 @@ import {
   PointText,
   SearchInputWrapper,
   StyledChartIcon,
+  StyledInput,
   Title,
 } from './MainStyle';
 import ProjectPreview from '../../components/user/ProjectPreview';
@@ -19,7 +21,7 @@ import { CheckPoint } from '../../services/StoreApi';
 import { userPointStore } from '../../states/user/PointStore';
 import LatestProject from '../../components/user/LatestProject';
 import { useAllProjectStore } from '../../states/user/UserProjectStore';
-import { FetchAllProject, FetchLatestProject } from '../../services/MainPageApi';
+import { FetchAllProject, FetchLatestProject, SearchProject } from '../../services/MainPageApi';
 
 export default function Main() {
   const userProfile = useUserStore(state => state.userProfile);
@@ -29,6 +31,7 @@ export default function Main() {
   const [activeButton, setActiveButton] = useState('인기순');
   const [filter, setFilter] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
+  const [keyword, setKeyword] = useState('');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -82,6 +85,11 @@ export default function Main() {
       console.error('프로젝트 데이터 가져오기 실패:', error);
     }
   };
+  const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      await SearchProject(keyword);
+    }
+  };
   return (
     <div className="flex-col cursor-pointer" style={{ margin: '1% 7%' }}>
       <MainContainer>
@@ -111,14 +119,33 @@ export default function Main() {
             등록순
           </OrderButton>
         </div>
-
         <SearchInputWrapper>
-          <input type="text" placeholder=" " />
-          <div>
-            <svg>
-              <use xlinkHref="#path"></use>
+          <StyledInput
+            type="text"
+            value={keyword}
+            onChange={e => setKeyword(e.target.value)}
+            onKeyPress={handleKeyPress}
+          />
+          <IconWrapper>
+            <svg xmlns="http://www.w3.org/2000/svg" className="ionicon" viewBox="0 0 512 512">
+              <title>Search</title>
+              <path
+                d="M221.09 64a157.09 157.09 0 10157.09 157.09A157.1 157.1 0 00221.09 64z"
+                fill="none"
+                stroke="currentColor"
+                strokeMiterlimit="10"
+                strokeWidth="32"
+              ></path>
+              <path
+                fill="none"
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeMiterlimit="10"
+                strokeWidth="32"
+                d="M338.29 338.29L448 448"
+              ></path>
             </svg>
-          </div>
+          </IconWrapper>
         </SearchInputWrapper>
       </div>
       <ProjectPreview />
@@ -131,14 +158,6 @@ export default function Main() {
           onChange={handlePageChange}
         />
       </span>
-      <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
-        <symbol xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 28" id="path">
-          <path
-            d="M32.9418651,-20.6880772 C37.9418651,-20.6880772 40.9418651,-16.6880772 40.9418651,-12.6880772 C40.9418651,-8.68807717 37.9418651,-4.68807717 32.9418651,-4.68807717 C27.9418651,-4.68807717 24.9418651,-8.68807717 24.9418651,-12.6880772 C24.9418651,-16.6880772 27.9418651,-20.6880772 32.9418651,-20.6880772 L32.9418651,-29.870624 C32.9418651,-30.3676803 33.3448089,-30.770624 33.8418651,-30.770624 C34.08056,-30.770624 34.3094785,-30.6758029 34.4782612,-30.5070201 L141.371843,76.386562"
-            transform="translate(83.156854, 22.171573) rotate(-225.000000) translate(-83.156854, -22.171573)"
-          ></path>
-        </symbol>
-      </svg>
     </div>
   );
 }

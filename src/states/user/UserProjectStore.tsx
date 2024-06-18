@@ -25,8 +25,23 @@ interface ProjectData {
 
 interface AllProjectState extends ProjectData {
   setProjects: (projects: ProjectData) => void;
+  searchProject: (projects: ProjectData) => void;
 }
 export const useAllProjectStore = create<AllProjectState>(set => ({
+  totalPages: 0,
+  totalElements: 0,
+  first: false,
+  last: false,
+  size: 0,
+  content: [],
+  setProjects: projects => set(() => projects),
+  searchProject: projects => set(() => projects),
+}));
+
+interface NewProjectState extends ProjectData {
+  setProjects: (projects: ProjectData) => void;
+}
+export const useNewProjectStore = create<NewProjectState>(set => ({
   totalPages: 0,
   totalElements: 0,
   first: false,

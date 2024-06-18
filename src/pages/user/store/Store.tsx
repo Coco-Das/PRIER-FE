@@ -15,13 +15,15 @@ import Gifticon from '../../../components/user/Gifticon';
 import PaymentModal from '../../../components/user/PaymentModal';
 import CoinLog from '../../../components/user/CoinLog';
 import { useGifticonStore, userPointStore } from '../../../states/user/PointStore';
-import { FetchGiftList, FetchPayment, FetchPointHistory } from '../../../services/StoreApi';
+import { CheckPoint, FetchGiftList, FetchKakaoPayment, FetchPointHistory } from '../../../services/StoreApi';
 
 export default function Store() {
   const pointStore = userPointStore();
   const { setGifticons } = useGifticonStore();
   const [openPayment, setOpenPayment] = useState(false);
   const [selectedAmount, setSelectedAmount] = useState(0);
+  const [selectedItem, setSelectedItem] = useState('');
+
   const [openLog, setOpenLog] = useState(false);
   //기프티콘 리스트 호출
   useEffect(() => {
@@ -29,6 +31,8 @@ export default function Store() {
       try {
         const gifticonData = await FetchGiftList();
         setGifticons(gifticonData);
+        const points = await CheckPoint();
+        pointStore.setPoint(points);
       } catch (error) {
         console.error('기프티콘 데이터 호출 실패:', error);
       }
@@ -37,15 +41,16 @@ export default function Store() {
     fetchData();
   }, [setGifticons]);
   //포인트 구매
-  const SelectAmount = (amount: number) => {
+  const SelectAmount = (amount: number, itemName: string) => {
     setSelectedAmount(amount);
+    setSelectedItem(itemName);
     setOpenPayment(true);
   };
 
-  const ChargeCoin = async (amount: number) => {
+  const ChargeCoin = async (amount: number, itemName: string) => {
     try {
-      const transactionData = await FetchPayment(amount);
-      pointStore.updatePoint(transactionData);
+      await FetchKakaoPayment(amount, itemName);
+
       setOpenPayment(false);
     } catch (error) {
       console.error('포인트 구매 실패:', error);
@@ -68,7 +73,9 @@ export default function Store() {
   };
   return (
     <StoreWrapper>
-      {openPayment && <PaymentModal amount={selectedAmount} onConfirm={ChargeCoin} onCancel={CancleCharge} />}
+      {openPayment && (
+        <PaymentModal amount={selectedAmount} itemName={selectedItem} onConfirm={ChargeCoin} onCancel={CancleCharge} />
+      )}
       {openLog && <CoinLog onCancel={CancleLog} />}
       <Title>상점</Title>
       <div className="flex w-full">
@@ -85,15 +92,15 @@ export default function Store() {
         <ChargeContainer>
           <PointText>코어 충전하기</PointText>
           <div className="flex items-center justify-center gap-10">
-            <span onClick={() => SelectAmount(1000)}>
+            <span onClick={() => SelectAmount(1000, '100 코어')}>
               <StyledPointIcon></StyledPointIcon>
               <PriceText>100코어 : 1000원</PriceText>
             </span>
-            <span onClick={() => SelectAmount(5000)}>
+            <span onClick={() => SelectAmount(5000, '500 코어')}>
               <StyledPointIcon></StyledPointIcon>
               <PriceText>500코어 : 5000원</PriceText>
             </span>
-            <span onClick={() => SelectAmount(10000)}>
+            <span onClick={() => SelectAmount(10000, '1000 코어')}>
               <StyledPointIcon></StyledPointIcon>
               <PriceText>1000코어 : 10000원</PriceText>
             </span>

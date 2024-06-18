@@ -29,21 +29,25 @@ export async function FetchPointHistory() {
   }
 }
 
-export async function FetchPayment(amount: number) {
+export async function FetchKakaoPayment(amount: number, itemName: string) {
   try {
     const response = await API_BASE_URL.post(
-      '/points/recharge',
-      { amount },
+      '/payment/ready',
+      {
+        price: amount,
+        itemName: itemName,
+      },
       {
         headers: {
           'Content-Type': 'application/json',
         },
       },
     );
-    console.log('포인트 구매 요청 성공', response.data);
-    return response.data;
+    console.log('카카오 결제 준비 요청 성공', response.data);
+    const redirectUrl = response.data.next_redirect_pc_url;
+    window.location.href = redirectUrl;
   } catch (error) {
-    console.error('포인트 구매 요청 실패', error);
+    console.error('카카오 페이 결제 실패', error);
     throw error;
   }
 }
