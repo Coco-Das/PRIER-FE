@@ -1,6 +1,7 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
 import Gif from '../../assets/personloading.json';
+// import Gif2 from '../../assets/projectsloading.json';
 import Lottie from './LottieComponent';
 
 const Container = styled.div`
@@ -10,9 +11,16 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: linear-gradient(to top left, lime, transparent), linear-gradient(to top right, #4188fe, transparent);
+  background-blend-mode: screen;
+  background-blend-mode: multiply;
+  background-blend-mode: overlay;
+  background-blend-mode: darken;
+  background-blend-mode: soft-light;
+  background-blend-mode: luminosity;
 `;
 
-const shootingtime = '5000ms';
+const shootingtime = '4500ms';
 
 const tail = keyframes`
   0% {
@@ -45,7 +53,7 @@ const ShootingStar = styled.div`
   left: 0;
   top: 50%;
   height: 2px;
-  background: linear-gradient(-45deg, rgba(95, 145, 255, 0.35), rgba(0, 0, 255, 0));
+  background: linear-gradient(-45deg, rgba(95, 145, 255, 0.8), rgba(0, 0, 255, 0));
   border-radius: 999px;
   filter: drop-shadow(0 0 6px rgba(105, 155, 255, 1));
   animation: ${tail} ${shootingtime} linear infinite, ${shooting} ${shootingtime} linear infinite;
@@ -61,7 +69,7 @@ export const Loading = () => {
       {stars.map((_, index) => (
         <ShootingStar
           key={index}
-          style={{ top: `${Math.random() * 100}%`, animationDelay: `${Math.random() * 11}s` }}
+          style={{ top: `${Math.random() * 100}%`, animationDelay: `${Math.random() * 10}s` }}
         />
       ))}
     </Container>
