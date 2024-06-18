@@ -96,6 +96,7 @@ export const CreateTest = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
   const [showAlert, setShowAlert] = useState(false);
+  const [alert, setAlert] = useState(false);
   const navigate = useNavigate();
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
@@ -275,8 +276,17 @@ export const CreateTest = () => {
     try {
       const response = await API_BASE_URL.post('/projects', formData, config);
       const projectId = response.data;
+      console.log(projectId);
+      if (projectId === -1) {
+        setAlert(true);
+        setTimeout(() => {
+          setAlert(false);
+        }, 800);
+        return;
+      }
       const setProjectId = useProjectStore.getState().setProjectId;
       setProjectId(projectId);
+      console.log(jsonData);
       navigate(`/responsetest/${projectId}`);
     } catch (error) {
       console.error('에러:', error);
@@ -288,6 +298,7 @@ export const CreateTest = () => {
     <CreateWrapper>
       <Project>
         <ProjectDiv>
+          {alert && <CustomAlert message="비어 있는 부분이 있습니다." showButtons={false} />}
           <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
             <Settings />
             <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
