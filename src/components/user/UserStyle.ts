@@ -73,14 +73,15 @@ export const LinkText = styled.p`
     color: #454545;
   }
 `;
-const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0', '#ACA4D5', '#4188FE'];
+export const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0', '#ACA4D5', '#4188FE'];
+const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
 export const TagContainer = styled.div`
   font-size: 14px;
-  padding: 5px 0.5rem;
-  background-color: ${colors};
+  padding: 0.1rem 0.5rem;
+  background-color: ${props => props.color || getRandomColor()};
   font-weight: 300;
-  border-radius: 20px;
+  border-radius: 15px;
   margin-right: 10px;
 `;
 //프로필
