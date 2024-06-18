@@ -25,6 +25,7 @@ interface ProjectData {
 
 interface AllProjectState extends ProjectData {
   setProjects: (projects: ProjectData) => void;
+  searchProject: (projects: ProjectData) => void;
 }
 export const useAllProjectStore = create<AllProjectState>(set => ({
   totalPages: 0,
@@ -34,6 +35,7 @@ export const useAllProjectStore = create<AllProjectState>(set => ({
   size: 0,
   content: [],
   setProjects: projects => set(() => projects),
+  searchProject: projects => set(() => projects),
 }));
 
 //마이페이지
