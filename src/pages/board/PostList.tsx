@@ -24,6 +24,7 @@ import useFormatDate from '../../hooks/UseFormatDate';
 import PositionedMenu from '../../components/board/PostMenu';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../const/TokenApi';
+import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 
 interface PostListProps {
   posts: BoardPost[];
@@ -33,6 +34,7 @@ interface PostListProps {
 
 const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) => {
   const formatDate = useFormatDate();
+  const extractTextFromContent = useExtractTextFromContent();
   const navigate = useNavigate();
   const [activePostId, setActivePostId] = useState<number | null>(null);
 
@@ -93,7 +95,16 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, toggleLike }) =
             </UserContainer>
             <ContentContainer>
               <h2>{post.title}</h2>
-              <p>{post.content}</p>
+              <p>
+                {extractTextFromContent(post.content)
+                  .split('\n')
+                  .map((line, index) => (
+                    <span key={index}>
+                      {line}
+                      <br />
+                    </span>
+                  ))}
+              </p>
               {post.media && post.media.length > 0 && <Image src={post.media[0].s3Url} alt={post.media[0].metadata} />}
             </ContentContainer>
             <LikesContainer>
