@@ -24,6 +24,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({ commentId, postId, onEditClic
     try {
       await API_BASE_URL.delete(`/posts/${postId}/comment/${commentId}`);
       onDeleteSuccess(); // Notify parent component about successful deletion
+      window.location.reload(); // 페이지 새로고침
     } catch (error) {
       console.error('Failed to delete the comment:', error);
     }

@@ -156,6 +156,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
               updatedAt: null,
               commentId: response.data.commentId,
             };
+
             setPost({ ...post, comments: [...post.comments, newCommentData] });
           } else {
             console.error('댓글 전송 실패:', response.status);
@@ -183,6 +184,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
         console.log('댓글 삭제:', commentId);
         const updatedComments = post.comments.filter(comment => comment.commentId !== commentId);
         setPost({ ...post, comments: updatedComments });
+        window.location.reload(); // 페이지 새로고침
       } else {
         console.error('댓글 삭제 실패:', response.status);
       }
