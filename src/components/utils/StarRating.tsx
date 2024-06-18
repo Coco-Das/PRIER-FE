@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 
 const StarRatingDiv = styled.div`
@@ -9,43 +9,113 @@ const StarRatingDiv = styled.div`
 
 const Star = styled.span`
   font-size: 24px;
+  cursor: pointer;
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  svg {
+    width: 100%;
+    height: 100%;
+  }
+`;
+
+const StarIcon = styled(Star)<{ isFilled: boolean }>`
+  color: ${({ isFilled }) => (isFilled ? 'gold' : 'lightgray')};
 `;
 
 const HalfStar = styled(Star)`
-  position: relative;
   &:before {
-    content: '\2605';
+    content: '★';
     position: absolute;
+    top: -6px;
+    left: 0;
+    width: 12px;
+    height: 24px;
     overflow: hidden;
-    width: 50%;
     color: gold;
   }
 `;
+
 interface StarRatingProps {
-  score: number; // 0부터 5까지의 스코어
+  initialScore: number; // 초기 스코어
+  onRatingChange?: (score: number) => void; // 점수가 변경될 때 호출되는 콜백 함수
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ score }) => {
-  const totalStars = 5;
-  const filledStars = Math.floor(score);
-  const halfStars = score % 1 >= 0.5 ? 1 : 0;
-  const emptyStars = totalStars - filledStars - halfStars;
+const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange }) => {
+  const [hoveredScore, setHoveredScore] = useState<number | null>(null);
+  const [rating, setRating] = useState(initialScore);
 
-  return (
-    <StarRatingDiv>
-      {Array(filledStars)
-        .fill(0)
-        .map((_, index) => (
-          <Star key={index}>&#9733;</Star>
-        ))}
-      {halfStars === 1 && <HalfStar>&#9733;</HalfStar>}
-      {Array(emptyStars)
-        .fill(0)
-        .map((_, index) => (
-          <Star key={index}>&#9734;</Star>
-        ))}
-    </StarRatingDiv>
-  );
+  useEffect(() => {
+    setRating(initialScore);
+  }, [initialScore]);
+
+  const handleMouseMove = (e: React.MouseEvent, starIndex: number) => {
+    const { left, width } = (e.target as HTMLElement).getBoundingClientRect();
+    const x = e.clientX - left;
+    const newHoveredScore = starIndex + (x > width / 2 ? 1 : 0.5);
+    setHoveredScore(newHoveredScore);
+  };
+
+  const handleMouseLeave = () => {
+    setHoveredScore(null);
+  };
+
+  const handleClick = (score: number) => {
+    setRating(score);
+    if (onRatingChange) {
+      onRatingChange(score);
+    }
+  };
+
+  const renderStars = () => {
+    const totalStars = 5;
+    const filledStars = Math.floor(hoveredScore !== null ? hoveredScore : rating);
+    const halfStars = hoveredScore !== null ? (hoveredScore % 1 >= 0.5 ? 1 : 0) : rating % 1 >= 0.5 ? 1 : 0;
+    const emptyStars = totalStars - filledStars - halfStars;
+
+    return (
+      <>
+        {Array(filledStars)
+          .fill(0)
+          .map((_, index) => (
+            <StarIcon
+              key={`filled-${index}`}
+              isFilled={true}
+              onMouseMove={e => handleMouseMove(e, index)}
+              onClick={() => handleClick(index + 1)}
+              onMouseLeave={handleMouseLeave}
+            >
+              ★
+            </StarIcon>
+          ))}
+        {halfStars === 1 && (
+          <HalfStar
+            onMouseMove={e => handleMouseMove(e, filledStars)}
+            onClick={() => handleClick(filledStars + 0.5)}
+            onMouseLeave={handleMouseLeave}
+          />
+        )}
+        {Array(emptyStars)
+          .fill(0)
+          .map((_, index) => (
+            <StarIcon
+              key={`empty-${index}`}
+              isFilled={false}
+              onMouseMove={e => handleMouseMove(e, filledStars + halfStars + index)}
+              onClick={() => handleClick(filledStars + halfStars + index + 0.5)}
+              onMouseLeave={handleMouseLeave}
+            >
+              ★
+            </StarIcon>
+          ))}
+      </>
+    );
+  };
+
+  return <StarRatingDiv>{renderStars()}</StarRatingDiv>;
 };
 
 export default StarRating;
