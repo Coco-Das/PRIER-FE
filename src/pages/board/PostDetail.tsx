@@ -38,9 +38,9 @@ import PostMenu from '../../components/board/PostMenu';
 import CommentMenu from '../../components/board/CommentMenu';
 import { useNavigate } from 'react-router-dom';
 import { Loading } from '../../components/utils/Loading';
-
 import axios from 'axios';
 import { API_BASE_URL } from '../../const/TokenApi';
+import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 
 interface Media {
   metadata: string;
@@ -83,6 +83,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
   const [newComment, setNewComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const formatDate = useFormatDate();
+  const extractTextFromContent = useExtractTextFromContent();
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -211,7 +212,16 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
           </UserContainer>
           <ContentContainer className="flex flex-col items-start">
             <h1>{post.title}</h1>
-            <p>{post.content}</p>
+            <p>
+              {extractTextFromContent(post.content)
+                .split('\n')
+                .map((line, index) => (
+                  <span key={index}>
+                    {line}
+                    <br />
+                  </span>
+                ))}
+            </p>
             {post.media && post.media.length > 0 && <Image src={post.media[0].s3Url} alt={post.media[0].metadata} />}
           </ContentContainer>
           <LikeBackContainer>
