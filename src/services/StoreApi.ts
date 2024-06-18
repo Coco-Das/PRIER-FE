@@ -51,6 +51,19 @@ export async function FetchKakaoPayment(amount: number, itemName: string) {
     throw error;
   }
 }
+export async function RefundKakaoPayment(payToken: string, amount: number) {
+  try {
+    console.log(payToken, amount);
+    const response = await API_BASE_URL.post(`/payment/refund`, {
+      tid: payToken,
+      cancelAmount: amount,
+      cancelTaxFreeAmount: 0,
+    });
+    console.log('환불 요청 성공', response.data);
+  } catch (error) {
+    console.error('환불 실패');
+  }
+}
 //기프티콘
 export async function FetchGiftList() {
   try {

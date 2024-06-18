@@ -69,7 +69,7 @@ export const LinkText = styled.p`
   font-weight: 300;
   color: #828282;
   cursor: pointer;
-  :&hover  {
+  &:hover {
     color: #454545;
   }
 `;
