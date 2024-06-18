@@ -37,6 +37,15 @@ export const ResponseQuestion = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [responses, setResponses] = useState<{ [key: number]: string }>({});
   const navigate = useNavigate();
+
+  const optionToValueMap: { [key: string]: string } = {
+    '매우 좋음': '50',
+    좋음: '40',
+    보통: '30',
+    나쁨: '20',
+    '매우 나쁨': '10',
+  };
+
   useEffect(() => {
     if (projectId) {
       setProjectId(projectId); // URL 파라미터로부터 projectId를 상태로 설정
@@ -79,9 +88,9 @@ export const ResponseQuestion = () => {
     try {
       const responsePayload = Object.keys(responses).map(questionId => ({
         questionId: Number(questionId),
-        content: responses[Number(questionId)],
+        content: optionToValueMap[responses[Number(questionId)]] || responses[Number(questionId)],
       }));
-      const response = await API_BASE_URL.post(`/projects/${projectId}/feedbacks/responses`, responsePayload);
+      const response = await API_BASE_URL.post(`/projects/${projectId}/responses`, responsePayload);
       console.log(response);
       navigate(`/responsetest/${projectId}`); //제출 후 다시 프로젝트 페이지로
     } catch (error) {
