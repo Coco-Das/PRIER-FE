@@ -65,7 +65,8 @@ AutoResizeTextarea.propTypes = {
 };
 
 interface Question {
-  questionId: number;
+  questionId: number | null;
+  newQuestionId?: number;
   category: string;
   content: string;
   options?: string[]; // 객관식 질문의 선택지(고정)
@@ -109,6 +110,7 @@ export const EditResponse = () => {
   const [teamName, setTeamName] = useState('');
   const [showAlert, setShowAlert] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
+  const [newQuestions, setNewQuestions] = useState<Question[]>([]);
 
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
@@ -260,15 +262,15 @@ export const EditResponse = () => {
   const handleLinkChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLink(event.target.value);
   };
-  const handleQuestionContentChange = (id: number, content: string) => {
-    setQuestions(prevQuestions =>
-      prevQuestions.map(question => (question.questionId === id ? { ...question, content } : question)),
+  const handleQuestionContentChange = (id: number | null, content: string) => {
+    setNewQuestions(prevNewQuestions =>
+      prevNewQuestions.map(question => (question.newQuestionId === id ? { ...question, content } : question)),
     );
   };
-  const toggleQuestionType = (id: number) => {
-    setQuestions(prevQuestions =>
-      prevQuestions.map(question =>
-        question.questionId === id
+  const toggleQuestionType = (id: number | null) => {
+    setNewQuestions(prevNewQuestions =>
+      prevNewQuestions.map(question =>
+        question.newQuestionId === id
           ? {
               ...question,
               category: question.category === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
@@ -280,16 +282,36 @@ export const EditResponse = () => {
       ),
     );
   };
-  const handleQuestionDelete = (id: number) => {
+  const handleQuestionDelete = (id: number | null) => {
+    // if (id !== null) {
     setQuestions(prevQuestions => prevQuestions.filter(question => question.questionId !== id));
+    setNewQuestions(prevNewQuestions => prevNewQuestions.filter(question => question.newQuestionId !== id));
+    // }
+    // if (id === null) {
+    //   setNewQuestions(prevNewQuestions => prevNewQuestions.filter(question => question.newQuestionId !== id));
+    // } else {
+    //   setQuestions(prevQuestions => prevQuestions.filter(question => question.questionId !== id));
+    // }
   };
 
   const addQuestion = () => {
-    setQuestions(prevQuestions => [
-      ...prevQuestions,
-      { questionId: prevQuestions.length + 1, category: 'SUBJECTIVE', content: '' },
+    const allQuestions = [...questions, ...newQuestions];
+    const maxId = allQuestions.reduce((max, question) => {
+      const id = question.questionId ?? question.newQuestionId ?? 0;
+      return Math.max(max, id);
+    }, 0);
+
+    setNewQuestions(prevNewQuestions => [
+      ...prevNewQuestions,
+      {
+        questionId: null,
+        newQuestionId: maxId + 1,
+        category: 'SUBJECTIVE',
+        content: '',
+      },
     ]);
   };
+
   const handleEditSubmit = async () => {
     const formData = new FormData();
     const formattedStartDate = format(startDate ?? new Date(), 'yyyy-MM-dd');
@@ -297,6 +319,8 @@ export const EditResponse = () => {
     const tagContents = tags.map(tag => tag.tagName);
 
     const replaceEmptyStringWithNull = (value: string) => (value.trim() === '' ? null : value.trim());
+    const combinedQuestions = [...questions, ...newQuestions];
+
     const jsonData = {
       title: replaceEmptyStringWithNull(title),
       introduce: replaceEmptyStringWithNull(introduce),
@@ -309,8 +333,9 @@ export const EditResponse = () => {
       teamDescription: replaceEmptyStringWithNull(teamDescription),
       teamMate: replaceEmptyStringWithNull(teamMate),
       link: replaceEmptyStringWithNull(link),
-      //   question: questions.map(q => replaceEmptyStringWithNull(q.content)),
-      type: questions.map(q => q.category),
+      question: combinedQuestions.map(q => replaceEmptyStringWithNull(q.content)),
+      type: combinedQuestions.map(q => q.category),
+      questionId: combinedQuestions.map(q => q.questionId),
     };
     formData.append(
       'form',
@@ -318,6 +343,7 @@ export const EditResponse = () => {
         type: 'application/json',
       }),
     );
+
     if (mainFileInputRef.current?.files && mainFileInputRef.current.files.length > 0) {
       formData.append('mainImage', mainFileInputRef.current.files[0]);
     }
@@ -331,13 +357,30 @@ export const EditResponse = () => {
         'Content-Type': 'multipart/form-data',
       },
     };
+
+    formData.forEach((value, key) => {
+      if (key === 'form') {
+        const reader = new FileReader();
+        reader.onload = event => {
+          console.log(`${key}: ${event.target?.result}`);
+        };
+        reader.readAsText(value as Blob);
+      } else if (value instanceof File) {
+        console.log(`${key}: ${value.name}`);
+      } else {
+        console.log(`${key}: ${value}`);
+      }
+    });
+    // console.log(jsonData);
+    // console.log(newQuestions);
     try {
-      const response = await API_BASE_URL.post('/projects', formData, config);
+      // console.log(jsonData);
+      const response = await API_BASE_URL.put(`/projects/${projectId}`, formData, config);
       console.log(response.data);
       navigate(`/responsetest/${projectId}`);
     } catch (error) {
       console.error('에러:', error);
-      console.log('JSON Data:', jsonData);
+      // console.log('JSON Data:', jsonData);
     }
   };
 
@@ -483,12 +526,6 @@ export const EditResponse = () => {
               <Input style={{ width: '60%' }} onChange={handleLinkChange} value={link} />
             </GreenInputDiv>
           </GreenDiv>
-          <CustomButton
-            style={{ height: '6%', marginLeft: 'auto', width: '30%' }}
-            onClick={() => navigate(`/responsequestions/${projectId}`)}
-          >
-            테스트폼 참여하기
-          </CustomButton>
         </ProjectIntro>
       </Project>
       <Question>
@@ -513,15 +550,16 @@ export const EditResponse = () => {
                       fontWeight: 'bold',
                       width: '80%',
                     }}
+                    readOnly={true}
                     value={question.content}
-                    onChange={e => handleQuestionContentChange(question.questionId, e.target.value)}
+                    // onChange={e => handleQuestionContentChange(question.questionId, e.target.value)}
                   />
-                  <div style={{ marginLeft: 'auto' }}>
+                  {/* <div style={{ marginLeft: 'auto' }}>
                     <ToggleBtn
                       currentType={question.category}
                       onToggle={() => toggleQuestionType(question.questionId)}
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <AutoResizeTextarea
                   placeholder="주관식 답변을 입력하세요..."
@@ -544,15 +582,16 @@ export const EditResponse = () => {
                   <input
                     placeholder="질문을 입력하세요"
                     style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
-                    onChange={e => handleQuestionContentChange(question.questionId, e.target.value)}
+                    // onChange={e => handleQuestionContentChange(question.questionId, e.target.value)}
                     value={question.content}
+                    readOnly={true}
                   />
-                  <div style={{ marginLeft: 'auto' }}>
+                  {/* <div style={{ marginLeft: 'auto' }}>
                     <ToggleBtn
                       currentType={question.category}
                       onToggle={() => toggleQuestionType(question.questionId)}
                     />
-                  </div>
+                  </div> */}
                 </div>
                 <div
                   style={{
@@ -583,6 +622,97 @@ export const EditResponse = () => {
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right' }}>
                   <QuestionDeleteButton onClick={() => handleQuestionDelete(question.questionId)} />
+                </div>
+              </div>
+            )}
+          </QuestionDiv>
+        ))}
+
+        {newQuestions.map((question, index) => (
+          <QuestionDiv key={question.newQuestionId} className="mt-4">
+            {question.category === 'SUBJECTIVE' ? (
+              <div>
+                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                  {index + questions.length + 1}번 문항
+                  <input
+                    placeholder="질문을 입력하세요"
+                    style={{
+                      marginLeft: '20px',
+                      fontSize: '20px',
+                      outline: 'none',
+                      fontWeight: 'bold',
+                      width: '80%',
+                    }}
+                    value={question.content}
+                    onChange={e => handleQuestionContentChange(question.newQuestionId ?? null, e.target.value)}
+                  />
+                  <div style={{ marginLeft: 'auto' }}>
+                    <ToggleBtn
+                      currentType={question.category}
+                      onToggle={() => toggleQuestionType(question.newQuestionId ?? null)}
+                    />
+                  </div>
+                </div>
+                <AutoResizeTextarea
+                  placeholder="주관식 답변을 입력하세요..."
+                  style={{
+                    marginTop: '10px',
+                    marginLeft: '75px',
+                    overflowY: 'auto',
+                    width: '80%',
+                  }}
+                  readOnly
+                />
+                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.newQuestionId ?? null)} />
+                </div>
+              </div>
+            ) : (
+              <div>
+                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                  {index + questions.length + 1}번 문항
+                  <input
+                    placeholder="질문을 입력하세요"
+                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
+                    onChange={e => handleQuestionContentChange(question.newQuestionId ?? null, e.target.value)}
+                    value={question.content}
+                  />
+                  <div style={{ marginLeft: 'auto' }}>
+                    <ToggleBtn
+                      currentType={question.category}
+                      onToggle={() => toggleQuestionType(question.newQuestionId ?? null)}
+                    />
+                  </div>
+                </div>
+                <div
+                  style={{
+                    marginLeft: '75px',
+                    marginTop: '50px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '10rem',
+                    marginBottom: '40px',
+                    fontSize: '20px',
+                    width: '85%',
+                  }}
+                >
+                  {question.options?.map((option, i) => (
+                    <div key={i}>
+                      <label>
+                        <input
+                          type="radio"
+                          name={`question-${question.newQuestionId}`}
+                          value={option}
+                          checked={false}
+                          readOnly={true}
+                        />{' '}
+                        {option}
+                      </label>
+                    </div>
+                  ))}
+                </div>
+                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.newQuestionId ?? null)} />
                 </div>
               </div>
             )}

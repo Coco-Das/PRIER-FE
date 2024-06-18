@@ -178,11 +178,12 @@ export const GreenDiv = styled.div`
   height: 10%;
   background-color: #e1f9f0;
   font-size: 15px;
-  padding: 15px 20px 0px 20px;
+  padding: 0px 20px 0px 20px;
   display: flex;
+  justify-content: flex-end;
+  align-items: center;
   gap: 5px;
   border: 1px solid #e0e0e0;
-  flex-direction: column;
   input {
     border: 1px solid #23be87;
   }
@@ -195,10 +196,7 @@ export const WhiteDiv = styled.div`
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   display: flex;
-  gap: 10px;
+  /* gap: 10px; */
   flex-direction: column;
   margin-left: 30px;
-  &:hover {
-    cursor: pointer;
-  }
 `;

@@ -77,11 +77,13 @@ interface DropDownContainerProps {
 export const DropDownContainer: React.FC<DropDownContainerProps> = ({ onSelect, select }) => {
   const [isDropdownView, setDropdownView] = useState(false);
 
-  const [selectedItem, setSelectedItem] = useState(select);
+  const [selectedItem, setSelectedItem] = useState('선택');
 
   useEffect(() => {
     if (select) {
       setSelectedItem(select);
+    } else {
+      setSelectedItem('선택');
     }
   }, [select]);
 
