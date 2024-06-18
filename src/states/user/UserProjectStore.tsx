@@ -38,6 +38,19 @@ export const useAllProjectStore = create<AllProjectState>(set => ({
   searchProject: projects => set(() => projects),
 }));
 
+interface NewProjectState extends ProjectData {
+  setProjects: (projects: ProjectData) => void;
+}
+export const useNewProjectStore = create<NewProjectState>(set => ({
+  totalPages: 0,
+  totalElements: 0,
+  first: false,
+  last: false,
+  size: 0,
+  content: [],
+  setProjects: projects => set(() => projects),
+}));
+
 //마이페이지
 interface RecentProjectState {
   projectId: number;

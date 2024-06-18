@@ -6,10 +6,10 @@ import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import { styled } from 'styled-components';
-import { useAllProjectStore } from '../../states/user/UserProjectStore';
+import { useNewProjectStore } from '../../states/user/UserProjectStore';
 
 export default function LatestProject() {
-  const { content } = useAllProjectStore();
+  const { content } = useNewProjectStore();
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: 'black',

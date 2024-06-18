@@ -1,5 +1,5 @@
 import { API_BASE_URL } from '../const/TokenApi';
-import { useAllProjectStore } from '../states/user/UserProjectStore';
+import { useAllProjectStore, useNewProjectStore } from '../states/user/UserProjectStore';
 
 //메인 페이지 모든 프로젝트 요청
 export async function FetchAllProject(filter: number, page: number) {
@@ -59,7 +59,7 @@ export async function FetchLatestProject() {
         score: project.score,
       })),
     };
-    useAllProjectStore.getState().setProjects(projectData);
+    useNewProjectStore.getState().setProjects(projectData);
     return projectData;
   } catch (error) {
     console.error('신규 프로젝트 요청 실패', error);
