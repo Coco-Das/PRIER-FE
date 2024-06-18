@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -14,7 +14,7 @@ import sidebar4 from '../../assets/sidebar4.svg';
 import sidebar5 from '../../assets/sidebar5.svg';
 import sidebar6 from '../../assets/sidebar6.svg';
 import CustomAlert from '../../components/utils/CustomAlert'; // 경로 업데이트
-import { FetchLogout as apiFetchLogout } from '../../services/UserApi'; // 로그아웃 API 호출 함수 임포트
+import { FetchLogout } from '../../services/UserApi'; // 로그아웃 API 호출 함수 임포트
 
 interface SideBarProps {
   open: boolean;
@@ -90,6 +90,7 @@ const LogoutButton = styled(ListItemButton)(({ theme }) => ({
 const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) => {
   const navigate = useNavigate();
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
+  const logout = FetchLogout();
 
   const menuItems = [
     { text: '프로젝트 리스트', path: '/main', icon: sidebar1 },
@@ -105,16 +106,6 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
     toggleDrawer(false); // 메뉴를 닫기 위해 추가
   };
 
-  const handleLogout = async () => {
-    setShowLogoutAlert(false);
-    try {
-      await apiFetchLogout();
-      navigate('/login');
-    } catch (error) {
-      console.error('로그아웃 실패:', error);
-    }
-  };
-
   const confirmLogout = () => {
     setShowLogoutAlert(true);
   };
@@ -122,6 +113,16 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
   const cancelLogout = () => {
     setShowLogoutAlert(false);
   };
+
+  const handleLogout = useCallback(async () => {
+    setShowLogoutAlert(false);
+    try {
+      await logout();
+      navigate('/login');
+    } catch (error) {
+      console.error('로그아웃 실패:', error);
+    }
+  }, [logout, navigate]);
 
   return (
     <CustomDrawer
