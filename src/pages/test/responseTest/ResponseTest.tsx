@@ -1,4 +1,5 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
+import { AxiosError } from 'axios';
 import 'react-datepicker/dist/react-datepicker.css';
 import {
   BlueDiv,
@@ -26,6 +27,8 @@ import { useProjectStore } from '../../../states/projects/ProjectStore';
 import { Link } from 'react-router-dom';
 import StarRating from '../../../components/utils/StarRating';
 import CustomAlert from '../../../components/utils/CustomAlert';
+import CustomModal from '../../../components/utils/CustomModal';
+import styled from 'styled-components';
 
 interface Tag {
   tagName: string;
@@ -39,6 +42,10 @@ interface Media {
   orderIndex: number;
   url: string;
 }
+const ButtonContainer = styled.div`
+  position: relative;
+  width: 30%;
+`;
 
 export const ResponseTest = () => {
   const { projectId } = useParams<{ projectId: string }>();
@@ -59,8 +66,13 @@ export const ResponseTest = () => {
   const [teamDescription, setTeamDescription] = useState('');
   const [teamMate, setTeamMate] = useState('');
   const [teamName, setTeamName] = useState('');
-  const [score, setScore] = useState<number>(0);
+  const [score, setScore] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
+  const [showModal, setShowModal] = useState(false);
+  const [feedback, setFeedback] = useState('');
+  const [nickname, setNickname] = useState('');
+  const [alert, setAlert] = useState(false);
+  const [comment, setCommnet] = useState('');
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -70,9 +82,15 @@ export const ResponseTest = () => {
   useEffect(() => {
     if (projectId) {
       setProjectId(projectId); // URL 파라미터로부터 projectId를 상태로 설정
+      // handleGetData();
       handleGetInfo();
+      // handleGetNickname();
     }
   }, [projectId, setProjectId]);
+
+  // const handleGetData = async () => {
+  //   await Promise.all([handleGetInfo(), handleGetNickname()]);
+  // };
 
   //정보 가져오기
   const handleGetInfo = async () => {
@@ -92,16 +110,30 @@ export const ResponseTest = () => {
       setTags(Data.tags.map((tag: { tagName: string }) => ({ tagName: tag.tagName, color: getRandomColor() })));
       setStatus(Data.status);
       setLink(Data.link);
-      setScore(Data.score);
       setIsMine(Data.isMine);
       const mainMedia = Data.media.find((item: Media) => item.main);
       setMainImageUrl(mainMedia ? mainMedia.url : null);
       const addMedia = Data.media.filter((item: Media) => !item.main);
       setAdditionalImageUrls(addMedia.map((item: Media) => item.url));
+      setFeedback(formatDateTime(Data.feedbackEndDate));
     } catch (error) {
-      console.error('에러:', error);
+      if (error instanceof AxiosError) {
+        console.log(error.response?.status);
+        setAlert(true);
+        setTimeout(() => {
+          setAlert(false);
+        }, 800);
+      } else {
+        console.error(error);
+      }
     }
   };
+
+  // const handleGetNickname = async () => {
+  //   const response = await API_BASE_URL.get('/users/mypage');
+  //   setNickname(response.data);
+  //   console.log(response.data);
+  // };
 
   // useEffect(() => {
   //   handleGetInfo();
@@ -135,17 +167,76 @@ export const ResponseTest = () => {
     }
   };
 
+  useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => {
+        navigate('/main'); // 메인 페이지로 이동
+      }, 1000); // 3초 후 메인 페이지로 이동
+
+      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
+    }
+  }, [alert, navigate]);
+
+  const formatDateTime = (dateString: string) => {
+    const date = new Date(dateString);
+    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
+      date.getDate(),
+    ).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(
+      2,
+      '0',
+    )}:${String(date.getSeconds()).padStart(2, '0')}`;
+    return formattedDate;
+  };
+
+  //모달창에 전달할 연장하기 버튼의 위치
+  const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
+  const handleMouseEnter = () => {
+    if (buttonRef.current) {
+      const rect = buttonRef.current.getBoundingClientRect();
+      setButtonPosition({ top: rect.top - 300, left: rect.left - 150 });
+    }
+    setShowModal(true);
+  };
+
+  const handleRatingChange = (newScore: number) => {
+    setScore(newScore);
+  };
+  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setCommnet(e.target.value);
+  };
+  const handleCommentSubmit = async () => {
+    const jsonData = { comment, score };
+    try {
+      const response = await API_BASE_URL.post(`/projects/${projectId}/comment`, jsonData);
+      console.log(response.data);
+    } catch (error) {
+      console.error('에러:', error);
+    }
+    setCommnet('');
+    handleRatingChange(0);
+  };
   return (
     <CreateWrapper>
       <Project>
+        {alert && <CustomAlert message="없는 페이지입니다." showButtons={false} />}
         <ProjectDiv>
-          <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-            <span className="ml-4 font-bold">
-              안녕하세요 <span>닉네임님</span>, <span style={{ color: '#315AF1' }}>{teamName}</span>의{' '}
+          <div
+            className="mt-4"
+            style={{
+              display: 'flex',
+              alignItems: 'center',
+              wordWrap: 'break-word',
+              width: '100%',
+            }}
+          >
+            <span className="ml-4 font-bold" style={{ wordBreak: 'break-word' }}>
+              안녕하세요 <span>{nickname}</span>, <span style={{ color: '#315AF1' }}>{teamName}</span>의{' '}
               <span style={{ color: '#23BE87' }}>{title}</span> 프로젝트 입니다.
             </span>
           </div>
           <ProjectTextArea className="mt-2">
+            <p style={{ fontSize: '15px', marginLeft: 'auto', color: 'black' }}>{feedback}</p>
             <p className="font-extrabold">프로젝트 소개</p>
             <span className="mt-3" style={{ fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: introduce }} />
             <p className="font-extrabold mt-5">프로젝트 목표</p>
@@ -167,6 +258,7 @@ export const ResponseTest = () => {
               style={{
                 marginTop: '20px',
                 display: 'flex',
+                alignItems: 'center',
               }}
             >
               <div style={{ display: 'flex', marginLeft: 'auto', gap: '15px' }}>
@@ -213,23 +305,63 @@ export const ResponseTest = () => {
             </BlueInputDiv>
           </BlueDiv>
           {link && (
-            <GreenDiv className="mt-2" style={{ cursor: 'pointer' }}>
-              <Link to={link}>
-                <span className="font-bold">배포 링크</span>
-              </Link>
+            <GreenDiv
+              className="mt-2"
+              style={{ cursor: 'pointer' }}
+              onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+            >
+              <span className="font-bold underline">바로가기 &rarr;</span>
             </GreenDiv>
           )}
-          <WhiteDiv className="mt-2" onClick={() => navigate(`/review/${projectId}`)}>
-            <span className="font-bold">댓글 달기</span>
-            <span style={{ color: '#828282' }}>한줄 평</span>
-            <StarRating score={score} />
+          <WhiteDiv className="mt-2">
+            <div style={{ display: 'flex', height: 'auto' }}>
+              <span className="font-bold">댓글 달기</span>
+              <StarRating initialScore={score} onRatingChange={handleRatingChange} />
+            </div>
+            <input
+              style={{ padding: '5px 10px', outline: 'none' }}
+              placeholder="한줄 평"
+              value={comment}
+              onChange={handleCommentChange}
+            ></input>
+            <CustomButton
+              style={{
+                height: '20%',
+                width: '15%',
+                display: 'flex',
+                justifyContent: 'center',
+                alignItems: 'center',
+                marginLeft: 'auto',
+              }}
+              onClick={handleCommentSubmit}
+            >
+              등록
+            </CustomButton>
           </WhiteDiv>
-          <CustomButton
-            style={{ height: '6%', marginLeft: 'auto', width: '30%' }}
-            onClick={() => navigate(`/responsequestions/${projectId}`)}
-          >
-            테스트폼 참여하기
-          </CustomButton>
+          <div style={{ display: 'flex', justifyContent: 'space-between', paddingLeft: '30px' }}>
+            {isMine && (
+              <ButtonContainer>
+                <CustomButton style={{ width: '100%' }} ref={buttonRef} onClick={handleMouseEnter}>
+                  연장하기
+                </CustomButton>
+                {showModal && buttonPosition && (
+                  <CustomModal
+                    top={buttonPosition.top}
+                    left={buttonPosition.left}
+                    onCancel={() => setShowModal(false)}
+                    onMouseLeave={() => setShowModal(false)}
+                    onExtend={handleGetInfo}
+                  />
+                )}
+              </ButtonContainer>
+            )}
+            <CustomButton
+              style={{ marginLeft: 'auto', width: '30%' }}
+              onClick={() => navigate(`/responsequestions/${projectId}`)}
+            >
+              테스트폼 참여하기
+            </CustomButton>
+          </div>
         </ProjectIntro>
       </Project>
     </CreateWrapper>
