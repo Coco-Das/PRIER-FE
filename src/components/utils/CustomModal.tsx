@@ -30,8 +30,6 @@ const ModalOverlay = styled.div`
 const ModalContent = styled.div<{ top: number; left: number }>`
   /* padding: 30px 30px 0px 30px; */
   position: absolute;
-  border: 1px solid blue;
-
   width: 30%;
   height: 40%;
   display: flex;
@@ -72,14 +70,13 @@ const BalloonSVG = styled.svg`
 
 const BalloonContent = styled.div`
   position: absolute;
-  border: 1px solid black;
-  top: 20px;
-  left: 20px;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -60%);
   width: 80%;
-  height: 80%;
+  height: 70%;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
 `;
 
 const DisagreeButton = styled.button`
@@ -93,6 +90,7 @@ const DisagreeButton = styled.button`
   cursor: pointer;
   font-size: 16px;
   padding: 10px 20px;
+  height: 100%;
   &:hover {
     background-color: #f3f8ff;
     transition: 0.3s;
@@ -193,6 +191,7 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
               display: 'flex',
               flexDirection: 'column',
               justifyContent: 'space-around',
+              paddingTop: '10px',
             }}
           >
             <p>내 포인트: {point}</p>
@@ -234,29 +233,26 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
               width: '100%',
               display: 'flex',
               flexDirection: 'column',
-              marginTop: '20px',
-              height: '30%',
+              marginTop: '10px',
+              height: '15%',
+              justifyContent: 'center',
             }}
           >
-            <div style={{ justifyContent: 'space-around', display: 'flex', height: '50%' }}>
-              <DisagreeButton style={{ width: '20%' }} onClick={onCancel}>
+            <div style={{ justifyContent: 'space-around', display: 'flex', height: '100%' }}>
+              <DisagreeButton style={{ width: '20%', height: '100%' }} onClick={onCancel}>
                 취소
               </DisagreeButton>
               <ExtendsBtn $point={point} $used={used} onClick={handleExtend}>
                 확인
               </ExtendsBtn>
             </div>
-            <div style={{ display: 'flex', marginLeft: 'auto' }}>
-              {point < used && (
-                <Link
-                  to={'/store'}
-                  className="underline mt-2 font-bold"
-                  style={{ fontSize: '15px', color: ' #315af1' }}
-                >
-                  충전하러 가기 &rarr;
-                </Link>
-              )}
-            </div>
+          </div>
+          <div style={{ display: 'flex', marginLeft: 'auto', height: '14%' }}>
+            {point < used && (
+              <Link to={'/store'} className="underline mt-2 font-bold" style={{ fontSize: '13px', color: ' #315af1' }}>
+                충전하러 가기 &rarr;
+              </Link>
+            )}
           </div>
         </BalloonContent>
       </ModalContent>
