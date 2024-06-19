@@ -21,6 +21,7 @@ const Board: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [USER_ID, setUserId] = useState<number | null>(null);
+  const [allFetched, setAllFetched] = useState<boolean>(false);
 
   const POSTS_PER_PAGE = 3;
   const {
@@ -38,24 +39,27 @@ const Board: React.FC = () => {
     }
   }, []);
 
-  useEffect(() => {
-    const fetchPosts = async () => {
-      setLoading(true);
-      try {
-        const response = await API_BASE_URL.get('/posts');
-        const sortedPosts = response.data.sort(
-          (a: BoardPost, b: BoardPost) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
-        );
-        setPosts(sortedPosts);
-      } catch (error) {
-        console.error('Error fetching posts:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchPosts = async () => {
+    setLoading(true);
+    try {
+      const response = await API_BASE_URL.get('/posts');
+      const sortedPosts = response.data.sort(
+        (a: BoardPost, b: BoardPost) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
+      );
+      setPosts(sortedPosts);
+      setAllFetched(true);
+    } catch (error) {
+      console.error('Error fetching posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
 
-    fetchPosts();
-  }, []);
+  useEffect(() => {
+    if (!allFetched && activeFilter === 'all') {
+      fetchPosts();
+    }
+  }, [activeFilter, allFetched]);
 
   useEffect(() => {
     const fetchMyPosts = async () => {
@@ -91,6 +95,16 @@ const Board: React.FC = () => {
       } else if (activeFilter === 'myposts') {
         fetchMyPosts();
         return;
+      } else if (activeFilter === 'all') {
+        const updatedPosts = posts.filter(post => post.category === activeCategory);
+
+        if (searchTerm) {
+          setFilteredPosts(
+            updatedPosts.filter(post => post.title.includes(searchTerm) || post.content.includes(searchTerm)),
+          );
+        } else {
+          setFilteredPosts(updatedPosts);
+        }
       } else {
         let updatedPosts = posts.filter(post => post.category === activeCategory);
 
@@ -113,6 +127,9 @@ const Board: React.FC = () => {
 
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
+    if (filter === 'all') {
+      setAllFetched(false);
+    }
     navigate(`/board?category=${activeCategory}&filter=${filter}`);
   };
 
