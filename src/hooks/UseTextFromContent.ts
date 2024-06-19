@@ -14,6 +14,7 @@ const useExtractTextFromContent = () => {
           }
         });
       }
+      console.log(text);
 
       return text;
     } catch (error) {

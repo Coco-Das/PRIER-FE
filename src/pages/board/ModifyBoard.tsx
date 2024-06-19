@@ -84,7 +84,7 @@ const decorator = new CompositeDecorator([
 
 const ModifyBoard: React.FC = () => {
   const navigate = useNavigate();
-  const { postId } = useParams();
+  const { postId } = useParams<{ postId: string }>();
   const [title, setTitle] = useState<string>(''); // 제목 상태 변수
   const [editorState, setEditorState] = useState(EditorState.createEmpty(decorator)); // 에디터 상태 변수
   const [category, setCategory] = useState<string>(''); // 카테고리 상태 변수
@@ -101,7 +101,10 @@ const ModifyBoard: React.FC = () => {
         setTitle(post.title);
         setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(post.content)), decorator));
         setCategory(post.category);
-        setExistingImages(post.images || []); // 초기 상태를 빈 배열로 설정
+        if (post.media && post.media.length > 0) {
+          const mediaUrls = post.media.map((media: { s3Url: string }) => media.s3Url);
+          setExistingImages(mediaUrls); // 이미지가 있을 경우에만 상태 업데이트
+        }
       } catch (error) {
         console.error('Error fetching post:', error);
       }
@@ -316,18 +319,20 @@ const ModifyBoard: React.FC = () => {
             </div>
           </ContentContainer>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
-            {existingImages.map((image, index) => (
-              <ImageWrapper key={index}>
-                <StyledImg src={image} alt={`Existing image ${index}`} />
-                <DeleteButton onClick={() => handleDeleteExistingImage(index)}>×</DeleteButton>
-              </ImageWrapper>
-            ))}
-            {images.map((image, index) => (
-              <ImageWrapper key={index}>
-                <StyledImg src={URL.createObjectURL(image)} alt={`Uploaded image ${index}`} />
-                <DeleteButton onClick={() => handleDeleteImage(index)}>×</DeleteButton>
-              </ImageWrapper>
-            ))}
+            {existingImages &&
+              existingImages.map((image, index) => (
+                <ImageWrapper key={index}>
+                  <StyledImg src={image} alt={`Existing image ${index}`} />
+                  <DeleteButton onClick={() => handleDeleteExistingImage(index)}>×</DeleteButton>
+                </ImageWrapper>
+              ))}
+            {images &&
+              images.map((image, index) => (
+                <ImageWrapper key={index}>
+                  <StyledImg src={URL.createObjectURL(image)} alt={`Uploaded image ${index}`} />
+                  <DeleteButton onClick={() => handleDeleteImage(index)}>×</DeleteButton>
+                </ImageWrapper>
+              ))}
           </div>
           <FileCount>업로드된 이미지 수: {images.length + existingImages.length}</FileCount>
         </PostBox>

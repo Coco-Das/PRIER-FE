@@ -348,6 +348,8 @@ export const PostContentContainer = styled(PostBox)`
   flex-direction: column;
   justify-content: space-between;
   background: ${props => (props.category === 'NOTICE' ? '#e1f9f0' : '#ffffff')};
+  height: 100%;
+  min-height: 200px;
 `;
 
 export const LikeBackContainer = styled.div`
