@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import {
   Filler,
@@ -14,9 +14,21 @@ import { useUserStore } from '../../states/user/UserStore';
 import { userPointStore } from '../../states/user/PointStore';
 
 export default function Profile() {
-  const [progress] = useState(50);
   const userProfile = useUserStore(state => state.userProfile);
   const pointStore = userPointStore();
+  const progressTrans = (rank: string): number => {
+    switch (rank) {
+      case '브론즈':
+        return 35;
+      case '실버':
+        return 70;
+      case '골드':
+        return 100;
+      default:
+        return 0;
+    }
+  };
+  const progress = progressTrans(userProfile.rank);
   return (
     <ProfileContainer>
       <div className="flex justify-between items-center gap-10 mb-3">
