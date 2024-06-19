@@ -211,7 +211,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
     setIsModalOpen(false);
     setTimeout(() => {
       setModalImageUrl(null);
-    }, 500); // fadeOut 애니메이션 시간과 일치
+    }); // fadeOut 애니메이션 시간과 일치
   };
 
   const likeState = likes[post.postId] || { isLiked: post.isLikedByMe, likeCount: post.likes };
