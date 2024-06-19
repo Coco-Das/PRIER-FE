@@ -42,6 +42,7 @@ import axios from 'axios';
 import { API_BASE_URL } from '../../const/TokenApi';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 import ImageModal from '../../components/board/ImageModal'; // 모달 컴포넌트 임포트
+import useLike from '../../hooks/UseLike';
 
 interface Media {
   metadata: string;
@@ -51,6 +52,7 @@ interface Media {
 
 interface Comment {
   userId: number;
+  nickname: string; // 닉네임 속성 추가
   content: string;
   createdAt: string;
   updatedAt: string | null;
@@ -76,10 +78,9 @@ interface Post {
 interface PostDetailProps {
   postId: number;
   onBackToList: () => void;
-  toggleLike: (postId: number) => void;
 }
 
-const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLike }) => {
+const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const [post, setPost] = useState<Post | null>(null);
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
@@ -93,13 +94,14 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
   const storedUserId = localStorage.getItem('userId');
   const USER_ID = storedUserId ? Number(storedUserId) : null;
 
+  const { likes, toggleLike, isLikedByMe } = useLike();
+
   useEffect(() => {
     const fetchPost = async () => {
       setLoading(true);
       try {
         const response = await API_BASE_URL.get(`/posts/${postId}`);
         setPost(response.data);
-        console.log(response);
       } catch (error) {
         console.error('게시글을 가져오는 중 오류 발생:', error);
       } finally {
@@ -156,11 +158,13 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
             console.log('새 댓글 제출:', newComment);
             const newCommentData: Comment = {
               userId: USER_ID!, // 실제 사용자 ID로 대체해야 합니다.
+              nickname: members.find(member => member.userId === USER_ID)?.nickname || 'Unknown', // 댓글 작성자의 닉네임 추가
               content: newComment,
               createdAt: new Date().toISOString(),
               updatedAt: null,
               commentId: response.data.commentId,
             };
+            window.location.reload(); // 페이지 새로고침
 
             setPost({ ...post, comments: [...post.comments, newCommentData] });
           } else {
@@ -209,6 +213,9 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       setModalImageUrl(null);
     }, 500); // fadeOut 애니메이션 시간과 일치
   };
+
+  const likeState = likes[post.postId] || { isLiked: post.isLikedByMe, likeCount: post.likes };
+  const currentIsLiked = likeState.isLiked;
 
   return (
     <PostDetailContainer className="flex">
@@ -262,14 +269,14 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
               <Backto src={backto} />
             </button>
             <LikesContainer>
-              <Likes>likes {post.likes}</Likes>
+              <Likes>좋아요 {likeState.likeCount}</Likes>
               <LikeButton
-                onClick={(e: any) => {
+                onClick={async (e: any) => {
                   e.stopPropagation();
-                  toggleLike(post.postId);
+                  await toggleLike(post.postId, currentIsLiked);
                 }}
               >
-                <LikeIcon src={post.isLikedByMe ? Like : UnLike} alt="like/unlike" />
+                <LikeIcon src={currentIsLiked ? Like : UnLike} alt="좋아요/좋아요 취소" />
               </LikeButton>
             </LikesContainer>
           </LikeBackContainer>
@@ -285,19 +292,16 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
           </div>
         ) : (
           post.comments.map(comment => {
-            const member = getMemberById(comment.userId);
             return (
               <CommentContainer key={comment.commentId} className="flex justify-between">
-                {member && (
-                  <CommentAvatar onClick={e => handleProfileClick(e, comment.userId)}>
-                    <AvatarImage src={userAvatar} alt="Avatar" />
-                  </CommentAvatar>
-                )}
+                <CommentAvatar onClick={e => handleProfileClick(e, comment.userId)}>
+                  <AvatarImage src={userAvatar} alt="Avatar" />
+                </CommentAvatar>
                 <CommentContent className="flex-1">
                   <div className="flex flex-row items-center space-x-2 justify-between">
                     <div className="flex flex-row items-center space-x-2">
                       <CommentAuthor onClick={e => handleProfileClick(e, comment.userId)} category={post.category}>
-                        {`${post.nickname}`}
+                        {comment.nickname}
                       </CommentAuthor>
                       <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
                     </div>

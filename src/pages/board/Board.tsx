@@ -145,13 +145,7 @@ const Board: React.FC = () => {
       {loading && !postId ? (
         <></>
       ) : postId ? (
-        <PostDetail
-          postId={Number(postId)}
-          onBackToList={handleBackToList}
-          toggleLike={(postId: number) => {
-            console.log(`Toggle like for post ${postId}`);
-          }}
-        />
+        <PostDetail postId={Number(postId)} onBackToList={handleBackToList} />
       ) : filteredPosts.length > 0 ? (
         <PostList posts={paginatedPosts} onPostClick={handlePostClick} userId={USER_ID} />
       ) : searchTerm ? (
