@@ -59,10 +59,6 @@ const router = createBrowserRouter([
         element: <ResponseQuestion />,
       },
       {
-        path: '/review/:projectId',
-        element: <Comment />,
-      },
-      {
         path: '/editproject/:projectId',
         element: <EditResponse />,
       },

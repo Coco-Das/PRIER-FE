@@ -91,6 +91,19 @@ export const CustomButton = styled.button`
   text-align: center;
 `;
 
+export const CommentBtn = styled.button`
+  cursor: pointer;
+  border: 1px solid #315af1;
+  border-radius: 5px;
+  white-space: nowrap;
+  font-size: 13px;
+  height: 100%;
+  font-weight: bold;
+  width: 15%;
+  background-color: white;
+  color: #315af1;
+`;
+
 export const DeleteButton = styled(DeleteBtn)`
   width: 20px;
   height: 20px;
@@ -192,7 +205,7 @@ export const GreenDiv = styled.div`
 export const WhiteDiv = styled.div`
   height: 20%;
   font-size: 15px;
-  padding: 15px 20px 0px 20px;
+  padding: 15px 20px 10px 20px;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   display: flex;
