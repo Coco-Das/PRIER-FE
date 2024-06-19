@@ -58,11 +58,24 @@ const Board: React.FC = () => {
   }, []);
 
   useEffect(() => {
+    const fetchMyPosts = async () => {
+      setLoading(true);
+      try {
+        const response = await API_BASE_URL.get(`/posts/my`);
+        const myPosts = response.data.filter((post: BoardPost) => post.category === activeCategory).reverse();
+        setFilteredPosts(myPosts);
+      } catch (error) {
+        console.error('Error fetching my posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
     const fetchLikedPosts = async () => {
       setLoading(true);
       try {
         const response = await API_BASE_URL.get(`/posts/like/my`);
-        const likedPosts = response.data.filter((post: BoardPost) => post.category === activeCategory);
+        const likedPosts = response.data.filter((post: BoardPost) => post.category === activeCategory).reverse();
         setFilteredPosts(likedPosts);
       } catch (error) {
         console.error('Error fetching liked posts:', error);
@@ -72,27 +85,24 @@ const Board: React.FC = () => {
     };
 
     if (!postId && USER_ID !== null) {
-      let updatedPosts = posts;
-
       if (activeFilter === 'likes') {
         fetchLikedPosts();
         return;
-      }
-
-      if (activeFilter === 'all') {
-        updatedPosts = posts.filter(post => post.category === activeCategory);
       } else if (activeFilter === 'myposts') {
-        updatedPosts = posts.filter(post => post.category === activeCategory && post.userId === USER_ID);
-      }
+        fetchMyPosts();
+        return;
+      } else {
+        let updatedPosts = posts.filter(post => post.category === activeCategory);
 
-      if (searchTerm) {
-        updatedPosts = updatedPosts.filter(
-          post => post.title.includes(searchTerm) || post.content.includes(searchTerm),
-        );
-      }
+        if (searchTerm) {
+          updatedPosts = updatedPosts.filter(
+            post => post.title.includes(searchTerm) || post.content.includes(searchTerm),
+          );
+        }
 
-      setFilteredPosts(updatedPosts);
-      setPage(1);
+        setFilteredPosts(updatedPosts);
+        setPage(1);
+      }
     }
   }, [posts, activeCategory, activeFilter, searchTerm, postId, USER_ID]);
 

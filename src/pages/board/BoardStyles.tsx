@@ -337,6 +337,7 @@ export const PostDetailContainer = styled.div`
   width: 100%;
   max-width: 1200px;
   align-items: flex-start;
+  gap: 20px; /* 추가: 콘텐츠와 댓글 컨테이너 사이의 간격 */
 `;
 
 export const PostContentContainer = styled(PostBox)`
@@ -350,6 +351,7 @@ export const PostContentContainer = styled(PostBox)`
   background: ${props => (props.category === 'NOTICE' ? '#e1f9f0' : '#ffffff')};
   height: 100%;
   min-height: 200px;
+  align-self: start;
 `;
 
 export const LikeBackContainer = styled.div`
@@ -364,6 +366,7 @@ export const CommentsContainer = styled(PostBox)`
   max-width: 430px;
   align-self: flex-start;
   padding: 3vh 2vh;
+  margin-top: 0; /* 추가: 상단 마진 제거 */
 `;
 
 export const Backto = styled.img`
@@ -380,6 +383,8 @@ export const CommentContainer = styled.div`
 export const CommentAvatar = styled(Avatar)`
   width: 40px;
   height: 40px;
+  align-self: start;
+  margin-top: 7px;
 `;
 
 export const CommentContent = styled.div`
@@ -401,6 +406,7 @@ export const CommentCreatedAt = styled(CreatedAt)`
   font-size: 12px;
   color: #828282;
 `;
+
 export const CommentInputContainer = styled.div`
   display: flex;
   align-items: center;
