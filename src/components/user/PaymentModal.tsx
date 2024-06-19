@@ -34,8 +34,25 @@ const PaymentContainer = styled.div`
 `;
 const PaymentText = styled.h2`
   color: #315af1;
+  margin-bottom: 0.5rem;
+`;
+const AlertText = styled.p`
+  font-size: 1rem;
+  text-decolation: underline;
 `;
 const PaymentButton = styled.button`
+  background-color: #fee500;
+  padding: 10px 50px;
+  border-radius: 10px;
+  border: 1px solid #f3f5fb;
+  &:hover {
+    background-color: #ffd400;
+    color: #191919;
+    transition: 0.5s;
+    border: 1px solid #191919;
+  }
+`;
+const CancleButton = styled.button`
   background-color: #f3f5fb;
   padding: 10px 50px;
   border-radius: 10px;
@@ -59,7 +76,7 @@ const bounce = keyframes`
 `;
 const Tooltip = styled.div`
   position: absolute;
-  bottom: 390px; // 버튼 위에 위치하도록 조정
+  bottom: 360px; // 버튼 위에 위치하도록 조정
   background-color: white;
   border: 1px solid red;
   border-radius: 50px;
@@ -68,7 +85,7 @@ const Tooltip = styled.div`
   font-size: 12px;
   font-weight: 300;
   white-space: nowrap;
-  animation: ${bounce} 0.6s ease-in-out 3, fadeOut 0.6s forwards 4s;
+  animation: ${bounce} 0.7s ease-in-out 3, fadeOut 0.6s forwards 4s;
 
   @keyframes fadeOut {
     to {
@@ -82,12 +99,13 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ amount, itemName, onConfirm
       <PaymentContainer>
         <PointIcon className="w-20" />
         <PaymentText>{amount} 원을 충전하시겠습니까?</PaymentText>
-        <span className="flex mt-36 gap-10">
+        <AlertText>충전 후 포인트를 사용할 시에는 취소가 불가합니다.</AlertText>
+        <span className="flex mt-36 gap-8">
           <Tooltip>카카오 페이로 결제하기</Tooltip>
           <PaymentButton className="relative" onClick={() => onConfirm(amount, itemName)}>
             결제
           </PaymentButton>
-          <PaymentButton onClick={onCancel}>취소</PaymentButton>
+          <CancleButton onClick={onCancel}>취소</CancleButton>
         </span>
       </PaymentContainer>
     </PaymentOverlay>

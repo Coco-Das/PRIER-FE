@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { styled } from 'styled-components';
-import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import { userPointStore } from '../../states/user/PointStore';
 import { CheckPoint, RefundKakaoPayment } from '../../services/StoreApi';
@@ -31,7 +30,7 @@ const LogContainer = styled.div`
   align-items: center;
   width: 45%;
   height: 60%;
-  padding: 20px;
+  padding: 2rem;
   border: 1px solid transparent;
   border-radius: 10px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
@@ -141,6 +140,9 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
       if (response.status === 500) {
         setSnackbar({ message: '이미 처리된 요청입니다.', type: 'error' });
       }
+      if (response.status === 401) {
+        setSnackbar({ message: '포인트를 사용한 경우 환불이 불가합니다.', type: 'error' });
+      }
     } catch (error) {
       setSnackbar({ message: '이미 처리된 요청입니다.', type: 'error' });
     }
@@ -150,7 +152,6 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
     <LogOverlay>
       <LogContainer>
         <CloseButton onClick={onCancel} />
-        <PointIcon className="w-20" />
         <LogTitle>코어 로그</LogTitle>
         <TransactionList>
           <TransactionItem>
