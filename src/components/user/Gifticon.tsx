@@ -17,6 +17,7 @@ import { styled } from 'styled-components';
 import { useGifticonStore } from '../../states/user/PointStore';
 import { DescriptionGift, PurchaseGift } from '../../services/StoreApi';
 import GiftPurchaseModal from './GiftPurchaseModal';
+import Snackbar from './Snackbar';
 
 const StyledCoinIcon = styled(PointIcon)`
   width: 40px;
@@ -30,6 +31,7 @@ export default function Gifticon() {
   const [details, setDetails] = useState<string | null>(null);
   const [showPurchaseAlert, setShowPurchaseAlert] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const handleFlip = async (index: number, productId: number) => {
     if (index === flippedIndex) {
@@ -57,8 +59,10 @@ export default function Gifticon() {
         const response = await PurchaseGift(selectedProductId);
         console.log(response);
         setShowPurchaseAlert(false);
+        setSnackbar({ message: `상품을 구매했습니다.`, type: 'success' });
       } catch (error) {
         console.error('기프티콘 구매 요청 실패:', error);
+        setSnackbar({ message: `상품 구매에 실패했습니다.`, type: 'error' });
       }
     }
   };
@@ -138,6 +142,7 @@ export default function Gifticon() {
           </Card>
         </CardContainer>
       ))}
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </>
   );
 }
