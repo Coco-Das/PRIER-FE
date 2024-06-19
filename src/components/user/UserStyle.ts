@@ -1,5 +1,6 @@
 import { css, styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
+import { ReactComponent as BaseImg } from '../../assets/BaseImg.svg';
 export const LatestProjectWrapper = styled.div`
   width: 100%;
   height: 25rem;
@@ -64,8 +65,13 @@ export const LatestProjectContainer = styled.div`
 export const ProjectImg = styled.img`
   border-radius: 10px;
   margin-bottom: 0.5rem;
+  height: 50%;
+  align-self: center;
+`;
+export const Base = styled(BaseImg)`
+  margin-bottom: 0.5rem;
   width: 100%;
-  height: 10rem;
+  height: 50%;
   align-self: center;
 `;
 export const LinkText = styled.p`

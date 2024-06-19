@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
-import { LatestProjectContainer, LatestProjectWrapper, LinkText, ProjectImg, TagContainer } from './UserStyle';
+import { Base, LatestProjectContainer, LatestProjectWrapper, LinkText, ProjectImg, TagContainer } from './UserStyle';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
@@ -35,7 +35,7 @@ export default function LatestProject() {
               </span>
             </div>
           </div>
-          <ProjectImg src={project.mainImageUrl} alt="My Project" className="mb-2" style={{ width: '270px' }} />
+          {project.mainImageUrl ? <ProjectImg src={project.mainImageUrl} alt="My Project" /> : <Base />}
           <div className="flex">
             {project.tags.map(tag => (
               <TagContainer key={tag.tagId}>{tag.tagName}</TagContainer>
