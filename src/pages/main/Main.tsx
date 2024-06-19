@@ -110,7 +110,7 @@ export default function Main() {
       <Title>신규 프로젝트</Title>
       <LatestProject />
       <Title>모든 프로젝트</Title>
-      <div className="flex justify-between mb-2">
+      <div className="flex justify-between mb-[1%]">
         <div className="flex gap-2">
           <OrderButton active={activeButton === '인기순'} onClick={() => FilterChange(0, '인기순')}>
             인기순

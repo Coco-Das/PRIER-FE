@@ -3,24 +3,24 @@ import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import { Container, NoPostsMessage } from './BoardStyles';
 import { BoardPost } from '../../states/board/BoardStore';
 import PaginationComponent from '../../components/board/PaginationComponent';
-import PostSkeleton from '../../components/board/PostSkeleton';
 import NavigationBar from '../../components/board/NavigationBar';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
-import PostDetailSkeleton from '../../components/board/PostDetailSkeleton';
+import PostSkeleton from '../../components/board/PostSkeleton';
 import usePagination from '../../hooks/UsePagination';
 import { API_BASE_URL } from '../../const/TokenApi';
 
 const Board: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
   const location = useLocation();
+  const navigate = useNavigate();
   const [posts, setPosts] = useState<BoardPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BoardPost[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('ITNEWS');
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
-  const navigate = useNavigate();
+  const [USER_ID, setUserId] = useState<number | null>(null);
 
   const POSTS_PER_PAGE = 3;
   const {
@@ -30,6 +30,13 @@ const Board: React.FC = () => {
     handlePageChange,
     setPage,
   } = usePagination(filteredPosts, POSTS_PER_PAGE);
+
+  useEffect(() => {
+    const storedUserId = localStorage.getItem('userId');
+    if (storedUserId) {
+      setUserId(Number(storedUserId));
+    }
+  }, []);
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -51,14 +58,31 @@ const Board: React.FC = () => {
   }, []);
 
   useEffect(() => {
-    if (!postId) {
+    const fetchLikedPosts = async () => {
+      setLoading(true);
+      try {
+        const response = await API_BASE_URL.get(`/posts/like/my`);
+        const likedPosts = response.data.filter((post: BoardPost) => post.category === activeCategory);
+        setFilteredPosts(likedPosts);
+      } catch (error) {
+        console.error('Error fetching liked posts:', error);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (!postId && USER_ID !== null) {
       let updatedPosts = posts;
+
+      if (activeFilter === 'likes') {
+        fetchLikedPosts();
+        return;
+      }
+
       if (activeFilter === 'all') {
         updatedPosts = posts.filter(post => post.category === activeCategory);
-      } else if (activeFilter === 'likes') {
-        updatedPosts = posts.filter(post => post.category === activeCategory && post.likedByUser);
       } else if (activeFilter === 'myposts') {
-        updatedPosts = posts.filter(post => post.category === activeCategory && post.nickname === '이인지');
+        updatedPosts = posts.filter(post => post.category === activeCategory && post.userId === USER_ID);
       }
 
       if (searchTerm) {
@@ -70,25 +94,13 @@ const Board: React.FC = () => {
       setFilteredPosts(updatedPosts);
       setPage(1);
     }
-  }, [posts, activeCategory, activeFilter, searchTerm, postId]);
+  }, [posts, activeCategory, activeFilter, searchTerm, postId, USER_ID]);
 
-  // 좋아요 토글 함수
-  const toggleLike = (postId: number) => {
-    setPosts(prevPosts =>
-      prevPosts.map(post => (post.postId === postId ? { ...post, likedByUser: !post.likedByUser } : post)),
-    );
-  };
-
-  // 카테고리 변경을 처리하는 함수
   const handleCategoryClick = (category: string) => {
-    if (activeFilter === 'myposts' && category === 'NOTICE') {
-      setActiveFilter('all');
-    }
     setActiveCategory(category);
     navigate(`/board?category=${category}&filter=${activeFilter}`);
   };
 
-  // 필터 변경을 처리하는 함수
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
     navigate(`/board?category=${activeCategory}&filter=${filter}`);
@@ -107,10 +119,14 @@ const Board: React.FC = () => {
   };
 
   const getTitle = () => {
-    if (activeFilter === 'all') return 'Community';
-    if (activeFilter === 'likes') return 'Likes';
-    if (activeFilter === 'myposts') return 'My Posts';
-    return 'Board';
+    switch (activeFilter) {
+      case 'likes':
+        return 'Likes';
+      case 'myposts':
+        return 'My Posts';
+      default:
+        return 'Community';
+    }
   };
 
   const isDetailPage = location.pathname.includes('post');
@@ -127,15 +143,17 @@ const Board: React.FC = () => {
         handleSearchChange={handleSearchChange}
       />
       {loading && !postId ? (
-        <>
-          <PostSkeleton />
-          <PostSkeleton />
-          <PostSkeleton />
-        </>
+        <></>
       ) : postId ? (
-        <PostDetail postId={Number(postId)} onBackToList={handleBackToList} toggleLike={toggleLike} />
+        <PostDetail
+          postId={Number(postId)}
+          onBackToList={handleBackToList}
+          toggleLike={(postId: number) => {
+            console.log(`Toggle like for post ${postId}`);
+          }}
+        />
       ) : filteredPosts.length > 0 ? (
-        <PostList posts={paginatedPosts} onPostClick={handlePostClick} toggleLike={toggleLike} />
+        <PostList posts={paginatedPosts} onPostClick={handlePostClick} userId={USER_ID} />
       ) : searchTerm ? (
         <NoPostsMessage>{searchTerm} (이)가 포함된 게시물이 없습니다.</NoPostsMessage>
       ) : (

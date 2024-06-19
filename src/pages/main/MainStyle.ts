@@ -107,7 +107,7 @@ export const Title = styled.h2`
   color: #315af1;
   font-weight: 700;
   margin-top: 2%;
-  margin-bottom: 1%;
+  margin-bottom: 2%;
   ${device.small} {
     font-size: 14px;
   }

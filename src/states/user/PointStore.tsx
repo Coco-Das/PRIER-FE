@@ -7,6 +7,7 @@ interface Transaction {
   transactionId: number;
   transactionType: string;
   userId: number;
+  tid: string | null;
 }
 interface UserPointStore {
   point: number;
