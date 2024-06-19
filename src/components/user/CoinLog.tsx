@@ -124,10 +124,12 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
   const formatTransactionTime = (datetime: string) => {
     const date = new Date(datetime);
     return new Intl.DateTimeFormat('ko-KR', {
-      year: '2-digit',
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
+      minute: '2-digit',
+      hour12: false, // 24-hour format
+      timeZone: 'Asia/Seoul',
     }).format(date);
   };
   const handleRefund = async (payToken: string, amount: number) => {
