@@ -215,8 +215,8 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
               </div>
             )}
           </UserContainer>
-          <ContentContainer className="flex flex-col items-start">
-            <h1>{post.title}</h1>
+          <ContentContainer className="flex flex-col items-start w-[600px] self-center">
+            <h1 className="text-xl font-bold  mb-8">{post.title}</h1>
             <p>
               {extractTextFromContent(post.content)
                 .split('\n')
@@ -227,7 +227,13 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
                   </span>
                 ))}
             </p>
-            {post.media && post.media.length > 0 && <Image src={post.media[0].s3Url} alt={post.media[0].metadata} />}
+            {post.media && post.media.length > 0 && (
+              <div className="flex flex-wrap gap-4">
+                {post.media.map((mediaItem, index) => (
+                  <Image key={index} src={mediaItem.s3Url} alt={mediaItem.metadata} />
+                ))}
+              </div>
+            )}
           </ContentContainer>
           <LikeBackContainer>
             <button onClick={onBackToList}>

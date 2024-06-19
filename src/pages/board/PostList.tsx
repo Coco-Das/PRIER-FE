@@ -62,6 +62,10 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
         const likeState = likes[post.postId] || { isLiked: post.isLikedByMe, likeCount: post.likes };
         const currentIsLiked = likeState.isLiked;
 
+        const content = extractTextFromContent(post.content);
+        const lines = content.split('\n');
+        const displayContent = lines.length > 2 ? `${lines.slice(0, 2).join('\n')}\n...` : content;
+
         return (
           <BackgroundContainer
             key={post.postId}
@@ -88,20 +92,19 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
                   </div>
                 )}
               </UserContainer>
-              <ContentContainer>
-                <h2>{post.title}</h2>
-                <p>
-                  {extractTextFromContent(post.content)
-                    .split('\n')
-                    .map((line, index) => (
-                      <span key={index}>
+              <ContentContainer className="flex flex-col items-start w-[1000px] self-center">
+                <h1 className="text-xl font-bold mb-8">{post.title}</h1>
+                {post.media && post.media.length > 0 ? (
+                  <Image src={post.media[0].s3Url} alt={post.media[0].metadata} />
+                ) : (
+                  <p className="single-line-text">
+                    {displayContent.split('\n').map((line, index) => (
+                      <React.Fragment key={index}>
                         {line}
                         <br />
-                      </span>
+                      </React.Fragment>
                     ))}
-                </p>
-                {post.media && post.media.length > 0 && (
-                  <Image src={post.media[0].s3Url} alt={post.media[0].metadata} />
+                  </p>
                 )}
               </ContentContainer>
               <LikesContainer>
