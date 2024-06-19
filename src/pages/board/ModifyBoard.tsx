@@ -91,7 +91,7 @@ const ModifyBoard: React.FC = () => {
   const [showCreateBoardAlert, setShowCreateBoardAlert] = useState<boolean>(false); // 알림 표시 상태 변수
   const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 상태 변수
   const [existingImages, setExistingImages] = useState<{ s3Url: string; s3Key: string }[]>([]); // 기존 이미지 상태 변수 초기화
-  const [deleteImages, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
+  const [deleteimages, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
 
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
 
@@ -215,6 +215,7 @@ const ModifyBoard: React.FC = () => {
 
   const handleDeleteExistingImage = (index: number) => {
     setDeleteImages(prevDeleteImages => [...prevDeleteImages, existingImages[index].s3Key]);
+    console.log(deleteimages);
     setExistingImages(existingImages.filter((_, i) => i !== index));
   };
 
@@ -228,7 +229,7 @@ const ModifyBoard: React.FC = () => {
     const formData = new FormData();
     formData.append(
       'dto',
-      new Blob([JSON.stringify({ title, content: contentString, category, deleteImages })], {
+      new Blob([JSON.stringify({ title, content: contentString, category, deleteimages })], {
         type: 'application/json',
       }),
     );
@@ -246,16 +247,16 @@ const ModifyBoard: React.FC = () => {
 
       if (response.status === 200) {
         console.log('게시물 작성 성공');
-        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
+        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteimages });
         navigate('/board');
       } else {
         console.error('게시물 작성 실패');
         console.log('응답 상태 코드:', response.status);
-        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
+        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteimages });
       }
     } catch (error) {
       console.error('에러:', error);
-      console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
+      console.log('보낸 데이터:', { title, content: contentString, category, images, deleteimages });
     }
   };
 

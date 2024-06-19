@@ -41,6 +41,7 @@ import { Loading } from '../../components/utils/Loading';
 import axios from 'axios';
 import { API_BASE_URL } from '../../const/TokenApi';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
+import ImageModal from '../../components/board/ImageModal'; // 모달 컴포넌트 임포트
 
 interface Media {
   metadata: string;
@@ -83,6 +84,9 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
   const [loading, setLoading] = useState(true);
   const [newComment, setNewComment] = useState('');
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [modalImageUrl, setModalImageUrl] = useState<string | null>(null);
+
   const formatDate = useFormatDate();
   const extractTextFromContent = useExtractTextFromContent();
   const navigate = useNavigate();
@@ -194,12 +198,24 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
     }
   };
 
+  const openModal = (imageUrl: string) => {
+    setModalImageUrl(imageUrl);
+    setIsModalOpen(true);
+  };
+
+  const closeModal = () => {
+    setIsModalOpen(false);
+    setTimeout(() => {
+      setModalImageUrl(null);
+    }, 500); // fadeOut 애니메이션 시간과 일치
+  };
+
   return (
-    <PostDetailContainer>
+    <PostDetailContainer className="flex">
       {loading ? (
         <Loading />
       ) : (
-        <PostContentContainer category={post.category}>
+        <PostContentContainer className="self-start mt-0" category={post.category}>
           <UserContainer>
             <Avatar onClick={e => handleProfileClick(e, post.userId)} category={post.category}>
               <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
@@ -231,7 +247,12 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
             {post.media && post.media.length > 0 && (
               <div className="flex flex-wrap gap-4">
                 {post.media.map((mediaItem, index) => (
-                  <Image key={index} src={mediaItem.s3Url} alt={mediaItem.metadata} />
+                  <Image
+                    key={index}
+                    src={mediaItem.s3Url}
+                    alt={mediaItem.metadata}
+                    onClick={() => openModal(mediaItem.s3Url)}
+                  />
                 ))}
               </div>
             )}
@@ -254,7 +275,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
           </LikeBackContainer>
         </PostContentContainer>
       )}
-      <CommentsContainer>
+      <CommentsContainer className="mt-0">
         {loading ? (
           <Loading />
         ) : post.comments.length === 0 ? (
@@ -302,6 +323,9 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
           <CommentButton onClick={handleCommentSubmit}>{editingCommentId !== null ? '수정' : '게시'}</CommentButton>
         </CommentInputContainer>
       </CommentsContainer>
+
+      {/* 모달 컴포넌트 사용 */}
+      {isModalOpen && <ImageModal imageUrl={modalImageUrl} onClose={closeModal} />}
     </PostDetailContainer>
   );
 };
