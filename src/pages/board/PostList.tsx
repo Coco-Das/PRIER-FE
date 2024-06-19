@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, CSSProperties } from 'react';
 import {
   BackgroundContainer,
   PostListPostBox as PostBox,
@@ -95,7 +95,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
               <ContentContainer className="flex flex-col items-start w-[1000px] self-center">
                 <h1 className="text-xl font-bold mb-8">{post.title}</h1>
                 {post.media && post.media.length > 0 ? (
-                  <Image src={post.media[0].s3Url} alt={post.media[0].metadata} />
+                  <ImageSlider images={post.media.map(m => m.s3Url)} category={post.category} />
                 ) : (
                   <p className="single-line-text">
                     {displayContent.split('\n').map((line, index) => (
@@ -123,6 +123,70 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
         );
       })}
     </>
+  );
+};
+
+const ImageSlider: React.FC<{ images: string[]; category: string }> = ({ images, category }) => {
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [imageStyles, setImageStyles] = useState<CSSProperties[]>([]);
+
+  useEffect(() => {
+    if (images.length > 1) {
+      const interval = setInterval(() => {
+        setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
+      }, 5000);
+
+      return () => clearInterval(interval);
+    }
+  }, [images.length]);
+
+  useEffect(() => {
+    const loadImages = async () => {
+      const styles = await Promise.all(
+        images.map(
+          src =>
+            new Promise<CSSProperties>(resolve => {
+              const img = new window.Image();
+              img.src = src;
+              img.onload = () => {
+                if (img.width > img.height) {
+                  resolve({ width: '100%', height: 'auto', maxHeight: '300px' });
+                } else if (img.height > img.width) {
+                  resolve({ width: 'auto', height: '300px', maxWidth: '500px', objectFit: 'cover' });
+                } else {
+                  resolve({ width: 'auto', height: '300px', objectFit: 'contain' });
+                }
+              };
+            }),
+        ),
+      );
+      setImageStyles(styles);
+    };
+
+    loadImages();
+  }, [images]);
+
+  return (
+    <div style={{ position: 'relative', width: '100%', height: '300px', overflow: 'hidden' }}>
+      {images.map((image, index) => (
+        <Image
+          key={index}
+          src={image}
+          alt={`Content image ${index + 1}`}
+          category={category}
+          style={{
+            position: 'absolute',
+            top: '50%',
+            left: '50%',
+            width: '100%',
+            transform: 'translate(-50%, -50%)',
+            transition: 'opacity 1s ease-in-out',
+            opacity: index === currentIndex ? 1 : 0,
+            ...imageStyles[index],
+          }}
+        />
+      ))}
+    </div>
   );
 };
 
