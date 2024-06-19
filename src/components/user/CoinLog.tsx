@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import CloseIcon from '@mui/icons-material/Close';
@@ -6,6 +6,7 @@ import { userPointStore } from '../../states/user/PointStore';
 import { RefundKakaoPayment } from '../../services/StoreApi';
 import CreditCardOffRoundedIcon from '@mui/icons-material/CreditCardOffRounded';
 import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
+import Snackbar from './Snackbar';
 
 interface CoinLogProps {
   onCancel: () => void;
@@ -102,6 +103,10 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
   const pointStore = userPointStore();
+  const [showSnackbar, setShowSnackbar] = useState(false);
+  const [snackbarMessage, setSnackbarMessage] = useState('');
+  const [snackbarType, setSnackbarType] = useState<'success' | 'error'>('success');
+
   const TransactionType = (type: string) => {
     switch (type) {
       case 'QUEST_REWARD':
@@ -126,7 +131,19 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
     }).format(date);
   };
   const handleRefund = async (payToken: string, amount: number) => {
-    await RefundKakaoPayment(payToken, amount);
+    try {
+      await RefundKakaoPayment(payToken, amount);
+      setSnackbarMessage('환불이 완료되었습니다.');
+      setSnackbarType('success');
+    } catch (error) {
+      setSnackbarMessage('환불에 실패했습니다.');
+      setSnackbarType('error');
+    } finally {
+      setShowSnackbar(true);
+    }
+  };
+  const handleCloseSnackbar = () => {
+    setShowSnackbar(false);
   };
 
   return (
@@ -148,7 +165,7 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
               <TransactionText>{TransactionType(transaction.transactionType)}</TransactionText>
               <TransactionText>{transaction.balance}</TransactionText>
               <TransactionTime>{formatTransactionTime(transaction.createdAt)}</TransactionTime>
-              {transaction.transactionType === 'POINT_CHARGE' && (
+              {transaction.transactionType === 'POINT_CHARGE' && transaction.tid && (
                 <LightTooltip title="카카오페이 결제 취소" placement="right">
                   <StyledCreditCardOffRoundedIcon
                     onClick={() => handleRefund(transaction.tid as string, transaction.amount)}
@@ -159,6 +176,7 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
           ))}
         </TransactionList>
       </LogContainer>
+      {showSnackbar && <Snackbar message={snackbarMessage} type={snackbarType} onClose={handleCloseSnackbar} />}
     </LogOverlay>
   );
 };
