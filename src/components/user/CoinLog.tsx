@@ -3,7 +3,7 @@ import { styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import { userPointStore } from '../../states/user/PointStore';
-import { RefundKakaoPayment } from '../../services/StoreApi';
+import { CheckPoint, RefundKakaoPayment } from '../../services/StoreApi';
 import CreditCardOffRoundedIcon from '@mui/icons-material/CreditCardOffRounded';
 import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
 import Snackbar from './Snackbar';
@@ -103,9 +103,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
   const pointStore = userPointStore();
-  const [showSnackbar, setShowSnackbar] = useState(false);
-  const [snackbarMessage, setSnackbarMessage] = useState('');
-  const [snackbarType, setSnackbarType] = useState<'success' | 'error'>('success');
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const TransactionType = (type: string) => {
     switch (type) {
@@ -117,6 +115,8 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
         return '상품 구매';
       case 'FEEDBACK_EXTENSION':
         return '피드백 연장';
+      case 'REFUND':
+        return '포인트 환불';
       default:
         return type;
     }
@@ -132,18 +132,16 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
   };
   const handleRefund = async (payToken: string, amount: number) => {
     try {
-      await RefundKakaoPayment(payToken, amount);
-      setSnackbarMessage('환불이 완료되었습니다.');
-      setSnackbarType('success');
+      const response = await RefundKakaoPayment(payToken, amount);
+      const remain = await CheckPoint();
+      pointStore.setPoint(remain);
+      setSnackbar({ message: '환불 요청이 처리되었습니다.', type: 'success' });
+      if (response.status === 500) {
+        setSnackbar({ message: '이미 처리된 요청입니다.', type: 'error' });
+      }
     } catch (error) {
-      setSnackbarMessage('환불에 실패했습니다.');
-      setSnackbarType('error');
-    } finally {
-      setShowSnackbar(true);
+      setSnackbar({ message: '이미 처리된 요청입니다.', type: 'error' });
     }
-  };
-  const handleCloseSnackbar = () => {
-    setShowSnackbar(false);
   };
 
   return (
@@ -168,7 +166,7 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
               {transaction.transactionType === 'POINT_CHARGE' && transaction.tid && (
                 <LightTooltip title="카카오페이 결제 취소" placement="right">
                   <StyledCreditCardOffRoundedIcon
-                    onClick={() => handleRefund(transaction.tid as string, transaction.amount)}
+                    onClick={() => handleRefund(transaction.tid as string, transaction.amount * 10)}
                   />
                 </LightTooltip>
               )}
@@ -176,7 +174,7 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
           ))}
         </TransactionList>
       </LogContainer>
-      {showSnackbar && <Snackbar message={snackbarMessage} type={snackbarType} onClose={handleCloseSnackbar} />}
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </LogOverlay>
   );
 };
