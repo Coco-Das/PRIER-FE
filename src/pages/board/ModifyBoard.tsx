@@ -90,7 +90,9 @@ const ModifyBoard: React.FC = () => {
   const [category, setCategory] = useState<string>(''); // 카테고리 상태 변수
   const [showCreateBoardAlert, setShowCreateBoardAlert] = useState<boolean>(false); // 알림 표시 상태 변수
   const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 상태 변수
-  const [existingImages, setExistingImages] = useState<string[]>([]); // 기존 이미지 상태 변수 초기화
+  const [existingImages, setExistingImages] = useState<{ s3Url: string; s3Key: string }[]>([]); // 기존 이미지 상태 변수 초기화
+  const [deleteImages, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
+
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
 
   useEffect(() => {
@@ -102,8 +104,14 @@ const ModifyBoard: React.FC = () => {
         setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(post.content)), decorator));
         setCategory(post.category);
         if (post.media && post.media.length > 0) {
-          const mediaUrls = post.media.map((media: { s3Url: string }) => media.s3Url);
-          setExistingImages(mediaUrls); // 이미지가 있을 경우에만 상태 업데이트
+          setExistingImages(
+            post.media.map((media: { s3Url: string; s3Key: string }) => ({
+              s3Url: media.s3Url,
+              s3Key: media.s3Key,
+            })),
+          ); // 이미지가 있을 경우에만 상태 업데이트
+          setDeleteImages([]); // deleteImages를 초기화
+          console.log(post.media);
         }
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -206,6 +214,7 @@ const ModifyBoard: React.FC = () => {
   };
 
   const handleDeleteExistingImage = (index: number) => {
+    setDeleteImages(prevDeleteImages => [...prevDeleteImages, existingImages[index].s3Key]);
     setExistingImages(existingImages.filter((_, i) => i !== index));
   };
 
@@ -219,7 +228,9 @@ const ModifyBoard: React.FC = () => {
     const formData = new FormData();
     formData.append(
       'dto',
-      new Blob([JSON.stringify({ title, content: contentString, category })], { type: 'application/json' }),
+      new Blob([JSON.stringify({ title, content: contentString, category, deleteImages })], {
+        type: 'application/json',
+      }),
     );
 
     images.forEach(file => {
@@ -235,16 +246,16 @@ const ModifyBoard: React.FC = () => {
 
       if (response.status === 200) {
         console.log('게시물 작성 성공');
-        console.log('보낸 데이터:', { title, content: contentString, category, images });
+        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
         navigate('/board');
       } else {
         console.error('게시물 작성 실패');
         console.log('응답 상태 코드:', response.status);
-        console.log('보낸 데이터:', { title, content: contentString, category, images });
+        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
       }
     } catch (error) {
       console.error('에러:', error);
-      console.log('보낸 데이터:', { title, content: contentString, category, images });
+      console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
     }
   };
 
@@ -322,7 +333,7 @@ const ModifyBoard: React.FC = () => {
             {existingImages &&
               existingImages.map((image, index) => (
                 <ImageWrapper key={index}>
-                  <StyledImg src={image} alt={`Existing image ${index}`} />
+                  <StyledImg src={image.s3Url} alt={`Existing image ${index}`} />
                   <DeleteButton onClick={() => handleDeleteExistingImage(index)}>×</DeleteButton>
                 </ImageWrapper>
               ))}

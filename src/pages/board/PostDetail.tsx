@@ -95,6 +95,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList, toggleLik
       try {
         const response = await API_BASE_URL.get(`/posts/${postId}`);
         setPost(response.data);
+        console.log(response);
       } catch (error) {
         console.error('게시글을 가져오는 중 오류 발생:', error);
       } finally {
