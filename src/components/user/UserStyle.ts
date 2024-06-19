@@ -14,11 +14,15 @@ export const ProjectWrapper = styled.div`
   gap: 2rem;
 `;
 export const ProjectContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 18rem;
   height: 22rem;
   border: none;
   border-radius: 15px;
   padding: 0.5rem;
+  cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
 `;
 export const LatestProjectContainer = styled.div`
@@ -60,7 +64,7 @@ export const LatestProjectContainer = styled.div`
 export const ProjectImg = styled.img`
   border-radius: 10px;
   margin-bottom: 0.5rem;
-  width: 10rem;
+  width: 100%;
   height: 10rem;
   align-self: center;
 `;
