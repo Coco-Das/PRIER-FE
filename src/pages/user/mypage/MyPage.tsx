@@ -62,6 +62,7 @@ import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material';
 import QuestSuccess from '../../../components/user/QuestSuccess';
 import { RecentProjectStore } from '../../../states/user/UserProjectStore';
+import Snackbar from '../../../components/user/Snackbar';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -105,6 +106,7 @@ export default function MyPage() {
   const [newIntro, setNewIntro] = useState<string>('');
   const UseFetchLogout = FetchLogout();
   const [showSuccess, setShowSuccess] = useState(false);
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -325,6 +327,8 @@ export default function MyPage() {
     setShowSuccess(true);
     if (success) {
       useUserStore.getState().setQuest(String(sequence));
+    } else {
+      setSnackbar({ message: `먼저 퀘스트에 참여해주세요`, type: 'error' });
     }
   };
   const closeSuccessMessage = () => {
@@ -600,6 +604,7 @@ export default function MyPage() {
           </span>
         </ReviewWrapper>
       </div>
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </div>
   );
 }
