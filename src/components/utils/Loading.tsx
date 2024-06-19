@@ -1,23 +1,16 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import Gif from '../../assets/personloading.json';
-// import Gif2 from '../../assets/projectsloading.json';
+import Gif2 from '../../assets/projectloading.json';
 import Lottie from './LottieComponent';
 
 const Container = styled.div`
-  width: 100vw;
-  height: 100vh;
+  overflow: hidden;
+  width: 100%;
+  height: 100%;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(to top left, lime, transparent), linear-gradient(to top right, #4188fe, transparent);
-  background-blend-mode: screen;
-  background-blend-mode: multiply;
-  background-blend-mode: overlay;
-  background-blend-mode: darken;
-  background-blend-mode: soft-light;
-  background-blend-mode: luminosity;
 `;
 
 const shootingtime = '4500ms';
@@ -44,7 +37,7 @@ const shooting = keyframes`
     transform: translateX(0);
   }
   100% {
-    transform: translateX(100%);
+    transform: translateX(100vw);
   }
 `;
 
@@ -58,14 +51,15 @@ const ShootingStar = styled.div`
   filter: drop-shadow(0 0 6px rgba(105, 155, 255, 1));
   animation: ${tail} ${shootingtime} linear infinite, ${shooting} ${shootingtime} linear infinite;
   z-index: -1;
+  overflow: hidden;
 `;
 
 export const Loading = () => {
-  const stars = Array.from({ length: 20 });
+  const stars = Array.from({ length: 10 });
 
   return (
     <Container>
-      <Lottie animationData={Gif} loop={true} autoplay={true} style={{ width: '35%' }} />
+      <Lottie animationData={Gif2} loop={true} autoplay={true} style={{ width: '35%' }} />
       {stars.map((_, index) => (
         <ShootingStar
           key={index}

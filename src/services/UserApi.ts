@@ -26,7 +26,7 @@ export function FetchLogout() {
       console.log('로그아웃 요청 성공', response.data);
 
       localStorage.removeItem('accessToken');
-      localStorage.removeItem('kakao_access_token');
+      localStorage.removeItem('kakaoAccessToken');
       localStorage.removeItem('userId');
 
       setLogout();
