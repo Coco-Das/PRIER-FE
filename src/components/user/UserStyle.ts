@@ -14,11 +14,15 @@ export const ProjectWrapper = styled.div`
   gap: 2rem;
 `;
 export const ProjectContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   width: 18rem;
   height: 22rem;
   border: none;
   border-radius: 15px;
   padding: 0.5rem;
+  cursor: pointer;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
 `;
 export const LatestProjectContainer = styled.div`
@@ -60,7 +64,7 @@ export const LatestProjectContainer = styled.div`
 export const ProjectImg = styled.img`
   border-radius: 10px;
   margin-bottom: 0.5rem;
-  width: 10rem;
+  width: 100%;
   height: 10rem;
   align-self: center;
 `;
@@ -69,18 +73,19 @@ export const LinkText = styled.p`
   font-weight: 300;
   color: #828282;
   cursor: pointer;
-  :&hover  {
+  &:hover {
     color: #454545;
   }
 `;
-const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0', '#ACA4D5', '#4188FE'];
+export const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0', '#ACA4D5', '#4188FE'];
+const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
 export const TagContainer = styled.div`
   font-size: 14px;
-  padding: 5px 0.5rem;
-  background-color: ${colors};
+  padding: 0.1rem 0.5rem;
+  background-color: ${props => props.color || getRandomColor()};
   font-weight: 300;
-  border-radius: 20px;
+  border-radius: 15px;
   margin-right: 10px;
 `;
 //프로필
