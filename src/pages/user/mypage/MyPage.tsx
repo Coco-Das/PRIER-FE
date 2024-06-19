@@ -132,7 +132,7 @@ export default function MyPage() {
   const Logout = async () => {
     setShowLogoutAlert(false);
     await UseFetchLogout();
-    navigate('/login');
+    navigate('/firstmain');
   };
 
   //닉네임 수정

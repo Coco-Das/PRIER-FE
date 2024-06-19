@@ -24,7 +24,6 @@ import {
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
-import { Link } from 'react-router-dom';
 import StarRating from '../../../components/utils/StarRating';
 import CustomAlert from '../../../components/utils/CustomAlert';
 import CustomModal from '../../../components/utils/CustomModal';
@@ -73,6 +72,19 @@ export const ResponseTest = () => {
   const [nickname, setNickname] = useState('');
   const [alert, setAlert] = useState(false);
   const [comment, setCommnet] = useState('');
+
+  const saveTagColors = (tags: Tag[]) => {
+    const tagColors: { [key: string]: string } = {};
+    tags.forEach(tag => {
+      tagColors[tag.tagName] = tag.color;
+    });
+    localStorage.setItem('tagColors', JSON.stringify(tagColors));
+  };
+
+  const getTagColors = (): { [key: string]: string } => {
+    const tagColors = localStorage.getItem('tagColors');
+    return tagColors ? JSON.parse(tagColors) : {};
+  };
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -107,7 +119,16 @@ export const ResponseTest = () => {
       setStartDate(Data.startDate);
       setEndDate(Data.endDate);
       setTeamMate(Data.teamMate.replace(/\n/g, '<br />'));
-      setTags(Data.tags.map((tag: { tagName: string }) => ({ tagName: tag.tagName, color: getRandomColor() })));
+      const storedColors = getTagColors();
+      const tagsWithColors = Data.tags.map((tag: { tagName: string }) => {
+        const color = storedColors[tag.tagName] || getRandomColor();
+        if (!storedColors[tag.tagName]) {
+          storedColors[tag.tagName] = color;
+        }
+        return { tagName: tag.tagName, color };
+      });
+      setTags(tagsWithColors);
+      saveTagColors(tagsWithColors);
       setStatus(Data.status);
       setLink(Data.link);
       setIsMine(Data.isMine);
@@ -194,7 +215,7 @@ export const ResponseTest = () => {
   const handleMouseEnter = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      setButtonPosition({ top: rect.top - 300, left: rect.left - 150 });
+      setButtonPosition({ top: rect.top - 310, left: rect.left - 150 });
     }
     setShowModal(true);
   };
@@ -216,6 +237,7 @@ export const ResponseTest = () => {
     setCommnet('');
     handleRatingChange(0);
   };
+
   return (
     <CreateWrapper>
       <Project>
