@@ -1,8 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import CloseIcon from '@mui/icons-material/Close';
 import { userPointStore } from '../../states/user/PointStore';
+import { CheckPoint, RefundKakaoPayment } from '../../services/StoreApi';
+import CreditCardOffRoundedIcon from '@mui/icons-material/CreditCardOffRounded';
+import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
+import Snackbar from './Snackbar';
 
 interface CoinLogProps {
   onCancel: () => void;
@@ -25,7 +29,7 @@ const LogContainer = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
-  width: 40%;
+  width: 45%;
   height: 60%;
   padding: 20px;
   border: 1px solid transparent;
@@ -56,6 +60,11 @@ const TransactionItem = styled.li`
   justify-content: space-between;
   padding: 10px;
   border-bottom: 1px solid #e0e0e0;
+  position: relative;
+  &:hover {
+    background: #e1f9f0;
+    transition: 0.3s;
+  }
 `;
 const TransactionTitle = styled.p`
   font-size: 18px;
@@ -73,9 +82,29 @@ const TransactionText = styled.p`
   width: 20%;
   font-weight: 300;
 `;
+const StyledCreditCardOffRoundedIcon = styled(CreditCardOffRoundedIcon)`
+  cursor: pointer;
+  &:hover {
+    color: #315af1;
+    transition: color 0.4s;
+  }
+`;
+const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(() => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: '#F3F8FF',
+    color: '#4188FE',
+    borderRounded: '10px',
+    border: '1px solid #CEE7FF',
+    fontSize: 12,
+  },
+}));
 
 const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
   const pointStore = userPointStore();
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
   const TransactionType = (type: string) => {
     switch (type) {
       case 'QUEST_REWARD':
@@ -86,6 +115,8 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
         return '상품 구매';
       case 'FEEDBACK_EXTENSION':
         return '피드백 연장';
+      case 'REFUND':
+        return '포인트 환불';
       default:
         return type;
     }
@@ -93,11 +124,26 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
   const formatTransactionTime = (datetime: string) => {
     const date = new Date(datetime);
     return new Intl.DateTimeFormat('ko-KR', {
-      year: '2-digit',
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
+      minute: '2-digit',
+      hour12: false, // 24-hour format
+      timeZone: 'Asia/Seoul',
     }).format(date);
+  };
+  const handleRefund = async (payToken: string, amount: number) => {
+    try {
+      const response = await RefundKakaoPayment(payToken, amount);
+      const remain = await CheckPoint();
+      pointStore.setPoint(remain);
+      setSnackbar({ message: '환불 요청이 처리되었습니다.', type: 'success' });
+      if (response.status === 500) {
+        setSnackbar({ message: '이미 처리된 요청입니다.', type: 'error' });
+      }
+    } catch (error) {
+      setSnackbar({ message: '이미 처리된 요청입니다.', type: 'error' });
+    }
   };
 
   return (
@@ -119,10 +165,18 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
               <TransactionText>{TransactionType(transaction.transactionType)}</TransactionText>
               <TransactionText>{transaction.balance}</TransactionText>
               <TransactionTime>{formatTransactionTime(transaction.createdAt)}</TransactionTime>
+              {transaction.transactionType === 'POINT_CHARGE' && transaction.tid && (
+                <LightTooltip title="카카오페이 결제 취소" placement="right">
+                  <StyledCreditCardOffRoundedIcon
+                    onClick={() => handleRefund(transaction.tid as string, transaction.amount * 10)}
+                  />
+                </LightTooltip>
+              )}
             </TransactionItem>
           ))}
         </TransactionList>
       </LogContainer>
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </LogOverlay>
   );
 };

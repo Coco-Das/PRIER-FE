@@ -21,10 +21,9 @@ export default function Store() {
   const pointStore = userPointStore();
   const { setGifticons } = useGifticonStore();
   const [openPayment, setOpenPayment] = useState(false);
-  const [selectedAmount, setSelectedAmount] = useState(0);
-  const [selectedItem, setSelectedItem] = useState('');
-
+  const [charge, setCharge] = useState<{ amount: number; itemName: string }>({ amount: 0, itemName: '' });
   const [openLog, setOpenLog] = useState(false);
+
   //기프티콘 리스트 호출
   useEffect(() => {
     const fetchData = async () => {
@@ -42,15 +41,13 @@ export default function Store() {
   }, [setGifticons]);
   //포인트 구매
   const SelectAmount = (amount: number, itemName: string) => {
-    setSelectedAmount(amount);
-    setSelectedItem(itemName);
+    setCharge({ amount, itemName });
     setOpenPayment(true);
   };
 
   const ChargeCoin = async (amount: number, itemName: string) => {
     try {
       await FetchKakaoPayment(amount, itemName);
-
       setOpenPayment(false);
     } catch (error) {
       console.error('포인트 구매 실패:', error);
@@ -74,7 +71,12 @@ export default function Store() {
   return (
     <StoreWrapper>
       {openPayment && (
-        <PaymentModal amount={selectedAmount} itemName={selectedItem} onConfirm={ChargeCoin} onCancel={CancleCharge} />
+        <PaymentModal
+          amount={charge.amount}
+          itemName={charge.itemName}
+          onConfirm={ChargeCoin}
+          onCancel={CancleCharge}
+        />
       )}
       {openLog && <CoinLog onCancel={CancleLog} />}
       <Title>상점</Title>

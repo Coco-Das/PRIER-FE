@@ -35,24 +35,22 @@ export default function ProjectPreview() {
             </div>
           </div>
           <ProjectImg src={project.mainImageUrl} alt="My Project" />
-          <div className="ml-3">
-            <div className="flex">
-              {project.tags.map(tag => (
-                <TagContainer key={tag.tagId}>{tag.tagName}</TagContainer>
-              ))}
-            </div>
-            <div className="flex justify-between">
-              <StyledRating
-                defaultValue={project.score}
-                precision={0.5}
-                icon={<StarRateRoundedIcon fontSize="inherit" />}
-                emptyIcon={<StarBorderRoundedIcon fontSize="inherit" />}
-                readOnly
-              />
-              <Link to={`/feedback/projects/${project.projectId}`}>
-                <LinkText>피드백 참여하기 &gt;</LinkText>
-              </Link>
-            </div>
+          <div className="flex">
+            {project.tags.map(tag => (
+              <TagContainer key={tag.tagId}>{tag.tagName}</TagContainer>
+            ))}
+          </div>
+          <div className="flex justify-between">
+            <StyledRating
+              defaultValue={project.score}
+              precision={0.5}
+              icon={<StarRateRoundedIcon fontSize="inherit" />}
+              emptyIcon={<StarBorderRoundedIcon fontSize="inherit" />}
+              readOnly
+            />
+            <Link to={`/responsetest/${project.projectId}`}>
+              <LinkText>피드백 참여하기 &gt;</LinkText>
+            </Link>
           </div>
         </ProjectContainer>
       ))}

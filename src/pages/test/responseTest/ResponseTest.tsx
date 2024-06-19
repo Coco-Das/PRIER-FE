@@ -20,6 +20,7 @@ import {
   StyledImg,
   DeleteButton,
   EditButton,
+  CommentBtn,
 } from './ResponseTestStyles';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -28,6 +29,7 @@ import StarRating from '../../../components/utils/StarRating';
 import CustomAlert from '../../../components/utils/CustomAlert';
 import CustomModal from '../../../components/utils/CustomModal';
 import styled from 'styled-components';
+import { Comment } from '../comment/Comment';
 
 interface Tag {
   tagName: string;
@@ -72,6 +74,7 @@ export const ResponseTest = () => {
   const [nickname, setNickname] = useState('');
   const [alert, setAlert] = useState(false);
   const [comment, setCommnet] = useState('');
+  const [showSidebar, setShowSidebar] = useState(false);
 
   const saveTagColors = (tags: Tag[]) => {
     const tagColors: { [key: string]: string } = {};
@@ -212,10 +215,11 @@ export const ResponseTest = () => {
   //모달창에 전달할 연장하기 버튼의 위치
   const [buttonPosition, setButtonPosition] = useState<{ top: number; left: number } | null>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
+
   const handleMouseEnter = () => {
     if (buttonRef.current) {
       const rect = buttonRef.current.getBoundingClientRect();
-      setButtonPosition({ top: rect.top - 310, left: rect.left - 150 });
+      setButtonPosition({ top: rect.top - 290, left: rect.left - 160 });
     }
     setShowModal(true);
   };
@@ -341,24 +345,23 @@ export const ResponseTest = () => {
               <StarRating initialScore={score} onRatingChange={handleRatingChange} />
             </div>
             <input
-              style={{ padding: '5px 10px', outline: 'none' }}
+              style={{ padding: '5px 10px', outline: 'none', marginTop: '5px' }}
               placeholder="한줄 평"
               value={comment}
               onChange={handleCommentChange}
-            ></input>
-            <CustomButton
+            />
+            <div
               style={{
-                height: '20%',
-                width: '15%',
                 display: 'flex',
-                justifyContent: 'center',
-                alignItems: 'center',
-                marginLeft: 'auto',
+                justifyContent: 'flex-end',
+                gap: '20px',
+                height: '25%',
+                marginTop: 'auto',
               }}
-              onClick={handleCommentSubmit}
             >
-              등록
-            </CustomButton>
+              <CommentBtn onClick={() => setShowSidebar(true)}>전체댓글</CommentBtn>
+              <CommentBtn onClick={handleCommentSubmit}>등록</CommentBtn>
+            </div>
           </WhiteDiv>
           <div style={{ display: 'flex', justifyContent: 'space-between', paddingLeft: '30px' }}>
             {isMine && (
@@ -386,6 +389,7 @@ export const ResponseTest = () => {
           </div>
         </ProjectIntro>
       </Project>
+      <Comment show={showSidebar} onMouseLeave={() => setShowSidebar(false)}></Comment>
     </CreateWrapper>
   );
 };
