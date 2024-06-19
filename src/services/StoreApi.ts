@@ -60,6 +60,7 @@ export async function RefundKakaoPayment(payToken: string, amount: number) {
       cancelTaxFreeAmount: 0,
     });
     console.log('환불 요청 성공', response.data);
+    return response.data;
   } catch (error) {
     console.error('환불 실패');
   }

@@ -14,18 +14,20 @@ const SnackbarContainer = styled.div<{ type: 'success' | 'error'; isVisible: boo
   position: fixed;
   top: 5%;
   right: 5%;
-  width: 25%;
-  background-color: #504f4f;
+  width: 20%;
+  background-color: rgba(80, 79, 79, 0.8);
   color: white;
   font-weight: 300;
-  padding: 1rem;
+  font-size: 0.9rem;
+  padding: 0.5rem;
   border-radius: 4px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   display: flex;
   align-items: center;
+  gap: 1rem;
   z-index: 10;
   transform: translateX(${({ isVisible }) => (isVisible ? '0' : '100%')});
-  transition: transform 0.5s;
+  transition: transform 0.7s;
 `;
 
 const IconWrapper = styled.div`

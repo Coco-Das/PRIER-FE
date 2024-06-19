@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
-import StarGif from '../../assets/star-unscreen.gif';
+import StarGif from '../../assets/star.gif';
 interface QuestSuccessProps {
   onClose: () => void;
 }
@@ -21,7 +21,7 @@ const SuccessWrapper = styled.div`
 const GifWrapper = styled.div`
   display: inline-block;
   img {
-    animation: play 1s steps(10) infinite;
+    animation: play 0.8s steps(10) infinite;
   }
 
   @keyframes play {
@@ -52,7 +52,7 @@ const QuestSuccess: React.FC<QuestSuccessProps> = ({ onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 5000);
+    }, 4500);
 
     return () => clearTimeout(timer);
   }, [onClose]);
