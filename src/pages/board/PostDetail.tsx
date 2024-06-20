@@ -122,7 +122,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
 
   const handleProfileClick = (e: React.MouseEvent, userId: number) => {
     e.stopPropagation();
-    navigate(`/mypage`);
+    navigate(`/mypage/${userId}`);
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
