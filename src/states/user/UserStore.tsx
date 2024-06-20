@@ -1,19 +1,41 @@
 import { create } from 'zustand';
+interface ProjectKeyword {
+  content: string;
+  count: number;
+}
 
+interface Comment {
+  projectId: number;
+  commentId: number;
+  projectName: string;
+  teamName: string;
+  content: string;
+  score: number;
+}
 interface UserProfile {
   nickname: string;
-  belonging: string;
+  belonging: string | null;
   rank: string;
   email: string;
-  blog: string;
-  github: string;
-  figma: string;
-  notion: string;
-  intro: string;
-  quest: string;
-  statistic: string;
-  AIReport: string[] | null;
+  blog: string | null;
+  github: string | null;
+  figma: string | null;
+  notion: string | null;
+  intro: string | null;
+  firstQuest: boolean;
+  secondQuest: boolean;
+  thirdQuest: boolean;
+  nowProjectId: number;
+  nowProjectName: string;
+  nowProjectTeamName: string;
+  nowProjectFeedbackCount: number;
+  nowProjectScore: number;
+  nowProjectStaticPercentage: string;
+  nowProjectKeywordList: ProjectKeyword[];
+  myPageCommentDtoList: Comment[];
+  balance: number;
 }
+
 interface UserStore {
   userProfile: UserProfile;
   setUserProfile: (profile: UserProfile) => void;
@@ -38,13 +60,22 @@ const initialProfile: UserProfile = {
   figma: '',
   notion: '',
   intro: '',
-  quest: '0',
-  statistic: '',
-  AIReport: [],
+  firstQuest: false,
+  secondQuest: false,
+  thirdQuest: false,
+  nowProjectId: 0,
+  nowProjectName: '',
+  nowProjectTeamName: '',
+  nowProjectFeedbackCount: 0,
+  nowProjectScore: 0,
+  nowProjectStaticPercentage: '',
+  nowProjectKeywordList: [],
+  myPageCommentDtoList: [],
+  balance: 0,
 };
 export const useUserStore = create<UserStore>(set => ({
   userProfile: {
-    nickname: '개발자1',
+    nickname: '',
     belonging: '',
     rank: '',
     email: '',
@@ -53,9 +84,18 @@ export const useUserStore = create<UserStore>(set => ({
     figma: '',
     notion: '',
     intro: '',
-    quest: '0',
-    statistic: '',
-    AIReport: ['사과', '망고', '애플망고', '샤인머스캣', '블러드 오렌지'],
+    firstQuest: false,
+    secondQuest: false,
+    thirdQuest: false,
+    nowProjectId: 0,
+    nowProjectName: '',
+    nowProjectTeamName: '',
+    nowProjectFeedbackCount: 0,
+    nowProjectScore: 0,
+    nowProjectStaticPercentage: '',
+    nowProjectKeywordList: [],
+    myPageCommentDtoList: [],
+    balance: 0,
   },
   setUserProfile: (profile: UserProfile) => {
     sessionStorage.setItem('nickname', profile.nickname);
