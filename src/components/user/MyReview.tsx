@@ -1,5 +1,5 @@
 import React from 'react';
-import { ReviewContainer, ReviewProject, ReviewTeam } from './UserStyle';
+import { ReviewContainer, ReviewProject, ReviewTeam, ReviewText } from './UserStyle';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
@@ -33,7 +33,7 @@ function MyReview() {
       {reviews.map(review => (
         <ReviewContainer key={review.commentId}>
           <Link to={`/feedback/${review.projectId}`}>
-            <p>&quot;{review.content} &quot;</p>
+            <ReviewText>&quot;{review.content} &quot;</ReviewText>
             <ReviewProject>{review.projectName}</ReviewProject>
             <div className="flex justify-between gap-5">
               <ReviewTeam>Team : {review.teamName}</ReviewTeam>

@@ -237,6 +237,7 @@ export const SendQuest = async (sequence: string) => {
   try {
     const response = await API_BASE_URL.put(`/quests/${date}/${sequence}`);
     console.log('퀘스트 전송 성공', response.data);
+    return response.data;
   } catch (error) {
     console.error('퀘스트 전송 실패', error);
     throw error;

@@ -121,13 +121,19 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
     }
   };
   const formatTransactionTime = (datetime: string) => {
+    // 받은 시간을 UTC로 취급
     const date = new Date(datetime);
+
+    // 9시간을 더한 새로운 Date 객체 생성
+    date.setHours(date.getHours() + 9);
+
+    // 한국 시간으로 포맷
     return new Intl.DateTimeFormat('ko-KR', {
       month: '2-digit',
       day: '2-digit',
       hour: '2-digit',
       minute: '2-digit',
-      hour12: false, // 24-hour format
+      hour12: false, // 24시간 형식
       timeZone: 'Asia/Seoul',
     }).format(date);
   };

@@ -18,11 +18,11 @@ export default function Profile() {
   const pointStore = userPointStore();
   const progressTrans = (rank: string): number => {
     switch (rank) {
-      case '브론즈':
+      case 'ROOKIE':
         return 35;
-      case '실버':
+      case 'JUNIOR':
         return 70;
-      case '골드':
+      case 'SENIOR':
         return 100;
       default:
         return 0;

@@ -122,7 +122,7 @@ export default function UserProfile() {
       <div className="flex w-screen h-[60%]">
         <ProjectContainer>
           <Title>진행 중인 프로젝트</Title>
-          {userProfile.nowProjectId !== 0 ? (
+          {userProfile.nowProjectId !== null ? (
             <div className="flex w-full h-full">
               <div className="flex-col w-[30%] h-full">
                 <Link to={`/responsetest/${userProfile.nowProjectId}`}>
@@ -172,12 +172,9 @@ export default function UserProfile() {
               </AIReportContainer>
             </div>
           ) : (
-            <Link to="/createtest">
-              <EmptyContainer>
-                <p>생성한 테스트가 없습니다.</p>
-                <p className="text-end hover:text-[#315af1] mt-[5%]">테스트 생성하기 &gt;</p>
-              </EmptyContainer>
-            </Link>
+            <EmptyContainer>
+              <p>생성한 테스트가 없습니다.</p>
+            </EmptyContainer>
           )}
         </ProjectContainer>
         <ReviewWrapper>

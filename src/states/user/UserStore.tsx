@@ -25,7 +25,7 @@ interface UserProfile {
   firstQuest: boolean;
   secondQuest: boolean;
   thirdQuest: boolean;
-  nowProjectId: number;
+  nowProjectId: number | null;
   nowProjectName: string;
   nowProjectTeamName: string;
   nowProjectFeedbackCount: number;
@@ -63,7 +63,7 @@ const initialProfile: UserProfile = {
   firstQuest: false,
   secondQuest: false,
   thirdQuest: false,
-  nowProjectId: 0,
+  nowProjectId: null,
   nowProjectName: '',
   nowProjectTeamName: '',
   nowProjectFeedbackCount: 0,
@@ -154,12 +154,12 @@ interface OtherProfile {
   firstQuest: boolean;
   secondQuest: boolean;
   thirdQuest: boolean;
-  nowProjectId: number;
-  nowProjectName: string;
-  nowProjectTeamName: string;
-  nowProjectFeedbackCount: number;
-  nowProjectScore: number;
-  nowProjectStaticPercentage: string;
+  nowProjectId: number | null;
+  nowProjectName: string | null;
+  nowProjectTeamName: string | null;
+  nowProjectFeedbackCount: number | null;
+  nowProjectScore: number | null;
+  nowProjectStaticPercentage: string | null;
   nowProjectKeywordList: OtherProjectKeyword[];
   myPageCommentDtoList: OtherComment[];
   balance: number;
