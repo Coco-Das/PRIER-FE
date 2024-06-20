@@ -4,11 +4,12 @@ import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import { styled } from 'styled-components';
-import { MyReviewStore } from '../../states/user/UserProjectStore';
 import { Link } from 'react-router-dom';
+import { useUserStore } from '../../states/user/UserStore';
 
 function MyReview() {
-  const { reviews } = MyReviewStore();
+  const userProfile = useUserStore(state => state.userProfile);
+  const reviews = userProfile.myPageCommentDtoList || [];
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: 'black',
@@ -31,18 +32,20 @@ function MyReview() {
     <div>
       {reviews.map(review => (
         <ReviewContainer key={review.commentId}>
-          <p>&quot;{review.content} &quot;</p>
-          <ReviewProject>{review.projectTitle}</ReviewProject>
-          <div className="flex justify-between gap-5">
-            <ReviewTeam>Team : {review.teamName}</ReviewTeam>
-            <StyledRating
-              defaultValue={review.score}
-              precision={0.5}
-              icon={<StarRateRoundedIcon fontSize="inherit" />}
-              emptyIcon={<StarBorderRoundedIcon fontSize="inherit" />}
-              readOnly
-            />
-          </div>
+          <Link to={`/feedback/${review.projectId}`}>
+            <p>&quot;{review.content} &quot;</p>
+            <ReviewProject>{review.projectName}</ReviewProject>
+            <div className="flex justify-between gap-5">
+              <ReviewTeam>Team : {review.teamName}</ReviewTeam>
+              <StyledRating
+                defaultValue={review.score}
+                precision={0.5}
+                icon={<StarRateRoundedIcon fontSize="inherit" />}
+                emptyIcon={<StarBorderRoundedIcon fontSize="inherit" />}
+                readOnly
+              />
+            </div>{' '}
+          </Link>
         </ReviewContainer>
       ))}
     </div>
