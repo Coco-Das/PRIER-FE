@@ -46,8 +46,6 @@ import {
   EditNotion,
   FetchLogout,
   FetchMyPage,
-  FetchMyReview,
-  RecentProject,
   SendQuest,
 } from '../../../services/UserApi';
 import { useUserStore } from '../../../states/user/UserStore';
@@ -61,7 +59,6 @@ import AIReport from '../../../components/utils/AIReport';
 import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material';
 import QuestSuccess from '../../../components/user/QuestSuccess';
-import { RecentProjectStore } from '../../../states/user/UserProjectStore';
 import Snackbar from '../../../components/user/Snackbar';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
@@ -80,7 +77,6 @@ export default function MyPage() {
   const navigate = useNavigate();
   const userProfile = useUserStore(state => state.userProfile);
   const { setUserProfile } = useUserStore();
-  const LatestProject = RecentProjectStore();
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [showEditNameAlert, setShowEditNameAlert] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -111,12 +107,7 @@ export default function MyPage() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await RecentProject();
-        console.log('최근 프로젝트 호출 성공', response);
-        const reviews = await FetchMyReview();
-        console.log('리뷰 호출 성공', reviews);
-        const userProfileData = await FetchMyPage();
-        setUserProfile(userProfileData);
+        await FetchMyPage();
       } catch (error) {
         console.error('마이 페이지 호출 실패:', error);
       }
@@ -442,7 +433,7 @@ export default function MyPage() {
                     Blog
                   </EditAccountText>
                 ) : (
-                  <AccountLink href={userProfile.blog} target="_blank">
+                  <AccountLink href={userProfile.blog ?? ''} target="_blank">
                     <AccountIcon src={BlogIcon}></AccountIcon>
                     Blog
                   </AccountLink>
@@ -453,7 +444,7 @@ export default function MyPage() {
                     Github
                   </EditAccountText>
                 ) : (
-                  <AccountLink href={userProfile.github} target="_blank">
+                  <AccountLink href={userProfile.github ?? ''} target="_blank">
                     <AccountIcon src={GithubIcon}></AccountIcon>
                     Github
                   </AccountLink>
@@ -464,7 +455,7 @@ export default function MyPage() {
                     Figma
                   </EditAccountText>
                 ) : (
-                  <AccountLink href={userProfile.figma} target="_blank">
+                  <AccountLink href={userProfile.figma ?? ''} target="_blank">
                     <AccountIcon src={FigmaIcon}></AccountIcon>
                     Figma
                   </AccountLink>
@@ -475,7 +466,7 @@ export default function MyPage() {
                     Notion
                   </EditAccountText>
                 ) : (
-                  <AccountLink href={userProfile.notion} target="_blank">
+                  <AccountLink href={userProfile.notion ?? ''} target="_blank">
                     <AccountIcon src={NotionIcon}></AccountIcon>
                     Notion
                   </AccountLink>
@@ -505,7 +496,7 @@ export default function MyPage() {
           ) : (
             <IntroduceContainer>
               <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
-              <h1 className="text-2xl font-semibold">{userProfile.intro}안녕하세요</h1>
+              <h1 className="text-2xl font-semibold">{userProfile.intro}</h1>
               <CorrectText className="text-end" onClick={setEditIntro}>
                 수정하기
               </CorrectText>
@@ -516,22 +507,22 @@ export default function MyPage() {
             <StepsContainer>
               <LightTooltip title="+ 1코어" placement="top">
                 <Step onClick={() => QuestClick('1')}>
-                  <StepLabel completed={parseInt(userProfile.quest) >= 1}>출석하기</StepLabel>
-                  <StepCircle completed={parseInt(userProfile.quest) >= 1} color="#8e8ae3" />
+                  <StepLabel completed={userProfile.firstQuest === true}>출석하기</StepLabel>
+                  <StepCircle completed={userProfile.firstQuest === true} color="#8e8ae3" />
                 </Step>
               </LightTooltip>
               <StepLine />
               <LightTooltip title="+ 2코어" placement="top">
                 <Step onClick={() => QuestClick('2')}>
-                  <StepLabel completed={parseInt(userProfile.quest) >= 2}>댓글 작성하기</StepLabel>
-                  <StepCircle completed={parseInt(userProfile.quest) >= 2} color="#f4c542" />
+                  <StepLabel completed={userProfile.secondQuest === true}>댓글 작성하기</StepLabel>
+                  <StepCircle completed={userProfile.secondQuest === true} color="#f4c542" />
                 </Step>
               </LightTooltip>
               <StepLine />
               <LightTooltip title="+ 3코어" placement="top">
                 <Step onClick={() => QuestClick('3')}>
-                  <StepLabel completed={parseInt(userProfile.quest) >= 3}>피드백 참여하기</StepLabel>
-                  <StepCircle completed={parseInt(userProfile.quest) >= 3} color="#4188FE" />
+                  <StepLabel completed={userProfile.thirdQuest === true}>피드백 참여하기</StepLabel>
+                  <StepCircle completed={userProfile.thirdQuest === true} color="#4188FE" />
                 </Step>
               </LightTooltip>
             </StepsContainer>
@@ -542,23 +533,23 @@ export default function MyPage() {
       <div className="flex w-screen h-[60%]">
         <ProjectContainer>
           <Title>진행 중인 프로젝트</Title>
-          {LatestProject.projectId !== 0 ? (
+          {userProfile.nowProjectId !== 0 ? (
             <div className="flex w-full h-full">
               <div className="flex-col w-[30%] h-full">
-                <Link to={`/createtest/${LatestProject.projectId}`}>
+                <Link to={`/responsetest/${userProfile.nowProjectId}`}>
                   <LinkProject>
                     <div className="flex items-center gap-3">
                       <TeamProfile />
-                      <p className="text-lg">{LatestProject.teamName}</p>
+                      <p className="text-lg">{userProfile.nowProjectTeamName}</p>
                     </div>
-                    <p className="text-gray-600 text-center mt-2">{LatestProject.title}</p>
+                    <p className="text-gray-600 text-center mt-2">{userProfile.nowProjectName}</p>
                   </LinkProject>
                 </Link>
                 <FeedbackContainer>
                   <Link to="/feedback">
                     <TitleText className="mb-4">제출된 피드백</TitleText>
-                    <UniqueText className="mb-4">{LatestProject.feedbackAmount}</UniqueText>
-                    <DetailText>{LatestProject.feedbackAmount}개의 피드백이 제출되었습니다.</DetailText>
+                    <UniqueText className="mb-4">{userProfile.nowProjectFeedbackCount}</UniqueText>
+                    <DetailText>{userProfile.nowProjectFeedbackCount}개의 피드백이 제출되었습니다.</DetailText>
                     <LinkText className="text-end">모아보기 &gt;</LinkText>
                   </Link>
                 </FeedbackContainer>
@@ -566,20 +557,23 @@ export default function MyPage() {
               <StaticContainer>
                 <TitleText>통계</TitleText>
                 <UniqueText>평점</UniqueText>
-                <UniqueText>{userProfile.statistic} % </UniqueText>
-                <DetailText>평점 {LatestProject.score}의 별점</DetailText>
+                <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
+                <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
                 <MypageChartIcon></MypageChartIcon>
               </StaticContainer>
               <AIReportContainer>
-                {userProfile.AIReport && userProfile.AIReport.length > 0 ? (
+                {userProfile.nowProjectKeywordList && userProfile.nowProjectKeywordList.length > 0 ? (
                   <>
                     <div className="flex-col items-start w-full">
                       <span className="flex items-center">
                         <TitleText>AI 분석 Report</TitleText>
                         <StyledGraphIcon></StyledGraphIcon>
                       </span>
-                      <AIBestText>&quot; {userProfile.AIReport[0]} &quot;</AIBestText>
-                      <LinkText>&quot; {userProfile.AIReport[0]} &quot; 라는 단어가 가장 많이 응답되었습니다.</LinkText>
+                      <AIBestText>&quot; {userProfile.nowProjectKeywordList[0].content} &quot;</AIBestText>
+                      <LinkText>
+                        &quot; {userProfile.nowProjectKeywordList[0].content} &quot; 라는 단어가 가장 많이
+                        응답되었습니다.
+                      </LinkText>
                     </div>
                     <AIReport />
                   </>

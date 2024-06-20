@@ -13,9 +13,9 @@ export default function AIReport() {
       return;
     }
     let $child: HTMLDivElement | null = null;
-    const totalKeywords = userProfile.AIReport?.length || 0;
+    const totalKeywords = userProfile.nowProjectKeywordList?.length || 0;
 
-    userProfile.AIReport?.forEach((keyword, index) => {
+    userProfile.nowProjectKeywordList?.forEach((keyword, index) => {
       if (!canvasRef.current) {
         return;
       }
@@ -51,7 +51,7 @@ export default function AIReport() {
         canvasRef.current.innerHTML = '';
       }
     };
-  }, [canvasRef.current, userProfile.AIReport]);
+  }, [canvasRef.current, userProfile.nowProjectKeywordList]);
 
   return (
     <div
