@@ -140,6 +140,7 @@ export const ResponseTest = () => {
       const addMedia = Data.media.filter((item: Media) => !item.main);
       setAdditionalImageUrls(addMedia.map((item: Media) => item.url));
       setFeedback(formatDateTime(Data.feedbackEndDate));
+      console.log(Data);
     } catch (error) {
       if (error instanceof AxiosError) {
         console.log(error.response?.status);
@@ -271,9 +272,7 @@ export const ResponseTest = () => {
               {mainImageUrl && <StyledImg src={mainImageUrl} alt="메인 이미지" />}
 
               {additionalImageUrls.map((url, index) => (
-                <>
-                  <StyledImg key={index} src={url} alt={`추가 이미지 ${index + 1}`} />
-                </>
+                <StyledImg key={index} src={url} alt={`추가 이미지 ${index + 1}`} />
               ))}
             </ImageWrapper>
           </ProjectTextArea>
