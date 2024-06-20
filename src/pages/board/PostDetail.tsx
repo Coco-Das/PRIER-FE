@@ -43,6 +43,8 @@ import { API_BASE_URL } from '../../const/TokenApi';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 import ImageModal from '../../components/board/ImageModal'; // 모달 컴포넌트 임포트
 import useLike from '../../hooks/UseLike';
+import { useOtherProfileStore } from '../../states/user/UserStore';
+import { LinkUserProfile } from '../../services/UserApi';
 
 interface Media {
   metadata: string;
@@ -95,6 +97,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const USER_ID = storedUserId ? Number(storedUserId) : null;
 
   const { likes, toggleLike, isLikedByMe } = useLike();
+  const { setOtherProfile } = useOtherProfileStore();
 
   useEffect(() => {
     const fetchPost = async () => {
@@ -120,11 +123,15 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
     return members.find(member => member.userId === memberId);
   };
 
-  const handleProfileClick = (e: React.MouseEvent, userId: number) => {
+  const handleProfileClick = async (e: React.MouseEvent, userId: number) => {
     e.stopPropagation();
-    navigate(`/mypage/${userId}`);
+    if (userId == USER_ID) {
+      navigate(`/mypage`);
+    } else {
+      await LinkUserProfile(userId);
+      navigate(`/profile/${userId}`);
+    }
   };
-
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(e.target.value);
   };
