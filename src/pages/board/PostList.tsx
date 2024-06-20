@@ -25,6 +25,7 @@ import PostMenu from '../../components/board/PostMenu';
 import { useNavigate } from 'react-router-dom';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 import useLike from '../../hooks/UseLike';
+import { LinkUserProfile } from '../../services/UserApi';
 
 interface PostListProps {
   posts: BoardPost[];
@@ -38,10 +39,21 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
   const navigate = useNavigate();
   const [activePostId, setActivePostId] = useState<number | null>(null);
   const { likes, toggleLike, isLikedByMe } = useLike();
+  const storedUserId = localStorage.getItem('userId');
+  const USER_ID = storedUserId ? Number(storedUserId) : null;
 
-  const handleProfileClick = (e: React.MouseEvent, memberId: number) => {
+  const handleProfileClick = async (e: React.MouseEvent, userId: number) => {
     e.stopPropagation();
-    navigate(`/mypage`);
+    if (userId == USER_ID) {
+      navigate(`/mypage`);
+      console.log('myID:', USER_ID);
+      console.log('Profile ID:', userId);
+    } else {
+      await LinkUserProfile(userId);
+      navigate(`/profile/${userId}`);
+      console.log('myID:', USER_ID);
+      console.log('Profile ID:', userId);
+    }
   };
 
   const handlePostClick = (postId: number) => {
@@ -74,13 +86,17 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
           >
             <PostBox category={post.category}>
               <UserContainer>
-                <Avatar category={post.category} onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, 1)}>
+                <Avatar
+                  category={post.category}
+                  onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.userId)}
+                  className="mt-[5px]"
+                >
                   <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
                 </Avatar>
                 <AuthorContainer>
                   <Author
                     category={post.category}
-                    onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, 1)}
+                    onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.userId)}
                   >
                     {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
                   </Author>
@@ -108,7 +124,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
                 )}
               </ContentContainer>
               <LikesContainer>
-                <Likes>좋아요 {likeState.likeCount}</Likes>
+                <Likes>Likes {likeState.likeCount}</Likes>
                 <LikeButton
                   onClick={async (e: React.MouseEvent) => {
                     e.stopPropagation();
