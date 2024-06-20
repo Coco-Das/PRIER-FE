@@ -418,8 +418,10 @@ export default function MyPage() {
               </ProfileTextContainer>
             )}
             <ProfileTextContainer>
-              <ProfileText>등급 : </ProfileText>
-              <ProfileText>{userProfile.rank} </ProfileText>
+              <span className="flex">
+                <ProfileText>등급 : </ProfileText>
+                <ProfileText>{userProfile.rank} </ProfileText>
+              </span>
             </ProfileTextContainer>
             <ProfileTextContainer>
               <ProfileText>계정 정보 : {userProfile.email}</ProfileText>

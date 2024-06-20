@@ -192,8 +192,8 @@ export const ReviewWrapper = styled.div`
   display: flex;
   flex-direction: column;
   width: 30%;
-  height: 100%;
   box-sizing: border-box;
+  gap: 1rem;
 `;
 export const TitleText = styled.h2`
   font-weight: 700;
