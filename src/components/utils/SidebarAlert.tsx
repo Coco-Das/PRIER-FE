@@ -64,7 +64,7 @@ const SidebarAlert: React.FC<CustomAlertProps> = ({ message, showButtons = true,
   return (
     <ModalOverlay>
       <ModalContent>
-        <p>{message}</p>
+        <p style={{ fontSize: '15px' }}>{message}</p>
         {showButtons && (
           <span className="flex justify-center items-center gap-7">
             <AgreeButton onClick={onConfirm}>확인</AgreeButton>
