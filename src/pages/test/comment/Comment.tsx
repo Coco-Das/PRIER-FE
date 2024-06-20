@@ -1,9 +1,11 @@
 import { useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
-import { useEffect, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import PropTypes from 'prop-types';
-import { Button, CommentDiv, CommentWrapper, SidebarContainer } from './CommentStyles';
+import { Button, CommentDiv, CommentWrapper, DeleteButton, EditButton, SidebarContainer } from './CommentStyles';
+import StarRating from '../../../components/utils/StarRating';
+import SidebarAlert from '../../../components/utils/SidebarAlert';
 
 //댓글 불러옴 get
 //댓글 등록 post
@@ -25,6 +27,15 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
   const { projectId } = useParams<{ projectId: string }>();
   const setProjectId = useProjectStore(state => state.setProjectId);
   const [comments, setComments] = useState<CommentData[]>([]);
+  const [activeTab, setActiveTab] = useState<'all' | 'mine'>('all');
+  const storedUserId = localStorage.getItem('userId');
+  const USER_ID = storedUserId ? Number(storedUserId) : null;
+  const commentDivRef = useRef<HTMLDivElement>(null);
+  const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
+  const [editingContent, setEditingContent] = useState<string>('');
+  const [editingScore, setEditingScore] = useState(0);
+  const [showAlert, setShowAlert] = useState(false);
+  const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
 
   useEffect(() => {
     if (projectId) {
@@ -49,23 +60,151 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
     handleGetComments();
   }, [show]);
 
+  const filteredComments = comments.filter(comment => (activeTab === 'all' ? true : comment.userId === USER_ID));
+
+  const handleTabChange = (tab: 'all' | 'mine') => {
+    setActiveTab(tab);
+    if (commentDivRef.current) {
+      commentDivRef.current.scrollTop = 0;
+    }
+  };
+
+  const handleEditClick = (comment: CommentData) => {
+    setEditingCommentId(comment.commentId);
+    setEditingContent(comment.content);
+    setEditingScore(comment.score);
+    console.log(editingCommentId);
+  };
+
+  const handleSaveClick = async () => {
+    if (!projectId || editingCommentId === null) return;
+    const commentId = editingCommentId;
+    const JsonData = { comment: editingContent, score: editingScore };
+    console.log(JsonData);
+    try {
+      await API_BASE_URL.put(`/projects/${projectId}/comment/${commentId}`, JsonData);
+      setEditingCommentId(null);
+      handleGetComments(); // 댓글 목록 갱신
+    } catch (error) {
+      console.error('에러:', error);
+    }
+  };
+  const handleDeleteClick = async (commentId: number) => {
+    setCommentToDelete(commentId);
+    setShowAlert(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!projectId || commentToDelete === null) return;
+    const commentId = commentToDelete;
+    try {
+      await API_BASE_URL.delete(`/projects/${projectId}/comment/${commentId}`);
+      setCommentToDelete(null);
+      setShowAlert(false);
+      handleGetComments(); // 댓글 목록 갱신
+      console.log('삭제 성공');
+    } catch (error) {
+      console.error('댓글 삭제 실패:', error);
+    }
+  };
+  const handleRatingChange = (newScore: number) => {
+    setEditingScore(newScore);
+  };
+
   return (
-    <SidebarContainer show={show}>
-      <div style={{ width: '100%', height: '5%', display: 'flex' }}>
-        <Button>전체 댓글</Button>
-        <Button style={{}}>나의 댓글</Button>
+    <SidebarContainer $show={show} onMouseLeave={onMouseLeave}>
+      <div style={{ width: '100%', height: '5%', display: 'flex', gap: '15px', paddingLeft: '20px' }}>
+        <Button
+          onClick={() => handleTabChange('all')}
+          style={{
+            backgroundColor: activeTab === 'all' ? '#315af1' : 'white',
+            color: activeTab === 'all' ? 'white' : '#315af1',
+          }}
+        >
+          전체 댓글
+        </Button>
+        <Button
+          onClick={() => handleTabChange('mine')}
+          style={{
+            backgroundColor: activeTab === 'mine' ? '#315af1' : 'white',
+            color: activeTab === 'mine' ? 'white' : '#315af1',
+          }}
+        >
+          나의 댓글
+        </Button>
       </div>
-      <CommentDiv style={{ height: '95%' }}>
-        {comments.map(comment => (
-          <CommentWrapper key={comment.commentId}>
-            <p>
-              <strong>{comment.userName}</strong>
-            </p>
-            <p>{comment.content}</p>
-            <p>Score: {comment.score}</p>
-          </CommentWrapper>
-        ))}
+      <CommentDiv style={{ height: '95%' }} ref={commentDivRef}>
+        {filteredComments.length === 0 ? (
+          <div
+            style={{
+              color: '#888',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <p>작성된 댓글이 없습니다</p>
+          </div>
+        ) : (
+          filteredComments.map(comment => (
+            <CommentWrapper key={comment.commentId}>
+              {USER_ID === comment.userId && (
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                    justifyContent: 'flex-end',
+                    gap: '10px',
+                  }}
+                >
+                  {editingCommentId === comment.commentId ? (
+                    <>
+                      <button onClick={handleSaveClick}>저장</button>
+                      <button onClick={() => setEditingCommentId(null)}>취소</button>
+                    </>
+                  ) : (
+                    <>
+                      <EditButton onClick={() => handleEditClick(comment)}>수정</EditButton>
+                      <DeleteButton onClick={() => handleDeleteClick(comment.commentId)}>삭제</DeleteButton>
+                    </>
+                  )}
+                </div>
+              )}
+              {editingCommentId === comment.commentId ? (
+                <input
+                  value={editingContent}
+                  onChange={e => setEditingContent(e.target.value)}
+                  style={{ outline: 'none' }}
+                />
+              ) : (
+                <input value={comment.content} style={{ outline: 'none' }} readOnly />
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <strong>{comment.userName}</strong>
+                {editingCommentId === comment.commentId ? (
+                  <StarRating initialScore={editingScore} onRatingChange={handleRatingChange} />
+                ) : (
+                  <StarRating initialScore={comment.score} readOnly={true} onHover={false} />
+                )}
+                {/* <StarRating initialScore={comment.score} readOnly={true} onHover={false} /> */}
+              </div>
+            </CommentWrapper>
+          ))
+        )}
       </CommentDiv>
+      {showAlert && (
+        <SidebarAlert
+          message="삭제하시겠습니까?"
+          onCancel={() => {
+            setShowAlert(false);
+            setCommentToDelete(null);
+          }}
+          onConfirm={confirmDelete}
+        />
+      )}
     </SidebarContainer>
   );
 };

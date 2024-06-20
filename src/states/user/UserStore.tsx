@@ -1,19 +1,41 @@
 import { create } from 'zustand';
+interface ProjectKeyword {
+  content: string;
+  count: number;
+}
 
+interface Comment {
+  projectId: number;
+  commentId: number;
+  projectName: string;
+  teamName: string;
+  content: string;
+  score: number;
+}
 interface UserProfile {
   nickname: string;
-  belonging: string;
+  belonging: string | null;
   rank: string;
   email: string;
-  blog: string;
-  github: string;
-  figma: string;
-  notion: string;
-  intro: string;
-  quest: string;
-  statistic: string;
-  AIReport: string[] | null;
+  blog: string | null;
+  github: string | null;
+  figma: string | null;
+  notion: string | null;
+  intro: string | null;
+  firstQuest: boolean;
+  secondQuest: boolean;
+  thirdQuest: boolean;
+  nowProjectId: number;
+  nowProjectName: string;
+  nowProjectTeamName: string;
+  nowProjectFeedbackCount: number;
+  nowProjectScore: number;
+  nowProjectStaticPercentage: string;
+  nowProjectKeywordList: ProjectKeyword[];
+  myPageCommentDtoList: Comment[];
+  balance: number;
 }
+
 interface UserStore {
   userProfile: UserProfile;
   setUserProfile: (profile: UserProfile) => void;
@@ -38,25 +60,21 @@ const initialProfile: UserProfile = {
   figma: '',
   notion: '',
   intro: '',
-  quest: '0',
-  statistic: '',
-  AIReport: [],
+  firstQuest: false,
+  secondQuest: false,
+  thirdQuest: false,
+  nowProjectId: 0,
+  nowProjectName: '',
+  nowProjectTeamName: '',
+  nowProjectFeedbackCount: 0,
+  nowProjectScore: 0,
+  nowProjectStaticPercentage: '',
+  nowProjectKeywordList: [],
+  myPageCommentDtoList: [],
+  balance: 0,
 };
 export const useUserStore = create<UserStore>(set => ({
-  userProfile: {
-    nickname: '개발자1',
-    belonging: '',
-    rank: '',
-    email: '',
-    blog: '',
-    github: '',
-    figma: '',
-    notion: '',
-    intro: '',
-    quest: '0',
-    statistic: '',
-    AIReport: ['사과', '망고', '애플망고', '샤인머스캣', '블러드 오렌지'],
-  },
+  userProfile: initialProfile,
   setUserProfile: (profile: UserProfile) => {
     sessionStorage.setItem('nickname', profile.nickname);
     set({ userProfile: profile });
@@ -105,5 +123,80 @@ export const useUserStore = create<UserStore>(set => ({
     set(state => ({
       userProfile: { ...state.userProfile, quest },
     }));
+  },
+}));
+
+//남의 프로필 스토어
+interface OtherProjectKeyword {
+  content: string;
+  count: number;
+}
+
+interface OtherComment {
+  projectId: number;
+  commentId: number;
+  projectName: string;
+  teamName: string;
+  content: string;
+  score: number;
+}
+
+interface OtherProfile {
+  nickname: string;
+  belonging: string | null;
+  rank: string;
+  email: string;
+  blog: string | null;
+  github: string | null;
+  figma: string | null;
+  notion: string | null;
+  intro: string | null;
+  firstQuest: boolean;
+  secondQuest: boolean;
+  thirdQuest: boolean;
+  nowProjectId: number;
+  nowProjectName: string;
+  nowProjectTeamName: string;
+  nowProjectFeedbackCount: number;
+  nowProjectScore: number;
+  nowProjectStaticPercentage: string;
+  nowProjectKeywordList: OtherProjectKeyword[];
+  myPageCommentDtoList: OtherComment[];
+  balance: number;
+}
+
+interface OtherProfileStore {
+  otherProfile: OtherProfile;
+  setOtherProfile: (profile: OtherProfile) => void;
+}
+
+const initialOtherProfile: OtherProfile = {
+  nickname: '',
+  belonging: '',
+  rank: '',
+  email: '',
+  blog: '',
+  github: '',
+  figma: '',
+  notion: '',
+  intro: '',
+  firstQuest: false,
+  secondQuest: false,
+  thirdQuest: false,
+  nowProjectId: 0,
+  nowProjectName: '',
+  nowProjectTeamName: '',
+  nowProjectFeedbackCount: 0,
+  nowProjectScore: 0,
+  nowProjectStaticPercentage: '',
+  nowProjectKeywordList: [],
+  myPageCommentDtoList: [],
+  balance: 0,
+};
+
+export const useOtherProfileStore = create<OtherProfileStore>(set => ({
+  otherProfile: initialOtherProfile,
+  setOtherProfile: (profile: OtherProfile) => {
+    set({ otherProfile: profile });
   },
 }));

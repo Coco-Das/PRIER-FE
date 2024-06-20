@@ -1,17 +1,72 @@
 import axios from 'axios';
 import { useCallback } from 'react';
-import { useUserStore } from '../states/user/UserStore';
+import { useOtherProfileStore, useUserStore } from '../states/user/UserStore';
 import { API_BASE_URL, KAKAO_ACCESS_TOKEN } from '../const/TokenApi';
-import { MyReviewStore, RecentProjectStore } from '../states/user/UserProjectStore';
 
 export async function FetchMyPage() {
   try {
-    const response = await API_BASE_URL.get('/users/mypage');
-    console.log('유저 정보 요청 성공', response.data);
+    const response = await API_BASE_URL.get('/mypage');
+    console.log('마이페이지 정보 요청 성공', response.data);
+    const userProfile = {
+      nickname: response.data.nickname,
+      belonging: response.data.belonging,
+      rank: response.data.rank,
+      email: response.data.email,
+      blog: response.data.blogUrl,
+      github: response.data.githubUrl,
+      figma: response.data.figmaUrl,
+      notion: response.data.notionUrl,
+      intro: response.data.intro,
+      firstQuest: response.data.firstQuest,
+      secondQuest: response.data.secondQuest,
+      thirdQuest: response.data.thirdQuest,
+      nowProjectId: response.data.nowProjectId,
+      nowProjectName: response.data.nowProjectName,
+      nowProjectTeamName: response.data.nowProjectTeamName,
+      nowProjectFeedbackCount: response.data.nowProjectFeedbackCount,
+      nowProjectScore: response.data.nowProjectScore,
+      nowProjectStaticPercentage: response.data.nowProjectStaticPercentage,
+      nowProjectKeywordList: response.data.nowProjectKeywordList,
+      myPageCommentDtoList: response.data.myPageCommentDtoList,
+      balance: response.data.balance,
+    };
+    useUserStore.getState().setUserProfile(userProfile);
     return response.data;
   } catch (error) {
-    console.error('유저 정보 요청 실패:', error);
+    console.error('마이페이지 정보 요청 실패:', error);
     throw error;
+  }
+}
+export async function LinkUserProfile(userId: number) {
+  try {
+    const response = await API_BASE_URL.get(`/mypage/${userId}`);
+    console.log('유저 프로필 정보 요청 성공', response.data);
+    const userProfile = {
+      nickname: response.data.nickname,
+      belonging: response.data.belonging,
+      rank: response.data.rank,
+      email: response.data.email,
+      blog: response.data.blogUrl,
+      github: response.data.githubUrl,
+      figma: response.data.figmaUrl,
+      notion: response.data.notionUrl,
+      intro: response.data.intro,
+      firstQuest: response.data.firstQuest,
+      secondQuest: response.data.secondQuest,
+      thirdQuest: response.data.thirdQuest,
+      nowProjectId: response.data.nowProjectId,
+      nowProjectName: response.data.nowProjectName,
+      nowProjectTeamName: response.data.nowProjectTeamName,
+      nowProjectFeedbackCount: response.data.nowProjectFeedbackCount,
+      nowProjectScore: response.data.nowProjectScore,
+      nowProjectStaticPercentage: response.data.nowProjectStaticPercentage,
+      nowProjectKeywordList: response.data.nowProjectKeywordList,
+      myPageCommentDtoList: response.data.myPageCommentDtoList,
+      balance: response.data.balance,
+    };
+    useOtherProfileStore.getState().setOtherProfile(userProfile);
+  } catch (error) {
+    console.error('유저 프로필 정보 요청 실패', error);
   }
 }
 
@@ -188,28 +243,3 @@ export const SendQuest = async (sequence: string) => {
   }
   return false;
 };
-
-export async function RecentProject() {
-  try {
-    const response = await API_BASE_URL.get('/projects/my-recent-project');
-    console.log('최근 프로젝트 요청 성공', response.data);
-    RecentProjectStore.getState().setProjects(response.data);
-  } catch (error) {
-    console.error('최근 프로젝트 요청 실패', error);
-    throw error;
-  }
-}
-
-export async function FetchMyReview() {
-  try {
-    const response = await API_BASE_URL.get('/projects/comment/my-comments');
-    console.log('리뷰 요청 성공', response.data);
-    if (Array.isArray(response.data)) {
-      MyReviewStore.getState().setReview(response.data);
-    } else {
-      console.error('Unexpected response format:', response.data);
-    }
-  } catch (error) {
-    console.log('리뷰 요청 실패', error);
-  }
-}

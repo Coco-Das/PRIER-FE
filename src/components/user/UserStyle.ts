@@ -1,31 +1,7 @@
 import { css, styled } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import { ReactComponent as BaseImg } from '../../assets/BaseImg.svg';
-export const LatestProjectWrapper = styled.div`
-  width: 100%;
-  height: 25rem;
-  gap: 2rem;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(19rem, 1fr));
-`;
-export const ProjectWrapper = styled.div`
-  width: 100%;
-  display: grid;
-  grid-template-columns: repeat(4, minmax(19rem, 1fr));
-  gap: 2rem;
-`;
-export const ProjectContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: space-between;
-  width: 18rem;
-  height: 22rem;
-  border: none;
-  border-radius: 15px;
-  padding: 0.5rem;
-  cursor: pointer;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
-`;
+
 export const LatestProjectContainer = styled.div`
   position: relative;
   width: 17rem;
@@ -37,6 +13,9 @@ export const LatestProjectContainer = styled.div`
   padding: 12px;
   border-radius: 15px;
   cursor: pointer;
+  &:hover {
+    transform: scale(1, 1);
+  }
 
   &::before {
     content: '';
@@ -56,9 +35,64 @@ export const LatestProjectContainer = styled.div`
   &:hover::after {
     filter: blur(30px);
   }
+
   &:hover::before {
     transform: rotate(-90deg) scaleX(1.3) scaleY(0.8);
     background: linear-gradient(-45deg, #28b381 0%, #40c9ff 100%);
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+  }
+`;
+
+export const LatestProjectWrapper = styled.div`
+  width: 100%;
+  height: 25rem;
+  gap: 2rem;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(19rem, 1fr));
+  transition: 0.3s ease-out;
+
+  &:hover > div:not(:hover) {
+    filter: blur(5px);
+    transition: 0.3s ease-out;
+    transform: scale(0.9, 0.9);
+  }
+`;
+
+export const ProjectWrapper = styled.div`
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(19rem, 1fr));
+  gap: 2rem;
+`;
+export const ProjectContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  width: 18rem;
+  height: 22rem;
+  border-radius: 15px;
+  padding: 0.5rem;
+  cursor: pointer;
+  background-color: #ffffff;
+
+  &::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    left: -0.25rem;
+    margin: auto;
+    width: 18.5rem;
+    height: 22.5rem;
+    border-radius: 17px;
+    z-index: -10;
+    pointer-events: none;
+    background: #f3f5fb;
+  }
+  &:hover::before {
+    background: #4188fe;
+    box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+    transition: 0.3s ease-out;
   }
 `;
 
@@ -80,7 +114,7 @@ export const LinkText = styled.p`
   color: #828282;
   cursor: pointer;
   &:hover {
-    color: #454545;
+    color: #4188fe;
   }
 `;
 export const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0', '#ACA4D5', '#4188FE'];
