@@ -84,6 +84,7 @@ export const CreateTest = () => {
     { id: 2, type: 'OBJECTIVE', content: '', options: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] },
   ]);
   const [tags, setTags] = useState<Tag[]>([]);
+  const [deleteImages, setDeleteImages] = useState<string[]>([]);
   const [tagInput, setTagInput] = useState<string>('');
   const [step, setStep] = useState('');
   const [introduce, setIntroduce] = useState('');
@@ -250,6 +251,7 @@ export const CreateTest = () => {
       teamDescription: replaceEmptyStringWithNull(teamDescription),
       teamMate: replaceEmptyStringWithNull(teamMate),
       link: replaceEmptyStringWithNull(link),
+      deleteImages: deleteImages.length > 0 ? deleteImages : null,
       question: questions.map(q => replaceEmptyStringWithNull(q.content)),
       type: questions.map(q => q.type),
     };
