@@ -134,51 +134,66 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
         </Button>
       </div>
       <CommentDiv style={{ height: '95%' }} ref={commentDivRef}>
-        {filteredComments.map(comment => (
-          <CommentWrapper key={comment.commentId}>
-            {USER_ID === comment.userId && (
-              <div
-                style={{
-                  display: 'flex',
-                  width: '100%',
-                  justifyContent: 'flex-end',
-                  gap: '10px',
-                }}
-              >
-                {editingCommentId === comment.commentId ? (
-                  <>
-                    <button onClick={handleSaveClick}>저장</button>
-                    <button onClick={() => setEditingCommentId(null)}>취소</button>
-                  </>
-                ) : (
-                  <>
-                    <EditButton onClick={() => handleEditClick(comment)}>수정</EditButton>
-                    <DeleteButton onClick={() => handleDeleteClick(comment.commentId)}>삭제</DeleteButton>
-                  </>
-                )}
-              </div>
-            )}
-            {editingCommentId === comment.commentId ? (
-              <input
-                value={editingContent}
-                onChange={e => setEditingContent(e.target.value)}
-                style={{ outline: 'none' }}
-              />
-            ) : (
-              <input value={comment.content} style={{ outline: 'none' }} readOnly />
-            )}
-
-            <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-              <strong>{comment.userName}</strong>
-              {editingCommentId === comment.commentId ? (
-                <StarRating initialScore={editingScore} onRatingChange={handleRatingChange} />
-              ) : (
-                <StarRating initialScore={comment.score} readOnly={true} onHover={false} />
+        {filteredComments.length === 0 ? (
+          <div
+            style={{
+              color: '#888',
+              height: '100%',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}
+          >
+            <p>작성된 댓글이 없습니다</p>
+          </div>
+        ) : (
+          filteredComments.map(comment => (
+            <CommentWrapper key={comment.commentId}>
+              {USER_ID === comment.userId && (
+                <div
+                  style={{
+                    display: 'flex',
+                    width: '100%',
+                    justifyContent: 'flex-end',
+                    gap: '10px',
+                  }}
+                >
+                  {editingCommentId === comment.commentId ? (
+                    <>
+                      <button onClick={handleSaveClick}>저장</button>
+                      <button onClick={() => setEditingCommentId(null)}>취소</button>
+                    </>
+                  ) : (
+                    <>
+                      <EditButton onClick={() => handleEditClick(comment)}>수정</EditButton>
+                      <DeleteButton onClick={() => handleDeleteClick(comment.commentId)}>삭제</DeleteButton>
+                    </>
+                  )}
+                </div>
               )}
-              {/* <StarRating initialScore={comment.score} readOnly={true} onHover={false} /> */}
-            </div>
-          </CommentWrapper>
-        ))}
+              {editingCommentId === comment.commentId ? (
+                <input
+                  value={editingContent}
+                  onChange={e => setEditingContent(e.target.value)}
+                  style={{ outline: 'none' }}
+                />
+              ) : (
+                <input value={comment.content} style={{ outline: 'none' }} readOnly />
+              )}
+
+              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
+                <strong>{comment.userName}</strong>
+                {editingCommentId === comment.commentId ? (
+                  <StarRating initialScore={editingScore} onRatingChange={handleRatingChange} />
+                ) : (
+                  <StarRating initialScore={comment.score} readOnly={true} onHover={false} />
+                )}
+                {/* <StarRating initialScore={comment.score} readOnly={true} onHover={false} /> */}
+              </div>
+            </CommentWrapper>
+          ))
+        )}
       </CommentDiv>
       {showAlert && (
         <SidebarAlert
