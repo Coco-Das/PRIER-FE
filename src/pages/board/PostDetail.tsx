@@ -27,7 +27,6 @@ import {
   CommentInput,
   CommentButton,
 } from './BoardStyles';
-import { members } from '../../states/board/MemberStore';
 import backto from '../../assets/BackTo.svg';
 import userAvatar from '../../assets/user.svg';
 import announcementAvatar from '../../assets/Announcement.svg';
@@ -43,6 +42,8 @@ import { API_BASE_URL } from '../../const/TokenApi';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 import ImageModal from '../../components/board/ImageModal'; // 모달 컴포넌트 임포트
 import useLike from '../../hooks/UseLike';
+import { LinkUserProfile } from '../../services/UserApi';
+import { useUserStore } from '../../states/user/UserStore';
 
 interface Media {
   metadata: string;
@@ -93,6 +94,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const navigate = useNavigate();
   const storedUserId = localStorage.getItem('userId');
   const USER_ID = storedUserId ? Number(storedUserId) : null;
+  const userProfile = useUserStore(state => state.userProfile);
 
   const { likes, toggleLike, isLikedByMe } = useLike();
 
@@ -116,15 +118,19 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
     return <div>게시글을 찾을 수 없습니다.</div>;
   }
 
-  const getMemberById = (memberId: number) => {
-    return members.find(member => member.userId === memberId);
-  };
-
-  const handleProfileClick = (e: React.MouseEvent, userId: number) => {
+  const handleProfileClick = async (e: React.MouseEvent, userId: number) => {
     e.stopPropagation();
-    navigate(`/mypage`);
+    if (userId == USER_ID) {
+      navigate(`/mypage`);
+      console.log('myID:', USER_ID);
+      console.log('Profile ID:', userId);
+    } else {
+      await LinkUserProfile(userId);
+      navigate(`/profile/${userId}`);
+      console.log('myID:', USER_ID);
+      console.log('Profile ID:', userId);
+    }
   };
-
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(e.target.value);
   };
@@ -158,7 +164,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
             console.log('새 댓글 제출:', newComment);
             const newCommentData: Comment = {
               userId: USER_ID!, // 실제 사용자 ID로 대체해야 합니다.
-              nickname: members.find(member => member.userId === USER_ID)?.nickname || 'Unknown', // 댓글 작성자의 닉네임 추가
+              nickname: userProfile.nickname, // 댓글 작성자의 닉네임 추가
               content: newComment,
               createdAt: new Date().toISOString(),
               updatedAt: null,
@@ -223,8 +229,12 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
         <Loading />
       ) : (
         <PostContentContainer className="self-start mt-0" category={post.category}>
-          <UserContainer>
-            <Avatar onClick={e => handleProfileClick(e, post.userId)} category={post.category}>
+          <UserContainer className="mt-[-16px]">
+            <Avatar
+              className="ml-[-8px] mt-[5px]"
+              onClick={e => handleProfileClick(e, post.userId)}
+              category={post.category}
+            >
               <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
@@ -265,11 +275,11 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
             )}
           </ContentContainer>
           <LikeBackContainer>
-            <button onClick={onBackToList}>
+            <button onClick={onBackToList} className="w-[15px] mt-[10px]">
               <Backto src={backto} />
             </button>
             <LikesContainer>
-              <Likes>좋아요 {likeState.likeCount}</Likes>
+              <Likes>Likes {likeState.likeCount}</Likes>
               <LikeButton
                 onClick={async (e: any) => {
                   e.stopPropagation();
