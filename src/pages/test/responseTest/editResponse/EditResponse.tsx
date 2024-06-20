@@ -35,8 +35,6 @@ import {
 import { API_BASE_URL } from '../../../../const/TokenApi';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../../states/projects/ProjectStore';
-import { Link } from 'react-router-dom';
-import StarRating from '../../../../components/utils/StarRating';
 import CustomAlert from '../../../../components/utils/CustomAlert';
 import { HiddenInput } from '../../createTest/CreateTestStyles';
 import { DropDownContainer } from '../../../../components/utils/DropDown';
@@ -84,6 +82,7 @@ interface Media {
   metadata: string;
   orderIndex: number;
   url: string;
+  s3Key: string;
 }
 
 export const EditResponse = () => {
@@ -92,6 +91,9 @@ export const EditResponse = () => {
   const [mainImageUrl, setMainImageUrl] = useState<string | null>(null);
   const mainFileInputRef = useRef<HTMLInputElement>(null);
   const [additionalImageUrls, setAdditionalImageUrls] = useState<string[]>([]);
+  const [mainKeys, setMainKeys] = useState<string | null>(null);
+  const [addKeys, setAddKeys] = useState<string[]>([]);
+  const [deleteImages, setDeleteImages] = useState<string[]>([]);
   const additionalFileInputRef = useRef<HTMLInputElement>(null);
   const [title, setTitle] = useState('');
   const [tags, setTags] = useState<Tag[]>([]);
@@ -111,6 +113,7 @@ export const EditResponse = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [newQuestions, setNewQuestions] = useState<Question[]>([]);
+  const [deleteMainImage, setDeleteMainImage] = useState(false);
 
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
@@ -146,8 +149,11 @@ export const EditResponse = () => {
       setIsMine(Data.isMine);
       const mainMedia = Data.media.find((item: Media) => item.main);
       setMainImageUrl(mainMedia ? mainMedia.url : null);
+      setMainKeys(mainMedia ? mainMedia.s3Key : null);
       const addMedia = Data.media.filter((item: Media) => !item.main);
       setAdditionalImageUrls(addMedia.map((item: Media) => item.url));
+      setAddKeys(addMedia.map((item: Media) => item.s3Key));
+
       const updatedQuestions = Data.questions.map((question: Question) => {
         if (question.category === 'OBJECTIVE' && !question.options) {
           return {
@@ -158,10 +164,18 @@ export const EditResponse = () => {
         return question;
       });
       setQuestions(updatedQuestions);
+      // console.log(Data);
     } catch (error) {
       console.error('에러:', error);
     }
   };
+  useEffect(() => {
+    console.log('Main Key:', mainKeys);
+  }, [mainKeys]);
+
+  useEffect(() => {
+    console.log('Add Keys:', addKeys);
+  }, [addKeys]);
 
   if (!projectId) {
     console.log(projectId);
@@ -201,9 +215,13 @@ export const EditResponse = () => {
   const handleMainButtonClick = () => {
     mainFileInputRef.current?.click();
   };
+
   const handleDeleteMainImage = () => {
     setMainImageUrl(null);
+    setMainKeys(null);
+    setDeleteMainImage(true);
   };
+
   const handleAdditionalImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -214,7 +232,6 @@ export const EditResponse = () => {
           reader.readAsDataURL(file);
         });
       });
-
       const results = await Promise.all(fileReaders);
       setAdditionalImageUrls(prevImageUrls => [...prevImageUrls, ...results]);
     }
@@ -222,9 +239,30 @@ export const EditResponse = () => {
   const handleAdditionalButtonClick = () => {
     additionalFileInputRef.current?.click();
   };
+
   const handleDeleteAdditionalImage = (index: number) => {
-    setAdditionalImageUrls(prevImageUrls => prevImageUrls.filter((_, i) => i !== index));
+    setAdditionalImageUrls(prevImageUrls => {
+      const updatedImageUrls = prevImageUrls.filter((_, i) => i !== index);
+      return updatedImageUrls;
+    });
+
+    setDeleteImages(prevDeleteImages => {
+      const newDeleteImages = [...prevDeleteImages, addKeys[index]];
+      setAddKeys(prevKey => prevKey.filter((_, i) => i !== index));
+      return newDeleteImages;
+    });
+
+    console.log(index);
+    console.log('삭제될이미지의 key:', addKeys[index]);
   };
+  useEffect(() => {
+    console.log('현재 보이는 이미지', additionalImageUrls);
+  }, [additionalImageUrls]);
+
+  useEffect(() => {
+    console.log('삭제될 이미지:', deleteImages);
+  }, [deleteImages]);
+
   const handleTagInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(event.target.value);
   };
@@ -283,15 +321,8 @@ export const EditResponse = () => {
     );
   };
   const handleQuestionDelete = (id: number | null) => {
-    // if (id !== null) {
     setQuestions(prevQuestions => prevQuestions.filter(question => question.questionId !== id));
     setNewQuestions(prevNewQuestions => prevNewQuestions.filter(question => question.newQuestionId !== id));
-    // }
-    // if (id === null) {
-    //   setNewQuestions(prevNewQuestions => prevNewQuestions.filter(question => question.newQuestionId !== id));
-    // } else {
-    //   setQuestions(prevQuestions => prevQuestions.filter(question => question.questionId !== id));
-    // }
   };
 
   const addQuestion = () => {
@@ -333,6 +364,8 @@ export const EditResponse = () => {
       teamDescription: replaceEmptyStringWithNull(teamDescription),
       teamMate: replaceEmptyStringWithNull(teamMate),
       link: replaceEmptyStringWithNull(link),
+      deleteMainImage: deleteMainImage,
+      deleteImages: deleteImages.length > 0 ? deleteImages : null,
       question: combinedQuestions.map(q => replaceEmptyStringWithNull(q.content)),
       type: combinedQuestions.map(q => q.category),
       questionId: combinedQuestions.map(q => q.questionId),
@@ -347,6 +380,7 @@ export const EditResponse = () => {
     if (mainFileInputRef.current?.files && mainFileInputRef.current.files.length > 0) {
       formData.append('mainImage', mainFileInputRef.current.files[0]);
     }
+
     if (additionalFileInputRef.current?.files) {
       Array.from(additionalFileInputRef.current.files).forEach(file => {
         formData.append('contentImages', file);
@@ -358,21 +392,20 @@ export const EditResponse = () => {
       },
     };
 
-    formData.forEach((value, key) => {
-      if (key === 'form') {
-        const reader = new FileReader();
-        reader.onload = event => {
-          console.log(`${key}: ${event.target?.result}`);
-        };
-        reader.readAsText(value as Blob);
-      } else if (value instanceof File) {
-        console.log(`${key}: ${value.name}`);
-      } else {
-        console.log(`${key}: ${value}`);
-      }
-    });
-    // console.log(jsonData);
-    // console.log(newQuestions);
+    // formData.forEach((value, key) => {
+    //   if (key === 'form') {
+    //     const reader = new FileReader();
+    //     reader.onload = event => {
+    //       console.log(`${key}: ${event.target?.result}`);
+    //     };
+    //     reader.readAsText(value as Blob);
+    //   } else if (value instanceof File) {
+    //     console.log(`${key}: ${value.name}`);
+    //   } else {
+    //     console.log(`${key}: ${value}`);
+    //   }
+    // });
+
     try {
       // console.log(jsonData);
       const response = await API_BASE_URL.put(`/projects/${projectId}`, formData, config);

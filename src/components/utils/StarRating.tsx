@@ -7,9 +7,9 @@ const StarRatingDiv = styled.div`
   margin-left: auto;
 `;
 
-const Star = styled.span`
+const Star = styled.span<{ $onHover: boolean }>`
   font-size: 24px;
-  cursor: pointer;
+  cursor: ${({ $onHover }) => ($onHover ? 'pointer' : 'default')};
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -22,8 +22,8 @@ const Star = styled.span`
   }
 `;
 
-const StarIcon = styled(Star)<{ isFilled: boolean }>`
-  color: ${({ isFilled }) => (isFilled ? 'gold' : 'lightgray')};
+const StarIcon = styled(Star)<{ $isFilled: boolean }>`
+  color: ${({ $isFilled }) => ($isFilled ? 'gold' : 'lightgray')};
 `;
 
 const HalfStar = styled(Star)`
@@ -42,9 +42,11 @@ const HalfStar = styled(Star)`
 interface StarRatingProps {
   initialScore: number; // 초기 스코어
   onRatingChange?: (score: number) => void; // 점수가 변경될 때 호출되는 콜백 함수
+  readOnly?: boolean; // 읽기 전용 여부
+  onHover?: boolean;
 }
 
-const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange }) => {
+const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange, readOnly = false, onHover = true }) => {
   const [hoveredScore, setHoveredScore] = useState<number | null>(null);
   const [rating, setRating] = useState(initialScore);
 
@@ -53,6 +55,7 @@ const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange })
   }, [initialScore]);
 
   const handleMouseMove = (e: React.MouseEvent, starIndex: number) => {
+    if (readOnly) return;
     const { left, width } = (e.target as HTMLElement).getBoundingClientRect();
     const x = e.clientX - left;
     const newHoveredScore = starIndex + (x > width / 2 ? 1 : 0.5);
@@ -60,10 +63,12 @@ const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange })
   };
 
   const handleMouseLeave = () => {
+    if (readOnly) return;
     setHoveredScore(null);
   };
 
   const handleClick = (score: number) => {
+    if (readOnly) return;
     setRating(score);
     if (onRatingChange) {
       onRatingChange(score);
@@ -82,8 +87,9 @@ const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange })
           .fill(0)
           .map((_, index) => (
             <StarIcon
+              $onHover={onHover}
               key={`filled-${index}`}
-              isFilled={true}
+              $isFilled={true}
               onMouseMove={e => handleMouseMove(e, index)}
               onClick={() => handleClick(index + 1)}
               onMouseLeave={handleMouseLeave}
@@ -93,6 +99,7 @@ const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange })
           ))}
         {halfStars === 1 && (
           <HalfStar
+            $onHover={onHover}
             onMouseMove={e => handleMouseMove(e, filledStars)}
             onClick={() => handleClick(filledStars + 0.5)}
             onMouseLeave={handleMouseLeave}
@@ -102,8 +109,9 @@ const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange })
           .fill(0)
           .map((_, index) => (
             <StarIcon
+              $onHover={onHover}
               key={`empty-${index}`}
-              isFilled={false}
+              $isFilled={false}
               onMouseMove={e => handleMouseMove(e, filledStars + halfStars + index)}
               onClick={() => handleClick(filledStars + halfStars + index + 0.5)}
               onMouseLeave={handleMouseLeave}

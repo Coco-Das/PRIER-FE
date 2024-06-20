@@ -116,7 +116,7 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
   const [used, setUsed] = useState(0);
   const setProjectId = useProjectStore(state => state.setProjectId);
   const navigate = useNavigate();
-  console.log(top, left);
+
   const handlePlus = () => {
     setWeeks(prevCount => {
       const newCount = prevCount + 1;
