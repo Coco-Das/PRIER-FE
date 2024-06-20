@@ -36,8 +36,7 @@ export default function Main() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const userProfileData = await FetchMyPage();
-        setUserProfile(userProfileData);
+        await FetchMyPage();
         const pointsData = await CheckPoint();
         pointStore.setPoint(pointsData);
         console.log(pointStore.point);

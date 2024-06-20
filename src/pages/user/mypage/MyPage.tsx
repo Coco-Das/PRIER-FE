@@ -76,7 +76,6 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 export default function MyPage() {
   const navigate = useNavigate();
   const userProfile = useUserStore(state => state.userProfile);
-  const { setUserProfile } = useUserStore();
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [showEditNameAlert, setShowEditNameAlert] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
@@ -113,7 +112,7 @@ export default function MyPage() {
       }
     };
     fetchData();
-  }, [setUserProfile]);
+  }, []);
 
   //로그아웃
   const ConfirmLogout = () => {
