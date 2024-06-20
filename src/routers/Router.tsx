@@ -17,6 +17,7 @@ import { CreateTest } from '../pages/test/createTest/CreateTest';
 import { ResponseQuestion } from '../pages/test/responseTest/ResponseQuestion';
 import { Comment } from '../pages/test/comment/Comment';
 import { EditResponse } from '../pages/test/responseTest/editResponse/EditResponse';
+import Profile from '../pages/user/mypage/\bProfile';
 
 const router = createBrowserRouter([
   {
@@ -38,6 +39,7 @@ const router = createBrowserRouter([
         path: '/mypage',
         element: <MyPage />,
       },
+      { path: '/profile', element: <Profile /> },
       {
         path: '/store',
         element: <Store />,
