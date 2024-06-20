@@ -112,7 +112,7 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
   };
 
   return (
-    <SidebarContainer $show={show}>
+    <SidebarContainer $show={show} onMouseLeave={onMouseLeave}>
       <div style={{ width: '100%', height: '5%', display: 'flex', gap: '15px', paddingLeft: '20px' }}>
         <Button
           onClick={() => handleTabChange('all')}
