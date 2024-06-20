@@ -13,9 +13,6 @@ export const LatestProjectContainer = styled.div`
   padding: 12px;
   border-radius: 15px;
   cursor: pointer;
-  &:hover {
-    transform: scale(1, 1);
-  }
 
   &::before {
     content: '';
@@ -50,12 +47,6 @@ export const LatestProjectWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(19rem, 1fr));
   transition: 0.3s ease-out;
-
-  &:hover > div:not(:hover) {
-    filter: blur(5px);
-    transition: 0.3s ease-out;
-    transform: scale(0.9, 0.9);
-  }
 `;
 
 export const ProjectWrapper = styled.div`
@@ -220,8 +211,13 @@ export const ReviewContainer = styled.div`
   width: 22rem;
   height: 9rem;
   padding: 20px;
+  margin-bottom: 1rem;
 `;
-
+export const ReviewText = styled.p`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
 export const ReviewProject = styled.h1`
   font-size: 20px;
   margin-top: 1rem;
@@ -276,8 +272,78 @@ export const CardBack = styled.div`
   left: 0;
   padding: 30px;
   transform: rotateY(180deg);
+  border: 1px solid transparent;
   border-radius: 20px;
-  background: linear-gradient(45deg, rgba(49, 90, 241, 0.3), rgba(35, 190, 135, 0.3), rgba(119, 60, 209, 0.3));
+  background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
+`;
+export const GiftTitle = styled.h1`
+  color: #315af1;
+  font-weight: 500;
+  font-size: 22px;
+  max-width: 10rem;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
+export const PurchaseButton = styled.button`
+  display: flex;
+  font-size: 1rem;
+  align-items: center;
+  justify-content: center;
+  width: 7rem;
+  padding: 0.5rem 0.5rem;
+  align-self: end;
+  border: 1px solid #315af1;
+  border-radius: 10px;
+  color: #315af1;
+  -webkit-transition: all 0.5s ease-in;
+  -moz-transition: all 0.5s ease-in;
+  transition: 0.5s ease-out;
+  &:hover {
+    background: #4188fe;
+    color: white;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+  }
+
+  &:hover::before {
+    -webkit-animation: sh02 0.5s 0s linear;
+    -moz-animation: sh02 0.5s 0s linear;
+    animation: sh02 0.5s 0s linear;
+  }
+  &::before {
+    content: '';
+    display: block;
+    width: 0px;
+    height: 86%;
+    position: absolute;
+    top: 7%;
+    left: 0%;
+    opacity: 0;
+    background: #fff;
+    box-shadow: 0 0 50px 30px #fff;
+    -webkit-transform: skewX(-20deg);
+    -moz-transform: skewX(-20deg);
+    -ms-transform: skewX(-20deg);
+    -o-transform: skewX(-20deg);
+    transform: skewX(-20deg);
+  }
+  @keyframes sh02 {
+    from {
+      opacity: 0;
+      left: 0%;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+      left: 100%;
+    }
+  }
 `;
 
 export const GiftTextWrapper = styled.div`
@@ -295,6 +361,8 @@ export const GiftImg = styled.img`
 `;
 export const DescriptionText = styled.p`
   font-size: 18px;
+  word-break: break-all;
+  white-space: normal;
 `;
 
 export const SoldOutContainer = styled.div`

@@ -7,7 +7,9 @@ import {
   DescriptionText,
   GiftImg,
   GiftTextWrapper,
+  GiftTitle,
   LinkText,
+  PurchaseButton,
   SoldOutContainer,
   SoldOutFlag,
   Title,
@@ -15,7 +17,7 @@ import {
 import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import { styled } from 'styled-components';
 import { useGifticonStore } from '../../states/user/PointStore';
-import { DescriptionGift, PurchaseGift } from '../../services/StoreApi';
+import { DescriptionGift, FetchGiftList, PurchaseGift } from '../../services/StoreApi';
 import GiftPurchaseModal from './GiftPurchaseModal';
 import Snackbar from './Snackbar';
 
@@ -32,6 +34,7 @@ export default function Gifticon() {
   const [showPurchaseAlert, setShowPurchaseAlert] = useState(false);
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const { setGifticons } = useGifticonStore();
 
   const handleFlip = async (index: number, productId: number) => {
     if (index === flippedIndex) {
@@ -60,6 +63,9 @@ export default function Gifticon() {
         console.log(response);
         setShowPurchaseAlert(false);
         setSnackbar({ message: `상품을 구매했습니다.`, type: 'success' });
+        setFlippedIndex(null);
+        const gifticonData = await FetchGiftList();
+        setGifticons(gifticonData);
       } catch (error) {
         console.error('기프티콘 구매 요청 실패:', error);
         setSnackbar({ message: `상품 구매에 실패했습니다.`, type: 'error' });
@@ -106,7 +112,7 @@ export default function Gifticon() {
                   <GiftImg src={gifticon.imageUrl} alt={gifticon.productName} />
                   <GiftTextWrapper>
                     <div className="flex items-center justify-between">
-                      <Title>{gifticon.productName}</Title>
+                      <GiftTitle>{gifticon.productName}</GiftTitle>
                       <LinkText>{gifticon.stock} 개 남음</LinkText>
                     </div>
                     <div className="flex items-center">
@@ -123,20 +129,18 @@ export default function Gifticon() {
                 <GiftTextWrapper>
                   <Title>{gifticon.productName}</Title>
                   <DescriptionText>{details}</DescriptionText>
-                  <LinkText
+                  <PurchaseButton
                     className="text-end"
                     onClick={e => {
                       e.stopPropagation();
                       handlePurchaseClick(gifticon.productId);
                     }}
                   >
-                    구매하기 &gt;
-                  </LinkText>
+                    구매하기
+                  </PurchaseButton>
                 </GiftTextWrapper>
               ) : (
-                <GiftTextWrapper>
-                  <Title>로딩 중...</Title>
-                </GiftTextWrapper>
+                <GiftTextWrapper></GiftTextWrapper>
               )}
             </CardBack>
           </Card>
