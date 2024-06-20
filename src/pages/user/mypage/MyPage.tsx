@@ -314,11 +314,11 @@ export default function MyPage() {
   //퀘스트
   const QuestClick = async (sequence: string) => {
     const success = await SendQuest(sequence);
-    setShowSuccess(true);
-    if (success) {
+    if (success === '퀘스트가 성공적으로 업데이트되었습니다.') {
       useUserStore.getState().setQuest(String(sequence));
+      setShowSuccess(true);
     } else {
-      setSnackbar({ message: `먼저 퀘스트에 참여해주세요`, type: 'error' });
+      setSnackbar({ message: `${success}`, type: 'error' });
     }
   };
   const closeSuccessMessage = () => {
@@ -326,7 +326,7 @@ export default function MyPage() {
   };
 
   return (
-    <div className="flex-col overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
+    <div className="flex-col h-full overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
       {showLogoutAlert && (
         <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
       )}
@@ -532,7 +532,7 @@ export default function MyPage() {
       <div className="flex w-screen h-[60%]">
         <ProjectContainer>
           <Title>진행 중인 프로젝트</Title>
-          {userProfile.nowProjectId !== 0 ? (
+          {userProfile.nowProjectId !== null ? (
             <div className="flex w-full h-full">
               <div className="flex-col w-[30%] h-full">
                 <Link to={`/responsetest/${userProfile.nowProjectId}`}>
@@ -592,7 +592,7 @@ export default function MyPage() {
         </ProjectContainer>
         <ReviewWrapper>
           <Title>{userProfile.nickname} 님의 리뷰</Title>
-          <span className="scroll-m-0 overflow-y-auto">
+          <span className="max-h-[80%] overflow-y-auto">
             <MyReview />
           </span>
         </ReviewWrapper>
