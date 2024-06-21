@@ -301,6 +301,7 @@ export default function MyPage() {
     try {
       await EditIntro(newIntro);
       setIsEditingIntro(false);
+      setShowEditIntroAlert(false);
     } catch (error) {
       alert('자기소개 수정 중 오류 발생:');
     }
@@ -312,10 +313,19 @@ export default function MyPage() {
   };
 
   //퀘스트
-  const QuestClick = async (sequence: string) => {
+  const QuestClick = async (sequence: '1' | '2' | '3') => {
+    const userProfile = useUserStore.getState().userProfile;
+    if (
+      (sequence === '1' && userProfile.firstQuest) ||
+      (sequence === '2' && userProfile.secondQuest) ||
+      (sequence === '3' && userProfile.thirdQuest)
+    ) {
+      setSnackbar({ message: '퀘스트가 이미 완료되었습니다.', type: 'error' });
+      return;
+    }
     const success = await SendQuest(sequence);
     if (success === '퀘스트가 성공적으로 업데이트되었습니다.') {
-      useUserStore.getState().setQuest(String(sequence));
+      useUserStore.getState().setQuest(sequence);
       setShowSuccess(true);
     } else {
       setSnackbar({ message: `${success}`, type: 'error' });
