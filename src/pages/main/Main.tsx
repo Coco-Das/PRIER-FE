@@ -59,13 +59,16 @@ export default function Main() {
     fetchProjects();
   }, [setProjects]);
 
-  const FilterChange = async (newFilter: number | null, buttonLabel: string) => {
+  const FilterChange = async (newFilter: number, buttonLabel: string) => {
     if (newFilter) {
       setFilter(newFilter);
     }
     setActiveButton(buttonLabel);
     try {
       const allProjects = await FetchAllProject(filter, 0);
+      if (filter === 1) {
+        console.log('등록순 요청');
+      }
       console.log('모든 프로젝트 데이터 가져오기 :', allProjects);
     } catch (error) {
       console.error('프로젝트 데이터 가져오기 실패:', error);
