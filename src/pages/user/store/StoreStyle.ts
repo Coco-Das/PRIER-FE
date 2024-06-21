@@ -1,4 +1,4 @@
-import styled from 'styled-components';
+import styled, { keyframes } from 'styled-components';
 import { ReactComponent as PointIcon } from '../../../assets/Coin.svg';
 
 export const StoreWrapper = styled.div`
@@ -11,6 +11,7 @@ export const StoreWrapper = styled.div`
 
 export const PointContainer = styled.div`
   display: flex;
+  align-items: center;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin-right: 20px;
@@ -20,9 +21,25 @@ export const PointContainer = styled.div`
   height: 11rem;
   max-height: 11rem;
 `;
+
 export const StyledPointIcon = styled(PointIcon)`
   width: 10rem;
   height: 5rem;
+`;
+const iconMove = keyframes`
+  50% {
+    transform: rotate(30deg);
+  }
+`;
+export const PriceContainer = styled.div`
+  transition: transform 0.3s ease-in-out;
+  &:hover {
+    color: #315af1;
+    transform: scale(1.1, 1.1);
+  }
+  ${StyledPointIcon}:hover {
+    animation: ${iconMove} 0.5s ease-in-out 2;
+  }
 `;
 export const PointText = styled.p`
   font-size: 20px;
@@ -32,11 +49,11 @@ export const BlueText = styled.p`
   color: #315af1;
 `;
 export const PriceText = styled.p`
-  color: #315af1;
   font-size: 18px;
 `;
 export const ChargeContainer = styled.div`
   display: flex;
+  justify-content: space-around;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   background-color: #e1f9f0;
