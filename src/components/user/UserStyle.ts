@@ -236,6 +236,7 @@ export const ReviewTeam = styled.h2`
 
 //기프티콘
 export const CardContainer = styled.div`
+  cursor: pointer;
   perspective: 1000px;
   display: flex;
   width: 35rem;
@@ -264,7 +265,7 @@ export const CardFront = styled.div`
   top: 0;
   left: 0;
   padding: 20px;
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
 `;
@@ -278,7 +279,7 @@ export const CardBack = styled.div`
   left: 0;
   padding: 30px;
   transform: rotateY(180deg);
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
 `;
@@ -355,6 +356,7 @@ export const PurchaseButton = styled.button`
 export const GiftTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   gap: 1em;
 `;
