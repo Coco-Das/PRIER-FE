@@ -17,7 +17,6 @@ import {
   StepLine,
   StepsContainer,
   MypageChartIcon,
-  StyledGraphIcon,
   StyledUserIcon,
   TitleText,
   ProfileAccountContainer,
@@ -28,7 +27,6 @@ import {
   AccountLink,
   AccountIcon,
   EditAccountText,
-  AIBestText,
   EmptyContainer,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
@@ -575,17 +573,6 @@ export default function MyPage() {
               <AIReportContainer>
                 {userProfile.nowProjectKeywordList && userProfile.nowProjectKeywordList.length > 0 ? (
                   <>
-                    <div className="flex-col items-start w-full">
-                      <span className="flex items-center">
-                        <TitleText>AI 분석 Report</TitleText>
-                        <StyledGraphIcon></StyledGraphIcon>
-                      </span>
-                      <AIBestText>&quot; {userProfile.nowProjectKeywordList[0].content} &quot;</AIBestText>
-                      <LinkText>
-                        &quot; {userProfile.nowProjectKeywordList[0].content} &quot; 라는 단어가 가장 많이
-                        응답되었습니다.
-                      </LinkText>
-                    </div>
                     <AIReport />
                   </>
                 ) : (
