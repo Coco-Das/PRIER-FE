@@ -1,5 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
+  DetailText,
   DivWrapper,
   FilterBtn,
   GreenDiv,
@@ -7,13 +8,19 @@ import {
   Img,
   ListDiv,
   ListWrapper,
+  MypageChartIcon,
   PurpleDiv,
+  StaticContainer,
   Tag,
   TagWrapper,
+  TitleText,
+  UniqueText,
 } from './TestListStyles';
 import { useOtherProfileStore } from '../../../states/user/UserStore';
-import { useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { API_BASE_URL } from '../../../const/TokenApi';
+import { Link } from 'react-router-dom';
+import StarRating from '../../../components/utils/StarRating';
 
 interface Tag {
   tagId: number;
@@ -40,12 +47,26 @@ function TestList() {
   const [page, setPage] = useState(0);
   const [projects, setProjects] = useState<Project[]>([]);
   const [totalPages, setTotalPages] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
+  const listWrapperRef = useRef<HTMLDivElement>(null);
+  const [last, setLast] = useState(false);
+
   // const [totalElements, setTotalElements] = useState(0);
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
 
   const handleFilterChange = (newFilter: '0' | '1' | '2') => {
     setFilter(newFilter);
+    navigateToPage(0, newFilter);
   };
+
+  useEffect(() => {
+    const queryParams = new URLSearchParams(location.search);
+    const currentFilter = (queryParams.get('filter') as '0' | '1' | '2') || '2';
+    const currentPage = parseInt(queryParams.get('page') || '0', 10);
+    setFilter(currentFilter);
+    setPage(currentPage);
+  }, [location.search]);
 
   useEffect(() => {
     if (userId) {
@@ -76,6 +97,7 @@ function TestList() {
 
       setProjects(projectsWithColoredTags);
       saveTagColors(storedColors);
+      setLast(data.last);
       console.log(userId);
       console.log(page);
       console.log(response.data);
@@ -96,6 +118,16 @@ function TestList() {
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
     return colors[randomIndex];
+  };
+
+  const navigateToPage = (newPage: number, newFilter: '0' | '1' | '2') => {
+    const queryParams = new URLSearchParams();
+    queryParams.set('filter', newFilter);
+    queryParams.set('page', newPage.toString());
+    navigate(`/testlist/${userId}?${queryParams.toString()}`);
+    if (listWrapperRef.current) {
+      listWrapperRef.current.scrollTo(0, 0);
+    }
   };
 
   const getStatusText = (status: string) => {
@@ -119,6 +151,7 @@ function TestList() {
           key={i}
           onClick={() => {
             setPage(i);
+            navigateToPage(i, filter);
           }}
           style={{
             borderRadius: '8px',
@@ -136,7 +169,7 @@ function TestList() {
   };
 
   return (
-    <ListWrapper>
+    <ListWrapper ref={listWrapperRef}>
       <span className="ml-4 font-extrabold mt-3" style={{ wordBreak: 'break-word', color: '#315AF1' }}>
         {userProfile.nickname} 프로젝트
       </span>
@@ -168,13 +201,22 @@ function TestList() {
                 <span style={{ color: getStatusText(project.status) === '배포 완료' ? 'inherit' : '#315AF1' }}>
                   {getStatusText(project.status)}
                 </span>
-                <span className="underline" style={{ marginLeft: 'auto', paddingRight: '10px' }}>
-                  자세히 보기&gt;
-                </span>
+                <Link
+                  to={`/responsetest/${project.projectId}`}
+                  style={{ marginLeft: 'auto', paddingRight: '10px', cursor: 'pointer' }}
+                >
+                  <span className="underline">자세히 보기 &gt;</span>
+                </Link>
+              </div>
+              <div>
+                <StarRating initialScore={project.score} onHover={false} readOnly={true}></StarRating>
               </div>
               {/* 이미지 있을 때만 보이도록 */}
-              <div style={{ padding: '10px 10px 0px 0px', height: '100%', width: '100s%' }}>
+              <div style={{ padding: '10px 10px 0px 0px', height: '100%', width: '100%', position: 'relative' }}>
                 {project.mainImageUrl && <Img src={project.mainImageUrl} alt={project.title} />}
+                {/* <div style={{ position: 'absolute', top: '5%' }}>
+                  <StarRating initialScore={project.score}></StarRating>
+                </div> */}
               </div>
             </ImageWrapper>
             <DivWrapper>
@@ -201,6 +243,13 @@ function TestList() {
                 </span>
               </GreenDiv>
             </DivWrapper>
+            <StaticContainer>
+              <TitleText>통계</TitleText>
+              <UniqueText>평점</UniqueText>
+              <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
+              <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
+              <MypageChartIcon></MypageChartIcon>
+            </StaticContainer>
           </ListDiv>
         ))}
       </div>
@@ -212,7 +261,13 @@ function TestList() {
           fontSize: '16px',
         }}
       >
+        <button onClick={() => setPage(page => page - 1)} disabled={page === 0}>
+          &lt;
+        </button>
         {renderPagination()}
+        <button onClick={() => setPage(page => page + 1)} disabled={last}>
+          &gt;
+        </button>
       </div>
     </ListWrapper>
   );
