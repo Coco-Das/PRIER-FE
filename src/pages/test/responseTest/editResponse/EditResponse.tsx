@@ -351,6 +351,7 @@ export const EditResponse = () => {
 
     const replaceEmptyStringWithNull = (value: string) => (value.trim() === '' ? null : value.trim());
     const combinedQuestions = [...questions, ...newQuestions];
+    const statusValue = status === '배포 완료' ? 0 : status === '개발 중' ? 1 : 2;
 
     const jsonData = {
       title: replaceEmptyStringWithNull(title),
@@ -359,7 +360,7 @@ export const EditResponse = () => {
       tags: tagContents,
       startDate: formattedStartDate,
       endDate: formattedEndDate,
-      status: status === '배포완료' ? 0 : status === '개발 중' ? 1 : 2,
+      status: statusValue,
       teamName: replaceEmptyStringWithNull(teamName),
       teamDescription: replaceEmptyStringWithNull(teamDescription),
       teamMate: replaceEmptyStringWithNull(teamMate),

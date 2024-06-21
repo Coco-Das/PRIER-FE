@@ -238,6 +238,7 @@ export const CreateTest = () => {
     const tagContents = tags.map(tag => tag.tagName);
 
     const replaceEmptyStringWithNull = (value: string) => (value.trim() === '' ? null : value.trim());
+    const statusValue = step === '배포 완료' ? 0 : step === '개발 중' ? 1 : 2;
 
     const jsonData = {
       title: replaceEmptyStringWithNull(title),
@@ -246,7 +247,7 @@ export const CreateTest = () => {
       tags: tagContents,
       startDate: formattedStartDate,
       endDate: formattedEndDate,
-      status: step === '배포완료' ? 0 : step === '개발 중' ? 1 : 2,
+      status: statusValue,
       teamName: replaceEmptyStringWithNull(teamName),
       teamDescription: replaceEmptyStringWithNull(teamDescription),
       teamMate: replaceEmptyStringWithNull(teamMate),
