@@ -12,14 +12,15 @@ interface SnackbarProps {
 
 const SnackbarContainer = styled.div<{ type: 'success' | 'error'; isVisible: boolean }>`
   position: fixed;
-  top: 5%;
-  right: 5%;
-  width: 20%;
+  top: 4%;
+  right: 2%;
+  width: max-conten;
+  max-width: max-content;
   background-color: rgba(80, 79, 79, 0.8);
   color: white;
   font-weight: 300;
   font-size: 0.9rem;
-  padding: 0.5rem;
+  padding: 0.5rem 1.5rem;
   border-radius: 4px;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
   display: flex;
@@ -31,7 +32,7 @@ const SnackbarContainer = styled.div<{ type: 'success' | 'error'; isVisible: boo
 `;
 
 const IconWrapper = styled.div`
-  margin-right: 8px;
+  margin-right: 10px;
 `;
 
 const Snackbar: React.FC<SnackbarProps> = ({ message, type, onClose }) => {
@@ -40,8 +41,8 @@ const Snackbar: React.FC<SnackbarProps> = ({ message, type, onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setIsVisible(false);
-      setTimeout(onClose, 500); // Wait for the slide-out animation to complete
-    }, 2500); // Show the snackbar for 2.5 seconds before starting the slide-out animation
+      setTimeout(onClose, 500);
+    }, 2500);
 
     return () => clearTimeout(timer);
   }, [onClose]);
