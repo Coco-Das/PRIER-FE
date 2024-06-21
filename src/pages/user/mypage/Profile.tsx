@@ -73,19 +73,19 @@ export default function UserProfile() {
             </ProfileTextContainer>
             <ProfileAccountContainer>
               <div className="flex items-center gap-5">
-                <AccountLink href={userProfile.blog ?? ''} target="_blank">
+                <AccountLink href={userProfile.blog ?? '#'} target="_blank">
                   <AccountIcon src={BlogIcon}></AccountIcon>
                   Blog
                 </AccountLink>
-                <AccountLink href={userProfile.github ?? ''} target="_blank">
+                <AccountLink href={userProfile.github ?? '#'} target="_blank">
                   <AccountIcon src={GithubIcon}></AccountIcon>
                   Github
                 </AccountLink>
-                <AccountLink href={userProfile.figma ?? ''} target="_blank">
+                <AccountLink href={userProfile.figma ?? '#'} target="_blank">
                   <AccountIcon src={FigmaIcon}></AccountIcon>
                   Figma
                 </AccountLink>
-                <AccountLink href={userProfile.notion ?? ''} target="_blank">
+                <AccountLink href={userProfile.notion ?? '#'} target="_blank">
                   <AccountIcon src={NotionIcon}></AccountIcon>
                   Notion
                 </AccountLink>

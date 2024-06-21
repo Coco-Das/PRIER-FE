@@ -29,6 +29,7 @@ import {
   EditAccountText,
   EmptyContainer,
   ProfileDetail,
+  AccountGithub,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
@@ -72,7 +73,17 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
     fontSize: 12,
   },
 }));
-
+const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(() => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: 'black',
+    color: 'white',
+    borderRounded: '10px',
+    border: '1px solid black',
+    fontSize: 13,
+  },
+}));
 export default function MyPage() {
   const navigate = useNavigate();
   const userProfile = useUserStore(state => state.userProfile);
@@ -483,58 +494,52 @@ export default function MyPage() {
                 {isEditingBlog ? (
                   <EditAccountText onClick={ConfirmEditBlog}>
                     <AccountIcon src={BlogIcon}></AccountIcon>
-                    Blog
                   </EditAccountText>
                 ) : (
-                  <AccountLink href={userProfile.blog ?? ''} target="_blank">
-                    <AccountIcon src={BlogIcon}></AccountIcon>
-                    Blog
-                  </AccountLink>
+                  <AccountTooltip title="Blog" placement="bottom">
+                    <AccountLink href={userProfile.blog ?? ''} target="_blank">
+                      <AccountIcon src={BlogIcon}></AccountIcon>
+                    </AccountLink>
+                  </AccountTooltip>
                 )}
                 {isEditingGithub ? (
                   <EditAccountText onClick={ConfirmEditGithub}>
-                    <AccountIcon src={GithubIcon}></AccountIcon>
-                    Github
+                    <AccountGithub src={GithubIcon}></AccountGithub>
                   </EditAccountText>
                 ) : (
-                  <AccountLink href={userProfile.github ?? ''} target="_blank">
-                    <AccountIcon src={GithubIcon}></AccountIcon>
-                    Github
-                  </AccountLink>
+                  <AccountTooltip title="Github" placement="bottom">
+                    <AccountLink href={userProfile.github ?? ''} target="_blank">
+                      <AccountGithub src={GithubIcon}></AccountGithub>
+                    </AccountLink>
+                  </AccountTooltip>
                 )}
                 {isEditingFigma ? (
                   <EditAccountText onClick={ConfirmEditFigma}>
                     <AccountIcon src={FigmaIcon}></AccountIcon>
-                    Figma
                   </EditAccountText>
                 ) : (
-                  <AccountLink href={userProfile.figma ?? ''} target="_blank">
-                    <AccountIcon src={FigmaIcon}></AccountIcon>
-                    Figma
-                  </AccountLink>
+                  <AccountTooltip title="Figma" placement="bottom">
+                    <AccountLink href={userProfile.figma ?? ''} target="_blank">
+                      <AccountIcon src={FigmaIcon}></AccountIcon>
+                    </AccountLink>
+                  </AccountTooltip>
                 )}
                 {isEditingNotion ? (
-                  <EditAccountText onClick={ConfirmEditNotion}>
+                  <div onClick={ConfirmEditNotion}>
                     <AccountIcon src={NotionIcon}></AccountIcon>
-                    Notion
-                  </EditAccountText>
+                  </div>
                 ) : (
-                  <AccountLink href={userProfile.notion ?? ''} target="_blank">
-                    <AccountIcon src={NotionIcon}></AccountIcon>
-                    Notion
-                  </AccountLink>
+                  <AccountTooltip title="Notion" placement="bottom">
+                    <AccountLink href={userProfile.notion ?? ''} target="_blank">
+                      <AccountIcon src={NotionIcon}></AccountIcon>
+                    </AccountLink>
+                  </AccountTooltip>
                 )}
               </div>
               {isEditingAccount ? (
-                <ProfileTextContainer>
-                  <span></span>
-                  <CorrectText onClick={cancleEditingAccount}>수정 모드 끝내기</CorrectText>
-                </ProfileTextContainer>
+                <CorrectText onClick={cancleEditingAccount}>수정 모드 끝내기</CorrectText>
               ) : (
-                <ProfileTextContainer>
-                  <span></span>
-                  <CorrectText onClick={EditAccount}>수정 하기</CorrectText>
-                </ProfileTextContainer>
+                <CorrectText onClick={EditAccount}>수정 하기</CorrectText>
               )}
             </ProfileAccountContainer>
           </div>
