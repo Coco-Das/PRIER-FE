@@ -30,6 +30,7 @@ import CustomAlert from '../../../components/utils/CustomAlert';
 import CustomModal from '../../../components/utils/CustomModal';
 import styled from 'styled-components';
 import { Comment } from '../comment/Comment';
+import { useUserStore } from '../../../states/user/UserStore';
 
 interface Tag {
   tagName: string;
@@ -71,10 +72,10 @@ export const ResponseTest = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [feedback, setFeedback] = useState('');
-  const [nickname, setNickname] = useState('');
   const [alert, setAlert] = useState(false);
   const [comment, setCommnet] = useState('');
   const [showSidebar, setShowSidebar] = useState(false);
+  const userProfile = useUserStore(state => state.userProfile);
 
   const saveTagColors = (tags: Tag[]) => {
     const tagColors: { [key: string]: string } = {};
@@ -97,15 +98,9 @@ export const ResponseTest = () => {
   useEffect(() => {
     if (projectId) {
       setProjectId(projectId); // URL 파라미터로부터 projectId를 상태로 설정
-      // handleGetData();
       handleGetInfo();
-      // handleGetNickname();
     }
   }, [projectId, setProjectId]);
-
-  // const handleGetData = async () => {
-  //   await Promise.all([handleGetInfo(), handleGetNickname()]);
-  // };
 
   //정보 가져오기
   const handleGetInfo = async () => {
@@ -154,15 +149,9 @@ export const ResponseTest = () => {
     }
   };
 
-  // const handleGetNickname = async () => {
-  //   const response = await API_BASE_URL.get('/users/mypage');
-  //   setNickname(response.data);
-  //   console.log(response.data);
-  // };
-
-  // useEffect(() => {
-  //   handleGetInfo();
-  // }, [projectId]);
+  useEffect(() => {
+    handleGetInfo();
+  }, [projectId]);
 
   if (!projectId) {
     console.log(projectId);
@@ -258,7 +247,7 @@ export const ResponseTest = () => {
             }}
           >
             <span className="ml-4 font-bold" style={{ wordBreak: 'break-word' }}>
-              안녕하세요 <span>{nickname}</span>, <span style={{ color: '#315AF1' }}>{teamName}</span>의{' '}
+              안녕하세요 <span>{userProfile.nickname} 님</span>, <span style={{ color: '#315AF1' }}>{teamName}</span>의{' '}
               <span style={{ color: '#23BE87' }}>{title}</span> 프로젝트 입니다.
             </span>
           </div>

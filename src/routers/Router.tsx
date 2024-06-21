@@ -15,7 +15,6 @@ import ModifyBoard from '../pages/board/ModifyBoard';
 import Board from '../pages/board/Board';
 import { CreateTest } from '../pages/test/createTest/CreateTest';
 import { ResponseQuestion } from '../pages/test/responseTest/ResponseQuestion';
-import { Comment } from '../pages/test/comment/Comment';
 import { EditResponse } from '../pages/test/responseTest/editResponse/EditResponse';
 import Profile from '../pages/user/mypage/\bProfile';
 
@@ -65,7 +64,7 @@ const router = createBrowserRouter([
         element: <EditResponse />,
       },
       {
-        path: '/testlist',
+        path: '/testlist/:userId',
         element: <TestList />,
       },
       {
