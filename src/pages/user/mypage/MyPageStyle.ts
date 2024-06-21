@@ -191,6 +191,9 @@ export const ReviewWrapper = styled.div`
   cursor: defualt;
   display: flex;
   flex-direction: column;
+  height: 28.5rem;
+  overscroll-behavior: none;
+  overflow-y: scroll;
   width: 30%;
   box-sizing: border-box;
   gap: 1rem;

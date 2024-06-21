@@ -336,7 +336,7 @@ export default function MyPage() {
   };
 
   return (
-    <div className="flex-col h-full overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
+    <div className="flex-col overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
       {showLogoutAlert && (
         <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
       )}
