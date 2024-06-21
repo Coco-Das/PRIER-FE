@@ -17,7 +17,6 @@ import {
   StepLine,
   StepsContainer,
   MypageChartIcon,
-  StyledGraphIcon,
   StyledUserIcon,
   TitleText,
   ProfileAccountContainer,
@@ -28,7 +27,6 @@ import {
   AccountLink,
   AccountIcon,
   EditAccountText,
-  AIBestText,
   EmptyContainer,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
@@ -301,6 +299,7 @@ export default function MyPage() {
     try {
       await EditIntro(newIntro);
       setIsEditingIntro(false);
+      setShowEditIntroAlert(false);
     } catch (error) {
       alert('자기소개 수정 중 오류 발생:');
     }
@@ -312,10 +311,19 @@ export default function MyPage() {
   };
 
   //퀘스트
-  const QuestClick = async (sequence: string) => {
+  const QuestClick = async (sequence: '1' | '2' | '3') => {
+    const userProfile = useUserStore.getState().userProfile;
+    if (
+      (sequence === '1' && userProfile.firstQuest) ||
+      (sequence === '2' && userProfile.secondQuest) ||
+      (sequence === '3' && userProfile.thirdQuest)
+    ) {
+      setSnackbar({ message: '퀘스트가 이미 완료되었습니다.', type: 'error' });
+      return;
+    }
     const success = await SendQuest(sequence);
     if (success === '퀘스트가 성공적으로 업데이트되었습니다.') {
-      useUserStore.getState().setQuest(String(sequence));
+      useUserStore.getState().setQuest(sequence);
       setShowSuccess(true);
     } else {
       setSnackbar({ message: `${success}`, type: 'error' });
@@ -326,7 +334,7 @@ export default function MyPage() {
   };
 
   return (
-    <div className="flex-col h-full overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
+    <div className="flex-col overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
       {showLogoutAlert && (
         <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
       )}
@@ -565,17 +573,6 @@ export default function MyPage() {
               <AIReportContainer>
                 {userProfile.nowProjectKeywordList && userProfile.nowProjectKeywordList.length > 0 ? (
                   <>
-                    <div className="flex-col items-start w-full">
-                      <span className="flex items-center">
-                        <TitleText>AI 분석 Report</TitleText>
-                        <StyledGraphIcon></StyledGraphIcon>
-                      </span>
-                      <AIBestText>&quot; {userProfile.nowProjectKeywordList[0].content} &quot;</AIBestText>
-                      <LinkText>
-                        &quot; {userProfile.nowProjectKeywordList[0].content} &quot; 라는 단어가 가장 많이
-                        응답되었습니다.
-                      </LinkText>
-                    </div>
                     <AIReport />
                   </>
                 ) : (

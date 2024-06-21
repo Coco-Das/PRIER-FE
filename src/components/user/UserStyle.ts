@@ -108,6 +108,12 @@ export const LinkText = styled.p`
     color: #4188fe;
   }
 `;
+export const SmallText = styled.p`
+  font-size: 15px;
+  font-weight: 300;
+  color: #828282;
+  cursor: pointer;
+`;
 export const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0', '#ACA4D5', '#4188FE'];
 const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 

@@ -15,7 +15,6 @@ import {
   Title,
 } from './MainStyle';
 import ProjectPreview from '../../components/user/ProjectPreview';
-import { FetchMyPage } from '../../services/UserApi';
 import { useUserStore } from '../../states/user/UserStore';
 import { CheckPoint } from '../../services/StoreApi';
 import { userPointStore } from '../../states/user/PointStore';
@@ -25,7 +24,6 @@ import { FetchAllProject, FetchLatestProject, SearchProject } from '../../servic
 
 export default function Main() {
   const userProfile = useUserStore(state => state.userProfile);
-  const { setUserProfile } = useUserStore();
   const pointStore = userPointStore();
   const { totalPages, setProjects } = useAllProjectStore();
   const [activeButton, setActiveButton] = useState('인기순');
@@ -36,7 +34,6 @@ export default function Main() {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        await FetchMyPage();
         const pointsData = await CheckPoint();
         pointStore.setPoint(pointsData);
         console.log(pointStore.point);
@@ -46,7 +43,7 @@ export default function Main() {
     };
 
     fetchData();
-  }, [setUserProfile, pointStore.setPoint]);
+  }, [pointStore.setPoint]);
   useEffect(() => {
     const fetchProjects = async () => {
       try {

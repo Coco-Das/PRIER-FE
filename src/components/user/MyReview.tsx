@@ -4,12 +4,16 @@ import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
 import { styled } from 'styled-components';
-import { Link } from 'react-router-dom';
-import { useUserStore } from '../../states/user/UserStore';
+import { Link, useLocation } from 'react-router-dom';
+import { useOtherProfileStore, useUserStore } from '../../states/user/UserStore';
 
 function MyReview() {
+  const { pathname } = useLocation();
   const userProfile = useUserStore(state => state.userProfile);
-  const reviews = userProfile.myPageCommentDtoList || [];
+  const otherProfile = useOtherProfileStore(state => state.otherProfile);
+
+  const reviews =
+    pathname === '/mypage' ? userProfile.myPageCommentDtoList || [] : otherProfile.myPageCommentDtoList || [];
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: 'black',

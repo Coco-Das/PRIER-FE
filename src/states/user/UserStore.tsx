@@ -47,7 +47,7 @@ interface UserStore {
   setFigma: (figma: string) => void;
   setNotion: (notion: string) => void;
   setIntro: (intro: string) => void;
-  setQuest: (quest: string) => void;
+  setQuest: (quest: '1' | '2' | '3') => void;
 }
 
 const initialProfile: UserProfile = {
@@ -119,10 +119,14 @@ export const useUserStore = create<UserStore>(set => ({
       userProfile: { ...state.userProfile, intro },
     }));
   },
-  setQuest: (quest: string) => {
-    set(state => ({
-      userProfile: { ...state.userProfile, quest },
-    }));
+  setQuest: (quest: '1' | '2' | '3') => {
+    set(state => {
+      const updatedProfile = { ...state.userProfile };
+      if (quest === '1') updatedProfile.firstQuest = true;
+      if (quest === '2') updatedProfile.secondQuest = true;
+      if (quest === '3') updatedProfile.thirdQuest = true;
+      return { userProfile: updatedProfile };
+    });
   },
 }));
 
