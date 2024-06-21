@@ -27,6 +27,12 @@ export const ProfileText = styled.h2`
   margin-right: 20px;
   cursor: default;
 `;
+export const ProfileDetail = styled.p`
+  font-size: 19px;
+  font-weight: 500;
+  margin-right: 20px;
+  cursor: default;
+`;
 export const CorrectText = styled.p`
   font-size: 15px;
   font-weight: 300;

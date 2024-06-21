@@ -28,6 +28,7 @@ import {
   AccountIcon,
   EditAccountText,
   EmptyContainer,
+  ProfileDetail,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
@@ -37,6 +38,7 @@ import MyReview from '../../../components/user/MyReview';
 import {
   EditBelonging,
   EditBlog,
+  EditEmail,
   EditFigma,
   EditGithub,
   EditIntro,
@@ -81,6 +83,9 @@ export default function MyPage() {
   const [showEditBelongingAlert, setShowEditBelongingAlert] = useState(false);
   const [isEditingBelonging, setIsEditingBelonging] = useState(false);
   const [newBelonging, setNewBelonging] = useState<string>('');
+  const [showEditEmailAlert, setShowEditEmailAlert] = useState(false);
+  const [isEditingEmail, setIsEditingEmail] = useState(false);
+  const [newEmail, setNewEmail] = useState<string>('');
   const [showEditBlogAlert, setShowEditBlogAlert] = useState(false);
   const [isEditingBlog, setIsEditingBlog] = useState(false);
   const [newBlog, setNewBlog] = useState<string>('');
@@ -173,7 +178,30 @@ export default function MyPage() {
     setShowEditBelongingAlert(false);
     setNewBelonging('');
   };
-
+  //이메일 수정
+  const EmailInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setNewEmail(event.target.value);
+  };
+  const setEditEmail = () => {
+    setIsEditingEmail(true);
+  };
+  const ConfirmEditEmail = () => {
+    setShowEditEmailAlert(true);
+  };
+  const saveEditEmail = async () => {
+    try {
+      await EditEmail(newEmail);
+      setIsEditingEmail(false);
+      setShowEditEmailAlert(false);
+    } catch (error) {
+      alert('메일 수정 중 오류 발생:');
+    }
+  };
+  const cancleEditEmail = () => {
+    setIsEditingEmail(false);
+    setShowEditEmailAlert(false);
+    setNewEmail('');
+  };
   //블로그 수정
   const BlogInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewBlog(event.target.value);
@@ -344,6 +372,9 @@ export default function MyPage() {
       {showEditBelongingAlert && (
         <CustomAlert message="소속을 수정 하시겠습니까?" onConfirm={saveEditBelonging} onCancel={cancleEditBelonging} />
       )}
+      {showEditEmailAlert && (
+        <CustomAlert message="계정 정보를 수정 하시겠습니까?" onConfirm={saveEditEmail} onCancel={cancleEditEmail} />
+      )}
       {showEditBlogAlert && (
         <>
           <AccountEdit
@@ -386,15 +417,14 @@ export default function MyPage() {
         <ProfileContainer>
           <StyledUserIcon></StyledUserIcon>
           <div className="flex-col mt-3 w-full">
-            <span className="flex items-center justify-between">
+            <div className="w-full flex items-center justify-between ml-[10px]">
               <Title>반갑습니다 {userProfile.nickname} 님</Title>
               <CorrectText onClick={ConfirmLogout}>로그 아웃</CorrectText>
-            </span>
-
+            </div>
             {isEditingName ? (
               <ProfileTextContainer>
                 <span className="flex">
-                  <ProfileText>닉네임 : </ProfileText>
+                  <ProfileText>이름 : </ProfileText>
                   <StyledInput type="text" value={newNickName} onChange={NickNameInputChange}></StyledInput>
                 </span>
                 <CorrectText onClick={ConfirmEditName}>확인</CorrectText>
@@ -402,8 +432,8 @@ export default function MyPage() {
             ) : (
               <ProfileTextContainer>
                 <span className="flex">
-                  <ProfileText>닉네임 : </ProfileText>
-                  <ProfileText> {userProfile.nickname} </ProfileText>
+                  <ProfileText>이름 : </ProfileText>
+                  <ProfileDetail> {userProfile.nickname} </ProfileDetail>
                 </span>
                 <CorrectText onClick={setEditName}>수정 하기</CorrectText>
               </ProfileTextContainer>
@@ -420,7 +450,7 @@ export default function MyPage() {
               <ProfileTextContainer>
                 <span className="flex">
                   <ProfileText>소속 : </ProfileText>
-                  <ProfileText> {userProfile.belonging} </ProfileText>
+                  <ProfileDetail> {userProfile.belonging} </ProfileDetail>
                 </span>
                 <CorrectText onClick={setEditBelonging}>수정 하기</CorrectText>
               </ProfileTextContainer>
@@ -428,12 +458,26 @@ export default function MyPage() {
             <ProfileTextContainer>
               <span className="flex">
                 <ProfileText>등급 : </ProfileText>
-                <ProfileText>{userProfile.rank} </ProfileText>
+                <ProfileDetail>{userProfile.rank} </ProfileDetail>
               </span>
             </ProfileTextContainer>
-            <ProfileTextContainer>
-              <ProfileText>계정 정보 : {userProfile.email}</ProfileText>
-            </ProfileTextContainer>
+            {isEditingEmail ? (
+              <ProfileTextContainer>
+                <span className="flex">
+                  <ProfileText>계정: </ProfileText>
+                  <StyledInput type="text" value={newEmail} onChange={EmailInputChange}></StyledInput>
+                </span>
+                <CorrectText onClick={ConfirmEditEmail}>확인</CorrectText>
+              </ProfileTextContainer>
+            ) : (
+              <ProfileTextContainer>
+                <span className="flex">
+                  <ProfileText>계정 : </ProfileText>
+                  <ProfileDetail> {userProfile.email} </ProfileDetail>
+                </span>
+                <CorrectText onClick={setEditEmail}>수정 하기</CorrectText>
+              </ProfileTextContainer>
+            )}
             <ProfileAccountContainer>
               <div className="flex items-center gap-5">
                 {isEditingBlog ? (
@@ -482,13 +526,15 @@ export default function MyPage() {
                 )}
               </div>
               {isEditingAccount ? (
-                <CorrectText className="text-end" onClick={cancleEditingAccount}>
-                  수정 모드 끝내기
-                </CorrectText>
+                <ProfileTextContainer>
+                  <span></span>
+                  <CorrectText onClick={cancleEditingAccount}>수정 모드 끝내기</CorrectText>
+                </ProfileTextContainer>
               ) : (
-                <CorrectText className="text-end" onClick={EditAccount}>
-                  수정 하기
-                </CorrectText>
+                <ProfileTextContainer>
+                  <span></span>
+                  <CorrectText onClick={EditAccount}>수정 하기</CorrectText>
+                </ProfileTextContainer>
               )}
             </ProfileAccountContainer>
           </div>
@@ -507,7 +553,7 @@ export default function MyPage() {
               <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
               <h1 className="text-2xl font-semibold">{userProfile.intro}</h1>
               <CorrectText className="text-end" onClick={setEditIntro}>
-                수정하기
+                수정 하기
               </CorrectText>
             </IntroduceContainer>
           )}
