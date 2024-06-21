@@ -42,6 +42,7 @@ interface UserStore {
   setLogout: () => void;
   setNickname: (nickname: string) => void;
   setBelonging: (belonging: string) => void;
+  setEmail: (email: string) => void;
   setBlog: (blog: string) => void;
   setGithub: (github: string) => void;
   setFigma: (figma: string) => void;
@@ -92,6 +93,11 @@ export const useUserStore = create<UserStore>(set => ({
   setBelonging: (belonging: string) => {
     set(state => ({
       userProfile: { ...state.userProfile, belonging },
+    }));
+  },
+  setEmail: (email: string) => {
+    set(state => ({
+      userProfile: { ...state.userProfile, email },
     }));
   },
   setBlog: (blog: string) => {

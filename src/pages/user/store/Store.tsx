@@ -6,6 +6,7 @@ import {
   GiftWrapper,
   PointContainer,
   PointText,
+  PriceContainer,
   PriceText,
   StoreWrapper,
   StyledPointIcon,
@@ -82,7 +83,7 @@ export default function Store() {
       <Title>상점</Title>
       <div className="flex w-full">
         <PointContainer>
-          <StyledPointIcon></StyledPointIcon>
+          <StyledPointIcon className="mb-3"></StyledPointIcon>
           <div className="flex-col">
             <PointText className="mb-5">포인트</PointText>
             <BlueText className="mb-5">{pointStore.point} 코어 보유</BlueText>
@@ -93,21 +94,20 @@ export default function Store() {
         </PointContainer>
         <ChargeContainer>
           <PointText>코어 충전하기</PointText>
-          <div className="flex items-center justify-center gap-10">
-            <span onClick={() => SelectAmount(1000, '100 코어')}>
+          <div className="flex w-[80%] items-center justify-between  cursor-pointer">
+            <PriceContainer onClick={() => SelectAmount(1000, '100 코어')}>
               <StyledPointIcon></StyledPointIcon>
               <PriceText>100코어 : 1000원</PriceText>
-            </span>
-            <span onClick={() => SelectAmount(5000, '500 코어')}>
+            </PriceContainer>
+            <PriceContainer onClick={() => SelectAmount(5000, '500 코어')}>
               <StyledPointIcon></StyledPointIcon>
               <PriceText>500코어 : 5000원</PriceText>
-            </span>
-            <span onClick={() => SelectAmount(10000, '1000 코어')}>
+            </PriceContainer>
+            <PriceContainer onClick={() => SelectAmount(10000, '1000 코어')}>
               <StyledPointIcon></StyledPointIcon>
               <PriceText>1000코어 : 10000원</PriceText>
-            </span>
+            </PriceContainer>
           </div>
-          <LinkText className="flex items-end ml-20">코어 충전하기 &gt;</LinkText>
         </ChargeContainer>
       </div>
       <Title>기프티콘</Title>

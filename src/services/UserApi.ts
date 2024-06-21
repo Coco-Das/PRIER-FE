@@ -131,6 +131,25 @@ export const EditBelonging = async (newBelonging: string) => {
     throw error;
   }
 };
+export const EditEmail = async (newEmail: string) => {
+  try {
+    const response = await API_BASE_URL.put(
+      '/users/email',
+      { email: newEmail },
+      {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      },
+    );
+    console.log('메일 수정 성공', response.data);
+    const setEmail = useUserStore.getState().setEmail;
+    setEmail(newEmail);
+  } catch (error) {
+    console.error('메일 수정 실패', error);
+    throw error;
+  }
+};
 
 export const EditBlog = async (newBlog: string) => {
   try {
