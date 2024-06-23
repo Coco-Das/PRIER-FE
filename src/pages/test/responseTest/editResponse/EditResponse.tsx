@@ -39,6 +39,7 @@ import CustomAlert from '../../../../components/utils/CustomAlert';
 import { HiddenInput } from '../../createTest/CreateTestStyles';
 import { DropDownContainer } from '../../../../components/utils/DropDown';
 import { ToggleBtn } from '../../../../components/utils/Toggle';
+import ProjectSnackbar from '../../../../components/user/ProjectSnackbar';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
@@ -114,6 +115,7 @@ export const EditResponse = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [newQuestions, setNewQuestions] = useState<Question[]>([]);
   const [deleteMainImage, setDeleteMainImage] = useState(false);
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
@@ -343,6 +345,7 @@ export const EditResponse = () => {
     ]);
   };
 
+  //제출하기
   const handleEditSubmit = async () => {
     const formData = new FormData();
     const formattedStartDate = format(startDate ?? new Date(), 'yyyy-MM-dd');
@@ -411,8 +414,12 @@ export const EditResponse = () => {
       // console.log(jsonData);
       const response = await API_BASE_URL.put(`/projects/${projectId}`, formData, config);
       console.log(response.data);
-      navigate(`/responsetest/${projectId}`);
+      setSnackbar({ message: '프로젝트가 수정되었습니다', type: 'success' });
+      setTimeout(() => {
+        navigate(`/responsetest/${projectId}`);
+      }, 500); // 2초 지연
     } catch (error) {
+      setSnackbar({ message: '프로젝트 수정이 실패하였습니다.', type: 'error' });
       console.error('에러:', error);
       // console.log('JSON Data:', jsonData);
     }
@@ -562,13 +569,17 @@ export const EditResponse = () => {
           </GreenDiv>
         </ProjectIntro>
       </Project>
-      <Question>
-        <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-          <Settings />
-          <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
-            상세한 피드백을 위한 원하는 질문 폼을 작성해주세요
+      <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
+        <Settings />
+        <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
+          상세한 피드백을 위한 원하는 질문 폼을 작성해주세요
+          <span style={{ fontSize: '12px', color: '#828282' }} className="font-medium">
+            {' '}
+            (기존 질문은 삭제만 가능합니다.)
           </span>
-        </div>
+        </span>
+      </div>
+      <Question>
         {questions.map((question, index) => (
           <QuestionDiv key={question.questionId} className="mt-4">
             {question.category === 'SUBJECTIVE' ? (
@@ -576,7 +587,6 @@ export const EditResponse = () => {
                 <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
                   {index + 1}번 문항
                   <input
-                    placeholder="질문을 입력하세요"
                     style={{
                       marginLeft: '20px',
                       fontSize: '20px',
@@ -588,24 +598,9 @@ export const EditResponse = () => {
                     value={question.content}
                     // onChange={e => handleQuestionContentChange(question.questionId, e.target.value)}
                   />
-                  {/* <div style={{ marginLeft: 'auto' }}>
-                    <ToggleBtn
-                      currentType={question.category}
-                      onToggle={() => toggleQuestionType(question.questionId)}
-                    />
-                  </div> */}
                 </div>
-                <AutoResizeTextarea
-                  placeholder="주관식 답변을 입력하세요..."
-                  style={{
-                    marginTop: '10px',
-                    marginLeft: '75px',
-                    overflowY: 'auto',
-                    width: '80%',
-                  }}
-                  readOnly
-                />
-                <div style={{ display: 'flex', justifyContent: 'right' }}>
+
+                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
                   <QuestionDeleteButton onClick={() => handleQuestionDelete(question.questionId)} />
                 </div>
               </div>
@@ -616,16 +611,9 @@ export const EditResponse = () => {
                   <input
                     placeholder="질문을 입력하세요"
                     style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
-                    // onChange={e => handleQuestionContentChange(question.questionId, e.target.value)}
                     value={question.content}
                     readOnly={true}
                   />
-                  {/* <div style={{ marginLeft: 'auto' }}>
-                    <ToggleBtn
-                      currentType={question.category}
-                      onToggle={() => toggleQuestionType(question.questionId)}
-                    />
-                  </div> */}
                 </div>
                 <div
                   style={{
@@ -634,9 +622,9 @@ export const EditResponse = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     gap: '10rem',
-                    marginBottom: '40px',
                     fontSize: '20px',
                     width: '85%',
+                    opacity: '0.3',
                   }}
                 >
                   {question.options?.map((option, i) => (
@@ -654,7 +642,7 @@ export const EditResponse = () => {
                     </div>
                   ))}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
                   <QuestionDeleteButton onClick={() => handleQuestionDelete(question.questionId)} />
                 </div>
               </div>
@@ -687,17 +675,7 @@ export const EditResponse = () => {
                     />
                   </div>
                 </div>
-                <AutoResizeTextarea
-                  placeholder="주관식 답변을 입력하세요..."
-                  style={{
-                    marginTop: '10px',
-                    marginLeft: '75px',
-                    overflowY: 'auto',
-                    width: '80%',
-                  }}
-                  readOnly
-                />
-                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
                   <QuestionDeleteButton onClick={() => handleQuestionDelete(question.newQuestionId ?? null)} />
                 </div>
               </div>
@@ -725,9 +703,9 @@ export const EditResponse = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     gap: '10rem',
-                    marginBottom: '40px',
                     fontSize: '20px',
                     width: '85%',
+                    opacity: '0.3',
                   }}
                 >
                   {question.options?.map((option, i) => (
@@ -745,14 +723,14 @@ export const EditResponse = () => {
                     </div>
                   ))}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
                   <QuestionDeleteButton onClick={() => handleQuestionDelete(question.newQuestionId ?? null)} />
                 </div>
               </div>
             )}
           </QuestionDiv>
         ))}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
           <AddButton onClick={addQuestion}>질문 추가</AddButton>
         </div>
         <div style={{ width: '100%', display: 'flex', marginBottom: '20px' }}>
@@ -761,6 +739,9 @@ export const EditResponse = () => {
           </CustomButton>
         </div>
       </Question>
+      {snackbar && (
+        <ProjectSnackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />
+      )}
     </CreateWrapper>
   );
 };
