@@ -36,6 +36,14 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
   const [editingScore, setEditingScore] = useState(0);
   const [showAlert, setShowAlert] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  useEffect(() => {
+    if (textareaRef.current) {
+      textareaRef.current.style.height = 'auto'; // 초기화
+      textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 높이 조정
+    }
+  }, [editingContent]); // editingContent가 변경될 때마다 실행
 
   useEffect(() => {
     if (projectId) {
@@ -73,6 +81,12 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
     setEditingCommentId(comment.commentId);
     setEditingContent(comment.content);
     setEditingScore(comment.score);
+    setTimeout(() => {
+      if (textareaRef.current) {
+        textareaRef.current.style.height = 'auto'; // 초기화
+        textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 높이 조정
+      }
+    }, 0); // 높이 조정을 강제.
     console.log(editingCommentId);
   };
 
@@ -173,15 +187,15 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
                 </div>
               )}
               {editingCommentId === comment.commentId ? (
-                <input
+                <textarea
+                  ref={textareaRef}
                   value={editingContent}
                   onChange={e => setEditingContent(e.target.value)}
-                  style={{ outline: 'none' }}
+                  style={{ outline: 'none', resize: 'none', overflow: 'hidden', width: '100%' }}
                 />
               ) : (
-                <input value={comment.content} style={{ outline: 'none' }} readOnly />
+                <span dangerouslySetInnerHTML={{ __html: comment.content.replace(/\n/g, '<br />') }}></span>
               )}
-
               <div style={{ display: 'flex', justifyContent: 'space-between' }}>
                 <strong>{comment.userName}</strong>
                 {editingCommentId === comment.commentId ? (
@@ -189,7 +203,6 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
                 ) : (
                   <StarRating initialScore={comment.score} readOnly={true} onHover={false} />
                 )}
-                {/* <StarRating initialScore={comment.score} readOnly={true} onHover={false} /> */}
               </div>
             </CommentWrapper>
           ))
