@@ -112,84 +112,91 @@ export const ResponseQuestion = () => {
   };
 
   return (
-    <Question>
-      {questions.map((question, index) => (
-        <QuestionDiv key={question.questionId} className="mt-4">
-          {question.category === 'SUBJECTIVE' ? (
-            <div>
-              <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                {index + 1}번 문항
-                <input
+    <>
+      <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
+        <span className="ml-10 font-extrabold" style={{ color: '#315AF1' }}>
+          프로젝트에 대한 솔직한 의견을 남겨주세요
+        </span>
+      </div>
+      <Question>
+        {questions.map((question, index) => (
+          <QuestionDiv key={question.questionId} className="mt-4">
+            {question.category === 'SUBJECTIVE' ? (
+              <div>
+                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                  {index + 1}번 문항
+                  <input
+                    style={{
+                      marginLeft: '20px',
+                      fontSize: '20px',
+                      outline: 'none',
+                      fontWeight: 'bold',
+                      width: '80%',
+                    }}
+                    value={question.content}
+                    readOnly
+                  />
+                </div>
+
+                <AutoResizeTextarea
+                  placeholder="답변을 입력해주세요..."
                   style={{
-                    marginLeft: '20px',
-                    fontSize: '20px',
-                    outline: 'none',
-                    fontWeight: 'bold',
+                    marginTop: '10px',
+                    marginLeft: '75px',
+                    overflowY: 'auto',
                     width: '80%',
                   }}
-                  value={question.content}
-                  readOnly
+                  onChange={e => TextChange(question.questionId, e.target.value)}
+                  value={responses[question.questionId] || ''}
                 />
               </div>
-
-              <AutoResizeTextarea
-                placeholder="주관식 답변을 입력하세요..."
-                style={{
-                  marginTop: '10px',
-                  marginLeft: '75px',
-                  overflowY: 'auto',
-                  width: '80%',
-                }}
-                onChange={e => TextChange(question.questionId, e.target.value)}
-                value={responses[question.questionId] || ''}
-              />
-            </div>
-          ) : (
-            <div>
-              <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                {index + 1}번 문항
-                <input
-                  style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
-                  readOnly
-                  value={question.content}
-                />
+            ) : (
+              <div>
+                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                  {index + 1}번 문항
+                  <input
+                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
+                    readOnly
+                    value={question.content}
+                  />
+                </div>
+                <div
+                  style={{
+                    marginLeft: '75px',
+                    marginTop: '50px',
+                    display: 'flex',
+                    justifyContent: 'center',
+                    gap: '10rem',
+                    marginBottom: '40px',
+                    fontSize: '20px',
+                    width: '85%',
+                  }}
+                >
+                  {question.options?.map((option, i) => (
+                    <div key={i}>
+                      <label>
+                        <input
+                          type="radio"
+                          name={`question-${question.questionId}`}
+                          value={option}
+                          checked={responses[question.questionId] === option}
+                          onChange={() => OptionChange(question.questionId, option)}
+                        />{' '}
+                        {option}
+                      </label>
+                    </div>
+                  ))}
+                </div>
               </div>
-              <div
-                style={{
-                  marginLeft: '75px',
-                  marginTop: '50px',
-                  display: 'flex',
-                  justifyContent: 'center',
-                  gap: '10rem',
-                  marginBottom: '40px',
-                  fontSize: '20px',
-                  width: '85%',
-                }}
-              >
-                {question.options?.map((option, i) => (
-                  <div key={i}>
-                    <label>
-                      <input
-                        type="radio"
-                        name={`question-${question.questionId}`}
-                        value={option}
-                        checked={responses[question.questionId] === option}
-                        onChange={() => OptionChange(question.questionId, option)}
-                      />{' '}
-                      {option}
-                    </label>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </QuestionDiv>
-      ))}
-      <div style={{ width: '100%', display: 'flex', marginBottom: '10px' }}>
-        <CustomButton onClick={handleQuestionSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
-          제출하기
-        </CustomButton>
-      </div>
-    </Question>
+            )}
+          </QuestionDiv>
+        ))}
+        <div style={{ width: '100%', display: 'flex', marginBottom: '20px', marginTop: '20px' }}>
+          <CustomButton onClick={handleQuestionSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
+            제출하기
+          </CustomButton>
+        </div>
+      </Question>
+    </>
   );
 };

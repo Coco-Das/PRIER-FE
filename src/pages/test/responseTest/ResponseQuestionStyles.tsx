@@ -1,9 +1,18 @@
 import styled from 'styled-components';
 
-export const QuestionDiv = styled.div`
+export const Question = styled.div`
   width: 100%;
+  display: flex;
+  flex-direction: column;
   height: auto;
-  padding: 10px 20px;
+  padding: 0px 30px 0px 30px;
+  align-items: center;
+`;
+
+export const QuestionDiv = styled.div`
+  width: 90%;
+  height: auto;
+  padding: 10px 30px;
   border-radius: 8px;
   border: 2px solid transparent;
   background: linear-gradient(#fff, #fff), linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc);
@@ -34,12 +43,4 @@ export const Textarea = styled.textarea`
   min-height: 100px;
   overflow: hidden;
   box-sizing: border-box;
-`;
-export const Question = styled.div`
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  height: auto;
-  overflow-y: auto;
-  padding: 0px 30px 0px 30px;
 `;
