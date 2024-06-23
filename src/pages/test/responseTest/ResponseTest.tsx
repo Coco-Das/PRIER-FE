@@ -31,6 +31,7 @@ import CustomModal from '../../../components/utils/CustomModal';
 import styled from 'styled-components';
 import { Comment } from '../comment/Comment';
 import { useUserStore } from '../../../states/user/UserStore';
+import ProjectSnackbar from '../../../components/user/ProjectSnackbar';
 
 interface Tag {
   tagName: string;
@@ -76,6 +77,9 @@ export const ResponseTest = () => {
   const [comment, setCommnet] = useState('');
   const [showSidebar, setShowSidebar] = useState(false);
   const userProfile = useUserStore(state => state.userProfile);
+  const storedUserId = localStorage.getItem('userId');
+  const USER_ID = storedUserId ? Number(storedUserId) : null;
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const saveTagColors = (tags: Tag[]) => {
     const tagColors: { [key: string]: string } = {};
@@ -175,7 +179,7 @@ export const ResponseTest = () => {
     try {
       const response = await API_BASE_URL.delete(`/projects/${projectId}`);
       console.log('삭제 요청 성공', response.data);
-      navigate('/testlist');
+      navigate(`/testlist/${USER_ID}`);
     } catch (error) {
       console.error('에러:', error);
     }
@@ -191,15 +195,23 @@ export const ResponseTest = () => {
     }
   }, [alert, navigate]);
 
-  const formatDateTime = (dateString: string) => {
-    const date = new Date(dateString);
-    const formattedDate = `${date.getFullYear()}-${String(date.getMonth() + 1).padStart(2, '0')}-${String(
-      date.getDate(),
-    ).padStart(2, '0')} ${String(date.getHours()).padStart(2, '0')}:${String(date.getMinutes()).padStart(
-      2,
-      '0',
-    )}:${String(date.getSeconds()).padStart(2, '0')}`;
-    return formattedDate;
+  const formatDateTime = (datetime: string) => {
+    const date = new Date(datetime);
+    console.log(datetime);
+    // 9시간을 더한 새로운 Date 객체 생성
+    date.setHours(date.getHours() + 9);
+
+    // 한국 시간으로 포맷
+    return new Intl.DateTimeFormat('ko-KR', {
+      year: 'numeric', // 연도를 포함하려면 추가
+      month: '2-digit',
+      day: '2-digit',
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit', // 초를 포함하려면 추가
+      hour12: false, // 24시간 형식
+      timeZone: 'Asia/Seoul',
+    }).format(date);
   };
 
   //모달창에 전달할 연장하기 버튼의 위치
@@ -217,7 +229,7 @@ export const ResponseTest = () => {
   const handleRatingChange = (newScore: number) => {
     setScore(newScore);
   };
-  const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setCommnet(e.target.value);
   };
   const handleCommentSubmit = async () => {
@@ -225,8 +237,10 @@ export const ResponseTest = () => {
     try {
       const response = await API_BASE_URL.post(`/projects/${projectId}/comment`, jsonData);
       console.log(response.data);
+      setSnackbar({ message: '댓글이 등록되었습니다', type: 'success' });
     } catch (error) {
       console.error('에러:', error);
+      setSnackbar({ message: '댓글 등록이 실패하였습니다', type: 'error' });
     }
     setCommnet('');
     handleRatingChange(0);
@@ -332,8 +346,8 @@ export const ResponseTest = () => {
               <span className="font-bold">댓글 달기</span>
               <StarRating initialScore={score} onRatingChange={handleRatingChange} />
             </div>
-            <input
-              style={{ padding: '5px 10px', outline: 'none', marginTop: '5px' }}
+            <textarea
+              style={{ padding: '5px 10px', outline: 'none', marginTop: '5px', resize: 'none' }}
               placeholder="한줄 평"
               value={comment}
               onChange={handleCommentChange}
@@ -378,6 +392,9 @@ export const ResponseTest = () => {
         </ProjectIntro>
       </Project>
       <Comment show={showSidebar} onMouseLeave={() => setShowSidebar(false)}></Comment>
+      {snackbar && (
+        <ProjectSnackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />
+      )}
     </CreateWrapper>
   );
 };
