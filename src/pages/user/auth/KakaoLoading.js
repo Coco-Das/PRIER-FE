@@ -16,7 +16,7 @@ export default function KakaoLoading() {
       const fetchData = async () => {
         console.log('fetchData:');
         try {
-          const response = await axios.get(`http://52.78.16.255:8080/api/kakao/callback?code=${code}`);
+          const response = await axios.get(`http://13.209.18.77:8080/api/kakao/callback?code=${code}`);
 
           console.log('데이터', response.data);
           const ACCESS_TOKEN = response.data.accessToken;

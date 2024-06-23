@@ -2,7 +2,7 @@
   "name": "prier",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://52.78.16.255:8080",
+  "proxy": "http://13.209.18.77:8080",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
