@@ -43,7 +43,8 @@ interface Project {
 function TestList() {
   const { userId } = useParams<{ userId: string }>();
   const userProfile = useOtherProfileStore(state => state.otherProfile);
-  const [filter, setFilter] = useState<'0' | '1' | '2'>('2');
+  console.log(userProfile.nickname);
+  const [filter, setFilter] = useState<number>(0);
   const [page, setPage] = useState(0);
   const [projects, setProjects] = useState<Project[]>([]);
   const [totalPages, setTotalPages] = useState(0);
@@ -52,17 +53,16 @@ function TestList() {
   const listWrapperRef = useRef<HTMLDivElement>(null);
   const [last, setLast] = useState(false);
 
-  // const [totalElements, setTotalElements] = useState(0);
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
 
-  const handleFilterChange = (newFilter: '0' | '1' | '2') => {
+  const handleFilterChange = (newFilter: number) => {
     setFilter(newFilter);
     navigateToPage(0, newFilter);
   };
 
   useEffect(() => {
     const queryParams = new URLSearchParams(location.search);
-    const currentFilter = (queryParams.get('filter') as '0' | '1' | '2') || '2';
+    const currentFilter = parseInt(queryParams.get('filter') || '0', 10);
     const currentPage = parseInt(queryParams.get('page') || '0', 10);
     setFilter(currentFilter);
     setPage(currentPage);
@@ -74,14 +74,16 @@ function TestList() {
     }
   }, [userId, filter, page]);
 
-  const handleGetInfo = async (userId: string, filter: '0' | '1' | '2', page: number) => {
+  const handleGetInfo = async (userId: string, filter: number, page: number) => {
     try {
-      const response = await API_BASE_URL.get(`/projects/user-projects?userId=${userId}&filter=${filter}&page=${page}`);
+      console.log(`Requesting with userId: ${userId}, filter: ${filter}, page: ${page}`);
+      const response = await API_BASE_URL.get(`/projects/user-projects?`, {
+        params: { userId, filter, page },
+      });
       const data = response.data;
 
       setProjects(data.content);
       setTotalPages(data.totalPages);
-      // setTotalElements(data.totalElements);
 
       const storedColors = getTagColors();
       const projectsWithColoredTags = data.content.map((project: Project) => {
@@ -120,9 +122,9 @@ function TestList() {
     return colors[randomIndex];
   };
 
-  const navigateToPage = (newPage: number, newFilter: '0' | '1' | '2') => {
+  const navigateToPage = (newPage: number, newFilter: number) => {
     const queryParams = new URLSearchParams();
-    queryParams.set('filter', newFilter);
+    queryParams.set('filter', newFilter.toString());
     queryParams.set('page', newPage.toString());
     navigate(`/testlist/${userId}?${queryParams.toString()}`);
     if (listWrapperRef.current) {
@@ -137,7 +139,7 @@ function TestList() {
       case 'DEVELOPING':
         return '개발 중';
       case 'PLANNING':
-        return '기획 중';
+        return '기획';
       default:
         return status;
     }
@@ -171,20 +173,28 @@ function TestList() {
   return (
     <ListWrapper ref={listWrapperRef}>
       <span className="ml-4 font-extrabold mt-3" style={{ wordBreak: 'break-word', color: '#315AF1' }}>
-        {userProfile.nickname} 프로젝트
+        {userProfile.nickname} 님의 프로젝트
       </span>
       <div className="ml-5 mt-2" style={{ display: 'flex', gap: '15px', width: '90%', height: '100%' }}>
-        <FilterBtn $isActive={filter === '2'} onClick={() => handleFilterChange('2')}>
+        <FilterBtn $isActive={filter === 0} onClick={() => handleFilterChange(0)}>
           최신순
         </FilterBtn>
-        <FilterBtn $isActive={filter === '1'} onClick={() => handleFilterChange('1')}>
+        <FilterBtn $isActive={filter === 1} onClick={() => handleFilterChange(1)}>
           등록순
         </FilterBtn>
-        <FilterBtn $isActive={filter === '0'} onClick={() => handleFilterChange('0')}>
+        <FilterBtn $isActive={filter === 2} onClick={() => handleFilterChange(2)}>
           진행중인 프로젝트만 보기
         </FilterBtn>
       </div>
-      <div className="mt-5" style={{ display: 'flex', flexDirection: 'column', gap: '20px' }}>
+      <div
+        className="mt-5"
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '20px',
+          alignItems: 'center',
+        }}
+      >
         {projects.map(project => (
           <ListDiv key={project.projectId}>
             <ImageWrapper>
@@ -237,7 +247,7 @@ function TestList() {
                 <p>배포 링크</p>
                 <span
                   className="font-bold underline"
-                  style={{ marginLeft: 'auto', fontSize: '16px', color: '#828282', marginTop: 'auto' }}
+                  style={{ marginLeft: 'auto', fontSize: '14px', color: '#828282', marginTop: 'auto' }}
                 >
                   바로가기 &rarr;
                 </span>
@@ -253,24 +263,42 @@ function TestList() {
           </ListDiv>
         ))}
       </div>
-      <div
-        style={{
-          marginTop: '20px',
-          display: 'flex',
-          justifyContent: 'center',
-          fontSize: '16px',
-        }}
-      >
-        <button onClick={() => setPage(page => page - 1)} disabled={page === 0}>
-          &lt;
-        </button>
-        {renderPagination()}
-        <button onClick={() => setPage(page => page + 1)} disabled={last}>
-          &gt;
-        </button>
-      </div>
+      {projects.length > 0 ? (
+        <div
+          style={{
+            marginTop: '20px',
+            display: 'flex',
+            justifyContent: 'center',
+            fontSize: '16px',
+          }}
+        >
+          <button onClick={() => setPage(page => page - 1)} disabled={page === 0}>
+            &lt;
+          </button>
+          {renderPagination()}
+          <button onClick={() => setPage(page => page + 1)} disabled={last}>
+            &gt;
+          </button>
+        </div>
+      ) : (
+        <div
+          style={{
+            width: '100%',
+            height: '500px',
+            display: 'flex',
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: '#cccccc',
+          }}
+        >
+          <span> {filter === 2 ? '현재 진행 중인 프로젝트가 없습니다.' : '프로젝트가 없습니다.'}</span>
+        </div>
+      )}
     </ListWrapper>
   );
 }
 
 export default TestList;
+
+// api/chatgpt/projectId

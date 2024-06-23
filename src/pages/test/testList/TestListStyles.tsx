@@ -5,12 +5,11 @@ export const ListWrapper = styled.div`
   width: 100%;
   height: auto;
   display: flex;
-  overflow-y: auto;
   flex-direction: column;
   padding: 0px 30px 20px 30px;
 `;
+
 export const FilterBtn = styled.button<{ $isActive: boolean }>`
-  /* width: 10%; */
   background-color: ${props => (props.$isActive ? '#315af1' : 'white')};
   color: ${props => (props.$isActive ? 'white' : 'black')};
   height: 100%;
@@ -21,9 +20,10 @@ export const FilterBtn = styled.button<{ $isActive: boolean }>`
     background-color: ${props => (props.$isActive ? '#315af1' : '#e0e0e0')};
   }
 `;
+
 export const ListDiv = styled.div`
-  width: 100%;
-  height: 350px;
+  width: 90%;
+  height: 300px;
   display: flex;
   padding: 20px 40px;
   border: 1px solid #a9b5bc;
@@ -54,7 +54,7 @@ export const DivWrapper = styled.div`
 export const PurpleDiv = styled.div`
   background-color: #b193d040;
   border: 1px solid #e0e0e0;
-  gap: 15px;
+  gap: 8px;
   display: flex;
   flex-direction: column;
   height: 50%;
@@ -81,10 +81,11 @@ export const GreenDiv = styled.div`
   }
 `;
 export const TagWrapper = styled.div`
-  padding-left: 30px;
+  margin-left: 30px;
   display: flex;
   position: absolute;
   flex-wrap: nowrap;
+  width: 100%;
   top: 70%;
   left: 0%;
   gap: 5px;
