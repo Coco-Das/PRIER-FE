@@ -115,12 +115,11 @@ export const SmallText = styled.p`
   cursor: pointer;
 `;
 export const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0', '#ACA4D5', '#4188FE'];
-const getRandomColor = () => colors[Math.floor(Math.random() * colors.length)];
 
 export const TagContainer = styled.div`
   font-size: 14px;
   padding: 0.1rem 0.5rem;
-  background-color: ${props => props.color || getRandomColor()};
+  background-color: ${props => props.color};
   font-weight: 300;
   border-radius: 15px;
   margin-right: 10px;
@@ -236,6 +235,7 @@ export const ReviewTeam = styled.h2`
 
 //기프티콘
 export const CardContainer = styled.div`
+  cursor: pointer;
   perspective: 1000px;
   display: flex;
   width: 35rem;
@@ -264,7 +264,7 @@ export const CardFront = styled.div`
   top: 0;
   left: 0;
   padding: 20px;
-  border: 1px solid transparent;
+  border: 1.5px solid transparent;
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
 `;
@@ -278,7 +278,7 @@ export const CardBack = styled.div`
   left: 0;
   padding: 30px;
   transform: rotateY(180deg);
-  border: 1px solid transparent;
+  border: 2px solid transparent;
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
 `;
@@ -355,6 +355,7 @@ export const PurchaseButton = styled.button`
 export const GiftTextWrapper = styled.div`
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   width: 100%;
   gap: 1em;
 `;

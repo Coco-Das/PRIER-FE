@@ -25,6 +25,8 @@ import {
   AccountLink,
   AccountIcon,
   EmptyContainer,
+  AccountGithub,
+  ProfileDetail,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
@@ -37,6 +39,19 @@ import GithubIcon from '../../../assets/github.png';
 import FigmaIcon from '../../../assets/figma.png';
 import NotionIcon from '../../../assets/notion.png';
 import AIReport from '../../../components/utils/AIReport';
+import { styled } from 'styled-components';
+import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
+const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
+  <Tooltip {...props} classes={{ popper: className }} />
+))(() => ({
+  [`& .${tooltipClasses.tooltip}`]: {
+    backgroundColor: 'black',
+    color: 'white',
+    borderRounded: '10px',
+    border: '1px solid black',
+    fontSize: 13,
+  },
+}));
 
 export default function UserProfile() {
   const userProfile = useOtherProfileStore(state => state.otherProfile);
@@ -52,43 +67,50 @@ export default function UserProfile() {
             </span>
             <ProfileTextContainer>
               <span className="flex">
-                <ProfileText>닉네임 : </ProfileText>
-                <ProfileText> {userProfile.nickname} </ProfileText>
+                <ProfileText>이름 : </ProfileText>
+                <ProfileDetail> {userProfile.nickname} </ProfileDetail>
               </span>
             </ProfileTextContainer>
             <ProfileTextContainer>
               <span className="flex">
                 <ProfileText>소속 : </ProfileText>
-                <ProfileText> {userProfile.belonging} </ProfileText>
+                <ProfileDetail> {userProfile.belonging} </ProfileDetail>
               </span>
             </ProfileTextContainer>
             <ProfileTextContainer>
               <span className="flex">
                 <ProfileText>등급 : </ProfileText>
-                <ProfileText>{userProfile.rank} </ProfileText>
+                <ProfileDetail>{userProfile.rank} </ProfileDetail>
               </span>
             </ProfileTextContainer>
             <ProfileTextContainer>
-              <ProfileText>계정 정보 : {userProfile.email}</ProfileText>
+              <span className="flex">
+                <ProfileText>계정 : </ProfileText>
+                <ProfileDetail>{userProfile.email}</ProfileDetail>
+              </span>
             </ProfileTextContainer>
             <ProfileAccountContainer>
               <div className="flex items-center gap-5">
-                <AccountLink href={userProfile.blog ?? ''} target="_blank">
-                  <AccountIcon src={BlogIcon}></AccountIcon>
-                  Blog
-                </AccountLink>
-                <AccountLink href={userProfile.github ?? ''} target="_blank">
-                  <AccountIcon src={GithubIcon}></AccountIcon>
-                  Github
-                </AccountLink>
-                <AccountLink href={userProfile.figma ?? ''} target="_blank">
-                  <AccountIcon src={FigmaIcon}></AccountIcon>
-                  Figma
-                </AccountLink>
-                <AccountLink href={userProfile.notion ?? ''} target="_blank">
-                  <AccountIcon src={NotionIcon}></AccountIcon>
-                  Notion
-                </AccountLink>
+                <AccountTooltip title="Blog" placement="bottom">
+                  <AccountLink href={userProfile.blog ?? '#'} target="_blank">
+                    <AccountIcon src={BlogIcon}></AccountIcon>
+                  </AccountLink>
+                </AccountTooltip>
+                <AccountTooltip title="Github" placement="bottom">
+                  <AccountLink href={userProfile.github ?? '#'} target="_blank">
+                    <AccountGithub src={GithubIcon}></AccountGithub>
+                  </AccountLink>
+                </AccountTooltip>
+                <AccountTooltip title="Figma" placement="bottom">
+                  <AccountLink href={userProfile.figma ?? '#'} target="_blank">
+                    <AccountIcon src={FigmaIcon}></AccountIcon>
+                  </AccountLink>
+                </AccountTooltip>
+                <AccountTooltip title="Notion" placement="bottom">
+                  <AccountLink href={userProfile.notion ?? '#'} target="_blank">
+                    <AccountIcon src={NotionIcon}></AccountIcon>
+                  </AccountLink>
+                </AccountTooltip>
               </div>
             </ProfileAccountContainer>
           </div>

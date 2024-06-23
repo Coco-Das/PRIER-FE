@@ -27,6 +27,12 @@ export const ProfileText = styled.h2`
   margin-right: 20px;
   cursor: default;
 `;
+export const ProfileDetail = styled.p`
+  font-size: 19px;
+  font-weight: 500;
+  margin-right: 20px;
+  cursor: default;
+`;
 export const CorrectText = styled.p`
   font-size: 15px;
   font-weight: 300;
@@ -45,14 +51,12 @@ export const AccountLink = styled.a`
   cursor: pointer;
 `;
 export const EditAccountText = styled.p`
-  display: flex;
-  font-size: 18px;
-  color: #315af1;
   cursor: pointer;
 `;
 export const StyledInput = styled.input`
   font-size: 18px;
   border-bottom: 1px solid #828282;
+  background: transparent;
   &:focus {
     outline: none;
     border-bottom: 1.5px solid #4188fe;
@@ -61,11 +65,18 @@ export const StyledInput = styled.input`
 `;
 export const ProfileAccountContainer = styled.div`
   display: flex;
-  flex-direction: column;
+  justify-content: space-between;
+  align-items: center;
+  margin-left: 10px;
   width: 100%;
 `;
 export const AccountIcon = styled.img`
-  width: 2.5rem;
+  width: 2.8rem;
+`;
+export const AccountGithub = styled.img`
+  width: 2.4rem;
+  border: none;
+  border-radius: 10px;
 `;
 //자기소개
 export const IntroduceContainer = styled.div`

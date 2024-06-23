@@ -128,7 +128,7 @@ interface OrderButtonProps {
 export const OrderButton = styled.button<OrderButtonProps>`
   border: none;
   border-radius: 20px;
-  padding: 4px 6px;
+  padding: 4px 10px;
   margin-bottom: 3%;
   font-size: 14px;
   font-weight: 300;
@@ -142,27 +142,27 @@ const expandInput = keyframes`
   }
   to {
     width: 200px;
- box-shadow: 0.5px 0.5px 1px #0e0e0e, -0.5px -0.5px 1px #828282, inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #5f5e5e;
+ box-shadow: 0.7px 0.7px 1px #4188fe, -0.7px -0.7px 1px #4188fe, inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #4188fe;
   }
 `;
 
 export const SearchInputWrapper = styled.div`
   position: relative;
   --size-button: 40px;
-  color: white;
+  color: #315af1;
 `;
 
 export const StyledInput = styled.input`
   padding-left: var(--size-button);
   height: var(--size-button);
-  font-size: 15px;
+  font-size: 16px;
   border: none;
-  color: #fff;
+  color: #315af1;
   outline: none;
   width: var(--size-button);
   transition: all ease 0.3s;
-  background-color: #315af1;
-  box-shadow: 0.5px 0.5px 1px #0e0e0e, -0.5px -0.5px 1px #828282, inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #5f5e5e;
+  background-color: white;
+  box-shadow: 0.7px 0.7px 1px #4188fe, -0.7px -0.7px 1px #4188fe, inset 0px 0px 0px #4188fe, inset 0px -0px 0px #4188fe;
   border-radius: 50px;
   cursor: pointer;
 

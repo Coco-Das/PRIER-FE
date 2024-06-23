@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
-import { LinkText, ProjectContainer, ProjectWrapper, ProjectImg, TagContainer, Base } from './UserStyle';
+import { LinkText, ProjectContainer, ProjectWrapper, ProjectImg, TagContainer, Base, colors } from './UserStyle';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
@@ -36,8 +36,10 @@ export default function ProjectPreview() {
           </div>
           {project.mainImageUrl ? <ProjectImg src={project.mainImageUrl} alt="My Project" /> : <Base />}
           <div className="flex">
-            {project.tags.map(tag => (
-              <TagContainer key={tag.tagId}>{tag.tagName}</TagContainer>
+            {project.tags.map((tag, index) => (
+              <TagContainer key={tag.tagId} color={colors[index % colors.length]}>
+                {tag.tagName}
+              </TagContainer>
             ))}
           </div>
           <div className="flex justify-between">
