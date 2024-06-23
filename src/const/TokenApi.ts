@@ -3,7 +3,8 @@ import axios from 'axios';
 export const KAKAO_ACCESS_TOKEN = localStorage.getItem('kakaoAccessToken');
 
 export const API_BASE_URL = axios.create({
-  baseURL: 'http://3.35.136.167:8080/api',
+  baseURL: 'http://13.209.18.77:8080/api',
+
 });
 //요청 인터셉터
 API_BASE_URL.interceptors.request.use(

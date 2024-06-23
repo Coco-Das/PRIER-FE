@@ -50,11 +50,13 @@ const BtnLabel = styled.label<{ $isSubjective: boolean }>`
 `;
 
 export const ToggleBtn: React.FC<ToggleBtnProps> = ({ currentType, onToggle }) => {
+  const uniqueId = `toggleBtn_${Math.random().toString(36).slice(2, 11)}`;
+
   return (
     <ToggleWrapper onClick={onToggle}>
       <div style={{ width: '50%', textAlign: 'center', color: 'gray' }}>주관식</div>
       <div style={{ width: '50%', textAlign: 'center', color: 'gray' }}>객관식</div>
-      <Checkbox type="checkbox" id="toggleBtn" checked={currentType === 'SUBJECTIVE'} readOnly />
+      <Checkbox type="checkbox" id={uniqueId} checked={currentType === 'SUBJECTIVE'} readOnly />
       <BtnLabel htmlFor="toggleBtn" $isSubjective={currentType === 'SUBJECTIVE'}></BtnLabel>
     </ToggleWrapper>
   );

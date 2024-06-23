@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import PropTypes from 'prop-types';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
@@ -39,6 +39,7 @@ import { DropDownContainer } from '../../../components/utils/DropDown';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import CustomAlert from '../../../components/utils/CustomAlert';
 import { useNavigate } from 'react-router-dom';
+import ProjectSnackbar from '../../../components/user/ProjectSnackbar';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
@@ -99,34 +100,43 @@ export const CreateTest = () => {
   const [showAlert, setShowAlert] = useState(false);
   const [alert, setAlert] = useState(false);
   const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
     return colors[randomIndex];
   };
 
-  const addQuestion = () => {
+  //질문 추가
+  const addQuestion = useCallback(() => {
     setQuestions(prevQuestions => [
       ...prevQuestions,
       { id: prevQuestions.length + 1, type: 'SUBJECTIVE', content: '' },
     ]);
-  };
+  }, []);
 
-  const toggleQuestionType = (id: number) => {
-    setQuestions(prevQuestions =>
-      prevQuestions.map(question =>
-        question.id === id
-          ? {
-              ...question,
-              type: question.type === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
-              options: question.type === 'SUBJECTIVE' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
-              content: '',
-            }
-          : question,
-      ),
-    );
-  };
+  //토글
+  const toggleQuestionType = useCallback(
+    (id: number) => {
+      setQuestions(prevQuestions =>
+        prevQuestions.map(question =>
+          question.id === id
+            ? {
+                ...question,
+                type: question.type === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
+                options:
+                  question.type === 'SUBJECTIVE' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
+                content: question.type === 'SUBJECTIVE' ? '' : question.content,
+              }
+            : question,
+        ),
+      );
+    },
+    [setQuestions],
+  );
 
+  //메인이미지 변경
   const handleMainImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
     if (file) {
@@ -135,7 +145,7 @@ export const CreateTest = () => {
       reader.readAsDataURL(file);
     }
   };
-
+  //추가 이미지 변경
   const handleAdditionalImageChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const files = event.target.files;
     if (files) {
@@ -152,25 +162,32 @@ export const CreateTest = () => {
     }
   };
 
+  //메인 이미지 삭제
   const handleDeleteMainImage = () => {
     setMainImageUrl(null);
   };
 
+  //추가 이미지 삭제
   const handleDeleteAdditionalImage = (index: number) => {
     setAdditionalImageUrls(prevImageUrls => prevImageUrls.filter((_, i) => i !== index));
   };
 
+  //메인이미지 업로드 버튼 클릭
   const handleMainButtonClick = () => {
     mainFileInputRef.current?.click();
   };
 
+  //추가이미지 업로드 버튼 클릭
   const handleAdditionalButtonClick = () => {
     additionalFileInputRef.current?.click();
   };
+
+  //태그 변경
   const handleTagInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(event.target.value);
   };
 
+  //태그 엔터 입력 & 태그 2개 제한
   const handleTagInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && tagInput.trim()) {
       event.preventDefault();
@@ -185,47 +202,60 @@ export const CreateTest = () => {
       }
     }
   };
+
+  //질문 삭제
   const handleQuestionDelete = (id: number) => {
     setQuestions(prevQuestions => prevQuestions.filter(question => question.id !== id));
   };
 
+  //소개 변경
   const handleIntroduceChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setIntroduce(event.target.value);
   };
 
+  //목표 변경
   const handleGoalChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setGoal(event.target.value);
   };
+
+  //타이틀 변경
   const handleTitleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTitle(event.target.value);
   };
 
+  //단계 변경
   const handleStepChange = (selectedStep: string) => {
     setStep(selectedStep);
   };
 
+  //팀이름 변경
   const handleTeamNameChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTeamName(event.target.value);
   };
 
+  //팀설명 변경
   const handleTeamDescriptionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTeamDescription(event.target.value);
   };
 
+  //팀원 변경
   const handleTeamMateChange = (event: React.ChangeEvent<HTMLTextAreaElement>) => {
     setTeamMate(event.target.value);
   };
 
+  //랑크 변경
   const handleLinkChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setLink(event.target.value);
   };
 
+  //질문 내용 변경
   const handleQuestionContentChange = (id: number, content: string) => {
     setQuestions(prevQuestions =>
       prevQuestions.map(question => (question.id === id ? { ...question, content } : question)),
     );
   };
 
+  //태그 삭제
   const handleDeleteTag = (index: number) => {
     setTags(tags => tags.filter((_, i) => i !== index));
   };
@@ -290,8 +320,12 @@ export const CreateTest = () => {
       const setProjectId = useProjectStore.getState().setProjectId;
       setProjectId(projectId);
       console.log(jsonData);
-      navigate(`/responsetest/${projectId}`);
+      setSnackbar({ message: '프로젝트가 등록되었습니다', type: 'success' });
+      setTimeout(() => {
+        navigate(`/responsetest/${projectId}`);
+      }, 500); // 2초 지연
     } catch (error) {
+      setSnackbar({ message: '프로젝트가 등록이 실패하였습니다.', type: 'error' });
       console.error('에러:', error);
       console.log('JSON Data:', jsonData);
     }
@@ -442,23 +476,31 @@ export const CreateTest = () => {
           </GreenDiv>
         </ProjectIntro>
       </Project>
+      <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
+        <Settings />
+        <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
+          상세한 피드백을 위한 원하는 질문 폼을 작성해주세요
+        </span>
+      </div>
+
       <Question>
-        <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-          <Settings />
-          <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
-            상세한 피드백을 위한 원하는 질문 폼을 작성해주세요
-          </span>
-        </div>
         {questions.map((question, index) => (
           <QuestionDiv key={question.id} className="mt-4">
             {question.type === 'SUBJECTIVE' ? (
               <div>
-                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    fontSize: '15px',
+                    alignItems: 'center',
+                    fontWeight: 'bold',
+                  }}
+                >
                   {index + 1}번 문항
                   <input
                     placeholder="질문을 입력하세요"
                     style={{
-                      marginLeft: '20px',
+                      marginLeft: '30px',
                       fontSize: '20px',
                       outline: 'none',
                       fontWeight: 'bold',
@@ -471,27 +513,24 @@ export const CreateTest = () => {
                     <ToggleBtn currentType={question.type} onToggle={() => toggleQuestionType(question.id)} />
                   </div>
                 </div>
-                <AutoResizeTextarea
-                  placeholder="주관식 답변을 입력하세요..."
-                  style={{
-                    marginTop: '10px',
-                    marginLeft: '75px',
-                    overflowY: 'auto',
-                    width: '80%',
-                  }}
-                  readOnly
-                />
-                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
                   <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
                 </div>
               </div>
             ) : (
               <div>
-                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                <div
+                  style={{
+                    display: 'flex',
+                    fontSize: '15px',
+                    alignItems: 'center',
+                    fontWeight: 'bold',
+                  }}
+                >
                   {index + 1}번 문항
                   <input
                     placeholder="질문을 입력하세요"
-                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
+                    style={{ marginLeft: '30px', fontSize: '20px', outline: 'none', width: '80%' }}
                     onChange={e => handleQuestionContentChange(question.id, e.target.value)}
                     value={question.content}
                   />
@@ -506,9 +545,9 @@ export const CreateTest = () => {
                     display: 'flex',
                     justifyContent: 'center',
                     gap: '10rem',
-                    marginBottom: '40px',
-                    fontSize: '20px',
+                    fontSize: '18px',
                     width: '85%',
+                    opacity: '0.3',
                   }}
                 >
                   {question.options?.map((option, i) => (
@@ -520,14 +559,14 @@ export const CreateTest = () => {
                     </div>
                   ))}
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'right' }}>
+                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
                   <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
                 </div>
               </div>
             )}
           </QuestionDiv>
         ))}
-        <div style={{ display: 'flex', justifyContent: 'center' }}>
+        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
           <AddButton onClick={addQuestion}>질문 추가</AddButton>
         </div>
         <div style={{ width: '100%', display: 'flex', marginBottom: '20px' }}>
@@ -536,6 +575,9 @@ export const CreateTest = () => {
           </CustomButton>
         </div>
       </Question>
+      {snackbar && (
+        <ProjectSnackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />
+      )}
     </CreateWrapper>
   );
 };

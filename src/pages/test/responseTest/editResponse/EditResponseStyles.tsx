@@ -60,8 +60,8 @@ export const Textarea = styled.textarea`
 `;
 export const StyledImg = styled.img`
   max-width: 100%;
-  width: 400px;
-  height: 300px;
+  width: 300px;
+  height: 150px;
   object-fit: contain;
   border: 1px solid #ccc;
   border-radius: 20px;
@@ -71,7 +71,7 @@ export const ImageWrapper = styled.div`
   position: relative;
   display: inline-block;
   margin-top: 10px;
-  width: 400px;
+  width: 200px;
   max-width: 100%;
 `;
 
@@ -101,8 +101,8 @@ export const AddButton = styled(AddBtn)`
   }
 `;
 export const QuestionDeleteButton = styled(DeleteBtn)`
-  width: 25px;
-  height: 25px;
+  width: 23px;
+  height: 23px;
   &:hover {
     cursor: pointer;
   }
@@ -247,12 +247,13 @@ export const Question = styled.div`
   display: flex;
   flex-direction: column;
   height: auto;
+  align-items: center;
 `;
 
 export const QuestionDiv = styled.div`
-  width: 100%;
+  width: 90%;
   height: auto;
-  padding: 10px 20px;
+  padding: 10px 30px;
   border-radius: 8px;
   border: 2px solid transparent;
   background: linear-gradient(#fff, #fff), linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc);
