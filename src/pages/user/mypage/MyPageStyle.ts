@@ -12,7 +12,57 @@ export const ProfileContainer = styled.div`
   border-radius: 8px;
   padding: 10px;
 `;
-export const StyledUserIcon = styled(UserIcon)``;
+export const ProfileImgContainer = styled.div`
+  position: relative;
+  width: 20rem;
+  height: 15rem;
+  border: none;
+  border-radius: 50%;
+  overflow: hidden;
+  &:hover .edit-overlay {
+    opacity: 1;
+  }
+`;
+export const StyledUserIcon = styled(UserIcon)`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+export const StyledProfile = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+`;
+export const EditOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 50%;
+`;
+export const EditingOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0);
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 1;
+  transition: opacity 0.3s ease-in-out;
+  border-radius: 50%;
+`;
 export const ProfileTextContainer = styled.div`
   display: flex;
   width: 100%;

@@ -17,7 +17,6 @@ import {
   StepLine,
   StepsContainer,
   MypageChartIcon,
-  StyledUserIcon,
   TitleText,
   ProfileAccountContainer,
   AIReportContainer,
@@ -27,6 +26,9 @@ import {
   EmptyContainer,
   AccountGithub,
   ProfileDetail,
+  ProfileImgContainer,
+  StyledProfile,
+  StyledUserIcon,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
@@ -41,6 +43,7 @@ import NotionIcon from '../../../assets/notion.png';
 import AIReport from '../../../components/utils/AIReport';
 import { styled } from 'styled-components';
 import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
+
 const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(() => ({
@@ -60,7 +63,9 @@ export default function UserProfile() {
     <div className="flex-col overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
       <div className="flex w-full h-[40%] mb-5">
         <ProfileContainer>
-          <StyledUserIcon></StyledUserIcon>
+          <ProfileImgContainer>
+            {userProfile.imgUrl ? <StyledProfile src={userProfile.imgUrl} /> : <StyledUserIcon />}
+          </ProfileImgContainer>
           <div className="flex-col mt-3 w-full">
             <span className="flex items-center justify-between">
               <Title>{userProfile.nickname} 님의 프로필</Title>

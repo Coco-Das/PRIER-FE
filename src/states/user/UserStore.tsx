@@ -13,6 +13,7 @@ interface Comment {
   score: number;
 }
 interface UserProfile {
+  imgUrl: string | null;
   nickname: string;
   belonging: string | null;
   rank: string;
@@ -40,6 +41,7 @@ interface UserStore {
   userProfile: UserProfile;
   setUserProfile: (profile: UserProfile) => void;
   setLogout: () => void;
+  setImgUrl: (imgUrl: string) => void;
   setNickname: (nickname: string) => void;
   setBelonging: (belonging: string) => void;
   setEmail: (email: string) => void;
@@ -52,6 +54,7 @@ interface UserStore {
 }
 
 const initialProfile: UserProfile = {
+  imgUrl: '',
   nickname: '',
   belonging: '',
   rank: '',
@@ -83,6 +86,9 @@ export const useUserStore = create<UserStore>(set => ({
   setLogout: () => {
     sessionStorage.removeItem('nickname');
     set({ userProfile: initialProfile });
+  },
+  setImgUrl: (imgUrl: string) => {
+    set(state => ({ userProfile: { ...state.userProfile, imgUrl } }));
   },
   setNickname: (nickname: string) => {
     set(state => ({
@@ -152,6 +158,7 @@ interface OtherComment {
 }
 
 interface OtherProfile {
+  imgUrl: string | null;
   nickname: string;
   belonging: string | null;
   rank: string;
@@ -181,6 +188,7 @@ interface OtherProfileStore {
 }
 
 const initialOtherProfile: OtherProfile = {
+  imgUrl: '',
   nickname: '',
   belonging: '',
   rank: '',

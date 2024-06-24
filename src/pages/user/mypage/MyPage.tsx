@@ -17,7 +17,6 @@ import {
   StepLine,
   StepsContainer,
   MypageChartIcon,
-  StyledUserIcon,
   TitleText,
   ProfileAccountContainer,
   CorrectText,
@@ -30,7 +29,13 @@ import {
   EmptyContainer,
   ProfileDetail,
   AccountGithub,
+  ProfileImgContainer,
+  EditOverlay,
+  StyledUserIcon,
+  EditingOverlay,
+  StyledProfile,
 } from './MyPageStyle';
+import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
@@ -42,6 +47,7 @@ import {
   EditEmail,
   EditFigma,
   EditGithub,
+  EditImg,
   EditIntro,
   EditNickName,
   EditNotion,
@@ -88,6 +94,9 @@ export default function MyPage() {
   const navigate = useNavigate();
   const userProfile = useUserStore(state => state.userProfile);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
+  const [showEditImgAlert, setShowEditImgAlert] = useState(false);
+  const [isEditingImg, setIsEditingImg] = useState(false);
+  const [newImg, setNewImg] = useState<string>('');
   const [showEditNameAlert, setShowEditNameAlert] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [newNickName, setNewNickName] = useState<string>('');
@@ -139,6 +148,26 @@ export default function MyPage() {
     setShowLogoutAlert(false);
     await UseFetchLogout();
     navigate('/firstmain');
+  };
+  //이미지 수정
+  const setEditImg = () => {
+    setIsEditingImg(true);
+    setShowEditImgAlert(true);
+  };
+
+  const saveEditImg = async () => {
+    try {
+      await EditImg(newImg);
+      setIsEditingImg(false);
+      setShowEditImgAlert(false);
+    } catch (error) {
+      alert('이미지 수정 중 오류 발생:');
+    }
+  };
+  const cancleEditImg = () => {
+    setIsEditingImg(false);
+    setShowEditImgAlert(false);
+    setNewImg('');
   };
 
   //닉네임 수정
@@ -226,14 +255,12 @@ export default function MyPage() {
   const saveEditBlog = async () => {
     try {
       await EditBlog(newBlog);
-      setIsEditingBlog(false);
       setShowEditBlogAlert(false);
     } catch (error) {
       alert('블로그 주소 수정 실패');
     }
   };
   const cancleEditBlog = () => {
-    setIsEditingBlog(false);
     setShowEditBlogAlert(false);
     setNewBlog('');
   };
@@ -250,14 +277,12 @@ export default function MyPage() {
   const saveEditGithub = async () => {
     try {
       await EditGithub(newGithub);
-      setIsEditingGithub(false);
       setShowEditGithubAlert(false);
     } catch (error) {
       alert('깃허브 주소 수정 실패');
     }
   };
   const cancleEditGithub = () => {
-    setIsEditingGithub(false);
     setShowEditGithubAlert(false);
     setNewGithub('');
   };
@@ -274,14 +299,12 @@ export default function MyPage() {
   const saveEditFigma = async () => {
     try {
       await EditFigma(newFigma);
-      setIsEditingFigma(false);
       setShowEditFigmaAlert(false);
     } catch (error) {
       alert('피그마 주소 수정 실패');
     }
   };
   const cancleEditFigma = () => {
-    setIsEditingFigma(false);
     setShowEditFigmaAlert(false);
     setNewFigma('');
   };
@@ -298,14 +321,12 @@ export default function MyPage() {
   const saveEditNotion = async () => {
     try {
       await EditNotion(newNotion);
-      setIsEditingNotion(false);
       setShowEditNotionAlert(false);
     } catch (error) {
       alert('노션 주소 수정 실패');
     }
   };
   const cancleEditNotion = () => {
-    setIsEditingNotion(false);
     setShowEditNotionAlert(false);
     setNewNotion('');
   };
@@ -377,6 +398,14 @@ export default function MyPage() {
       {showLogoutAlert && (
         <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
       )}
+      {showEditImgAlert && (
+        <AccountEdit
+          message="프로필 이미지를 변경하시겠습니까?"
+          onConfirm={saveEditImg}
+          onCancel={cancleEditImg}
+          onInput={BlogInputChange}
+        />
+      )}
       {showEditNameAlert && (
         <CustomAlert message="닉네임을 수정 하시겠습니까?" onConfirm={saveEditName} onCancel={cancleEditName} />
       )}
@@ -387,14 +416,12 @@ export default function MyPage() {
         <CustomAlert message="계정 정보를 수정 하시겠습니까?" onConfirm={saveEditEmail} onCancel={cancleEditEmail} />
       )}
       {showEditBlogAlert && (
-        <>
-          <AccountEdit
-            message="블로그 주소를 수정 하시겠습니까?"
-            onConfirm={saveEditBlog}
-            onCancel={cancleEditBlog}
-            onInput={BlogInputChange}
-          />
-        </>
+        <AccountEdit
+          message="블로그 주소를 수정 하시겠습니까?"
+          onConfirm={saveEditBlog}
+          onCancel={cancleEditBlog}
+          onInput={BlogInputChange}
+        />
       )}
       {showEditGithubAlert && (
         <AccountEdit
@@ -426,7 +453,20 @@ export default function MyPage() {
 
       <div className="flex w-full h-[40%] mb-5">
         <ProfileContainer>
-          <StyledUserIcon></StyledUserIcon>
+          {isEditingImg ? (
+            <ProfileImgContainer>
+              {userProfile.imgUrl ? <StyledProfile src={userProfile.imgUrl} /> : <StyledUserIcon />}
+              <EditingOverlay></EditingOverlay>
+            </ProfileImgContainer>
+          ) : (
+            <ProfileImgContainer>
+              {userProfile.imgUrl ? <StyledProfile src={userProfile.imgUrl} /> : <StyledUserIcon />}
+              <EditOverlay className="edit-overlay" onClick={setEditImg}>
+                <ModeEditOutlineRoundedIcon color="inherit" />
+              </EditOverlay>
+            </ProfileImgContainer>
+          )}
+
           <div className="flex-col mt-3 w-full">
             <div className="w-full flex items-center justify-between ml-[10px]">
               <Title>반갑습니다 {userProfile.nickname} 님</Title>
