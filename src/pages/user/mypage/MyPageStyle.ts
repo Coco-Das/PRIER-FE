@@ -229,6 +229,21 @@ export const StaticContainer = styled.div`
   cursor: default;
   box-sizing: border-box;
 `;
+export const StaticOverlay = styled.div`
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 21.5rem;
+  border: none;
+  border-radius: 20px;
+  backdrop-filter: blur(5px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #828282;
+  z-index: 3;
+`;
 
 export const AIReportContainer = styled.div`
   background-color: #e1f9f0;
