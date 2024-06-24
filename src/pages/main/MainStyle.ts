@@ -156,13 +156,12 @@ export const StyledInput = styled.input`
   padding-left: var(--size-button);
   height: var(--size-button);
   font-size: 16px;
-  border: none;
+  border: 1px solid #315af1;
   color: #315af1;
   outline: none;
   width: var(--size-button);
   transition: all ease 0.3s;
   background-color: white;
-  box-shadow: 0.7px 0.7px 1px #4188fe, -0.7px -0.7px 1px #4188fe, inset 0px 0px 0px #4188fe, inset 0px -0px 0px #4188fe;
   border-radius: 50px;
   cursor: pointer;
 
