@@ -29,6 +29,7 @@ import {
   ProfileImgContainer,
   StyledProfile,
   StyledUserIcon,
+  StaticOverlay,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
@@ -176,21 +177,26 @@ export default function UserProfile() {
                   </Link>
                 </FeedbackContainer>
               </div>
-              <StaticContainer>
-                <TitleText>통계</TitleText>
-                <UniqueText>평점</UniqueText>
-                <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
-                <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
-                <MypageChartIcon></MypageChartIcon>
-              </StaticContainer>
+              {userProfile.nowProjectFeedbackCount === 0 ? (
+                <StaticContainer className="relative">
+                  <TitleText>통계</TitleText>
+                  <UniqueText>평점</UniqueText>
+                  <UniqueText>80 % </UniqueText>
+                  <DetailText>평점 4의 별점</DetailText>
+                  <MypageChartIcon></MypageChartIcon>
+                  <StaticOverlay>제출된 피드백이 없습니다.</StaticOverlay>
+                </StaticContainer>
+              ) : (
+                <StaticContainer>
+                  <TitleText>통계</TitleText>
+                  <UniqueText>평점</UniqueText>
+                  <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
+                  <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
+                  <MypageChartIcon></MypageChartIcon>
+                </StaticContainer>
+              )}
               <AIReportContainer>
-                {userProfile.nowProjectKeywordList && userProfile.nowProjectKeywordList.length > 0 ? (
-                  <>
-                    <AIReport />
-                  </>
-                ) : (
-                  <></>
-                )}
+                <AIReport />
               </AIReportContainer>
             </div>
           ) : (
