@@ -641,7 +641,12 @@ export default function MyPage() {
       </div>
       <div className="flex w-screen h-[60%]">
         <ProjectContainer>
-          <Title>진행 중인 프로젝트</Title>
+          <div className="flex w-full justify-between items-center">
+            <Title>진행 중인 프로젝트</Title>
+            <Link to={`/testlist/${localStorage.getItem('userId')}`}>
+              <LinkText>전체 프로젝트 &gt;</LinkText>
+            </Link>
+          </div>
           {userProfile.nowProjectId !== null ? (
             <div className="flex w-full h-full">
               <div className="flex-col w-[30%] h-full">

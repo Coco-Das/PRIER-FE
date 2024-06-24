@@ -33,7 +33,7 @@ import {
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
 import { useOtherProfileStore } from '../../../states/user/UserStore';
 import BlogIcon from '../../../assets/blog.png';
@@ -58,6 +58,7 @@ const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 export default function UserProfile() {
   const userProfile = useOtherProfileStore(state => state.otherProfile);
+  const { userId } = useParams();
 
   return (
     <div className="flex-col overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
@@ -148,7 +149,12 @@ export default function UserProfile() {
       </div>
       <div className="flex w-screen h-[60%]">
         <ProjectContainer>
-          <Title>진행 중인 프로젝트</Title>
+          <div className="flex justify-between items-center">
+            <Title>진행 중인 프로젝트</Title>
+            <Link to={`/testlist/${userId}`}>
+              <LinkText>모든 프로젝트 &gt;</LinkText>
+            </Link>
+          </div>
           {userProfile.nowProjectId !== null ? (
             <div className="flex w-full h-full">
               <div className="flex-col w-[30%] h-full">
