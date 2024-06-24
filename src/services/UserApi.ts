@@ -8,6 +8,7 @@ export async function FetchMyPage() {
     const response = await API_BASE_URL.get('/mypage');
     console.log('마이페이지 정보 요청 성공', response.data);
     const userProfile = {
+      imgUrl: response.data.imgUrl,
       nickname: response.data.nickname,
       belonging: response.data.belonging,
       rank: response.data.rank,
@@ -42,6 +43,7 @@ export async function LinkUserProfile(userId: number) {
     const response = await API_BASE_URL.get(`/mypage/${userId}`);
     console.log('유저 프로필 정보 요청 성공', response.data);
     const userProfile = {
+      imgUrl: response.data.imgUrl,
       nickname: response.data.nickname,
       belonging: response.data.belonging,
       rank: response.data.rank,
@@ -91,7 +93,20 @@ export function FetchLogout() {
     }
   }, [setLogout]);
 }
-
+export const EditImg = async (newImg: string) => {
+  try {
+    const respose = await API_BASE_URL.put(
+      '/users/img',
+      { imgUrl: newImg },
+      { headers: { 'Content-Type': 'application/json' } },
+    );
+    console.log('프로필 이미지 수정 요청 성공', respose.data);
+    const setImgUrl = useUserStore.getState().setImgUrl;
+    setImgUrl(newImg);
+  } catch (error) {
+    console.error('프로필 이미지 수정 실패', error);
+  }
+};
 export const EditNickName = async (newNickName: string) => {
   try {
     const response = await API_BASE_URL.put(

@@ -7,6 +7,7 @@ import {
   LinkButton,
   MainContainer,
   MainText,
+  NoresultWrapper,
   OrderButton,
   PointText,
   SearchInputWrapper,
@@ -30,6 +31,7 @@ export default function Main() {
   const [filter, setFilter] = useState(0);
   const [currentPage, setCurrentPage] = useState(1);
   const [keyword, setKeyword] = useState('');
+  const [noResults, setNoResults] = useState(false);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -60,15 +62,11 @@ export default function Main() {
   }, [setProjects]);
 
   const FilterChange = async (newFilter: number, buttonLabel: string) => {
-    if (newFilter) {
-      setFilter(newFilter);
-    }
+    setFilter(newFilter);
     setActiveButton(buttonLabel);
     try {
-      const allProjects = await FetchAllProject(filter, 0);
-      if (filter === 1) {
-        console.log('등록순 요청');
-      }
+      await setFilter(newFilter);
+      const allProjects = await FetchAllProject(newFilter, 0);
       console.log('모든 프로젝트 데이터 가져오기 :', allProjects);
     } catch (error) {
       console.error('프로젝트 데이터 가져오기 실패:', error);
@@ -78,7 +76,7 @@ export default function Main() {
   const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
     try {
-      const allProjects = await FetchAllProject(filter, value);
+      const allProjects = await FetchAllProject(filter, value - 1);
       console.log('페이지네이션 :', allProjects);
     } catch (error) {
       console.error('프로젝트 데이터 가져오기 실패:', error);
@@ -86,7 +84,12 @@ export default function Main() {
   };
   const handleKeyPress = async (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter') {
-      await SearchProject(keyword);
+      const response = await SearchProject(keyword);
+      if (response.length === 0) {
+        setNoResults(true);
+      } else {
+        setNoResults(false);
+      }
     }
   };
   return (
@@ -147,15 +150,14 @@ export default function Main() {
           </IconWrapper>
         </SearchInputWrapper>
       </div>
-      <ProjectPreview />
+      {noResults ? (
+        <NoresultWrapper>{keyword} (이)가 포함된 프로젝트가 존재하지 않습니다.</NoresultWrapper>
+      ) : (
+        <ProjectPreview />
+      )}
+
       <span className="flex justify-center mt-6">
-        <Pagination
-          count={totalPages - 1}
-          page={currentPage}
-          color="primary"
-          size="large"
-          onChange={handlePageChange}
-        />
+        <Pagination count={totalPages} page={currentPage} color="primary" size="large" onChange={handlePageChange} />
       </span>
     </div>
   );

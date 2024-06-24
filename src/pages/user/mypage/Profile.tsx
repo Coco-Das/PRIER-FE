@@ -17,7 +17,6 @@ import {
   StepLine,
   StepsContainer,
   MypageChartIcon,
-  StyledUserIcon,
   TitleText,
   ProfileAccountContainer,
   AIReportContainer,
@@ -27,11 +26,15 @@ import {
   EmptyContainer,
   AccountGithub,
   ProfileDetail,
+  ProfileImgContainer,
+  StyledProfile,
+  StyledUserIcon,
+  StaticOverlay,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
-import { Link } from 'react-router-dom';
+import { Link, useParams } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
 import { useOtherProfileStore } from '../../../states/user/UserStore';
 import BlogIcon from '../../../assets/blog.png';
@@ -41,6 +44,7 @@ import NotionIcon from '../../../assets/notion.png';
 import AIReport from '../../../components/utils/AIReport';
 import { styled } from 'styled-components';
 import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
+
 const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(() => ({
@@ -55,12 +59,15 @@ const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
 
 export default function UserProfile() {
   const userProfile = useOtherProfileStore(state => state.otherProfile);
+  const { userId } = useParams();
 
   return (
     <div className="flex-col overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
       <div className="flex w-full h-[40%] mb-5">
         <ProfileContainer>
-          <StyledUserIcon></StyledUserIcon>
+          <ProfileImgContainer>
+            {userProfile.imgUrl ? <StyledProfile src={userProfile.imgUrl} /> : <StyledUserIcon />}
+          </ProfileImgContainer>
           <div className="flex-col mt-3 w-full">
             <span className="flex items-center justify-between">
               <Title>{userProfile.nickname} 님의 프로필</Title>
@@ -143,7 +150,12 @@ export default function UserProfile() {
       </div>
       <div className="flex w-screen h-[60%]">
         <ProjectContainer>
-          <Title>진행 중인 프로젝트</Title>
+          <div className="flex justify-between items-center">
+            <Title>진행 중인 프로젝트</Title>
+            <Link to={`/testlist/${userId}`}>
+              <LinkText>모든 프로젝트 &gt;</LinkText>
+            </Link>
+          </div>
           {userProfile.nowProjectId !== null ? (
             <div className="flex w-full h-full">
               <div className="flex-col w-[30%] h-full">
@@ -165,21 +177,26 @@ export default function UserProfile() {
                   </Link>
                 </FeedbackContainer>
               </div>
-              <StaticContainer>
-                <TitleText>통계</TitleText>
-                <UniqueText>평점</UniqueText>
-                <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
-                <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
-                <MypageChartIcon></MypageChartIcon>
-              </StaticContainer>
+              {userProfile.nowProjectFeedbackCount === 0 ? (
+                <StaticContainer className="relative">
+                  <TitleText>통계</TitleText>
+                  <UniqueText>평점</UniqueText>
+                  <UniqueText>80 % </UniqueText>
+                  <DetailText>평점 4의 별점</DetailText>
+                  <MypageChartIcon></MypageChartIcon>
+                  <StaticOverlay>제출된 피드백이 없습니다.</StaticOverlay>
+                </StaticContainer>
+              ) : (
+                <StaticContainer>
+                  <TitleText>통계</TitleText>
+                  <UniqueText>평점</UniqueText>
+                  <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
+                  <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
+                  <MypageChartIcon></MypageChartIcon>
+                </StaticContainer>
+              )}
               <AIReportContainer>
-                {userProfile.nowProjectKeywordList && userProfile.nowProjectKeywordList.length > 0 ? (
-                  <>
-                    <AIReport />
-                  </>
-                ) : (
-                  <></>
-                )}
+                <AIReport />
               </AIReportContainer>
             </div>
           ) : (

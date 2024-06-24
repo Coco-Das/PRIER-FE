@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import styled from 'styled-components';
 interface CustomAlertProps {
   message: string;
@@ -34,7 +34,7 @@ const ModalContent = styled.div`
 `;
 const AccountInput = styled.input`
   position: relative;
-  font-size: 18px;
+  font-size: 16px;
   width: 70%;
   max-width: 70%;
   border-radius: 20px;
@@ -45,7 +45,9 @@ const AccountInput = styled.input`
     outline: none;
   }
 `;
-
+const HiddenInput = styled.input`
+  display: none;
+`;
 const AgreeButton = styled.button`
   background-color: #4188fe;
   color: white;
@@ -74,15 +76,36 @@ const DisagreeButton = styled.button`
 `;
 
 const AccountEdit: React.FC<CustomAlertProps> = ({ message, onConfirm, onCancel, onInput }) => {
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const handleFileButtonClick = () => {
+    if (fileInputRef.current) {
+      fileInputRef.current.click();
+    }
+  };
   return (
     <ModalOverlay>
       <ModalContent>
-        <p>{message}</p>
-        <AccountInput placeholder="계정 정보를 입력하세요" onChange={onInput}></AccountInput>
-        <span className="flex justify-center items-center gap-7">
-          <AgreeButton onClick={onConfirm}>확인</AgreeButton>
-          <DisagreeButton onClick={onCancel}>취소</DisagreeButton>
-        </span>
+        {message === '프로필 이미지를 변경하시겠습니까?' ? (
+          <>
+            <p>{message}</p>
+            <HiddenInput type="file" accept="image/*" onChange={onInput} ref={fileInputRef} />
+            <AgreeButton onClick={handleFileButtonClick}>이미지 업로드</AgreeButton>
+            <span className="flex justify-center items-center gap-5">
+              <AgreeButton onClick={onConfirm}>확인</AgreeButton>
+              <DisagreeButton onClick={onCancel}>취소</DisagreeButton>
+            </span>
+          </>
+        ) : (
+          <>
+            <p>{message}</p>
+            <AccountInput placeholder="계정 정보를 입력하세요" onChange={onInput}></AccountInput>
+            <span className="flex justify-center items-center gap-7">
+              <AgreeButton onClick={onConfirm}>확인</AgreeButton>
+              <DisagreeButton onClick={onCancel}>취소</DisagreeButton>
+            </span>
+          </>
+        )}
       </ModalContent>
     </ModalOverlay>
   );

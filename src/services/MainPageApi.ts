@@ -71,6 +71,7 @@ export async function SearchProject(keyword: string) {
   try {
     const response = await API_BASE_URL.get(`/projects?search=${keyword}`);
     console.log('프로젝트 검색 성공', keyword, response.data);
+
     const projectData = {
       totalPages: response.data.totalPages,
       totalElements: response.data.totalElements,
@@ -92,6 +93,7 @@ export async function SearchProject(keyword: string) {
       })),
     };
     useAllProjectStore.getState().searchProject(projectData);
+    return response.data.content;
   } catch (error) {
     console.error('프로젝트 검색 실패', error);
     throw error;
