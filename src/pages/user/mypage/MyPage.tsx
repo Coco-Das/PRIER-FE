@@ -169,7 +169,16 @@ export default function MyPage() {
     setShowEditImgAlert(false);
     setNewImg('');
   };
-
+  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setNewImg(reader.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
   //닉네임 수정
   const NickNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewNickName(event.target.value);
@@ -403,7 +412,7 @@ export default function MyPage() {
           message="프로필 이미지를 변경하시겠습니까?"
           onConfirm={saveEditImg}
           onCancel={cancleEditImg}
-          onInput={BlogInputChange}
+          onInput={handleImageChange}
         />
       )}
       {showEditNameAlert && (
