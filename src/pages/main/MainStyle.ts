@@ -97,10 +97,53 @@ export const LinkButton = styled.div`
   ${device.medium} {
     font-size: 14px;
   }
+  -webkit-transition: all 0.5s ease-in;
+  -moz-transition: all 0.5s ease-in;
+  transition: 0.5s ease-out;
   &:hover {
-    background-color: #315af1;
-    color: #ffffff;
-    transition: 0.7s;
+    background: #4188fe;
+    color: white;
+    -webkit-transition: all 0.5s ease-out;
+    -moz-transition: all 0.5s ease-out;
+    transition: all 0.5s ease-out;
+  }
+
+  &:hover::before {
+    -webkit-animation: sh02 0.5s 0s linear;
+    -moz-animation: sh02 0.5s 0s linear;
+    animation: sh02 0.5s 0s linear;
+  }
+  &::before {
+    content: '';
+    display: block;
+    width: 0px;
+    height: 86%;
+    position: absolute;
+    top: 7%;
+    left: 0%;
+    opacity: 0;
+    background: #fff;
+    box-shadow: 0 0 50px 30px #fff;
+    -webkit-transform: skewX(-20deg);
+    -moz-transform: skewX(-20deg);
+    -ms-transform: skewX(-20deg);
+    -o-transform: skewX(-20deg);
+    transform: skewX(-20deg);
+  }
+  @keyframes sh02 {
+    from {
+      opacity: 0;
+      left: 0%;
+    }
+
+    50% {
+      opacity: 1;
+    }
+
+    to {
+      opacity: 0;
+      left: 100%;
+    }
   }
 `;
 export const Title = styled.h2`
@@ -185,4 +228,12 @@ export const IconWrapper = styled.div`
     width: 100%;
     height: 100%;
   }
+`;
+export const NoresultWrapper = styled.div`
+  width: 100%;
+  height: 15rem;
+  color: #828282;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
