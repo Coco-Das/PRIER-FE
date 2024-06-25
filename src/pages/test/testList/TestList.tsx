@@ -21,6 +21,7 @@ import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { Link } from 'react-router-dom';
 import StarRating from '../../../components/utils/StarRating';
+import ProjectStatistics from './ProjectStatics';
 
 interface Tag {
   tagId: number;
@@ -100,8 +101,7 @@ function TestList() {
       setProjects(projectsWithColoredTags);
       saveTagColors(storedColors);
       setLast(data.last);
-      console.log(userId);
-      console.log(page);
+
       console.log(response.data);
     } catch (error) {
       console.log(error);
@@ -253,13 +253,14 @@ function TestList() {
                 </span>
               </GreenDiv>
             </DivWrapper>
-            <StaticContainer onClick={() => navigate(`/feedback/${project.projectId}`)}>
+            {/* <StaticContainer onClick={() => navigate(`/feedback/${project.projectId}`)}>
               <TitleText>통계</TitleText>
               <UniqueText>평점</UniqueText>
               <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
               <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
               <MypageChartIcon></MypageChartIcon>
-            </StaticContainer>
+            </StaticContainer> */}
+            <ProjectStatistics project={project} />
           </ListDiv>
         ))}
       </div>
