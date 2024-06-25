@@ -102,7 +102,7 @@ export const CreateTest = () => {
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const [ImageAlert, setImageAlert] = useState(false);
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -296,6 +296,12 @@ export const CreateTest = () => {
     );
     if (mainFileInputRef.current?.files && mainFileInputRef.current.files.length > 0) {
       formData.append('mainImage', mainFileInputRef.current.files[0]);
+    } else {
+      setImageAlert(true);
+      setTimeout(() => {
+        setImageAlert(false);
+      }, 800);
+      return;
     }
     if (additionalFileInputRef.current?.files) {
       Array.from(additionalFileInputRef.current.files).forEach(file => {
@@ -327,7 +333,7 @@ export const CreateTest = () => {
         navigate(`/responsetest/${projectId}`);
       }, 500); // 2초 지연
     } catch (error) {
-      setSnackbar({ message: '프로젝트가 등록이 실패하였습니다.', type: 'error' });
+      setSnackbar({ message: '프로젝트 등록이 실패하였습니다.', type: 'error' });
       console.error('에러:', error);
       console.log('JSON Data:', jsonData);
     }
@@ -361,7 +367,12 @@ export const CreateTest = () => {
             <p>프로젝트 목표</p>
             <AutoResizeTextarea value={goal} onChange={handleGoalChange} placeholder="프로젝트 목표를 입력하세요..." />
             <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
-            <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
+            <div style={{ display: 'flex' }}>
+              <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
+              <span className="ml-2" style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato' }}>
+                * 메인이미지는 필수입니다
+              </span>
+            </div>
             {mainImageUrl && (
               <ImageWrapper>
                 <StyledImg src={mainImageUrl} alt="메인 이미지" />
@@ -581,6 +592,7 @@ export const CreateTest = () => {
       {snackbar && (
         <ProjectSnackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />
       )}
+      {ImageAlert && <CustomAlert message="메인이미지는 필수입니다" showButtons={false} />}
     </CreateWrapper>
   );
 };
