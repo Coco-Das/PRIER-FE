@@ -37,7 +37,7 @@ function MyReview() {
       {reviews.map(review => (
         <ReviewContainer key={review.commentId}>
           <Link to={`/feedback/${review.projectId}`}>
-            <ReviewText>&quot;{review.content} &quot;</ReviewText>
+            <ReviewText>&quot; {review.content} &quot;</ReviewText>
             <ReviewProject>{review.projectName}</ReviewProject>
             <div className="flex justify-between gap-5">
               <ReviewTeam>Team : {review.teamName}</ReviewTeam>

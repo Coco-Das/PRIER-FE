@@ -22,16 +22,20 @@ import { userPointStore } from '../../states/user/PointStore';
 import LatestProject from '../../components/user/LatestProject';
 import { useAllProjectStore } from '../../states/user/UserProjectStore';
 import { FetchAllProject, FetchLatestProject, SearchProject } from '../../services/MainPageApi';
+import Alarm from '../../components/user/Alarm';
 
 export default function Main() {
   const userProfile = useUserStore(state => state.userProfile);
   const pointStore = userPointStore();
   const { totalPages, setProjects } = useAllProjectStore();
   const [activeButton, setActiveButton] = useState('인기순');
-  const [filter, setFilter] = useState(0);
+  const [filter, setFilter] = useState(1);
   const [currentPage, setCurrentPage] = useState(1);
   const [keyword, setKeyword] = useState('');
   const [noResults, setNoResults] = useState(false);
+  //알림 데이터
+  const response = sessionStorage.getItem('responseAmount');
+  const comment = sessionStorage.getItem('commentAmount');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -51,7 +55,7 @@ export default function Main() {
       try {
         const Latest = await FetchLatestProject();
         console.log('최근 프로젝트 데이터 가져오기 :', Latest);
-        const AllProject = await FetchAllProject(0, 0);
+        const AllProject = await FetchAllProject(1, 0);
         console.log('모든 프로젝트 데이터 가져오기 :', AllProject);
       } catch (error) {
         console.error('프로젝트 데이터 가져오기 실패:', error);
@@ -67,6 +71,7 @@ export default function Main() {
     try {
       await setFilter(newFilter);
       const allProjects = await FetchAllProject(newFilter, 0);
+      setCurrentPage(1);
       console.log('모든 프로젝트 데이터 가져오기 :', allProjects);
     } catch (error) {
       console.error('프로젝트 데이터 가져오기 실패:', error);
@@ -114,11 +119,14 @@ export default function Main() {
       <Title>모든 프로젝트</Title>
       <div className="flex justify-between mb-[1%]">
         <div className="flex gap-2">
-          <OrderButton active={activeButton === '인기순'} onClick={() => FilterChange(0, '인기순')}>
+          <OrderButton active={activeButton === '인기순'} onClick={() => FilterChange(1, '인기순')}>
             인기순
           </OrderButton>
-          <OrderButton active={activeButton === '등록순'} onClick={() => FilterChange(1, '등록순')}>
+          <OrderButton active={activeButton === '등록순'} onClick={() => FilterChange(2, '등록순')}>
             등록순
+          </OrderButton>
+          <OrderButton active={activeButton === '최신순'} onClick={() => FilterChange(3, '최신순')}>
+            최신순
           </OrderButton>
         </div>
         <SearchInputWrapper>
@@ -159,6 +167,13 @@ export default function Main() {
       <span className="flex justify-center mt-6">
         <Pagination count={totalPages} page={currentPage} color="primary" size="large" onChange={handlePageChange} />
       </span>
+      {response === '0' && comment === '0' ? (
+        <></>
+      ) : (
+        <>
+          <Alarm />
+        </>
+      )}
     </div>
   );
 }
