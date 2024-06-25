@@ -95,7 +95,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
   const menuItems = [
     { text: '프로젝트 리스트', path: '/main', icon: sidebar1 },
     { text: '테스트 생성하기', path: '/createtest', icon: sidebar2 },
-    { text: '테스트한 프로젝트', path: '/testlist', icon: sidebar3 },
+    { text: '테스트한 프로젝트', path: `/testlist/${localStorage.getItem('userId')}`, icon: sidebar3 },
     { text: '커뮤니티', path: '/board', icon: sidebar4 },
     { text: '상점', path: '/store', icon: sidebar5 },
     { text: '마이페이지', path: '/mypage', icon: sidebar6 },

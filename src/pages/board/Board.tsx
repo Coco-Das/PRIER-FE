@@ -16,8 +16,9 @@ const Board: React.FC = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<BoardPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BoardPost[]>([]);
-  const [activeCategory, setActiveCategory] = useState<string>('ITNEWS');
+  const [activeCategory, setActiveCategory] = useState<string>('ALL');
   const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [activeSort, setActiveSort] = useState<string>('latest');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [USER_ID, setUserId] = useState<number | null>(null);
@@ -55,70 +56,95 @@ const Board: React.FC = () => {
     }
   };
 
+  const fetchMyPosts = async () => {
+    setLoading(true);
+    try {
+      const response = await API_BASE_URL.get('/posts/my');
+      const myPosts = response.data.reverse();
+      const filteredMyPosts =
+        activeCategory === 'ALL' ? myPosts : myPosts.filter((post: BoardPost) => post.category === activeCategory);
+      setPosts(filteredMyPosts);
+    } catch (error) {
+      console.error('Error fetching my posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchLikedPosts = async () => {
+    setLoading(true);
+    try {
+      const response = await API_BASE_URL.get('/posts/like/my');
+      const likedPosts = response.data.reverse();
+      const filteredLikedPosts =
+        activeCategory === 'ALL'
+          ? likedPosts
+          : likedPosts.filter((post: BoardPost) => post.category === activeCategory);
+      setPosts(filteredLikedPosts);
+    } catch (error) {
+      console.error('Error fetching liked posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    if (!allFetched && activeFilter === 'all') {
+    if (activeFilter === 'all') {
       fetchPosts();
+    } else if (activeFilter === 'myposts') {
+      fetchMyPosts();
+    } else if (activeFilter === 'likes') {
+      fetchLikedPosts();
     }
-  }, [activeFilter, allFetched]);
+  }, [activeCategory, activeFilter, activeSort]);
 
   useEffect(() => {
-    const fetchMyPosts = async () => {
-      setLoading(true);
-      try {
-        const response = await API_BASE_URL.get(`/posts/my`);
-        const myPosts = response.data.filter((post: BoardPost) => post.category === activeCategory).reverse();
-        setFilteredPosts(myPosts);
-      } catch (error) {
-        console.error('Error fetching my posts:', error);
-      } finally {
-        setLoading(false);
+    const applySearchFilter = (posts: BoardPost[]) => {
+      if (searchTerm) {
+        return posts.filter(
+          post =>
+            post.title.includes(searchTerm) ||
+            post.content.includes(searchTerm) ||
+            (activeCategory !== 'NOTICE' && post.nickname.includes(searchTerm)),
+        );
       }
+      return posts;
     };
 
-    const fetchLikedPosts = async () => {
-      setLoading(true);
-      try {
-        const response = await API_BASE_URL.get(`/posts/like/my`);
-        const likedPosts = response.data.filter((post: BoardPost) => post.category === activeCategory).reverse();
-        setFilteredPosts(likedPosts);
-      } catch (error) {
-        console.error('Error fetching liked posts:', error);
-      } finally {
-        setLoading(false);
+    const applySort = (posts: BoardPost[]) => {
+      if (activeSort === 'latest') {
+        return posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      } else if (activeSort === 'registration') {
+        return posts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      } else if (activeSort === 'popular') {
+        return posts.sort((a, b) => {
+          if (b.likes === a.likes) {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          }
+          return b.likes - a.likes;
+        });
+      } else if (activeSort === 'views') {
+        return posts.sort((a, b) => {
+          if (b.views === a.views) {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          }
+          return b.views - a.views;
+        });
       }
+      return posts;
     };
 
-    if (!postId && USER_ID !== null) {
-      if (activeFilter === 'likes') {
-        fetchLikedPosts();
-        return;
-      } else if (activeFilter === 'myposts') {
-        fetchMyPosts();
-        return;
-      } else if (activeFilter === 'all') {
-        const updatedPosts = posts.filter(post => post.category === activeCategory);
+    let updatedPosts = posts;
 
-        if (searchTerm) {
-          setFilteredPosts(
-            updatedPosts.filter(post => post.title.includes(searchTerm) || post.content.includes(searchTerm)),
-          );
-        } else {
-          setFilteredPosts(updatedPosts);
-        }
-      } else {
-        let updatedPosts = posts.filter(post => post.category === activeCategory);
-
-        if (searchTerm) {
-          updatedPosts = updatedPosts.filter(
-            post => post.title.includes(searchTerm) || post.content.includes(searchTerm),
-          );
-        }
-
-        setFilteredPosts(updatedPosts);
-        setPage(1);
-      }
+    if (activeCategory !== 'ALL') {
+      updatedPosts = posts.filter(post => post.category === activeCategory);
+    } else {
+      updatedPosts = posts.filter(post => post.category !== 'NOTICE');
     }
-  }, [posts, activeCategory, activeFilter, searchTerm, postId, USER_ID]);
+
+    const filteredAndSortedPosts = applySort(applySearchFilter(updatedPosts));
+    setFilteredPosts(filteredAndSortedPosts);
+  }, [posts, activeCategory, activeFilter, searchTerm, postId, USER_ID, activeSort]);
 
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
@@ -131,6 +157,18 @@ const Board: React.FC = () => {
       setAllFetched(false);
     }
     navigate(`/board?category=${activeCategory}&filter=${filter}`);
+  };
+
+  const handleSortClick = (sort: string) => {
+    setActiveSort(sort);
+    setPage(1);
+    if (activeFilter === 'all') {
+      fetchPosts();
+    } else if (activeFilter === 'myposts') {
+      fetchMyPosts();
+    } else if (activeFilter === 'likes') {
+      fetchLikedPosts();
+    }
   };
 
   const handlePostClick = (postId: number) => {
@@ -168,13 +206,15 @@ const Board: React.FC = () => {
         title={getTitle()}
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
+        activeSort={activeSort}
+        handleSortClick={handleSortClick}
       />
       {loading && !postId ? (
         <></>
       ) : postId ? (
         <PostDetail postId={Number(postId)} onBackToList={handleBackToList} />
       ) : filteredPosts.length > 0 ? (
-        <PostList posts={paginatedPosts} onPostClick={handlePostClick} userId={USER_ID} />
+        <PostList posts={paginatedPosts} onPostClick={handlePostClick} userId={USER_ID} activeSort={activeSort} />
       ) : searchTerm ? (
         <NoPostsMessage>{searchTerm} (이)가 포함된 게시물이 없습니다.</NoPostsMessage>
       ) : (

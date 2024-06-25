@@ -9,7 +9,7 @@ import {
   AvatarImage,
   AuthorContainer,
   Author,
-  CreatedAt,
+  TimeViews,
   ContentContainer,
   Image,
   LikesContainer,
@@ -241,11 +241,15 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
               <Author onClick={e => handleProfileClick(e, post.userId)} category={post.category}>
                 {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
               </Author>
-              <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                <TimeViews>{formatDate(post.createdAt)}</TimeViews>
+                <div style={{ width: '4px', height: '4px', backgroundColor: '#828282', borderRadius: '50%' }}></div>
+                <TimeViews>조회수 {post.views}회 </TimeViews>
+              </div>
             </AuthorContainer>
             {USER_ID === post.userId && (
               <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                <PostMenu postId={post.postId} />
+                <PostMenu postId={post.postId} title={post.title} />
               </div>
             )}
           </UserContainer>
@@ -320,8 +324,10 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
                         <CommentMenu
                           commentId={comment.commentId}
                           postId={post.postId}
+                          title={post.title}
                           onEditClick={handleEditComment}
                           onDeleteSuccess={() => handleDeleteComment(comment.commentId)}
+                          commentContent={comment.content}
                         />
                       </div>
                     )}

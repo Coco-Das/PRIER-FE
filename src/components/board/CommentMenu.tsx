@@ -8,51 +8,79 @@ import Edit from '@mui/icons-material/Edit';
 import DeleteForever from '@mui/icons-material/DeleteForever';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
-import { useNavigate } from 'react-router-dom';
-import axios from 'axios'; // Import axios
-import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
+import { API_BASE_URL } from '../../const/TokenApi';
+import DeleteAlert from '../board/DeleteAlert'; // Import CustomAlert
 
 interface CommentMenuProps {
   commentId: number;
-  postId: number; // Add postId prop
+  postId: number;
+  title: string; // Add title prop
   onEditClick: (commentId: number) => void;
-  onDeleteSuccess: () => void; // Add a callback for successful deletion
+  onDeleteSuccess: () => void;
+  insidePostBox?: boolean;
+  commentContent: string;
 }
 
-const CommentMenu: React.FC<CommentMenuProps> = ({ commentId, postId, onEditClick, onDeleteSuccess }) => {
+const CommentMenu: React.FC<CommentMenuProps> = ({
+  commentId,
+  postId,
+  title,
+  onEditClick,
+  onDeleteSuccess,
+  insidePostBox,
+  commentContent,
+}) => {
+  const [showAlert, setShowAlert] = React.useState(false);
+
   const handleDelete = async () => {
     try {
       await API_BASE_URL.delete(`/posts/${postId}/comment/${commentId}`);
-      onDeleteSuccess(); // Notify parent component about successful deletion
-      window.location.reload(); // 페이지 새로고침
+      onDeleteSuccess();
+      window.location.reload();
     } catch (error) {
       console.error('Failed to delete the comment:', error);
     }
   };
 
+  const handleDeleteClick = () => {
+    setShowAlert(true);
+  };
+
+  const truncatedContent = commentContent.length > 5 ? `${commentContent.slice(0, 5)}...` : commentContent;
+
   return (
-    <Dropdown>
-      <MenuButton
-        slots={{ root: IconButton }}
-        slotProps={{ root: { variant: 'none', color: 'neutral', sx: { zIndex: 10 } } }}
-      >
-        <MoreVert />
-      </MenuButton>
-      <Menu placement="bottom-end" sx={{ zIndex: 20, border: 'none' }}>
-        <MenuItem onClick={() => onEditClick(commentId)}>
-          <ListItemDecorator>
-            <Edit />
-          </ListItemDecorator>
-          수정하기
-        </MenuItem>
-        <MenuItem variant="soft" color="danger" onClick={handleDelete}>
-          <ListItemDecorator sx={{ color: 'inherit' }}>
-            <DeleteForever />
-          </ListItemDecorator>
-          삭제하기
-        </MenuItem>
-      </Menu>
-    </Dropdown>
+    <>
+      {showAlert && (
+        <DeleteAlert
+          message={`'${truncatedContent}' 댓글을 삭제하시겠습니까?`}
+          onConfirm={handleDelete}
+          onCancel={() => setShowAlert(false)}
+          insidePostBox={insidePostBox}
+        />
+      )}
+      <Dropdown>
+        <MenuButton
+          slots={{ root: IconButton }}
+          slotProps={{ root: { variant: 'none', color: 'neutral', sx: { zIndex: 1 } } }}
+        >
+          <MoreVert />
+        </MenuButton>
+        <Menu placement="bottom-end" sx={{ zIndex: 20, border: 'none' }}>
+          <MenuItem onClick={() => onEditClick(commentId)}>
+            <ListItemDecorator>
+              <Edit />
+            </ListItemDecorator>
+            수정하기
+          </MenuItem>
+          <MenuItem variant="soft" color="danger" onClick={handleDeleteClick}>
+            <ListItemDecorator sx={{ color: 'inherit' }}>
+              <DeleteForever />
+            </ListItemDecorator>
+            삭제하기
+          </MenuItem>
+        </Menu>
+      </Dropdown>
+    </>
   );
 };
 

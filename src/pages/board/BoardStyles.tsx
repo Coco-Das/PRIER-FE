@@ -263,7 +263,7 @@ export const Author = styled.div<{ category?: string }>`
   cursor: pointer;
 `;
 
-export const CreatedAt = styled.div`
+export const TimeViews = styled.div`
   color: #828282;
   font-size: 14px;
   line-height: 150%;
@@ -404,7 +404,7 @@ export const CommentText = styled.div`
   color: #000;
 `;
 
-export const CommentCreatedAt = styled(CreatedAt)`
+export const CommentCreatedAt = styled(TimeViews)`
   font-size: 12px;
   color: #828282;
 `;
@@ -450,5 +450,17 @@ export const CommentButton = styled.button`
   &:hover {
     background: #d1e0fc;
     color: #4188fe;
+  }
+`;
+export const FilterBtn = styled.button<{ $isActive: boolean }>`
+  background-color: ${props => (props.$isActive ? '#315af1' : 'white')};
+  color: ${props => (props.$isActive ? 'white' : 'black')};
+  height: 100%;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-top: 10px;
+  &:hover {
+    background-color: ${props => (props.$isActive ? '#315af1' : '#e0e0e0')};
   }
 `;

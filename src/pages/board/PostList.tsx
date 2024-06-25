@@ -7,7 +7,7 @@ import {
   AvatarImage,
   AuthorContainer,
   Author,
-  CreatedAt,
+  TimeViews,
   ContentContainer,
   LikesContainer,
   Likes,
@@ -31,9 +31,10 @@ interface PostListProps {
   posts: BoardPost[];
   onPostClick: (postId: number) => void;
   userId: number | null;
+  activeSort: string;
 }
 
-const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
+const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeSort }) => {
   const formatDate = useFormatDate();
   const extractTextFromContent = useExtractTextFromContent();
   const navigate = useNavigate();
@@ -68,9 +69,28 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
     console.log(likes);
   }, [likes]);
 
+  const sortedPosts = [...posts].sort((a, b) => {
+    if (activeSort === 'latest') {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    } else if (activeSort === 'registration') {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    } else if (activeSort === 'popular') {
+      if (b.likes === a.likes) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      return b.likes - a.likes;
+    } else if (activeSort === 'views') {
+      if (b.views === a.views) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      return b.views - a.views;
+    }
+    return 0;
+  });
+
   return (
     <>
-      {posts.map(post => {
+      {sortedPosts.map(post => {
         const likeState = likes[post.postId] || { isLiked: post.isLikedByMe, likeCount: post.likes };
         const currentIsLiked = likeState.isLiked;
 
@@ -100,11 +120,15 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
                   >
                     {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
                   </Author>
-                  <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <TimeViews>{formatDate(post.createdAt)}</TimeViews>
+                    <div style={{ width: '4px', height: '4px', backgroundColor: '#828282', borderRadius: '50%' }}></div>
+                    <TimeViews>조회수 {post.views}회 </TimeViews>
+                  </div>
                 </AuthorContainer>
                 {userId === post.userId && (
                   <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                    <PostMenu postId={post.postId} />
+                    <PostMenu postId={post.postId} title={post.title} insidePostBox />
                   </div>
                 )}
               </UserContainer>
