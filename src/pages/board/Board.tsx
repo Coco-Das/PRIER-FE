@@ -123,6 +123,13 @@ const Board: React.FC = () => {
           }
           return b.likes - a.likes;
         });
+      } else if (activeSort === 'views') {
+        return posts.sort((a, b) => {
+          if (b.views === a.views) {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          }
+          return b.views - a.views;
+        });
       }
       return posts;
     };
@@ -155,20 +162,13 @@ const Board: React.FC = () => {
   const handleSortClick = (sort: string) => {
     setActiveSort(sort);
     setPage(1);
-    const sortedPosts = [...filteredPosts];
-    if (sort === 'latest') {
-      sortedPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-    } else if (sort === 'registration') {
-      sortedPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-    } else if (sort === 'popular') {
-      sortedPosts.sort((a, b) => {
-        if (b.likes === a.likes) {
-          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-        }
-        return b.likes - a.likes;
-      });
+    if (activeFilter === 'all') {
+      fetchPosts();
+    } else if (activeFilter === 'myposts') {
+      fetchMyPosts();
+    } else if (activeFilter === 'likes') {
+      fetchLikedPosts();
     }
-    setFilteredPosts(sortedPosts);
   };
 
   const handlePostClick = (postId: number) => {

@@ -79,6 +79,11 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
         return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
       }
       return b.likes - a.likes;
+    } else if (activeSort === 'views') {
+      if (b.views === a.views) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      return b.views - a.views;
     }
     return 0;
   });

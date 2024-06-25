@@ -245,7 +245,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
                 <TimeViews>{formatDate(post.createdAt)}</TimeViews>
                 <div style={{ width: '4px', height: '4px', backgroundColor: '#828282', borderRadius: '50%' }}></div>
                 <TimeViews>조회수 {post.views}회 </TimeViews>
-              </div>{' '}
+              </div>
             </AuthorContainer>
             {USER_ID === post.userId && (
               <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>

@@ -105,6 +105,9 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
         <FilterBtn $isActive={activeSort === 'popular'} onClick={() => handleSortClick('popular')}>
           인기순
         </FilterBtn>
+        <FilterBtn $isActive={activeSort === 'views'} onClick={() => handleSortClick('views')}>
+          조회순
+        </FilterBtn>
       </div>
     </Navigation>
   );
