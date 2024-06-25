@@ -253,7 +253,7 @@ function TestList() {
                 </span>
               </GreenDiv>
             </DivWrapper>
-            <StaticContainer>
+            <StaticContainer onClick={() => navigate(`/feedback/${project.projectId}`)}>
               <TitleText>통계</TitleText>
               <UniqueText>평점</UniqueText>
               <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>

@@ -233,6 +233,10 @@ export const ResponseTest = () => {
     setCommnet(e.target.value);
   };
   const handleCommentSubmit = async () => {
+    if (!comment || !score) {
+      setSnackbar({ message: '빈칸이 있습니다.', type: 'error' });
+      return;
+    }
     const jsonData = { comment, score };
     try {
       const response = await API_BASE_URL.post(`/projects/${projectId}/comment`, jsonData);
