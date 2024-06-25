@@ -128,7 +128,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                 </AuthorContainer>
                 {userId === post.userId && (
                   <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                    <PostMenu postId={post.postId} />
+                    <PostMenu postId={post.postId} title={post.title} insidePostBox />
                   </div>
                 )}
               </UserContainer>

@@ -249,7 +249,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
             </AuthorContainer>
             {USER_ID === post.userId && (
               <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                <PostMenu postId={post.postId} />
+                <PostMenu postId={post.postId} title={post.title} />
               </div>
             )}
           </UserContainer>
@@ -324,8 +324,10 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
                         <CommentMenu
                           commentId={comment.commentId}
                           postId={post.postId}
+                          title={post.title}
                           onEditClick={handleEditComment}
                           onDeleteSuccess={() => handleDeleteComment(comment.commentId)}
+                          commentContent={comment.content}
                         />
                       </div>
                     )}

@@ -1,4 +1,4 @@
-import * as React from 'react';
+import React from 'react';
 import IconButton from '@mui/joy/IconButton';
 import Menu from '@mui/joy/Menu';
 import MenuItem from '@mui/joy/MenuItem';
@@ -9,22 +9,24 @@ import DeleteForever from '@mui/icons-material/DeleteForever';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
-
-import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
+import { API_BASE_URL } from '../../const/TokenApi';
+import DeleteAlert from '../board/DeleteAlert'; // Import CustomAlert
 
 interface PositionedMenuProps {
   postId: number;
+  title: string; // Add title prop
+  insidePostBox?: boolean;
 }
 
-const PostMenu: React.FC<PositionedMenuProps> = ({ postId }) => {
+const PostMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox }) => {
   const navigate = useNavigate();
+  const [showAlert, setShowAlert] = React.useState(false);
 
   const handleEditClick = () => {
     navigate(`/modifyboard/${postId}`);
   };
 
-  const handleDeleteClick = async () => {
+  const handleDelete = async () => {
     try {
       await API_BASE_URL.delete(`/posts/${postId}`);
       alert('게시글이 삭제되었습니다.');
@@ -35,29 +37,47 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId }) => {
     }
   };
 
+  const handleDeleteClick = () => {
+    setShowAlert(true);
+  };
+
+  const truncatedTitle = title.length > 5 ? `${title.slice(0, 5)}...` : title;
+
   return (
-    <Dropdown>
-      <MenuButton
-        slots={{ root: IconButton }}
-        slotProps={{ root: { variant: 'none', color: 'neutral', sx: { zIndex: 10 } } }}
-      >
-        <MoreVert />
-      </MenuButton>
-      <Menu placement="bottom-end" sx={{ zIndex: 20, border: 'none' }}>
-        <MenuItem onClick={handleEditClick}>
-          <ListItemDecorator>
-            <Edit />
-          </ListItemDecorator>
-          수정하기
-        </MenuItem>
-        <MenuItem variant="soft" color="danger" onClick={handleDeleteClick}>
-          <ListItemDecorator sx={{ color: 'inherit' }}>
-            <DeleteForever />
-          </ListItemDecorator>
-          삭제하기
-        </MenuItem>
-      </Menu>
-    </Dropdown>
+    <>
+      {showAlert && (
+        <DeleteAlert
+          message={`해당 게시물을 삭제하시겠습니까?`}
+          onConfirm={handleDelete}
+          onCancel={() => setShowAlert(false)}
+          insidePostBox={insidePostBox}
+        />
+      )}
+      <Dropdown>
+        <MenuButton
+          slots={{ root: IconButton }}
+          slotProps={{ root: { variant: 'none', color: 'neutral', sx: { zIndex: 1 } } }} // z-index 설정
+        >
+          <MoreVert />
+        </MenuButton>
+        <Menu placement="bottom-end" sx={{ zIndex: 2, border: 'none' }}>
+          {' '}
+          {/* z-index 설정 */}
+          <MenuItem onClick={handleEditClick}>
+            <ListItemDecorator>
+              <Edit />
+            </ListItemDecorator>
+            수정하기
+          </MenuItem>
+          <MenuItem variant="soft" color="danger" onClick={handleDeleteClick}>
+            <ListItemDecorator sx={{ color: 'inherit' }}>
+              <DeleteForever />
+            </ListItemDecorator>
+            삭제하기
+          </MenuItem>
+        </Menu>
+      </Dropdown>
+    </>
   );
 };
 
