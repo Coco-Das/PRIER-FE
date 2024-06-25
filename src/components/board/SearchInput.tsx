@@ -4,6 +4,7 @@ import styled from 'styled-components';
 export const SearchInputWrapper = styled.div`
   margin-top: 5px;
   position: relative;
+  margin-left: 20px;
 
   input {
     position: relative;
@@ -37,7 +38,7 @@ export const SearchInputWrapper = styled.div`
         fill: none;
         stroke: #315af1;
         stroke-width: 1.5px;
-        stroke-dashoffset: 212.908 + 59;
+        stroke-dashoffset: 212.908 + 100;
         stroke-dasharray: 59 212.908;
         transition: all 0.6s ease;
       }
