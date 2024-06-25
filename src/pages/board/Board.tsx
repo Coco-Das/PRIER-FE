@@ -56,78 +56,87 @@ const Board: React.FC = () => {
     }
   };
 
+  const fetchMyPosts = async () => {
+    setLoading(true);
+    try {
+      const response = await API_BASE_URL.get('/posts/my');
+      const myPosts = response.data.reverse();
+      const filteredMyPosts =
+        activeCategory === 'ALL' ? myPosts : myPosts.filter((post: BoardPost) => post.category === activeCategory);
+      setPosts(filteredMyPosts);
+    } catch (error) {
+      console.error('Error fetching my posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const fetchLikedPosts = async () => {
+    setLoading(true);
+    try {
+      const response = await API_BASE_URL.get('/posts/like/my');
+      const likedPosts = response.data.reverse();
+      const filteredLikedPosts =
+        activeCategory === 'ALL'
+          ? likedPosts
+          : likedPosts.filter((post: BoardPost) => post.category === activeCategory);
+      setPosts(filteredLikedPosts);
+    } catch (error) {
+      console.error('Error fetching liked posts:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   useEffect(() => {
-    fetchPosts();
+    if (activeFilter === 'all') {
+      fetchPosts();
+    } else if (activeFilter === 'myposts') {
+      fetchMyPosts();
+    } else if (activeFilter === 'likes') {
+      fetchLikedPosts();
+    }
   }, [activeCategory, activeFilter, activeSort]);
 
   useEffect(() => {
-    const fetchMyPosts = async () => {
-      setLoading(true);
-      try {
-        const response = await API_BASE_URL.get(`/posts/my`);
-        const myPosts = response.data.reverse();
-        setFilteredPosts(myPosts);
-      } catch (error) {
-        console.error('Error fetching my posts:', error);
-      } finally {
-        setLoading(false);
+    const applySearchFilter = (posts: BoardPost[]) => {
+      if (searchTerm) {
+        return posts.filter(
+          post =>
+            post.title.includes(searchTerm) ||
+            post.content.includes(searchTerm) ||
+            (activeCategory !== 'NOTICE' && post.nickname.includes(searchTerm)),
+        );
       }
+      return posts;
     };
 
-    const fetchLikedPosts = async () => {
-      setLoading(true);
-      try {
-        const response = await API_BASE_URL.get(`/posts/like/my`);
-        const likedPosts = response.data.reverse();
-        setFilteredPosts(likedPosts);
-      } catch (error) {
-        console.error('Error fetching liked posts:', error);
-      } finally {
-        setLoading(false);
+    const applySort = (posts: BoardPost[]) => {
+      if (activeSort === 'latest') {
+        return posts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      } else if (activeSort === 'registration') {
+        return posts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+      } else if (activeSort === 'popular') {
+        return posts.sort((a, b) => {
+          if (b.likes === a.likes) {
+            return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+          }
+          return b.likes - a.likes;
+        });
       }
+      return posts;
     };
 
-    if (!postId && USER_ID !== null) {
-      if (activeFilter === 'likes') {
-        fetchLikedPosts();
-        return;
-      } else if (activeFilter === 'myposts') {
-        fetchMyPosts();
-        return;
-      } else if (activeFilter === 'all') {
-        let updatedPosts = posts;
+    let updatedPosts = posts;
 
-        if (activeCategory !== 'ALL') {
-          updatedPosts = posts.filter(post => post.category === activeCategory);
-        } else {
-          updatedPosts = posts.filter(post => post.category !== 'NOTICE');
-        }
-
-        if (searchTerm) {
-          updatedPosts = updatedPosts.filter(
-            post =>
-              post.title.includes(searchTerm) ||
-              post.content.includes(searchTerm) ||
-              post.nickname.includes(searchTerm),
-          );
-        }
-
-        if (activeSort === 'latest') {
-          updatedPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-        } else if (activeSort === 'registration') {
-          updatedPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
-        } else if (activeSort === 'popular') {
-          updatedPosts.sort((a, b) => {
-            if (b.likes === a.likes) {
-              return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-            }
-            return b.likes - a.likes;
-          });
-        }
-
-        setFilteredPosts(updatedPosts);
-      }
+    if (activeCategory !== 'ALL') {
+      updatedPosts = posts.filter(post => post.category === activeCategory);
+    } else {
+      updatedPosts = posts.filter(post => post.category !== 'NOTICE');
     }
+
+    const filteredAndSortedPosts = applySort(applySearchFilter(updatedPosts));
+    setFilteredPosts(filteredAndSortedPosts);
   }, [posts, activeCategory, activeFilter, searchTerm, postId, USER_ID, activeSort]);
 
   const handleCategoryClick = (category: string) => {
