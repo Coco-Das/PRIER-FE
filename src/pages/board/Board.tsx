@@ -105,7 +105,10 @@ const Board: React.FC = () => {
 
         if (searchTerm) {
           updatedPosts = updatedPosts.filter(
-            post => post.title.includes(searchTerm) || post.content.includes(searchTerm),
+            post =>
+              post.title.includes(searchTerm) ||
+              post.content.includes(searchTerm) ||
+              post.nickname.includes(searchTerm),
           );
         }
 

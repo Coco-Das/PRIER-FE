@@ -86,16 +86,6 @@ const SearchInput: React.FC<{
 }> = ({ searchTerm, handleSearchChange }) => {
   const inputRef = React.useRef<HTMLInputElement>(null);
 
-  const handleClearInput = (e: React.MouseEvent<HTMLButtonElement>) => {
-    e.stopPropagation(); // 이벤트 버블링 방지
-    e.preventDefault(); // 기본 이벤트 방지
-    if (inputRef.current) {
-      inputRef.current.value = '';
-      inputRef.current.focus();
-    }
-    handleSearchChange({ target: { value: '' } } as React.ChangeEvent<HTMLInputElement>);
-  };
-
   return (
     <>
       <SearchInputWrapper className="search">
@@ -105,9 +95,6 @@ const SearchInput: React.FC<{
             <use xlinkHref="#path" />
           </svg>
         </div>
-        <button type="button" onClick={handleClearInput}>
-          &times;
-        </button>
       </SearchInputWrapper>
 
       <svg xmlns="http://www.w3.org/2000/svg" style={{ display: 'none' }}>
