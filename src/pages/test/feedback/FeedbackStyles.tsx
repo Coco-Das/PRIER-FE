@@ -49,6 +49,8 @@ export const DetailText = styled.p`
 export const UniqueText = styled.span`
   font-weight: 700;
   font-size: 25px;
+
+  white-space: nowrap;
   padding-left: 5px;
 `;
 export const MypageChartIcon = styled(ChartIcon)`
@@ -106,7 +108,7 @@ export const Img = styled.img`
 `;
 
 export const QuestionDiv = styled.div`
-  width: 95%;
+  width: 100%;
   height: auto;
   padding: 10px 30px;
   border-radius: 8px;
@@ -114,4 +116,28 @@ export const QuestionDiv = styled.div`
   background: linear-gradient(#fff, #fff), linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc);
   background-clip: padding-box, border-box;
   background-origin: padding-box, border-box;
+`;
+export const CommentDiv = styled.div<{ $isEmpty: boolean }>`
+  height: auto;
+  width: 100%;
+  display: ${props => (props.$isEmpty ? 'flex' : 'grid')};
+  grid-template-columns: repeat(4, 1fr); /* 한 줄에 4개의 열 */
+  gap: 15px; /* 아이템 사이의 간격 */
+`;
+export const CommentWrapper = styled.div`
+  width: 100%;
+  font-size: 15px;
+  height: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  border-radius: 8px;
+  box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
+  padding: 20px 30px;
+`;
+export const ProfileImg = styled.img`
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
 `;

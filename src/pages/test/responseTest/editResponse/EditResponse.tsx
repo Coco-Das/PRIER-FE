@@ -116,6 +116,7 @@ export const EditResponse = () => {
   const [newQuestions, setNewQuestions] = useState<Question[]>([]);
   const [deleteMainImage, setDeleteMainImage] = useState(false);
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [ImageAlert, setImageAlert] = useState(false);
 
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
@@ -171,13 +172,13 @@ export const EditResponse = () => {
       console.error('에러:', error);
     }
   };
-  useEffect(() => {
-    console.log('Main Key:', mainKeys);
-  }, [mainKeys]);
+  // useEffect(() => {
+  //   console.log('Main Key:', mainKeys);
+  // }, [mainKeys]);
 
-  useEffect(() => {
-    console.log('Add Keys:', addKeys);
-  }, [addKeys]);
+  // useEffect(() => {
+  //   console.log('Add Keys:', addKeys);
+  // }, [addKeys]);
 
   if (!projectId) {
     console.log(projectId);
@@ -236,34 +237,38 @@ export const EditResponse = () => {
       });
       const results = await Promise.all(fileReaders);
       setAdditionalImageUrls(prevImageUrls => [...prevImageUrls, ...results]);
+      console.log(results);
+      console.log(additionalImageUrls);
     }
   };
+
   const handleAdditionalButtonClick = () => {
     additionalFileInputRef.current?.click();
   };
 
+  //추가이미지 삭제
   const handleDeleteAdditionalImage = (index: number) => {
+    //url에서 제거
     setAdditionalImageUrls(prevImageUrls => {
       const updatedImageUrls = prevImageUrls.filter((_, i) => i !== index);
       return updatedImageUrls;
     });
-
+    //key에서 제거
     setDeleteImages(prevDeleteImages => {
       const newDeleteImages = [...prevDeleteImages, addKeys[index]];
       setAddKeys(prevKey => prevKey.filter((_, i) => i !== index));
       return newDeleteImages;
     });
-
-    console.log(index);
-    console.log('삭제될이미지의 key:', addKeys[index]);
+    console.log(additionalImageUrls);
+    console.log('삭제될이미지의 key:', deleteImages);
   };
-  useEffect(() => {
-    console.log('현재 보이는 이미지', additionalImageUrls);
-  }, [additionalImageUrls]);
+  // useEffect(() => {
+  //   console.log('현재 보이는 이미지', additionalImageUrls);
+  // }, [additionalImageUrls]);
 
-  useEffect(() => {
-    console.log('삭제될 이미지:', deleteImages);
-  }, [deleteImages]);
+  // useEffect(() => {
+  //   console.log('삭제될 이미지:', deleteImages);
+  // }, [deleteImages]);
 
   const handleTagInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(event.target.value);
@@ -383,6 +388,14 @@ export const EditResponse = () => {
 
     if (mainFileInputRef.current?.files && mainFileInputRef.current.files.length > 0) {
       formData.append('mainImage', mainFileInputRef.current.files[0]);
+    } else {
+      if (deleteMainImage) {
+        setImageAlert(true);
+        setTimeout(() => {
+          setImageAlert(false);
+        }, 800);
+        return;
+      }
     }
 
     if (additionalFileInputRef.current?.files) {
@@ -452,7 +465,12 @@ export const EditResponse = () => {
             <p className="font-extrabold mt-5">프로젝트 목표</p>
             <AutoResizeTextarea value={goal} onChange={handleGoalChange} placeholder="프로젝트 목표를 입력하세요..." />
             <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
-            <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
+            <div style={{ display: 'flex' }}>
+              <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
+              <span className="ml-2" style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato' }}>
+                * 메인이미지는 필수입니다
+              </span>
+            </div>
             {mainImageUrl && (
               <ImageWrapper className="mt-5">
                 <StyledImg src={mainImageUrl} alt="메인 이미지" />
@@ -742,6 +760,7 @@ export const EditResponse = () => {
       {snackbar && (
         <ProjectSnackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />
       )}
+      {ImageAlert && <CustomAlert message="메인이미지는 필수입니다" showButtons={false} />}
     </CreateWrapper>
   );
 };

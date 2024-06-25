@@ -3,7 +3,15 @@ import { useProjectStore } from '../../../states/projects/ProjectStore';
 import { useEffect, useRef, useState } from 'react';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import PropTypes from 'prop-types';
-import { Button, CommentDiv, CommentWrapper, DeleteButton, EditButton, SidebarContainer } from './CommentStyles';
+import {
+  Button,
+  CommentDiv,
+  CommentWrapper,
+  DeleteButton,
+  EditButton,
+  ProfileImg,
+  SidebarContainer,
+} from './CommentStyles';
 import StarRating from '../../../components/utils/StarRating';
 import SidebarAlert from '../../../components/utils/SidebarAlert';
 
@@ -21,6 +29,7 @@ interface CommentData {
   score: number;
   userId: number;
   userName: string;
+  profileUrl: string;
 }
 
 export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
@@ -196,8 +205,15 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
               ) : (
                 <span dangerouslySetInnerHTML={{ __html: comment.content.replace(/\n/g, '<br />') }}></span>
               )}
-              <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                <strong>{comment.userName}</strong>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                }}
+              >
+                <ProfileImg src={comment.profileUrl}></ProfileImg>
+                <strong className="ml-1">{comment.userName}</strong>
                 {editingCommentId === comment.commentId ? (
                   <StarRating initialScore={editingScore} onRatingChange={handleRatingChange} />
                 ) : (

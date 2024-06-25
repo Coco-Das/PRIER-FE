@@ -3,10 +3,13 @@ import { useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
 import {
   AIReportContainer,
+  CommentDiv,
+  CommentWrapper,
   DetailText,
   FeedbackContainer,
   FeedbackWrapper,
   Img,
+  ProfileImg,
   ProjectContainer,
   ProjectDiv,
   QuestionDiv,
@@ -19,13 +22,17 @@ import { API_BASE_URL } from '../../../const/TokenApi';
 import { Link } from 'react-router-dom';
 import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import StarRating from '../../../components/utils/StarRating';
+import FeedbackAIReport from '../../../components/utils/FeedbackAIReport';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
 interface SubjectiveQuestion {
   questionId: number;
   summary: string;
+  feedbackCount: number;
   category: 'SUBJECTIVE';
+  questionContent: string;
 }
 
 interface ObjectiveQuestion {
@@ -35,9 +42,21 @@ interface ObjectiveQuestion {
   soso: number;
   bad: number;
   veryBad: number;
+  feedbackCount: number;
   category: 'OBJECTIVE';
+  questionContent: string;
 }
 type Question = SubjectiveQuestion | ObjectiveQuestion;
+
+interface CommentData {
+  commentId: number;
+  content: string;
+  isMine: boolean;
+  score: number;
+  userId: number;
+  userName: string;
+  profileUrl: string;
+}
 
 function Feedback() {
   const { projectId } = useParams<{ projectId: string }>();
@@ -48,9 +67,12 @@ function Feedback() {
   const [teamDescription, setTeamDescription] = useState('');
   const [mainImgUrl, setMainImgUrl] = useState('');
   const [questions, setQuestions] = useState<Question[]>([]);
-  const [score, setScore] = useState(0);
   const [amount, setAmount] = useState<number[]>([]);
   const [percents, setPercents] = useState(0);
+  const [averageScore, setAverageScore] = useState(0);
+  const [comments, setComments] = useState<CommentData[]>([]);
+  const [keywords, setKeywords] = useState([]);
+
   useEffect(() => {
     if (projectId) {
       setProjectId(projectId); // URL 파라미터로부터 projectId를 상태로 설정
@@ -69,20 +91,28 @@ function Feedback() {
       setIntroduce(Data.introduce);
       setMainImgUrl(Data.projectImage);
       setPercents(Data.percentage);
+      setAverageScore(Data.averageScore);
+      setAmount(Data1.amount);
+      setComments(Data.commentWithProfileDtoList);
+      setKeywords(Data.keyWordResponseDtoList);
 
       const subjectiveQuestions = Data.chatGpt.map((q: any) => ({
         questionId: q.question_id,
         summary: q.summary,
+        feedbackCount: q.feedbackCount,
+        questionContent: q.questionContent,
         category: 'SUBJECTIVE' as const,
       }));
 
       const objectiveQuestions = Data.responseObjectiveDtoList.map((q: any) => ({
         questionId: q.questionId,
-        veryGood: q.veryGood,
-        good: q.good,
+        veryGood: q.veryBad,
+        good: q.bad,
         soso: q.soso,
-        bad: q.bad,
-        veryBad: q.veryBad,
+        bad: q.good,
+        veryBad: q.veryGood,
+        feedbackCount: q.feedbackCount,
+        questionContent: q.questionContent,
         category: 'OBJECTIVE' as const,
       }));
 
@@ -90,7 +120,6 @@ function Feedback() {
       allQuestions.sort((a, b) => a.questionId - b.questionId);
 
       setQuestions(allQuestions);
-      setAmount(Data1.amount);
     } catch (error) {
       console.log(error);
     }
@@ -99,11 +128,15 @@ function Feedback() {
     handleGetInfo();
   }, [projectId]);
 
-  if (!title || !teamName || !introduce) {
-    return <div>Loading...</div>;
-  }
+  // if (!title || !teamName || !introduce) {
+  //   return <div>Loading...</div>;
+  // }
+  const calculatePercent = (value: number, total: number) => {
+    return total > 0 ? ((value / total) * 100).toFixed(2) : 0;
+  };
 
   const renderObjectiveQuestionChart = (question: ObjectiveQuestion) => {
+    const totalResponses = question.veryGood + question.good + question.soso + question.bad + question.veryBad;
     const data = {
       labels: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'],
       datasets: [
@@ -187,7 +220,9 @@ function Feedback() {
             <span className="underline">자세히 보기 &gt;</span>
           </Link>
         </ProjectContainer>
-        <AIReportContainer>{/* <AIReport /> */}</AIReportContainer>
+        <AIReportContainer>
+          <FeedbackAIReport keyWordResponseDtoList={keywords} />
+        </AIReportContainer>
         <div style={{ display: 'flex', flexDirection: 'column', width: '40%', gap: '15px' }}>
           <FeedbackContainer>
             <div style={{ display: 'flex', flexDirection: 'column', width: '30%', gap: '5px' }}>
@@ -212,12 +247,12 @@ function Feedback() {
             <div style={{ display: 'flex' }}>
               <div style={{ display: 'flex ', alignItems: 'center' }}>
                 <TitleText>통계</TitleText>
-                <UniqueText className="ml-3" style={{ fontSize: '28px' }}>
+                <UniqueText className="ml-3" style={{ fontSize: '25px' }}>
                   긍정의 응답 {percents}%
                 </UniqueText>
               </div>
               <DetailText className="ml-3 mb-1" style={{ display: 'flex', alignItems: 'flex-end' }}>
-                평점 {score}점의 별점을 받았습니다
+                평점 {averageScore}점의 별점을 받았습니다
               </DetailText>
             </div>
           </StaticContainer>
@@ -227,64 +262,159 @@ function Feedback() {
         상세 응답 분석
       </span>
       <ResponseDiv>
-        {questions.map((question, index) => (
-          <QuestionDiv key={question.questionId} className="mt-4">
-            {question.category === 'SUBJECTIVE' ? (
-              <div>
-                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  {index + 1}번 문항
-                  <input
-                    style={{
-                      marginLeft: '20px',
-                      fontSize: '20px',
-                      outline: 'none',
-                      fontWeight: 'bold',
-                      width: '80%',
-                    }}
-                    value="질문이 들어가야함"
-                    readOnly
-                  />
-                </div>
-                <p style={{ marginLeft: '60px', fontSize: '18px', padding: '20px' }}>{question.summary}</p>
-              </div>
-            ) : (
-              <div>
-                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  {index + 1}번 문항
-                  <input
-                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
-                    readOnly
-                    value="질문이 들어가야함"
-                  />
-                </div>
-                <div style={{ marginLeft: '60px', fontSize: '18px', outline: 'none', width: '80%', padding: '20px' }}>
-                  <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
-                    <div style={{ width: '15%' }}>{renderObjectiveQuestionChart(question)}</div>
-                    <div
-                      style={{
-                        width: '100%',
-                        display: 'flex',
-                        flexDirection: 'column',
-                        fontSize: '14px',
-                        justifyContent: 'flex-end',
-                        marginLeft: '50px',
-                        lineHeight: '16px',
-                        color: '#828282',
-                      }}
-                    >
-                      <p>매우 좋음: {question.veryGood}</p>
-                      <p>좋음: {question.good}</p>
-                      <p>보통: {question.soso}</p>
-                      <p>나쁨: {question.bad}</p>
-                      <p>매우 나쁨: {question.veryBad}</p>
+        {questions.length === 0 && (
+          <div
+            style={{
+              marginTop: '100px',
+              marginBottom: '100px',
+              color: '#888',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              fontSize: '18px',
+            }}
+          >
+            <p>작성됩 응답이 없습니다</p>
+          </div>
+        )}
+        {questions.map((question, index) => {
+          const totalResponses =
+            question.category === 'OBJECTIVE'
+              ? question.veryGood + question.good + question.soso + question.bad + question.veryBad
+              : 0;
+
+          return (
+            <QuestionDiv key={question.questionId} className="mt-4">
+              {question.category === 'SUBJECTIVE' ? (
+                <div>
+                  <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                    {index + 1}번 문항
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      <span
+                        style={{
+                          marginLeft: '20px',
+                          fontSize: '22px',
+                          outline: 'none',
+                          width: 'auto',
+                        }}
+                      >
+                        {question.questionContent}
+                      </span>
+                      <span className="ml-5" style={{ fontSize: '12px', color: '#828282' }}>
+                        응답 {question.feedbackCount}개
+                      </span>
                     </div>
                   </div>
+                  {question.feedbackCount > 0 && (
+                    <p style={{ marginLeft: '60px', fontSize: '18px', padding: '20px' }}>{question.summary}</p>
+                  )}
                 </div>
-              </div>
-            )}
-          </QuestionDiv>
-        ))}
+              ) : (
+                <div>
+                  <div style={{ display: 'inline-flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                    {index + 1}번 문항
+                    <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      <span
+                        style={{
+                          marginLeft: '20px',
+                          fontSize: '22px',
+                          outline: 'none',
+                          width: 'auto',
+                        }}
+                      >
+                        {question.questionContent}
+                      </span>
+                      <span className="ml-5" style={{ fontSize: '12px', color: '#828282' }}>
+                        응답 {question.feedbackCount}개
+                      </span>
+                    </div>
+                  </div>
+                  {question.feedbackCount > 0 && (
+                    <div
+                      style={{ marginLeft: '60px', fontSize: '18px', outline: 'none', width: '80%', padding: '20px' }}
+                    >
+                      <div style={{ display: 'flex', justifyContent: 'space-between', width: '100%' }}>
+                        <div style={{ width: '150px' }}>{renderObjectiveQuestionChart(question)}</div>
+                        <div
+                          style={{
+                            width: '100%',
+                            display: 'flex',
+                            flexDirection: 'column',
+                            fontSize: '12px',
+                            justifyContent: 'flex-end',
+                            marginLeft: '50px',
+                            lineHeight: '16px',
+                            color: '#828282',
+                          }}
+                        >
+                          <p>매우 좋음: {calculatePercent(question.veryGood, totalResponses)}%</p>
+                          <p>좋음: {calculatePercent(question.good, totalResponses)}%</p>
+                          <p>보통: {calculatePercent(question.soso, totalResponses)}%</p>
+                          <p>나쁨: {calculatePercent(question.bad, totalResponses)}%</p>
+                          <p>매우 나쁨: {calculatePercent(question.veryBad, totalResponses)}%</p>
+                        </div>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
+            </QuestionDiv>
+          );
+        })}
       </ResponseDiv>
+      <span className="mt-5 font-bold" style={{ color: '#315AF1' }}>
+        댓글
+      </span>
+      <CommentDiv $isEmpty={comments.length === 0}>
+        {comments.length === 0 ? (
+          <div
+            style={{
+              marginTop: '100px',
+              marginBottom: '100px',
+              color: '#888',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              width: '100%',
+              fontSize: '18px',
+            }}
+          >
+            <p>작성된 댓글이 없습니다</p>
+          </div>
+        ) : (
+          comments.map(comment => (
+            <CommentWrapper key={comment.commentId}>
+              <p
+                title={comment.content}
+                dangerouslySetInnerHTML={{ __html: comment.content.replace(/\n/g, '<br />') }}
+                style={{
+                  display: '-webkit-box',
+                  WebkitBoxOrient: 'vertical',
+                  WebkitLineClamp: 3,
+                  lineHeight: '1.2em',
+                  maxHeight: '3.6em',
+                  overflow: 'hidden',
+                }}
+              ></p>
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginTop: 'auto',
+                }}
+              >
+                <ProfileImg src={comment.profileUrl}></ProfileImg>
+                <strong className="ml-1">{comment.userName}</strong>
+                <StarRating initialScore={comment.score} readOnly={true} onHover={false} />
+              </div>
+            </CommentWrapper>
+          ))
+        )}
+      </CommentDiv>
     </FeedbackWrapper>
   );
 }
