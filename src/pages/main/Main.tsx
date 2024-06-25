@@ -22,6 +22,7 @@ import { userPointStore } from '../../states/user/PointStore';
 import LatestProject from '../../components/user/LatestProject';
 import { useAllProjectStore } from '../../states/user/UserProjectStore';
 import { FetchAllProject, FetchLatestProject, SearchProject } from '../../services/MainPageApi';
+import Alarm from '../../components/user/Alarm';
 
 export default function Main() {
   const userProfile = useUserStore(state => state.userProfile);
@@ -32,6 +33,9 @@ export default function Main() {
   const [currentPage, setCurrentPage] = useState(1);
   const [keyword, setKeyword] = useState('');
   const [noResults, setNoResults] = useState(false);
+  //알림 데이터
+  const response = sessionStorage.getItem('responseAmount');
+  const comment = sessionStorage.getItem('commentAmount');
 
   useEffect(() => {
     const fetchData = async () => {
@@ -163,6 +167,13 @@ export default function Main() {
       <span className="flex justify-center mt-6">
         <Pagination count={totalPages} page={currentPage} color="primary" size="large" onChange={handlePageChange} />
       </span>
+      {response === '0' && comment === '0' ? (
+        <></>
+      ) : (
+        <>
+          <Alarm />
+        </>
+      )}
     </div>
   );
 }

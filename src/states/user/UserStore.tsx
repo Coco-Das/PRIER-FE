@@ -13,7 +13,7 @@ interface Comment {
   score: number;
 }
 interface UserProfile {
-  imgUrl: string | null;
+  imgUrl: string;
   nickname: string;
   belonging: string | null;
   rank: string;
@@ -88,7 +88,9 @@ export const useUserStore = create<UserStore>(set => ({
     set({ userProfile: initialProfile });
   },
   setImgUrl: (imgUrl: string) => {
-    set(state => ({ userProfile: { ...state.userProfile, imgUrl } }));
+    set(state => ({
+      userProfile: { ...state.userProfile, imgUrl },
+    }));
   },
   setNickname: (nickname: string) => {
     set(state => ({
