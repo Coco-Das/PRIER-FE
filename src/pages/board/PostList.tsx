@@ -7,7 +7,7 @@ import {
   AvatarImage,
   AuthorContainer,
   Author,
-  CreatedAt,
+  TimeViews,
   ContentContainer,
   LikesContainer,
   Likes,
@@ -115,7 +115,11 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                   >
                     {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
                   </Author>
-                  <CreatedAt>{formatDate(post.createdAt)}</CreatedAt>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                    <TimeViews>{formatDate(post.createdAt)}</TimeViews>
+                    <div style={{ width: '4px', height: '4px', backgroundColor: '#828282', borderRadius: '50%' }}></div>
+                    <TimeViews>조회수 {post.views}회 </TimeViews>
+                  </div>
                 </AuthorContainer>
                 {userId === post.userId && (
                   <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>

@@ -263,7 +263,7 @@ export const Author = styled.div<{ category?: string }>`
   cursor: pointer;
 `;
 
-export const CreatedAt = styled.div`
+export const TimeViews = styled.div`
   color: #828282;
   font-size: 14px;
   line-height: 150%;
@@ -404,7 +404,7 @@ export const CommentText = styled.div`
   color: #000;
 `;
 
-export const CommentCreatedAt = styled(CreatedAt)`
+export const CommentCreatedAt = styled(TimeViews)`
   font-size: 12px;
   color: #828282;
 `;

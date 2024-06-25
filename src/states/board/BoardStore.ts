@@ -7,6 +7,7 @@ export interface Media {
 }
 
 export interface BoardPost {
+  views: number;
   postId: number;
   nickname: string;
   category: string;
