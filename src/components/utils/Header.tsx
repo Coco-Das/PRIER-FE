@@ -6,6 +6,7 @@ import { ReactComponent as User } from '../../assets/user.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SideBar from './SideBar';
 import Profile from '../user/Profile';
+import { useUserStore } from '../../states/user/UserStore';
 
 const HeaderContainer = styled.nav`
   position: relative;
@@ -30,8 +31,9 @@ const StyledLogo = styled(Logo)`
   height: 100%;
   margin-left: 40px;
 `;
-const StyledUser = styled(User)`
-  height: 100%;
+const StyledImg = styled.img`
+  width: 3rem;
+  height: 3rem;
 `;
 const UserContainer = styled.div`
   &:hover {
@@ -44,6 +46,7 @@ const UserContainer = styled.div`
 export const Header = () => {
   const [sideBarOpen, setSideBarOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
+  const userProfile = useUserStore(state => state.userProfile);
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
@@ -67,7 +70,7 @@ export const Header = () => {
       <StyledMenu onClick={() => toggleSideBar(!sideBarOpen)} />
       <StyledLogo onClick={handleLogoCick} />
       <UserContainer onMouseEnter={handleMouseEnter}>
-        <StyledUser />
+        <StyledImg src={userProfile.imgUrl} />
         {profileOpen && <Profile />}
       </UserContainer>
       <SideBar open={sideBarOpen} toggleDrawer={toggleSideBar} currentPath={currentPath} />

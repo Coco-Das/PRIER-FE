@@ -101,6 +101,7 @@ export const CreateTest = () => {
   const [alert, setAlert] = useState(false);
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const inputRef = useRef<HTMLInputElement>(null);
 
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
@@ -191,6 +192,7 @@ export const CreateTest = () => {
   const handleTagInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if (event.key === 'Enter' && tagInput.trim()) {
       event.preventDefault();
+
       if (tags.length < 2) {
         setTags(prevTags => [...prevTags, { tagName: tagInput.trim(), color: getRandomColor() }]);
         setTagInput('');
@@ -389,6 +391,7 @@ export const CreateTest = () => {
           <TagDiv className="mt-20">
             <span className="font-bold">태그</span>{' '}
             <Input
+              ref={inputRef}
               className="ml-4"
               value={tagInput}
               onChange={handleTagInputChange}

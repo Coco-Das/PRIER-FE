@@ -131,6 +131,7 @@ export default function MyPage() {
     const fetchData = async () => {
       try {
         await FetchMyPage();
+        console.log(useUserStore.getState().userProfile.imgUrl);
       } catch (error) {
         console.error('마이 페이지 호출 실패:', error);
       }
@@ -465,12 +466,12 @@ export default function MyPage() {
         <ProfileContainer>
           {isEditingImg ? (
             <ProfileImgContainer>
-              {userProfile.imgUrl ? <StyledProfile src={userProfile.imgUrl} /> : <StyledUserIcon />}
+              <StyledProfile src={userProfile.imgUrl} alt="Profile" />
               <EditingOverlay></EditingOverlay>
             </ProfileImgContainer>
           ) : (
             <ProfileImgContainer>
-              {userProfile.imgUrl ? <StyledProfile src={userProfile.imgUrl} /> : <StyledUserIcon />}
+              <StyledProfile src={userProfile.imgUrl} alt="Profile" />
               <EditOverlay className="edit-overlay" onClick={setEditImg}>
                 <ModeEditOutlineRoundedIcon color="inherit" />
               </EditOverlay>

@@ -3,9 +3,10 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { Loading } from '../../../components/utils/Loading';
 import { FetchMyPage } from '../../../services/UserApi';
-
+import { useUserStore } from '../../../states/user/UserStore';
 export default function KakaoLoading() {
   const navigate = useNavigate();
+  const setImgUrl = useUserStore(state => state.setImgUrl);
 
   useEffect(() => {
     const currentUrl = new URL(window.location.href);
@@ -16,18 +17,30 @@ export default function KakaoLoading() {
       const fetchData = async () => {
         console.log('fetchData:');
         try {
+<<<<<<< HEAD
           const response = await axios.get(`http://52.78.144.83:8080/api/kakao/callback?code=${code}`);
+=======
+
+          const response = await axios.get(`http://52.79.204.128:8080/api/kakao/callback?code=${code}`);
+
+>>>>>>> d2510f15e5a87f08dd82cd5f774024287d7d09dc
 
           console.log('데이터', response.data);
           const ACCESS_TOKEN = response.data.accessToken;
           const KAKAO_ACCESS_TOKEN = response.data.kakaoAccessToken;
           const USER_ID = response.data.userId;
+          const Response_Amount = response.data.notificationDto.responseAmount;
+          const Comment_Amount = response.data.notificationDto.commentAmount;
+
           localStorage.setItem('accessToken', ACCESS_TOKEN);
           localStorage.setItem('kakaoAccessToken', KAKAO_ACCESS_TOKEN);
           localStorage.setItem('userId', USER_ID);
+          sessionStorage.setItem('responseAmount', Response_Amount);
+          sessionStorage.setItem('commentAmount', Comment_Amount);
           console.log('로그인 성공');
           try {
             await FetchMyPage();
+            setImgUrl(response.data.profileImgDto.s3Key);
             navigate('/main');
           } catch (error) {
             console.error('메인 페이지 호출 실패:', error);
@@ -37,7 +50,6 @@ export default function KakaoLoading() {
           navigate('/login');
         }
       };
-
       fetchData();
     } else {
       navigate('/login');
