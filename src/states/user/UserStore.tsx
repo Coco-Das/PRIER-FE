@@ -160,7 +160,7 @@ interface OtherComment {
 }
 
 interface OtherProfile {
-  imgUrl: string | null;
+  imgUrl: string;
   nickname: string;
   belonging: string | null;
   rank: string;

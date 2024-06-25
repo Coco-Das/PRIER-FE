@@ -1,5 +1,4 @@
 import { styled } from 'styled-components';
-import { ReactComponent as UserIcon } from '../../../assets/userProfile.svg';
 import { ReactComponent as ChartIcon } from '../../../assets/main_chart.svg';
 import { ReactComponent as GraphIcon } from '../../../assets/Graph.svg';
 
@@ -23,14 +22,12 @@ export const ProfileImgContainer = styled.div`
     opacity: 1;
   }
 `;
-export const StyledUserIcon = styled(UserIcon)`
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-`;
+
 export const StyledProfile = styled.img`
   width: 100%;
   height: 100%;
+  border: none;
+  border-radius: 50%;
   object-fit: cover;
 `;
 export const EditOverlay = styled.div`

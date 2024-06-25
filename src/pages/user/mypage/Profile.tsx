@@ -28,7 +28,6 @@ import {
   ProfileDetail,
   ProfileImgContainer,
   StyledProfile,
-  StyledUserIcon,
   StaticOverlay,
 } from './MyPageStyle';
 import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
@@ -66,7 +65,7 @@ export default function UserProfile() {
       <div className="flex w-full h-[40%] mb-5">
         <ProfileContainer>
           <ProfileImgContainer>
-            {userProfile.imgUrl ? <StyledProfile src={userProfile.imgUrl} /> : <StyledUserIcon />}
+            <StyledProfile src={userProfile.imgUrl} alt="profile" />
           </ProfileImgContainer>
           <div className="flex-col mt-3 w-full">
             <span className="flex items-center justify-between">

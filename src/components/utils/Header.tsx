@@ -2,7 +2,6 @@ import * as React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Menu } from '../../assets/Menu.svg';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
-import { ReactComponent as User } from '../../assets/user.svg';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SideBar from './SideBar';
 import Profile from '../user/Profile';
@@ -34,6 +33,8 @@ const StyledLogo = styled(Logo)`
 const StyledImg = styled.img`
   width: 3rem;
   height: 3rem;
+  border: none;
+  border-radius: 50%;
 `;
 const UserContainer = styled.div`
   &:hover {
