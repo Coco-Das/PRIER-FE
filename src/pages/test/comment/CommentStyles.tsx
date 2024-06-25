@@ -60,3 +60,9 @@ export const CommentWrapper = styled.div`
   box-shadow: 2px 2px 5px rgba(0, 0, 0, 0.2);
   padding: 20px 30px;
 `;
+export const ProfileImg = styled.img`
+  width: 30px;
+  height: 30px;
+  object-fit: cover;
+  border-radius: 50%;
+`;
