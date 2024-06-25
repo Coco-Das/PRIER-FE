@@ -48,7 +48,7 @@ const router = createBrowserRouter([
         element: <CreateTest />,
       },
       {
-        path: '/feedback',
+        path: '/feedback/:projectId',
         element: <Feedback />,
       },
       {
