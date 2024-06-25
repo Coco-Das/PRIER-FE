@@ -109,6 +109,9 @@ export const StaticContainer = styled.div`
   margin-right: 20px;
   cursor: default;
   box-sizing: border-box;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 export const TitleText = styled.h2`
   font-weight: 700;
