@@ -239,8 +239,8 @@ export const CardContainer = styled.div`
   perspective: 1000px;
   display: flex;
   width: 35rem;
-  height: 13rem;
-  max-height: 13rem;
+  height: 13.5rem;
+  max-height: 13.5rem;
 `;
 
 export const Card = styled.div<{ isFlipped: boolean }>`

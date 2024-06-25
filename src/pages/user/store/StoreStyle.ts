@@ -15,7 +15,7 @@ export const PointContainer = styled.div`
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin-right: 20px;
-  padding: 20px 0;
+  padding: 20px;
   width: 23rem;
   max-width: 23rem;
   height: 11rem;

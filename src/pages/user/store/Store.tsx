@@ -84,7 +84,7 @@ export default function Store() {
       <div className="flex w-full">
         <PointContainer>
           <StyledPointIcon className="mb-3"></StyledPointIcon>
-          <div className="flex-col">
+          <div className="flex-col w-[60%] ">
             <PointText className="mb-5">포인트</PointText>
             <BlueText className="mb-5">{pointStore.point} 코어 보유</BlueText>
             <LinkText className="text-end" onClick={OpenLog}>

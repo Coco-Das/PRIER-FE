@@ -31,7 +31,6 @@ import {
   AccountGithub,
   ProfileImgContainer,
   EditOverlay,
-  StyledUserIcon,
   EditingOverlay,
   StyledProfile,
   StaticOverlay,

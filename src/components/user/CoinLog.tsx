@@ -68,26 +68,45 @@ const TransactionItem = styled.li`
 const TransactionTitle = styled.p`
   font-size: 18px;
   font-weight: 500;
-  width: 20%;
+  flex: 1;
+  text-align: center;
 `;
 const TransactionTime = styled.p`
   font-size: 18px;
   font-weight: 300;
-  width: 11rem;
+  flex: 1;
+  text-align: center;
 `;
 
 const TransactionText = styled.p`
   font-size: 18px;
-  width: 20%;
+  flex: 1;
   font-weight: 300;
+  text-align: center;
 `;
 const StyledCreditCardOffRoundedIcon = styled(CreditCardOffRoundedIcon)`
   cursor: pointer;
   &:hover {
-    color: #315af1;
+    color: #4188fe;
     transition: color 0.4s;
   }
 `;
+interface OrderButtonProps {
+  active: boolean;
+}
+
+const OrderButton = styled.button<OrderButtonProps>`
+  border: none;
+  border-radius: 20px;
+  padding: 4px 6px;
+  margin-bottom: 3%;
+  font-size: 14px;
+  font-weight: 300;
+  background-color: ${props => (props.active ? '#315af1' : '#f0f0f0')};
+  color: ${props => (props.active ? '#ffffff' : '#000000')};
+  transition: 0.4s;
+`;
+
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(() => ({
@@ -103,6 +122,7 @@ const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
 const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
   const pointStore = userPointStore();
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [activeButton, setActiveButton] = useState('최신순');
 
   const TransactionType = (type: string) => {
     switch (type) {
@@ -154,30 +174,50 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
     }
   };
 
+  const sortedTransactions =
+    activeButton === '최신순'
+      ? [...pointStore.transactions].sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      : [...pointStore.transactions].sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+
   return (
     <LogOverlay>
       <LogContainer>
         <CloseButton onClick={onCancel} />
         <LogTitle>코어 로그</LogTitle>
+        <span className="flex self-start gap-3">
+          <OrderButton active={activeButton === '최신순'} onClick={() => setActiveButton('최신순')}>
+            최신순
+          </OrderButton>
+          <OrderButton active={activeButton === '오래된순'} onClick={() => setActiveButton('오래된순')}>
+            오래된순
+          </OrderButton>
+        </span>
         <TransactionList>
           <TransactionItem>
             <TransactionTitle className="">사용 금액</TransactionTitle>
             <TransactionTitle>거래 내용</TransactionTitle>
             <TransactionTitle> 잔액</TransactionTitle>
             <TransactionTime style={{ fontWeight: '500' }}>거래 시간 </TransactionTime>
+            <TransactionTitle> 거래 취소</TransactionTitle>
           </TransactionItem>
-          {pointStore.transactions.map(transaction => (
+          {sortedTransactions.map(transaction => (
             <TransactionItem key={transaction.transactionId}>
               <TransactionText>{transaction.amount}</TransactionText>
               <TransactionText>{TransactionType(transaction.transactionType)}</TransactionText>
               <TransactionText>{transaction.balance}</TransactionText>
               <TransactionTime>{formatTransactionTime(transaction.createdAt)}</TransactionTime>
-              {transaction.transactionType === 'POINT_CHARGE' && transaction.tid && (
+              {transaction.transactionType === 'POINT_CHARGE' && transaction.tid ? (
                 <LightTooltip title="카카오페이 결제 취소" placement="right">
                   <StyledCreditCardOffRoundedIcon
                     onClick={() => handleRefund(transaction.tid as string, transaction.amount * 10)}
+                    style={{ flex: 1 }}
                   />
                 </LightTooltip>
+              ) : (
+                <>
+                  {' '}
+                  <div className="flex-1"></div>
+                </>
               )}
             </TransactionItem>
           ))}
