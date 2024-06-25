@@ -16,7 +16,7 @@ const Board: React.FC = () => {
   const navigate = useNavigate();
   const [posts, setPosts] = useState<BoardPost[]>([]);
   const [filteredPosts, setFilteredPosts] = useState<BoardPost[]>([]);
-  const [activeCategory, setActiveCategory] = useState<string>('ITNEWS');
+  const [activeCategory, setActiveCategory] = useState<string>('ALL');
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [activeSort, setActiveSort] = useState<string>('latest');
   const [searchTerm, setSearchTerm] = useState<string>('');
@@ -65,7 +65,7 @@ const Board: React.FC = () => {
       setLoading(true);
       try {
         const response = await API_BASE_URL.get(`/posts/my`);
-        const myPosts = response.data.filter((post: BoardPost) => post.category === activeCategory).reverse();
+        const myPosts = response.data.reverse();
         setFilteredPosts(myPosts);
       } catch (error) {
         console.error('Error fetching my posts:', error);
@@ -78,7 +78,7 @@ const Board: React.FC = () => {
       setLoading(true);
       try {
         const response = await API_BASE_URL.get(`/posts/like/my`);
-        const likedPosts = response.data.filter((post: BoardPost) => post.category === activeCategory).reverse();
+        const likedPosts = response.data.reverse();
         setFilteredPosts(likedPosts);
       } catch (error) {
         console.error('Error fetching liked posts:', error);
@@ -95,17 +95,13 @@ const Board: React.FC = () => {
         fetchMyPosts();
         return;
       } else if (activeFilter === 'all') {
-        const updatedPosts = posts.filter(post => post.category === activeCategory);
+        let updatedPosts = posts;
 
-        if (searchTerm) {
-          setFilteredPosts(
-            updatedPosts.filter(post => post.title.includes(searchTerm) || post.content.includes(searchTerm)),
-          );
+        if (activeCategory !== 'ALL') {
+          updatedPosts = posts.filter(post => post.category === activeCategory);
         } else {
-          setFilteredPosts(updatedPosts);
+          updatedPosts = posts.filter(post => post.category !== 'NOTICE');
         }
-      } else {
-        let updatedPosts = posts.filter(post => post.category === activeCategory);
 
         if (searchTerm) {
           updatedPosts = updatedPosts.filter(
@@ -113,8 +109,20 @@ const Board: React.FC = () => {
           );
         }
 
+        if (activeSort === 'latest') {
+          updatedPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+        } else if (activeSort === 'registration') {
+          updatedPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+        } else if (activeSort === 'popular') {
+          updatedPosts.sort((a, b) => {
+            if (b.likes === a.likes) {
+              return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+            }
+            return b.likes - a.likes;
+          });
+        }
+
         setFilteredPosts(updatedPosts);
-        setPage(1);
       }
     }
   }, [posts, activeCategory, activeFilter, searchTerm, postId, USER_ID, activeSort]);
