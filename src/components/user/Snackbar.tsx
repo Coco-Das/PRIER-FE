@@ -16,9 +16,9 @@ const SnackbarContainer = styled.div<{ type: 'success' | 'error'; isVisible: boo
   right: 2%;
   width: max-conten;
   max-width: max-content;
-  background-color: rgba(80, 79, 79, 0.8);
+  background-color: ${({ type }) => (type === 'success' ? 'rgba(40, 179, 129, 0.8)' : 'rgba(245, 91, 102, 0.8)')};
   color: white;
-  font-weight: 300;
+  font-weight: 400;
   font-size: 0.9rem;
   padding: 0.5rem 1.5rem;
   border-radius: 4px;
@@ -51,9 +51,9 @@ const Snackbar: React.FC<SnackbarProps> = ({ message, type, onClose }) => {
     <SnackbarContainer type={type} isVisible={isVisible}>
       <IconWrapper>
         {type === 'success' ? (
-          <CheckCircleRoundedIcon style={{ color: '#28B381' }} />
+          <CheckCircleRoundedIcon style={{ color: 'white' }} />
         ) : (
-          <ReportProblemRoundedIcon style={{ color: '#F9A5AB' }} />
+          <ReportProblemRoundedIcon style={{ color: 'white' }} />
         )}
       </IconWrapper>
       {message}
