@@ -68,18 +68,21 @@ const TransactionItem = styled.li`
 const TransactionTitle = styled.p`
   font-size: 18px;
   font-weight: 500;
-  width: 20%;
+  flex: 1;
+  text-align: center;
 `;
 const TransactionTime = styled.p`
   font-size: 18px;
   font-weight: 300;
-  width: 11rem;
+  flex: 1;
+  text-align: center;
 `;
 
 const TransactionText = styled.p`
   font-size: 18px;
-  width: 20%;
+  flex: 1;
   font-weight: 300;
+  text-align: center;
 `;
 const StyledCreditCardOffRoundedIcon = styled(CreditCardOffRoundedIcon)`
   cursor: pointer;
@@ -165,6 +168,7 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
             <TransactionTitle>거래 내용</TransactionTitle>
             <TransactionTitle> 잔액</TransactionTitle>
             <TransactionTime style={{ fontWeight: '500' }}>거래 시간 </TransactionTime>
+            <TransactionTitle> 거래 취소</TransactionTitle>
           </TransactionItem>
           {pointStore.transactions.map(transaction => (
             <TransactionItem key={transaction.transactionId}>
@@ -176,6 +180,7 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
                 <LightTooltip title="카카오페이 결제 취소" placement="right">
                   <StyledCreditCardOffRoundedIcon
                     onClick={() => handleRefund(transaction.tid as string, transaction.amount * 10)}
+                    style={{ flex: 1 }}
                   />
                 </LightTooltip>
               )}
