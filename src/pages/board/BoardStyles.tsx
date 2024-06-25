@@ -452,3 +452,15 @@ export const CommentButton = styled.button`
     color: #4188fe;
   }
 `;
+export const FilterBtn = styled.button<{ $isActive: boolean }>`
+  background-color: ${props => (props.$isActive ? '#315af1' : 'white')};
+  color: ${props => (props.$isActive ? 'white' : 'black')};
+  height: 100%;
+  padding: 5px 10px;
+  border-radius: 20px;
+  font-size: 12px;
+  margin-top: 10px;
+  &:hover {
+    background-color: ${props => (props.$isActive ? '#315af1' : '#e0e0e0')};
+  }
+`;

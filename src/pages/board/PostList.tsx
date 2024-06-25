@@ -31,9 +31,10 @@ interface PostListProps {
   posts: BoardPost[];
   onPostClick: (postId: number) => void;
   userId: number | null;
+  activeSort: string;
 }
 
-const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
+const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeSort }) => {
   const formatDate = useFormatDate();
   const extractTextFromContent = useExtractTextFromContent();
   const navigate = useNavigate();
@@ -68,9 +69,23 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId }) => {
     console.log(likes);
   }, [likes]);
 
+  const sortedPosts = [...posts].sort((a, b) => {
+    if (activeSort === 'latest') {
+      return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+    } else if (activeSort === 'registration') {
+      return new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime();
+    } else if (activeSort === 'popular') {
+      if (b.likes === a.likes) {
+        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+      }
+      return b.likes - a.likes;
+    }
+    return 0;
+  });
+
   return (
     <>
-      {posts.map(post => {
+      {sortedPosts.map(post => {
         const likeState = likes[post.postId] || { isLiked: post.isLikedByMe, likeCount: post.likes };
         const currentIsLiked = likeState.isLiked;
 

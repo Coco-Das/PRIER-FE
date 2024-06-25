@@ -18,6 +18,7 @@ const Board: React.FC = () => {
   const [filteredPosts, setFilteredPosts] = useState<BoardPost[]>([]);
   const [activeCategory, setActiveCategory] = useState<string>('ITNEWS');
   const [activeFilter, setActiveFilter] = useState<string>('all');
+  const [activeSort, setActiveSort] = useState<string>('latest');
   const [searchTerm, setSearchTerm] = useState<string>('');
   const [loading, setLoading] = useState<boolean>(true);
   const [USER_ID, setUserId] = useState<number | null>(null);
@@ -56,10 +57,8 @@ const Board: React.FC = () => {
   };
 
   useEffect(() => {
-    if (!allFetched && activeFilter === 'all') {
-      fetchPosts();
-    }
-  }, [activeFilter, allFetched]);
+    fetchPosts();
+  }, [activeCategory, activeFilter, activeSort]);
 
   useEffect(() => {
     const fetchMyPosts = async () => {
@@ -118,7 +117,7 @@ const Board: React.FC = () => {
         setPage(1);
       }
     }
-  }, [posts, activeCategory, activeFilter, searchTerm, postId, USER_ID]);
+  }, [posts, activeCategory, activeFilter, searchTerm, postId, USER_ID, activeSort]);
 
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
@@ -131,6 +130,25 @@ const Board: React.FC = () => {
       setAllFetched(false);
     }
     navigate(`/board?category=${activeCategory}&filter=${filter}`);
+  };
+
+  const handleSortClick = (sort: string) => {
+    setActiveSort(sort);
+    setPage(1);
+    const sortedPosts = [...filteredPosts];
+    if (sort === 'latest') {
+      sortedPosts.sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+    } else if (sort === 'registration') {
+      sortedPosts.sort((a, b) => new Date(a.createdAt).getTime() - new Date(b.createdAt).getTime());
+    } else if (sort === 'popular') {
+      sortedPosts.sort((a, b) => {
+        if (b.likes === a.likes) {
+          return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
+        }
+        return b.likes - a.likes;
+      });
+    }
+    setFilteredPosts(sortedPosts);
   };
 
   const handlePostClick = (postId: number) => {
@@ -168,13 +186,15 @@ const Board: React.FC = () => {
         title={getTitle()}
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
+        activeSort={activeSort}
+        handleSortClick={handleSortClick}
       />
       {loading && !postId ? (
         <></>
       ) : postId ? (
         <PostDetail postId={Number(postId)} onBackToList={handleBackToList} />
       ) : filteredPosts.length > 0 ? (
-        <PostList posts={paginatedPosts} onPostClick={handlePostClick} userId={USER_ID} />
+        <PostList posts={paginatedPosts} onPostClick={handlePostClick} userId={USER_ID} activeSort={activeSort} />
       ) : searchTerm ? (
         <NoPostsMessage>{searchTerm} (이)가 포함된 게시물이 없습니다.</NoPostsMessage>
       ) : (
