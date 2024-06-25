@@ -176,13 +176,18 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
               <TransactionText>{TransactionType(transaction.transactionType)}</TransactionText>
               <TransactionText>{transaction.balance}</TransactionText>
               <TransactionTime>{formatTransactionTime(transaction.createdAt)}</TransactionTime>
-              {transaction.transactionType === 'POINT_CHARGE' && transaction.tid && (
+              {transaction.transactionType === 'POINT_CHARGE' && transaction.tid ? (
                 <LightTooltip title="카카오페이 결제 취소" placement="right">
                   <StyledCreditCardOffRoundedIcon
                     onClick={() => handleRefund(transaction.tid as string, transaction.amount * 10)}
                     style={{ flex: 1 }}
                   />
                 </LightTooltip>
+              ) : (
+                <>
+                  {' '}
+                  <div className="flex-1"></div>
+                </>
               )}
             </TransactionItem>
           ))}
