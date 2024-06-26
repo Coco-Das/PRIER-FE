@@ -20,7 +20,7 @@ import {
 } from './FeedbackStyles';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { Link } from 'react-router-dom';
-import { Pie } from 'react-chartjs-2';
+import { Doughnut, Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import StarRating from '../../../components/utils/StarRating';
 import FeedbackAIReport from '../../../components/utils/FeedbackAIReport';
@@ -132,16 +132,15 @@ function Feedback() {
   //   return <div>Loading...</div>;
   // }
   const calculatePercent = (value: number, total: number) => {
-    return total > 0 ? ((value / total) * 100).toFixed(2) : 0;
+    return total > 0 ? Math.round((value / total) * 100) : 0;
   };
 
   const renderObjectiveQuestionChart = (question: ObjectiveQuestion) => {
-    const totalResponses = question.veryGood + question.good + question.soso + question.bad + question.veryBad;
     const data = {
       labels: ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'],
       datasets: [
         {
-          label: 'Responses',
+          label: '응답',
           data: [question.veryGood, question.good, question.soso, question.bad, question.veryBad],
           backgroundColor: [
             '#315AF1', // 진한 파란색
@@ -156,6 +155,14 @@ function Feedback() {
 
     const options = {
       plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context: any) {
+              const value = context.raw as number;
+              return `${value}표`;
+            },
+          },
+        },
         legend: {
           display: false,
         },
@@ -164,6 +171,36 @@ function Feedback() {
 
     return <Pie data={data} options={options} />;
   };
+  const renderPositiveResponseChart = (percent: number) => {
+    const data = {
+      labels: ['긍정 응답', '부정 응답'],
+      datasets: [
+        {
+          data: [percent, 100 - percent],
+          backgroundColor: ['#315AF1', '#E0E0E0'],
+        },
+      ],
+    };
+
+    const options = {
+      plugins: {
+        tooltip: {
+          callbacks: {
+            label: function (context: any) {
+              const value = context.raw as number;
+              return `${value}%`;
+            },
+          },
+        },
+        legend: {
+          display: false,
+        },
+      },
+    };
+
+    return <Pie data={data} options={options} />;
+  };
+
   return (
     <FeedbackWrapper>
       <ProjectDiv>
@@ -248,12 +285,15 @@ function Feedback() {
               <div style={{ display: 'flex ', alignItems: 'center' }}>
                 <TitleText>통계</TitleText>
                 <UniqueText className="ml-3" style={{ fontSize: '25px' }}>
-                  긍정의 응답 {percents}%
+                  긍정의 응답 {Math.round(percents)}%
                 </UniqueText>
               </div>
               <DetailText className="ml-3 mb-1" style={{ display: 'flex', alignItems: 'flex-end' }}>
                 평점 {averageScore}점의 별점을 받았습니다
               </DetailText>
+            </div>
+            <div style={{ width: '150px', height: '150px', marginTop: '20px', marginLeft: '40px' }}>
+              {renderPositiveResponseChart(Math.round(percents))}
             </div>
           </StaticContainer>
         </div>

@@ -253,13 +253,6 @@ function TestList() {
                 </span>
               </GreenDiv>
             </DivWrapper>
-            {/* <StaticContainer onClick={() => navigate(`/feedback/${project.projectId}`)}>
-              <TitleText>통계</TitleText>
-              <UniqueText>평점</UniqueText>
-              <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
-              <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
-              <MypageChartIcon></MypageChartIcon>
-            </StaticContainer> */}
             <ProjectStatistics project={project} />
           </ListDiv>
         ))}
