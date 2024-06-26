@@ -17,9 +17,11 @@ export interface BoardPost {
   likes: number;
   likedByUser: boolean;
   images?: string[]; // 이미지 배열
+  writerProfileUrl: string;
   media?: Media[]; // media 속성 추가
   userId: number;
   isLikedByMe: false;
+  writerId: number;
 }
 
 // 예시 데이터 (필요에 따라 추가)
