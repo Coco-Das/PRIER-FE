@@ -1,11 +1,11 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
 import {
   Base,
   LatestProjectContainer,
   LatestProjectWrapper,
   LinkText,
+  ProfileImg,
   ProjectImg,
   TagContainer,
   colors,
@@ -26,6 +26,7 @@ export default function LatestProject() {
       color: '#315af1',
     },
   });
+
   const displayedProjects = content.slice(0, 4);
 
   return (
@@ -34,7 +35,7 @@ export default function LatestProject() {
         <LatestProjectContainer key={project.projectId}>
           <div className="flex items-center mt-2 justify-between w-full">
             <div className="flex items-center">
-              <TeamProfile />
+              <ProfileImg src={project.profileImageUrl} />
               <span className="flex-col ml-2">
                 <p className="text-lg">{project.title}</p>
                 <p className="text-base font-light" style={{ color: '#828282' }}>

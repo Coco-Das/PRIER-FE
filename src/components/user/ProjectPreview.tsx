@@ -1,7 +1,15 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { ReactComponent as TeamProfile } from '../../assets/MainAvatar.svg';
-import { LinkText, ProjectContainer, ProjectWrapper, ProjectImg, TagContainer, Base, colors } from './UserStyle';
+import {
+  LinkText,
+  ProjectContainer,
+  ProjectWrapper,
+  ProjectImg,
+  TagContainer,
+  Base,
+  colors,
+  ProfileImg,
+} from './UserStyle';
 import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
 import Rating from '@mui/material/Rating';
 import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
@@ -25,7 +33,7 @@ export default function ProjectPreview() {
         <ProjectContainer key={project.projectId}>
           <div className="flex items-center mt-2 justify-between w-full">
             <div className="flex items-center">
-              <TeamProfile />
+              <ProfileImg src={project.profileImageUrl} />
               <span className="flex-col ml-2">
                 <p className="text-lg">{project.title}</p>
                 <p className="text-base font-light" style={{ color: '#828282' }}>

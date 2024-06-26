@@ -86,6 +86,13 @@ export const ProjectContainer = styled.div`
     transition: 0.3s ease-out;
   }
 `;
+export const ProfileImg = styled.img`
+  width: 43px;
+  height: 43px;
+  border: 0.7px solid #e0e0e0;
+  border-radius: 50%;
+  object-fit: cover;
+`;
 
 export const ProjectImg = styled.img`
   border-radius: 10px;
