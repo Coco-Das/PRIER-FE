@@ -283,7 +283,7 @@ export const CreateTest = () => {
       teamName: replaceEmptyStringWithNull(teamName),
       teamDescription: replaceEmptyStringWithNull(teamDescription),
       teamMate: replaceEmptyStringWithNull(teamMate),
-      link: replaceEmptyStringWithNull(link),
+      link: link,
       deleteImages: deleteImages.length > 0 ? deleteImages : null,
       question: questions.map(q => replaceEmptyStringWithNull(q.content)),
       type: questions.map(q => q.type),
