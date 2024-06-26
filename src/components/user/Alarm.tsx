@@ -3,6 +3,8 @@ import React, { useEffect, useState } from 'react';
 import { styled } from 'styled-components';
 import Lottie from '../utils/LottieComponent';
 import Alert from '../../assets/Alert.json';
+import { Link } from 'react-router-dom';
+import { useUserStore } from '../../states/user/UserStore';
 
 const ModalOverlay = styled.div`
   position: fixed;
@@ -69,6 +71,7 @@ export default function Alarm() {
   const comment = sessionStorage.getItem('commentAmount');
   const [isOpen, setIsOpen] = useState(true);
   const [isExpanded, setIsExpanded] = useState(false);
+  const userProfile = useUserStore(state => state.userProfile);
 
   useEffect(() => {
     const timer = setTimeout(() => {
@@ -98,7 +101,9 @@ export default function Alarm() {
           <span className="text-[#315AF1]">{response}</span> 개의 피드백과{' '}
           <span className="text-[#315AF1]">{comment} </span>개의 댓글이<br></br> 새로 작성되었습니다.
         </AlarmText>
-        <LinkText isVisible={isExpanded}>나의 테스트 확인하러 가기 &gt;</LinkText>
+        <Link to={`/feedback/${userProfile.nowProjectId}`}>
+          <LinkText isVisible={isExpanded}>나의 테스트 확인하러 가기 &gt;</LinkText>
+        </Link>
       </AlarmContainer>
     </ModalOverlay>
   );
