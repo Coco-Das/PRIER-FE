@@ -9,7 +9,8 @@ interface Content {
   projectId: number;
   title: string;
   teamName: string;
-  mainImageUrl: string | null;
+  mainImageUrl: string;
+  profileImageUrl: string;
   tags: Tag[];
   score: number;
 }

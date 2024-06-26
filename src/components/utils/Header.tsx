@@ -35,6 +35,7 @@ const StyledImg = styled.img`
   height: 3rem;
   border: none;
   border-radius: 50%;
+  object-fit: cover;
 `;
 const UserContainer = styled.div`
   &:hover {

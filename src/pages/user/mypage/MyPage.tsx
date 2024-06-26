@@ -423,7 +423,7 @@ export default function MyPage() {
           <div className="flex-col mt-3 w-full">
             <div className="w-full flex items-center justify-between ml-[10px]">
               <Title>반갑습니다 {userProfile.nickname} 님</Title>
-              <CorrectText onClick={ConfirmLogout}>로그 아웃</CorrectText>
+              <CorrectText onClick={ConfirmLogout}>로그아웃</CorrectText>
             </div>
             {isEditingName ? (
               <ProfileTextContainer>
@@ -439,7 +439,7 @@ export default function MyPage() {
                   <ProfileText>이름 : </ProfileText>
                   <ProfileDetail> {userProfile.nickname} </ProfileDetail>
                 </span>
-                <CorrectText onClick={setEditName}>수정 하기</CorrectText>
+                <CorrectText onClick={setEditName}>수정하기</CorrectText>
               </ProfileTextContainer>
             )}
             {isEditingBelonging ? (
@@ -456,7 +456,7 @@ export default function MyPage() {
                   <ProfileText>소속 : </ProfileText>
                   <ProfileDetail> {userProfile.belonging} </ProfileDetail>
                 </span>
-                <CorrectText onClick={setEditBelonging}>수정 하기</CorrectText>
+                <CorrectText onClick={setEditBelonging}>수정하기</CorrectText>
               </ProfileTextContainer>
             )}
             <ProfileTextContainer>
@@ -523,7 +523,7 @@ export default function MyPage() {
               {isEditingAccount ? (
                 <CorrectText onClick={cancleEditingAccount}>수정 모드 끝내기</CorrectText>
               ) : (
-                <CorrectText onClick={EditAccount}>수정 하기</CorrectText>
+                <CorrectText onClick={EditAccount}>수정하기</CorrectText>
               )}
             </ProfileAccountContainer>
           </div>
@@ -542,7 +542,7 @@ export default function MyPage() {
               <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
               <h1 className="text-2xl font-semibold">{userProfile.intro}</h1>
               <CorrectText className="text-end" onClick={setEditIntro}>
-                수정 하기
+                수정하기
               </CorrectText>
             </IntroduceContainer>
           )}
@@ -616,7 +616,9 @@ export default function MyPage() {
                 <StaticContainer>
                   <TitleText>통계</TitleText>
                   <UniqueText>평점</UniqueText>
-                  <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
+                  <UniqueText>
+                    {Math.round(parseFloat(userProfile.nowProjectStaticPercentage) * 100) / 100} %
+                  </UniqueText>
                   <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
                   <MypageChartIcon></MypageChartIcon>
                 </StaticContainer>

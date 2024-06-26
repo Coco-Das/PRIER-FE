@@ -18,6 +18,7 @@ export async function FetchAllProject(filter: number, page: number) {
         title: project.title,
         teamName: project.teamName,
         mainImageUrl: project.mainImageUrl,
+        profileImageUrl: project.profileImageUrl,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tags: project.tags.map((tag: any) => ({
           tagId: tag.tagId,
@@ -51,6 +52,7 @@ export async function FetchLatestProject() {
         title: project.title,
         teamName: project.teamName,
         mainImageUrl: project.mainImageUrl,
+        profileImageUrl: project.profileImageUrl,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tags: project.tags.map((tag: any) => ({
           tagId: tag.tagId,
