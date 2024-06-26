@@ -162,7 +162,6 @@ export const DeleteButton = styled.button`
 export const FileCount = styled.div`
   margin-top: 10px;
   font-size: 15px;
-  color: #31af1;
 `;
 
 export const CreateWrapper = styled.div`

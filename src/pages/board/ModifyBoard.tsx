@@ -43,7 +43,6 @@ import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가�
 import { useUserStore } from '../../states/user/UserStore';
 
 const { hasCommandModifier } = KeyBindingUtil;
-const storedUserId = localStorage.getItem('userId');
 
 const styleMap = {
   RED: { color: 'red' },
@@ -93,7 +92,7 @@ const ModifyBoard: React.FC = () => {
   const [showCreateBoardAlert, setShowCreateBoardAlert] = useState<boolean>(false); // 알림 표시 상태 변수
   const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 상태 변수
   const [existingImages, setExistingImages] = useState<{ s3Url: string; s3Key: string }[]>([]); // 기존 이미지 상태 변수 초기화
-  const [deleteimages, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
+  const [deleteImages, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
   const userProfile = useUserStore(state => state.userProfile);
 
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
@@ -101,7 +100,11 @@ const ModifyBoard: React.FC = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await API_BASE_URL.get(`/posts/${postId}`);
+        const response = await API_BASE_URL.get(`/posts/${postId}`, {
+          headers: {
+            Authorization: `Bearer ${localStorage.getItem('token')}`, // 토큰을 localStorage에서 가져옵니다.
+          },
+        });
         const post = response.data;
         setTitle(post.title);
         setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(post.content)), decorator));
@@ -231,7 +234,7 @@ const ModifyBoard: React.FC = () => {
     const formData = new FormData();
     formData.append(
       'dto',
-      new Blob([JSON.stringify({ title, content: contentString, category, deleteimages })], {
+      new Blob([JSON.stringify({ title, content: contentString, category, deleteImages })], {
         type: 'application/json',
       }),
     );
@@ -244,21 +247,22 @@ const ModifyBoard: React.FC = () => {
       const response = await API_BASE_URL.put(`/posts/${postId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
+          Authorization: `Bearer ${localStorage.getItem('token')}`, // 토큰을 localStorage에서 가져와 추가합니다.
         },
       });
 
       if (response.status === 200) {
-        console.log('게시물 작성 성공');
-        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteimages });
+        console.log('게시물 수정 성공');
+        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
         navigate('/board');
       } else {
-        console.error('게시물 작성 실패');
+        console.error('게시물 수정 실패');
         console.log('응답 상태 코드:', response.status);
-        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteimages });
+        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
       }
     } catch (error) {
       console.error('에러:', error);
-      console.log('보낸 데이터:', { title, content: contentString, category, images, deleteimages });
+      console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
     }
   };
 
