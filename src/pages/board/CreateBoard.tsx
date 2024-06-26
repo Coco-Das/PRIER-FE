@@ -40,6 +40,7 @@ import TextEditorToolbar from '../../components/board/TextEditorToolbar';
 import CustomAlert from '../../components/utils/CustomAlert';
 import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
 import { useUserStore } from '../../states/user/UserStore';
+import Snackbar from '../../components/user/Snackbar';
 
 const { hasCommandModifier } = KeyBindingUtil;
 const storedUserId = localStorage.getItem('userId');
@@ -89,6 +90,7 @@ const CreateBoard: React.FC = () => {
   const [category, setCategory] = useState<string>(''); // 카테고리 상태 변수
   const [showCreateBoardAlert, setShowCreateBoardAlert] = useState<boolean>(false); // 알림 표시 상태 변수
   const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 상태 변수
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null); // 스낵바 상태 변수
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
   const userProfile = useUserStore(state => state.userProfile);
 
@@ -186,8 +188,6 @@ const CreateBoard: React.FC = () => {
 
   // 게시물 생성 확인 핸들러
   const confirmCreateBoard = async () => {
-    setShowCreateBoardAlert(false);
-
     const contentState = editorState.getCurrentContent();
     const contentRaw = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
     const contentString = JSON.stringify(contentRaw); // Raw 데이터를 문자열로 변환
@@ -226,6 +226,19 @@ const CreateBoard: React.FC = () => {
   // 게시물 생성 취소 핸들러
   const cancelCreateBoard = () => {
     setShowCreateBoardAlert(false);
+  };
+
+  // 완료 버튼 클릭 핸들러
+  const handleCompleteClick = () => {
+    if (!title || !category || !editorState.getCurrentContent().hasText()) {
+      const missingFields = [];
+      if (!title) missingFields.push('제목');
+      if (!category) missingFields.push('카테고리');
+      if (!editorState.getCurrentContent().hasText()) missingFields.push('내용');
+      setSnackbar({ message: `${missingFields.join(', ')}을(를) 작성해주세요.`, type: 'error' });
+      return;
+    }
+    setShowCreateBoardAlert(true);
   };
 
   return (
@@ -303,12 +316,7 @@ const CreateBoard: React.FC = () => {
           <FileCount>업로드된 이미지 수: {images.length}</FileCount>
         </PostBox>
         <div>
-          <Button
-            onClick={() => {
-              setShowCreateBoardAlert(true);
-            }}
-            className="ml-auto"
-          >
+          <Button onClick={handleCompleteClick} className="ml-auto">
             <ButtonText>완료</ButtonText>
           </Button>
           {showCreateBoardAlert && (
@@ -320,6 +328,7 @@ const CreateBoard: React.FC = () => {
           )}
         </div>
       </CreateContainer>
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </Container>
   );
 };

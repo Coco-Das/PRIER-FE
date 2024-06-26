@@ -46,36 +46,41 @@ const Dropdown = styled.div`
 const DropdownContent = styled.div`
   display: none;
   position: absolute;
-  border-radius: 5px;
+  border-radius: 10px;
   background-color: #f9f9f9;
-  width: 140px;
+  width: 100px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
   z-index: 1;
-  margin-left: -70px;
+  margin-left: 0;
   ${Dropdown}:hover & {
     display: block;
   }
 `;
 
 const DropdownOption = styled.div<{ active?: boolean }>`
-  color: ${props => (props.active ? 'black' : '#828282')};
-  padding: 10px 16px;
+  color: ${props => (props.active ? '#000' : '#828282')};
+  padding: 10px 0;
   text-decoration: none;
   display: block;
-  font-size: 14px;
-  background-color: ${props => (props.active ? '#E1F9F0' : 'white')};
+  font-size: 15px;
+  text-align: center; /* 추가된 부분 */
+
+  background-color: ${props => (props.active ? '#E6E6E6' : 'white')};
   &:hover {
-    background-color: #e6e6e6;
-    color: black;
+    background-color: #e1f9f0;
+    color: #426e5e;
   }
 `;
 
 const CustomCategoryButton = styled(CategoryButton)`
-  background: ${props => (props.active ? '#E1F9F0' : 'transparent')};
-  color: black;
+  background: ${props => (props.active ? '#24be87' : 'transparent')};
+  color: ${props => (props.active ? '#ffff' : '#000')};
+  margin: 0;
+  width: 100px;
   &:hover {
     background: #d9f2e9;
-    color: black;
+    color: #426e5e;
   }
 `;
 
@@ -150,7 +155,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
         </FilterBtn>
         <SearchInput searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
         <div className="flex gap-2 ml-auto">
-          <CustomCategoryButton active={activeFilter === 'all'} onClick={handleBoardClick}>
+          <CustomCategoryButton active={activeFilter === 'all'} onClick={handleBoardClick} style={{ width: '70px' }}>
             게시판
           </CustomCategoryButton>
           <Dropdown>
