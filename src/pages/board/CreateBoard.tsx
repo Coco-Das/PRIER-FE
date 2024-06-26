@@ -43,7 +43,6 @@ import { useUserStore } from '../../states/user/UserStore';
 
 const { hasCommandModifier } = KeyBindingUtil;
 const storedUserId = localStorage.getItem('userId');
-const USER_ID = storedUserId ? Number(storedUserId) : null;
 const styleMap = {
   RED: { color: 'red' },
   ORANGE: { color: 'orange' },

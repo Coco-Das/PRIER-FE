@@ -23,6 +23,7 @@ const Board: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [USER_ID, setUserId] = useState<number | null>(null);
   const [allFetched, setAllFetched] = useState<boolean>(false);
+  const [title, setTitle] = useState<string>('Community'); // 추가된 상태
 
   const POSTS_PER_PAGE = 3;
   const {
@@ -203,7 +204,8 @@ const Board: React.FC = () => {
         activeFilter={activeFilter}
         handleCategoryClick={handleCategoryClick}
         handleFilterClick={handleFilterClick}
-        title={getTitle()}
+        setTitle={setTitle} // 수정된 부분
+        title={title} // 수정된 부분
         searchTerm={searchTerm}
         handleSearchChange={handleSearchChange}
         activeSort={activeSort}

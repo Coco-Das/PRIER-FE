@@ -60,6 +60,7 @@ export const Button = styled.div`
   align-items: center;
   justify-content: center;
   height: 40px;
+  margin-top: -10px;
 `;
 
 // 버튼 텍스트 스타일
@@ -70,7 +71,6 @@ export const ButtonText = styled.div`
   line-height: 150%;
   font-weight: 700;
 `;
-
 // 세그먼트 컨트롤 컨테이너 스타일
 export const SegmentedControlContainer = styled.div`
   display: flex;
@@ -82,18 +82,16 @@ export const SegmentedControlContainer = styled.div`
 
 // 세그먼트 컨트롤 스타일
 export const SegmentedControl = styled.div`
-  background: #e1f9f0;
-  border-radius: 8px;
   padding: 4px;
-  gap: 5px;
   display: flex;
   flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   flex-shrink: 0;
   height: 46px;
+  border-bottom: solid 1px;
+  padding: 0 0px;
 `;
-
 // 카테고리 버튼 컨테이너 스타일
 export const CategoryButtonsContainer = styled(SegmentedControlContainer)`
   display: flex;
@@ -127,17 +125,17 @@ interface MenuItemProps {
 }
 
 export const MenuItem = styled.div<MenuItemProps>`
-  padding: 1vh;
+  padding: 1vh 1.1vh;
   cursor: pointer;
-  background-color: ${props => (props.active ? '#ffffff' : 'transparent')};
-  border-radius: 5px;
-  &:hover {
-    background-color: #d1e0fc;
-  }
-  &:active {
-    background-color: #ffffff;
-  }
+  background-color: transparent;
+  border-bottom: ${props => (props.active ? '4px solid #000000' : '')};
+  color: ${props => (props.active ? '#000000' : '#828282')};
   font-size: 15px;
+  transition: all 0.3s;
+  margin-top: 4px;
+  &:hover {
+    color: #000000;
+  }
 `;
 const huerotate = keyframes`
   0% {

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import {
   Navigation,
@@ -7,7 +7,6 @@ import {
   SegmentedControlContainer,
   SegmentedControl,
   MenuItem,
-  CategoryButtonsContainer,
   CategoryButton,
   Title,
   TopContainer,
@@ -15,10 +14,11 @@ import {
   FilterBtn,
 } from '../../pages/board/BoardStyles';
 import SearchInput from './SearchInput';
+import styled from 'styled-components';
 
 const categoryLabels: { [key: string]: string } = {
   ALL: '전체',
-  ITNEWS: 'IT 지식',
+  ITNEWS: 'IT 소식',
   DAILY: '잡담/일상',
   TECH: '기술',
   INTERNSHIP: '인턴십/공모전',
@@ -35,7 +35,49 @@ interface NavigationBarProps {
   handleSearchChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   activeSort: string;
   handleSortClick: (sort: string) => void;
+  setTitle: (title: string) => void;
 }
+
+const Dropdown = styled.div`
+  position: relative;
+  display: inline-block;
+`;
+
+const DropdownContent = styled.div`
+  display: none;
+  position: absolute;
+  border-radius: 5px;
+  background-color: #f9f9f9;
+  width: 140px;
+  box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+  z-index: 1;
+  margin-left: -70px;
+  ${Dropdown}:hover & {
+    display: block;
+  }
+`;
+
+const DropdownOption = styled.div<{ active?: boolean }>`
+  color: ${props => (props.active ? 'black' : '#828282')};
+  padding: 10px 16px;
+  text-decoration: none;
+  display: block;
+  font-size: 14px;
+  background-color: ${props => (props.active ? '#E1F9F0' : 'white')};
+  &:hover {
+    background-color: #e6e6e6;
+    color: black;
+  }
+`;
+
+const CustomCategoryButton = styled(CategoryButton)`
+  background: ${props => (props.active ? '#E1F9F0' : 'transparent')};
+  color: black;
+  &:hover {
+    background: #d9f2e9;
+    color: black;
+  }
+`;
 
 const NavigationBar: React.FC<NavigationBarProps> = ({
   activeCategory,
@@ -47,7 +89,22 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   handleSearchChange,
   activeSort,
   handleSortClick,
+  setTitle,
 }) => {
+  const [selectedActivity, setSelectedActivity] = useState('내 활동');
+
+  const handleActivityClick = (activity: string) => {
+    setSelectedActivity(activity);
+    handleFilterClick(activity === '좋아요한 글' ? 'likes' : 'myposts');
+    setTitle(`내가 ${activity}`);
+  };
+
+  const handleBoardClick = () => {
+    setSelectedActivity('내 활동');
+    handleFilterClick('all');
+    setTitle('Community');
+  };
+
   const isNoticeCategory = activeCategory === 'NOTICE';
 
   return (
@@ -74,23 +131,6 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
             ))}
           </SegmentedControl>
         </SegmentedControlContainer>
-        <CategoryButtonsContainer>
-          <CategoryButton active={activeFilter === 'all'} onClick={() => handleFilterClick('all')}>
-            All
-          </CategoryButton>
-          <CategoryButton active={activeFilter === 'likes'} onClick={() => handleFilterClick('likes')}>
-            Likes
-          </CategoryButton>
-          <CategoryButton
-            active={activeFilter === 'myposts'}
-            onClick={() => !isNoticeCategory && handleFilterClick('myposts')}
-            disabled={isNoticeCategory}
-            title={isNoticeCategory ? '공지사항에서는 My Posts를 사용할 수 없습니다.' : ''}
-          >
-            My Posts
-          </CategoryButton>
-        </CategoryButtonsContainer>
-        <SearchInput searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
         <Button as={Link} to="/CreateBoard">
           <ButtonText>새 글 작성하기</ButtonText>
         </Button>
@@ -108,6 +148,25 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
         <FilterBtn $isActive={activeSort === 'views'} onClick={() => handleSortClick('views')}>
           조회순
         </FilterBtn>
+        <SearchInput searchTerm={searchTerm} handleSearchChange={handleSearchChange} />
+        <div className="flex gap-2 ml-auto">
+          <CustomCategoryButton active={activeFilter === 'all'} onClick={handleBoardClick}>
+            게시판
+          </CustomCategoryButton>
+          <Dropdown>
+            <CustomCategoryButton active={activeFilter === 'likes' || activeFilter === 'myposts'}>
+              {selectedActivity}
+            </CustomCategoryButton>
+            <DropdownContent>
+              <DropdownOption active={activeFilter === 'likes'} onClick={() => handleActivityClick('좋아요한 글')}>
+                좋아요한 글
+              </DropdownOption>
+              <DropdownOption active={activeFilter === 'myposts'} onClick={() => handleActivityClick('작성한 글')}>
+                작성한 글
+              </DropdownOption>
+            </DropdownContent>
+          </Dropdown>
+        </div>
       </div>
     </Navigation>
   );

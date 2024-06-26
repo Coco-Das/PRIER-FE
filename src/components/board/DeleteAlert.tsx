@@ -24,6 +24,7 @@ const ModalOverlay = styled.div<{ insidePostBox?: boolean }>`
 
 const ModalContent = styled.div`
   padding: 30px;
+  width: 30%;
 
   display: flex;
   flex-direction: column;
@@ -32,17 +33,16 @@ const ModalContent = styled.div`
   border: 1px solid transparent;
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
-  @media (max-width: 1210px) {
-    width: 30%;
-    height: 70%;
-  }
-  @media (min-width: 1210px) {
-    width: 30%;
+  z-index: 3;
+
+  @media (max-width: 799px) {
     height: 30%;
   }
-  z-index: 3;
-`;
 
+  @media (min-width: 800px) {
+    height: 80%;
+  }
+`;
 const AgreeButton = styled.button`
   background-color: #4188fe;
   color: white;
