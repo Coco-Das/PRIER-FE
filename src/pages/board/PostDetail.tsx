@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useEffect, useState } from 'react';
 import {
   PostDetailContainer,
@@ -43,6 +44,58 @@ import ImageModal from '../../components/board/ImageModal'; // 모달 컴포넌�
 import useLike from '../../hooks/UseLike';
 import { LinkUserProfile } from '../../services/UserApi';
 import { useUserStore } from '../../states/user/UserStore';
+import {
+  Editor,
+  EditorState,
+  convertFromRaw,
+  CompositeDecorator,
+  getDefaultKeyBinding,
+  KeyBindingUtil,
+  Modifier,
+  RichUtils,
+  DraftHandleValue,
+} from 'draft-js'; // Draft.js 임포트
+import 'draft-js/dist/Draft.css';
+
+// CreateBoard에서 사용한 styleMap과 decorator를 가져옵니다.
+const styleMap = {
+  RED: { color: 'red' },
+  ORANGE: { color: 'orange' },
+  YELLOW: { color: 'yellow' },
+  GREEN: { color: 'green' },
+  BLUE: { color: 'blue' },
+  INDIGO: { color: 'indigo' },
+  VIOLET: { color: 'violet' },
+  BLACK: { color: 'black' },
+  WHITE: { color: 'white' },
+  BACKGROUND_YELLOW: { backgroundColor: 'yellow' },
+};
+
+// 링크 엔티티를 찾는 전략을 정의합니다.
+const findLinkEntities = (contentBlock: any, callback: any, contentState: any) => {
+  contentBlock.findEntityRanges((character: any) => {
+    const entityKey = character.getEntity();
+    return entityKey !== null && contentState.getEntity(entityKey).getType() === 'LINK';
+  }, callback);
+};
+
+// 링크 컴포넌트 정의
+const Link = (props: any) => {
+  const { url } = props.contentState.getEntity(props.entityKey).getData();
+  return (
+    <a href={url} style={{ color: '#3b5998', textDecoration: 'underline' }}>
+      {props.children}
+    </a>
+  );
+};
+
+// 컴포지트 데코레이터 정의
+const decorator = new CompositeDecorator([
+  {
+    strategy: findLinkEntities,
+    component: Link,
+  },
+]);
 
 interface Media {
   metadata: string;
@@ -105,6 +158,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
       try {
         const response = await API_BASE_URL.get(`/posts/${postId}`);
         setPost(response.data);
+        console.log(response.data);
       } catch (error) {
         console.error('게시글을 가져오는 중 오류 발생:', error);
       } finally {
@@ -213,6 +267,10 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const likeState = likes[post.postId] || { isLiked: post.isLikedByMe, likeCount: post.likes };
   const currentIsLiked = likeState.isLiked;
 
+  // content를 EditorState로 변환
+  const contentState = convertFromRaw(JSON.parse(post.content));
+  const editorState = EditorState.createWithContent(contentState, decorator);
+
   return (
     <PostDetailContainer className="flex">
       {loading ? (
@@ -245,16 +303,9 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
           </UserContainer>
           <ContentContainer className="flex flex-col items-start w-[600px] self-center">
             <h1 className="text-xl font-bold  mb-8">{post.title}</h1>
-            <p>
-              {extractTextFromContent(post.content)
-                .split('\n')
-                .map((line, index) => (
-                  <span key={index}>
-                    {line}
-                    <br />
-                  </span>
-                ))}
-            </p>
+
+            <Editor editorState={editorState} customStyleMap={styleMap} readOnly={true} onChange={() => {}} />
+
             {post.media && post.media.length > 0 && (
               <div className="flex flex-wrap gap-4">
                 {post.media.map((mediaItem, index) => (

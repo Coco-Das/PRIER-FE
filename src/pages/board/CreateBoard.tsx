@@ -305,7 +305,7 @@ const CreateBoard: React.FC = () => {
               />
             </div>
           </ContentContainer>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '0px' }}>
             {images.map((image, index) => (
               <ImageWrapper key={index}>
                 <StyledImg src={URL.createObjectURL(image)} alt={`Uploaded image ${index}`} />
