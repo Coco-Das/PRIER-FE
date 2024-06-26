@@ -20,6 +20,8 @@ import { useNavigate } from 'react-router-dom';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 import useLike from '../../hooks/UseLike';
 import { LinkUserProfile } from '../../services/UserApi';
+import announcementAvatar from '../../assets/Announcement.svg';
+
 import './BoardLikeStyles.css'; // 스타일 파일을 import 합니다.
 
 interface PostListProps {
@@ -98,7 +100,10 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                   onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.writerId)}
                   className="mt-[5px]"
                 >
-                  <AvatarImage src={post.writerProfileUrl} alt="Avatar" />
+                  <AvatarImage
+                    src={post.category === 'NOTICE' ? announcementAvatar : post.writerProfileUrl}
+                    alt="Avatar"
+                  />
                 </Avatar>
                 <AuthorContainer>
                   <Author

@@ -28,7 +28,6 @@ import {
   CommentButton,
 } from './BoardStyles';
 import backto from '../../assets/BackTo.svg';
-import userAvatar from '../../assets/user.svg';
 import announcementAvatar from '../../assets/Announcement.svg';
 import UnLike from '../../assets/UnLike.svg';
 import Like from '../../assets/Like.svg';
@@ -226,10 +225,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
               onClick={e => handleProfileClick(e, post.writerId)}
               category={post.category}
             >
-              <AvatarImage
-                src={post.writerProfileUrl || (post.category === 'NOTICE' ? announcementAvatar : userAvatar)}
-                alt="Avatar"
-              />
+              <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : post.writerProfileUrl} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
               <Author onClick={e => handleProfileClick(e, post.writerId)} category={post.category}>
