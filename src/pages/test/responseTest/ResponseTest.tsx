@@ -152,6 +152,15 @@ export const ResponseTest = () => {
       }
     }
   };
+  useEffect(() => {
+    if (alert) {
+      const timer = setTimeout(() => {
+        navigate('/main'); // 메인 페이지로 이동
+      }, 1000); // 3초 후 메인 페이지로 이동
+
+      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
+    }
+  }, [alert, navigate]);
 
   useEffect(() => {
     handleGetInfo();
@@ -184,16 +193,6 @@ export const ResponseTest = () => {
       console.error('에러:', error);
     }
   };
-
-  useEffect(() => {
-    if (alert) {
-      const timer = setTimeout(() => {
-        navigate('/main'); // 메인 페이지로 이동
-      }, 1000); // 3초 후 메인 페이지로 이동
-
-      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
-    }
-  }, [alert, navigate]);
 
   const formatDateTime = (datetime: string) => {
     const date = new Date(datetime);
