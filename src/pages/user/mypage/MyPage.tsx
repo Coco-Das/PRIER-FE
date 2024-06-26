@@ -130,7 +130,6 @@ export default function MyPage() {
     const fetchData = async () => {
       try {
         await FetchMyPage();
-        console.log(useUserStore.getState().userProfile.imgUrl);
       } catch (error) {
         console.error('마이 페이지 호출 실패:', error);
       }
