@@ -8,13 +8,9 @@ import {
   Img,
   ListDiv,
   ListWrapper,
-  MypageChartIcon,
   PurpleDiv,
-  StaticContainer,
   Tag,
   TagWrapper,
-  TitleText,
-  UniqueText,
 } from './TestListStyles';
 import { useOtherProfileStore, useUserStore } from '../../../states/user/UserStore';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
@@ -22,6 +18,7 @@ import { API_BASE_URL } from '../../../const/TokenApi';
 import { Link } from 'react-router-dom';
 import StarRating from '../../../components/utils/StarRating';
 import ProjectStatistics from './ProjectStatics';
+import PaginationComponent from '../../../components/board/PaginationComponent';
 
 interface Tag {
   tagId: number;
@@ -58,6 +55,8 @@ function TestList() {
   const [last, setLast] = useState(false);
 
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
+  console.log('스토어에 저장된 내 아아디: ', USER_ID);
+  console.log('주소에 있는 내 아이디: ', userId);
 
   const handleFilterChange = (newFilter: number) => {
     setFilter(newFilter);
@@ -147,31 +146,11 @@ function TestList() {
         return status;
     }
   };
-
-  const renderPagination = () => {
-    const pages = [];
-    for (let i = 0; i < totalPages; i++) {
-      pages.push(
-        <button
-          key={i}
-          onClick={() => {
-            setPage(i);
-            navigateToPage(i, filter);
-          }}
-          style={{
-            borderRadius: '8px',
-            margin: '0 5px',
-            padding: '5px 10px',
-            background: i === page ? '#315AF1' : '#fff',
-            color: i === page ? '#fff' : '#000',
-          }}
-        >
-          {i + 1}
-        </button>,
-      );
-    }
-    return pages;
+  const handlePageChange = (event: React.ChangeEvent<unknown>, value: number) => {
+    setPage(value - 1);
+    navigateToPage(value - 1, filter);
   };
+
   const numericUserId = userId ? parseInt(userId, 10) : null;
   return (
     <ListWrapper ref={listWrapperRef}>
@@ -261,22 +240,7 @@ function TestList() {
         ))}
       </div>
       {projects.length > 0 ? (
-        <div
-          style={{
-            marginTop: '20px',
-            display: 'flex',
-            justifyContent: 'center',
-            fontSize: '16px',
-          }}
-        >
-          <button onClick={() => setPage(page => page - 1)} disabled={page === 0}>
-            &lt;
-          </button>
-          {renderPagination()}
-          <button onClick={() => setPage(page => page + 1)} disabled={last}>
-            &gt;
-          </button>
-        </div>
+        <PaginationComponent count={totalPages} page={page + 1} onChange={handlePageChange} />
       ) : (
         <div
           style={{

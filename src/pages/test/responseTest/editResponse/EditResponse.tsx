@@ -39,7 +39,7 @@ import CustomAlert from '../../../../components/utils/CustomAlert';
 import { HiddenInput } from '../../createTest/CreateTestStyles';
 import { DropDownContainer } from '../../../../components/utils/DropDown';
 import { ToggleBtn } from '../../../../components/utils/Toggle';
-import ProjectSnackbar from '../../../../components/user/ProjectSnackbar';
+import Snackbar from '../../../../components/user/Snackbar';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
@@ -757,9 +757,7 @@ export const EditResponse = () => {
           </CustomButton>
         </div>
       </Question>
-      {snackbar && (
-        <ProjectSnackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />
-      )}
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
       {ImageAlert && <CustomAlert message="메인이미지는 필수입니다" showButtons={false} />}
     </CreateWrapper>
   );
