@@ -15,7 +15,6 @@ import { ReactComponent as firstmainimg13 } from '../../assets/FirstMainImg13.sv
 import { ReactComponent as firstmainimg14 } from '../../assets/FirstMainImg14.svg';
 import { ReactComponent as firstmainimg15 } from '../../assets/FirstMainImg15.svg';
 import { ReactComponent as logo } from '../../assets/Logo-firstMain.svg';
-import Button from '@mui/material/Button';
 
 const fadeInUp = keyframes`
   0% {
@@ -68,41 +67,76 @@ export const Text = styled.h1`
   animation-delay: 0.2s;
 `;
 
-const StyledButton = styled(Button)`
-  background: linear-gradient(90deg, rgba(49, 90, 241, 1) 0%, rgba(119, 60, 209, 1) 100%);
-  border-radius: 15px;
+const ani = keyframes`
+  0% {
+    background-position: 0%;
+  }
+
+  100% {
+    background-position: 400%;
+  }
+`;
+
+export const StartButton = styled.button`
+  text-decoration: none;
+  position: relative;
+  border: none;
+  font-size: 22px;
+  font-weight: 600;
+  cursor: pointer;
+  color: #fff;
   width: 12rem;
   height: 3.3rem;
-  position: relative;
-  box-shadow: 0px 4px 4px 0px rgba(36, 189, 139, 0.51);
+  text-align: center;
+  background: linear-gradient(
+    90deg,
+    rgba(65, 136, 254, 1) 0%,
+    rgba(35, 190, 135, 1) 45.5%,
+    rgba(200, 102, 250, 1) 74.5%,
+    rgba(65, 136, 254, 1) 100%
+  );
+  background-size: 400%;
+  border-radius: 15px;
+  z-index: 1;
+  animation: ${ani} 10s linear infinite;
   border: none;
-  cursor: pointer;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  ${animationCSS};
-  animation-delay: 0.4s;
 
-  &::after {
-    content: '지금 시작하기';
-    white-space: nowrap;
+  &::before {
+    content: '';
+    position: absolute;
+    top: -1px;
+    left: -1px;
+    right: -1px;
+    bottom: -1px;
+    z-index: -1;
     background: linear-gradient(
       90deg,
       rgba(65, 136, 254, 1) 0%,
       rgba(35, 190, 135, 1) 45.5%,
-      rgba(200, 102, 250, 1) 74.5%
+      rgba(200, 102, 250, 1) 74.5%,
+      rgba(65, 136, 254, 1) 100%
     );
-    background-clip: text;
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    text-align: center;
-    font-size: 22px;
-    font-weight: 700;
-    position: absolute;
+    background-size: 400%;
+    border-radius: 15px;
+    transition: 1s;
+    filter: blur(5px);
+    animation: ${ani} 10s linear infinite;
+  }
+
+  &:hover::before {
+    filter: blur(15px);
+    animation: none;
+  }
+  &:active {
+    background: linear-gradient(
+      32deg,
+      rgba(65, 136, 254, 1) 0%,
+      rgba(35, 190, 135, 1) 45.5%,
+      rgba(200, 102, 250, 1) 74.5%,
+      rgba(65, 136, 254, 1) 100%
+    );
   }
 `;
-
-export const StartButton = styled(({ ...props }) => <StyledButton {...props} />)``;
 
 const animatedImgStyle = css`
   position: absolute;
