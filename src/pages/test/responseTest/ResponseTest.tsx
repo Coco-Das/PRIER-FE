@@ -31,7 +31,7 @@ import CustomModal from '../../../components/utils/CustomModal';
 import styled from 'styled-components';
 import { Comment } from '../comment/Comment';
 import { useUserStore } from '../../../states/user/UserStore';
-import ProjectSnackbar from '../../../components/user/ProjectSnackbar';
+import Snackbar from '../../../components/user/Snackbar';
 
 interface Tag {
   tagName: string;
@@ -387,9 +387,7 @@ export const ResponseTest = () => {
         </ProjectIntro>
       </Project>
       <Comment show={showSidebar} onMouseLeave={() => setShowSidebar(false)}></Comment>
-      {snackbar && (
-        <ProjectSnackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />
-      )}
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </CreateWrapper>
   );
 };
