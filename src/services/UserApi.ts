@@ -93,16 +93,16 @@ export function FetchLogout() {
     }
   }, [setLogout]);
 }
-export const EditImg = async (newImg: string) => {
+export const EditImg = async (newImg: File) => {
   try {
-    const response = await API_BASE_URL.put(
-      '/users/profile/img',
-      { media: newImg },
-      { headers: { 'Content-Type': 'application/json' } },
-    );
+    // FormData 객체 생성 및 이미지 데이터 추가
+    const formData = new FormData();
+    formData.append('media', newImg);
+    const response = await API_BASE_URL.put('/users/profile/img', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    });
     console.log('프로필 이미지 수정 요청 성공', response.data);
-    const setImgUrl = useUserStore.getState().setImgUrl;
-    setImgUrl(newImg);
+    FetchMyPage();
   } catch (error) {
     console.error('프로필 이미지 수정 실패', error);
   }
