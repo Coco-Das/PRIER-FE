@@ -22,7 +22,7 @@ export const Title = styled.div`
   font-weight: 800;
   width: 100%;
   max-width: 1000px;
-  align-self: center; /* 가운데 정렬 */
+  margin-top: 10px;
 `;
 
 // 네비게이션 스타일
