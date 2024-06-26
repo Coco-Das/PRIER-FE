@@ -100,11 +100,7 @@ const ModifyBoard: React.FC = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await API_BASE_URL.get(`/posts/${postId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // 토큰을 localStorage에서 가져옵니다.
-          },
-        });
+        const response = await API_BASE_URL.get(`/posts/${postId}`);
         const post = response.data;
         setTitle(post.title);
         setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(post.content)), decorator));
@@ -232,9 +228,11 @@ const ModifyBoard: React.FC = () => {
     const contentRaw = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
     const contentString = JSON.stringify(contentRaw); // Raw 데이터를 문자열로 변환
     const formData = new FormData();
+    const Delete = deleteImages.length === 0 ? null : deleteImages;
+
     formData.append(
       'dto',
-      new Blob([JSON.stringify({ title, content: contentString, category, deleteImages })], {
+      new Blob([JSON.stringify({ title, content: contentString, category, Delete })], {
         type: 'application/json',
       }),
     );
@@ -247,7 +245,6 @@ const ModifyBoard: React.FC = () => {
       const response = await API_BASE_URL.put(`/posts/${postId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // 토큰을 localStorage에서 가져와 추가합니다.
         },
       });
 

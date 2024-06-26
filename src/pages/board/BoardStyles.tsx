@@ -20,7 +20,6 @@ export const Title = styled.div`
   font-size: 28px;
   line-height: 140%;
   font-weight: 800;
-  margin-bottom: 20px;
   width: 100%;
   max-width: 1000px;
   align-self: center; /* 가운데 정렬 */
