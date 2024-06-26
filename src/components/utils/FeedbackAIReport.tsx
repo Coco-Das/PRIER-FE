@@ -18,6 +18,7 @@ const AIOverlay = styled.div`
   align-items: center;
   justify-content: center;
   color: #828282;
+  font-size: 18px;
   z-index: 3;
 `;
 
@@ -131,7 +132,7 @@ const FeedbackAIReport: React.FC<AIReportProps> = ({ keyWordResponseDtoList }) =
               {keyWordResponseDtoList[2]?.content || '유용하다'} &quot; 등의 키워드가 제출되어 당신의 프로젝트를
               대표했습니다.
             </SmallText>
-            <AIOverlay>제출된 상세 응답이 없습니다.</AIOverlay>
+            <AIOverlay>상세응답의 개수가 부족합니다</AIOverlay>
           </div>
           <div className="relative w-[400px] h-[300px]"></div>
         </>

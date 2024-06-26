@@ -249,7 +249,7 @@ function Feedback() {
               marginLeft: 'auto',
               paddingRight: '10px',
               cursor: 'pointer',
-              fontSize: '12px',
+              fontSize: '14px',
               marginTop: 'auto',
               color: '#828282',
             }}

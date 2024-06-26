@@ -5,27 +5,17 @@ import { DetailText, MypageChartIcon, StaticContainer, TitleText, UniqueText } f
 
 interface Project {
   projectId: number;
-  title: string;
-  teamName: string;
-  mainImageUrl: string;
-  score: number;
-  devStartDate: string;
-  status: string;
-  link: string;
 }
 
 const ProjectStatistics = ({ project }: { project: Project }) => {
-  const navigate = useNavigate();
   const [percents, setPercents] = useState<number | null>(null);
-  const [averageScore, setAverageScore] = useState<number | null>(null);
   const [count, setCount] = useState<number | null>(null);
   useEffect(() => {
     const fetchProjectStatistics = async () => {
       try {
         const response = await API_BASE_URL.get(`/projects/${project.projectId}/responses`);
         const Data = response.data;
-        console.log(Data);
-        setAverageScore(Data.averageScore); //평균 평점
+        // console.log(Data);
         setPercents(Data.percentage); //퍼센트
         setCount(Data.feedbackCount);
       } catch (error) {
@@ -37,7 +27,7 @@ const ProjectStatistics = ({ project }: { project: Project }) => {
   }, [project.projectId]);
 
   return (
-    <StaticContainer onClick={() => navigate(`/feedback/${project.projectId}`)}>
+    <StaticContainer>
       <TitleText>통계</TitleText>
       <div className="mt-3" style={{ display: 'flex', alignItems: 'center' }}>
         <UniqueText>긍정의 응답</UniqueText>
