@@ -41,6 +41,7 @@ import TextEditorToolbar from '../../components/board/TextEditorToolbar';
 import CustomAlert from '../../components/utils/CustomAlert';
 import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
 import { useUserStore } from '../../states/user/UserStore';
+import Snackbar from '../../components/user/Snackbar';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
@@ -93,6 +94,7 @@ const ModifyBoard: React.FC = () => {
   const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 상태 변수
   const [existingImages, setExistingImages] = useState<{ s3Url: string; s3Key: string }[]>([]); // 기존 이미지 상태 변수 초기화
   const [deleteImages, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null); // 스낵바 상태 변수
   const userProfile = useUserStore(state => state.userProfile);
 
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
@@ -100,11 +102,7 @@ const ModifyBoard: React.FC = () => {
   useEffect(() => {
     const fetchPost = async () => {
       try {
-        const response = await API_BASE_URL.get(`/posts/${postId}`, {
-          headers: {
-            Authorization: `Bearer ${localStorage.getItem('token')}`, // 토큰을 localStorage에서 가져옵니다.
-          },
-        });
+        const response = await API_BASE_URL.get(`/posts/${postId}`);
         const post = response.data;
         setTitle(post.title);
         setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(post.content)), decorator));
@@ -232,9 +230,11 @@ const ModifyBoard: React.FC = () => {
     const contentRaw = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
     const contentString = JSON.stringify(contentRaw); // Raw 데이터를 문자열로 변환
     const formData = new FormData();
+    const Delete = deleteImages.length === 0 ? null : deleteImages;
+
     formData.append(
       'dto',
-      new Blob([JSON.stringify({ title, content: contentString, category, deleteImages })], {
+      new Blob([JSON.stringify({ title, content: contentString, category, Delete })], {
         type: 'application/json',
       }),
     );
@@ -247,7 +247,6 @@ const ModifyBoard: React.FC = () => {
       const response = await API_BASE_URL.put(`/posts/${postId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
-          Authorization: `Bearer ${localStorage.getItem('token')}`, // 토큰을 localStorage에서 가져와 추가합니다.
         },
       });
 
@@ -269,6 +268,19 @@ const ModifyBoard: React.FC = () => {
   // 게시물 수정 취소 핸들러
   const cancelCreateBoard = () => {
     setShowCreateBoardAlert(false);
+  };
+
+  // 수정 버튼 클릭 핸들러
+  const handleModifyClick = () => {
+    if (!title || !category || !editorState.getCurrentContent().hasText()) {
+      const missingFields = [];
+      if (!title) missingFields.push('제목');
+      if (!category) missingFields.push('카테고리');
+      if (!editorState.getCurrentContent().hasText()) missingFields.push('내용');
+      setSnackbar({ message: `${missingFields.join(', ')}을(를) 작성해주세요.`, type: 'error' });
+      return;
+    }
+    setShowCreateBoardAlert(true);
   };
 
   return (
@@ -355,12 +367,7 @@ const ModifyBoard: React.FC = () => {
           <FileCount>업로드된 이미지 수: {images.length + existingImages.length}</FileCount>
         </PostBox>
         <div>
-          <Button
-            onClick={() => {
-              setShowCreateBoardAlert(true);
-            }}
-            className="ml-auto"
-          >
+          <Button onClick={handleModifyClick} className="ml-auto">
             <ButtonText>수정</ButtonText>
           </Button>
           {showCreateBoardAlert && (
@@ -372,6 +379,7 @@ const ModifyBoard: React.FC = () => {
           )}
         </div>
       </CreateContainer>
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </Container>
   );
 };
