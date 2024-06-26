@@ -55,8 +55,6 @@ function TestList() {
   const [last, setLast] = useState(false);
 
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
-  console.log('스토어에 저장된 내 아아디: ', USER_ID);
-  console.log('주소에 있는 내 아이디: ', userId);
 
   const handleFilterChange = (newFilter: number) => {
     setFilter(newFilter);
