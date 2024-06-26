@@ -21,6 +21,7 @@ import {
   DeleteButton,
   EditButton,
   CommentBtn,
+  GreenDiv2,
 } from './ResponseTestStyles';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -327,20 +328,20 @@ export const ResponseTest = () => {
               <span dangerouslySetInnerHTML={{ __html: teamMate }}></span>
             </BlueInputDiv>
           </BlueDiv>
-          {link && (
-            <div style={{ display: 'flex', height: '10%' }} className="mt-2">
-              <GreenDiv
-                style={{ cursor: 'pointer', backgroundColor: 'white', border: 'none' }}
-                onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
-              >
+          {link ? (
+            <div style={{ display: 'flex', height: '10%', gap: '8px' }} className="mt-2">
+              <GreenDiv2 onClick={() => navigate(`/feedback/${projectId}`)}>
                 <span className="font-bold underline">피드백 상세보기 &rarr;</span>
-              </GreenDiv>
-              <GreenDiv
-                style={{ cursor: 'pointer' }}
-                onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
-              >
+              </GreenDiv2>
+              <GreenDiv onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}>
                 <span className="font-bold underline">바로가기 &rarr;</span>
               </GreenDiv>
+            </div>
+          ) : (
+            <div style={{ display: 'flex', height: '10%' }} className="mt-2">
+              <GreenDiv2 onClick={() => navigate(`/feedback/${projectId}`)}>
+                <span className="font-bold underline">피드백 상세보기&rarr;</span>
+              </GreenDiv2>
             </div>
           )}
           <WhiteDiv className="mt-2">
