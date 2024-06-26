@@ -139,28 +139,21 @@ export const ResponseTest = () => {
       const addMedia = Data.media.filter((item: Media) => !item.main);
       setAdditionalImageUrls(addMedia.map((item: Media) => item.url));
       setFeedback(formatDateTime(Data.feedbackEndDate));
-      console.log(Data);
+      // console.log(Data);
     } catch (error) {
       if (error instanceof AxiosError) {
-        console.log(error.response?.status);
+        // console.log(error.response?.status);
         setAlert(true);
-        setTimeout(() => {
+        const timer = setTimeout(() => {
           setAlert(false);
+          navigate('/main'); // 메인 페이지로 이동
         }, 800);
+        return () => clearTimeout(timer);
       } else {
         console.error(error);
       }
     }
   };
-  useEffect(() => {
-    if (alert) {
-      const timer = setTimeout(() => {
-        navigate('/main'); // 메인 페이지로 이동
-      }, 1000); // 3초 후 메인 페이지로 이동
-
-      return () => clearTimeout(timer); // 컴포넌트 언마운트 시 타이머 클리어
-    }
-  }, [alert, navigate]);
 
   useEffect(() => {
     handleGetInfo();
@@ -196,7 +189,7 @@ export const ResponseTest = () => {
 
   const formatDateTime = (datetime: string) => {
     const date = new Date(datetime);
-    console.log(datetime);
+
     // 9시간을 더한 새로운 Date 객체 생성
     date.setHours(date.getHours() + 9);
 
@@ -239,7 +232,6 @@ export const ResponseTest = () => {
     const jsonData = { comment, score };
     try {
       const response = await API_BASE_URL.post(`/projects/${projectId}/comment`, jsonData);
-      console.log(response.data);
       setSnackbar({ message: '댓글이 등록되었습니다', type: 'success' });
     } catch (error) {
       console.error('에러:', error);
