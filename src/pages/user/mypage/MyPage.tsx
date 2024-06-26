@@ -46,7 +46,6 @@ import {
   EditBlog,
   EditFigma,
   EditGithub,
-  EditImg,
   EditIntro,
   EditNickName,
   EditNotion,
@@ -95,7 +94,6 @@ export default function MyPage() {
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [showEditImgAlert, setShowEditImgAlert] = useState(false);
   const [isEditingImg, setIsEditingImg] = useState(false);
-  const [newImg, setNewImg] = useState<string>('');
   const [showEditNameAlert, setShowEditNameAlert] = useState(false);
   const [isEditingName, setIsEditingName] = useState(false);
   const [newNickName, setNewNickName] = useState<string>('');
@@ -150,31 +148,11 @@ export default function MyPage() {
     setIsEditingImg(true);
     setShowEditImgAlert(true);
   };
-
-  const saveEditImg = async () => {
-    try {
-      await EditImg(newImg);
-      setIsEditingImg(false);
-      setShowEditImgAlert(false);
-    } catch (error) {
-      alert('이미지 수정 중 오류 발생:');
-    }
-  };
-  const cancleEditImg = () => {
+  const CancelEditImg = () => {
     setIsEditingImg(false);
     setShowEditImgAlert(false);
-    setNewImg('');
   };
-  const handleImageChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file) {
-      const reader = new FileReader();
-      reader.onloadend = () => {
-        setNewImg(reader.result as string);
-      };
-      reader.readAsDataURL(file);
-    }
-  };
+
   //닉네임 수정
   const NickNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewNickName(event.target.value);
@@ -381,12 +359,7 @@ export default function MyPage() {
         <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={Logout} onCancel={CancelLogout} />
       )}
       {showEditImgAlert && (
-        <AccountEdit
-          message="프로필 이미지를 변경하시겠습니까?"
-          onConfirm={saveEditImg}
-          onCancel={cancleEditImg}
-          onInput={handleImageChange}
-        />
+        <AccountEdit message="프로필 이미지를 변경하시겠습니까?" onConfirm={CancelEditImg} onCancel={CancelEditImg} />
       )}
       {showEditNameAlert && (
         <CustomAlert message="닉네임을 수정 하시겠습니까?" onConfirm={saveEditName} onCancel={cancleEditName} />

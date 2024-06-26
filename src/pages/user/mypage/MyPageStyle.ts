@@ -14,8 +14,8 @@ export const ProfileContainer = styled.div`
 export const ProfileImgContainer = styled.div`
   position: relative;
   width: 20rem;
-  height: 15rem;
-  border: none;
+  height: 14rem;
+  border: 0.7px solid #e0e0e0;
   border-radius: 50%;
   overflow: hidden;
   &:hover .edit-overlay {
