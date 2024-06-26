@@ -77,7 +77,7 @@ function TestList() {
 
   const handleGetInfo = async (userId: string, filter: number, page: number) => {
     try {
-      console.log(`Requesting with userId: ${userId}, filter: ${filter}, page: ${page}`);
+      // console.log(`Requesting with userId: ${userId}, filter: ${filter}, page: ${page}`);
       const response = await API_BASE_URL.get(`/projects/user-projects?`, {
         params: { userId, filter, page },
       });

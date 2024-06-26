@@ -186,11 +186,33 @@ export const BlueInputDiv = styled.div`
   }
 `;
 export const GreenDiv = styled.div`
-  margin-left: 30px;
+  /* margin-left: 30px; */
   width: 50%;
   border-radius: 8px;
   height: 100%;
-  background-color: #e1f9f0;
+  background-color: white;
+  font-size: 14px;
+  padding: 0px 20px 0px 20px;
+  display: flex;
+  color: #828282;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 5px;
+  border: 1px solid #e0e0e0;
+
+  &:hover {
+    transition: 0.3s;
+    cursor: pointer;
+    background-color: #e1f9f0;
+    color: black;
+  }
+`;
+export const GreenDiv2 = styled.div`
+  margin-left: 30px;
+  width: 50%;
+  border-radius: 8px;
+  color: #828282;
+  height: 100%;
   font-size: 14px;
   padding: 0px 20px 0px 20px;
   display: flex;
@@ -198,8 +220,11 @@ export const GreenDiv = styled.div`
   align-items: center;
   gap: 5px;
   border: 1px solid #e0e0e0;
-  input {
-    border: 1px solid #23be87;
+  &:hover {
+    transition: 0.3s;
+    cursor: pointer;
+    background-color: #e1f9f0;
+    color: black;
   }
 `;
 

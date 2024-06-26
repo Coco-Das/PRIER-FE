@@ -85,6 +85,16 @@ const FeedbackAIReport: React.FC<AIReportProps> = ({ keyWordResponseDtoList }) =
     };
   }, [canvasRef.current, keyWordResponseDtoList]);
 
+  const getDefaultContent = (index: number) => {
+    const defaults = ['새롭다', '좋다', '유용하다'];
+    return defaults[index] || '';
+  };
+
+  const getDefaultCount = (index: number) => {
+    const defaults = [3, 2, 1];
+    return defaults[index] || 1;
+  };
+
   return (
     <>
       {keyWordResponseDtoList && keyWordResponseDtoList.length > 2 ? (
@@ -95,25 +105,26 @@ const FeedbackAIReport: React.FC<AIReportProps> = ({ keyWordResponseDtoList }) =
               <StyledGraphIcon />
             </span>
 
-            <AIBestText>&quot; {keyWordResponseDtoList[0].content} &quot;</AIBestText>
+            <AIBestText>&quot; {keyWordResponseDtoList[0]?.content || ''} &quot;</AIBestText>
             <SmallText>
-              &quot; {keyWordResponseDtoList[0].content} &quot; 라는 단어가 가장 많이 응답되었습니다.
+              &quot; {keyWordResponseDtoList[0]?.content || ''} &quot; 라는 단어가 가장 많이 응답되었습니다.
             </SmallText>
           </div>
           <div className="relative w-[400px] h-[300px]" ref={canvasRef}></div>
           {pathname === '/mypage' ? (
             <SmallText>
-              &quot; {keyWordResponseDtoList[0].content}&quot; 라는 키워드가 &nbsp;
-              {keyWordResponseDtoList[0].count}회 제출되었습니다. &quot;
-              {keyWordResponseDtoList[1].content} &quot;가 {keyWordResponseDtoList[1].count}회, 그 외로 &quot;
-              {keyWordResponseDtoList[2].content}&quot; 등의 키워드가 제출되어 당신의 프로젝트를 대표했습니다.
+              &quot; {keyWordResponseDtoList[0]?.content || ''}&quot; 라는 키워드가 &nbsp;
+              {keyWordResponseDtoList[0]?.count || 0}회 제출되었습니다. &quot;
+              {keyWordResponseDtoList[1]?.content || ''} &quot;가 {keyWordResponseDtoList[1]?.count || 0}회, 그 외로
+              &quot;
+              {keyWordResponseDtoList[2]?.content || ''}&quot; 등의 키워드가 제출되어 당신의 프로젝트를 대표했습니다.
             </SmallText>
           ) : (
             <SmallText>
-              {keyWordResponseDtoList[0].content}의 키워드가 {keyWordResponseDtoList[0].count}회 제출되었습니다.{' '}
-              {keyWordResponseDtoList[1].content}가 {keyWordResponseDtoList[1].count}회, 그 외로{' '}
-              {keyWordResponseDtoList[2].content}, {keyWordResponseDtoList[3].content} 등의 키워드가 제출되어 당신의
-              프로젝트를 대표했습니다.
+              {keyWordResponseDtoList[0]?.content || ''}의 키워드가 {keyWordResponseDtoList[0]?.count || 0}회
+              제출되었습니다. {keyWordResponseDtoList[1]?.content || ''}가 {keyWordResponseDtoList[1]?.count || 0}회, 그
+              외로 {keyWordResponseDtoList[2]?.content || ''}, {keyWordResponseDtoList[3]?.content || ''} 등의 키워드가
+              제출되어 당신의 프로젝트를 대표했습니다.
             </SmallText>
           )}
         </>
@@ -124,13 +135,13 @@ const FeedbackAIReport: React.FC<AIReportProps> = ({ keyWordResponseDtoList }) =
               <TitleText>AI 분석 Report</TitleText>
               <StyledGraphIcon />
             </span>
-            <SmallText style={{ cursor: 'default' }}>
-              &quot; {keyWordResponseDtoList[0]?.content || '새롭다'} &quot; 라는 키워드가 &nbsp;{' '}
-              {keyWordResponseDtoList[0]?.count || 3}회 제출되었습니다. &quot;{' '}
-              {keyWordResponseDtoList[1]?.content || '좋다'} &quot;가 {keyWordResponseDtoList[1]?.count || 2} 회, 그
-              외로 &quot;
-              {keyWordResponseDtoList[2]?.content || '유용하다'} &quot; 등의 키워드가 제출되어 당신의 프로젝트를
-              대표했습니다.
+            <SmallText>
+              &quot; {keyWordResponseDtoList[0]?.content || getDefaultContent(0)} &quot; 라는 키워드가 &nbsp;{' '}
+              {keyWordResponseDtoList[0]?.count || getDefaultCount(0)}회 제출되었습니다. &quot;{' '}
+              {keyWordResponseDtoList[1]?.content || getDefaultContent(1)} &quot;가{' '}
+              {keyWordResponseDtoList[1]?.count || getDefaultCount(1)} 회, 그 외로 &quot;
+              {keyWordResponseDtoList[2]?.content || getDefaultContent(2)} &quot; 등의 키워드가 제출되어 당신의
+              프로젝트를 대표했습니다.
             </SmallText>
             <AIOverlay>상세응답의 개수가 부족합니다</AIOverlay>
           </div>
