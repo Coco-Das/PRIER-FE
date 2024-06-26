@@ -12,8 +12,9 @@ function MyReview() {
   const userProfile = useUserStore(state => state.userProfile);
   const otherProfile = useOtherProfileStore(state => state.otherProfile);
 
-  const reviews =
-    pathname === '/mypage' ? userProfile.myPageCommentDtoList || [] : otherProfile.myPageCommentDtoList || [];
+  const reviews = (
+    pathname === '/mypage' ? userProfile.myPageCommentDtoList || [] : otherProfile.myPageCommentDtoList || []
+  ).reverse();
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: 'black',
