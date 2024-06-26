@@ -19,7 +19,7 @@ import { ReactComponent as logo } from '../../assets/Logo-firstMain.svg';
 const fadeInUp = keyframes`
   0% {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   100% {
     opacity: 1;
@@ -28,7 +28,7 @@ const fadeInUp = keyframes`
 `;
 
 const animationCSS = css`
-  animation: ${fadeInUp} 1s ease-in-out;
+  animation: ${fadeInUp} 1.5s ease-in-out;
 `;
 
 export const FirstContainer = styled.div`
@@ -144,106 +144,106 @@ const animatedImgStyle = css`
 `;
 
 export const Img1 = styled(firstmainimg1)`
-  ${animatedImgStyle}
+  position: absolute;
+
   left: 4rem;
   top: 1rem;
-  animation-delay: 0.6s;
 `;
 
 export const Img2 = styled(firstmainimg2)`
-  ${animatedImgStyle}
+  position: absolute;
+
   left: 18rem;
   top: 2rem;
-  animation-delay: 0.8s;
 `;
 
 export const Img3 = styled(firstmainimg3)`
-  ${animatedImgStyle}
+  position: absolute;
+
   left: 32rem;
   top: 1rem;
-  animation-delay: 1s;
 `;
 
 export const Img4 = styled(firstmainimg4)`
-  ${animatedImgStyle}
+  position: absolute;
+
   right: 13rem;
   top: 0.5rem;
-  animation-delay: 1.2s;
 `;
 
 export const Img5 = styled(firstmainimg5)`
-  ${animatedImgStyle}
+  position: absolute;
+
   right: 4rem;
   top: 4rem;
-  animation-delay: 1.4s;
 `;
 
 export const Img6 = styled(firstmainimg6)`
-  ${animatedImgStyle}
+  position: absolute;
+
   left: 14rem;
   top: 14rem;
-  animation-delay: 1.6s;
 `;
 
 export const Img7 = styled(firstmainimg7)`
-  ${animatedImgStyle}
+  position: absolute;
+
   left: 6rem;
   top: 20rem;
-  animation-delay: 1.8s;
 `;
 
 export const Img8 = styled(firstmainimg8)`
-  ${animatedImgStyle}
+  position: absolute;
+
   left: -3rem;
   top: 34rem;
-  animation-delay: 2s;
 `;
 
 export const Img9 = styled(firstmainimg9)`
-  ${animatedImgStyle}
+  position: absolute;
+
   left: 18rem;
   top: 41rem;
-  animation-delay: 2.2s;
 `;
 
 export const Img10 = styled(firstmainimg10)`
-  ${animatedImgStyle}
+  position: absolute;
+
   left: 25rem;
   top: 38rem;
-  animation-delay: 2.4s;
 `;
 
 export const Img11 = styled(firstmainimg11)`
-  ${animatedImgStyle}
+  position: absolute;
+
   right: 34rem;
   top: 35rem;
-  animation-delay: 2.6s;
 `;
 
 export const Img12 = styled(firstmainimg12)`
-  ${animatedImgStyle}
+  position: absolute;
+
   right: 23rem;
   bottom: 6rem;
-  animation-delay: 2.8s;
 `;
 
 export const Img13 = styled(firstmainimg13)`
-  ${animatedImgStyle}
+  position: absolute;
+
   right: 20rem;
   top: 30rem;
-  animation-delay: 3s;
 `;
 
 export const Img14 = styled(firstmainimg14)`
-  ${animatedImgStyle}
+  position: absolute;
+
   right: 4rem;
   top: 24rem;
-  animation-delay: 3.2s;
 `;
 
 export const Img15 = styled(firstmainimg15)`
-  ${animatedImgStyle}
+  position: absolute;
+
   right: 0rem;
   top: 33rem;
-  animation-delay: 3.4s;
 `;

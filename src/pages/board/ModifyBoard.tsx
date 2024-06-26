@@ -113,6 +113,7 @@ const ModifyBoard: React.FC = () => {
         setTitle(post.title);
         setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(post.content)), decorator));
         setCategory(post.category);
+
         if (post.media && post.media.length > 0) {
           setExistingImages(
             post.media.map((media: { postMediaId: number; s3Url: string; s3Key: string }) => ({
@@ -321,7 +322,7 @@ const ModifyBoard: React.FC = () => {
         <PostBox>
           <UserContainer>
             <Avatar>
-              <AvatarImage src={userAvatar} alt="Avatar" />
+              <AvatarImage src={userProfile.imgUrl} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
               <Author>{userProfile.nickname}</Author>
