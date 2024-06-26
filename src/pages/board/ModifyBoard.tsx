@@ -92,8 +92,14 @@ const ModifyBoard: React.FC = () => {
   const [category, setCategory] = useState<string>(''); // 카테고리 상태 변수
   const [showCreateBoardAlert, setShowCreateBoardAlert] = useState<boolean>(false); // 알림 표시 상태 변수
   const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 상태 변수
-  const [existingImages, setExistingImages] = useState<{ s3Url: string; s3Key: string }[]>([]); // 기존 이미지 상태 변수 초기화
-  const [deleteImages, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
+  const [existingImages, setExistingImages] = useState<
+    {
+      [x: string]: string;
+      s3Url: string;
+      s3Key: string;
+    }[]
+  >([]); // 기존 이미지 상태 변수 초기화
+  const [postMediaIds, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null); // 스낵바 상태 변수
   const userProfile = useUserStore(state => state.userProfile);
 
@@ -109,13 +115,14 @@ const ModifyBoard: React.FC = () => {
         setCategory(post.category);
         if (post.media && post.media.length > 0) {
           setExistingImages(
-            post.media.map((media: { s3Url: string; s3Key: string }) => ({
+            post.media.map((media: { postMediaId: number; s3Url: string; s3Key: string }) => ({
+              postMediaId: media.postMediaId,
               s3Url: media.s3Url,
               s3Key: media.s3Key,
             })),
           ); // 이미지가 있을 경우에만 상태 업데이트
           setDeleteImages([]); // deleteImages를 초기화
-          console.log(post.media);
+          console.log(post.media.postMediaId);
         }
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -218,7 +225,7 @@ const ModifyBoard: React.FC = () => {
   };
 
   const handleDeleteExistingImage = (index: number) => {
-    setDeleteImages(prevDeleteImages => [...prevDeleteImages, existingImages[index].s3Key]);
+    setDeleteImages(prevpostMediaIds => [...prevpostMediaIds, existingImages[index].postMediaId]);
     setExistingImages(existingImages.filter((_, i) => i !== index));
   };
 
@@ -230,11 +237,10 @@ const ModifyBoard: React.FC = () => {
     const contentRaw = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
     const contentString = JSON.stringify(contentRaw); // Raw 데이터를 문자열로 변환
     const formData = new FormData();
-    const Delete = deleteImages.length === 0 ? null : deleteImages;
 
     formData.append(
       'dto',
-      new Blob([JSON.stringify({ title, content: contentString, category, Delete })], {
+      new Blob([JSON.stringify({ title, content: contentString, category, postMediaIds })], {
         type: 'application/json',
       }),
     );
@@ -252,16 +258,16 @@ const ModifyBoard: React.FC = () => {
 
       if (response.status === 200) {
         console.log('게시물 수정 성공');
-        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
+        console.log('보낸 데이터:', { title, content: contentString, category, images, postMediaIds });
         navigate('/board');
       } else {
         console.error('게시물 수정 실패');
         console.log('응답 상태 코드:', response.status);
-        console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
+        console.log('보낸 데이터:', { title, content: contentString, category, images, postMediaIds });
       }
     } catch (error) {
       console.error('에러:', error);
-      console.log('보낸 데이터:', { title, content: contentString, category, images, deleteImages });
+      console.log('보낸 데이터:', { title, content: contentString, category, images, postMediaIds });
     }
   };
 
