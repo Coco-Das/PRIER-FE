@@ -92,7 +92,7 @@ export const ResponseQuestion = () => {
       }));
       const response = await API_BASE_URL.post(`/projects/${projectId}/responses`, responsePayload);
       console.log(response);
-      navigate(`/responsetest/${projectId}`); //제출 후 다시 프로젝트 페이지로
+      navigate(`/feedback/${projectId}`); //제출 후 다시 프로젝트 페이지로
     } catch (error) {
       console.error('에러:', error);
     }

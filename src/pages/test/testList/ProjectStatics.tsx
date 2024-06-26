@@ -1,5 +1,4 @@
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { DetailText, MypageChartIcon, StaticContainer, TitleText, UniqueText } from './TestListStyles';
 
@@ -34,7 +33,7 @@ const ProjectStatistics = ({ project }: { project: Project }) => {
         <UniqueText className="ml-2">{percents !== null ? `${Math.round(percents)}%` : '...'}</UniqueText>
       </div>
       <DetailText className="mt-2">총 {count !== null ? `${count}` : '...'}개의 응답</DetailText>
-      <MypageChartIcon></MypageChartIcon>
+      <MypageChartIcon />
     </StaticContainer>
   );
 };

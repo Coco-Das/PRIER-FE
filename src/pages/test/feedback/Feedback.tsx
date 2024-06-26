@@ -9,6 +9,7 @@ import {
   FeedbackContainer,
   FeedbackWrapper,
   Img,
+  MypageChartIcon,
   ProfileImg,
   ProjectContainer,
   ProjectDiv,
@@ -292,8 +293,27 @@ function Feedback() {
                 평점 {averageScore}점의 별점을 받았습니다
               </DetailText>
             </div>
-            <div style={{ width: '150px', height: '150px', marginTop: '20px', marginLeft: '40px' }}>
-              {renderPositiveResponseChart(Math.round(percents))}
+            <div style={{ display: 'flex', width: '100%' }}>
+              <div style={{ width: '150px', height: '150px', marginTop: '25px', marginLeft: '40px' }}>
+                {renderPositiveResponseChart(Math.round(percents))}
+              </div>
+              <div
+                style={{
+                  width: 'auto',
+                  height: 'auto',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  fontSize: '12px',
+                  justifyContent: 'flex-end',
+                  lineHeight: '16px',
+                  color: '#828282',
+                  marginLeft: '10px',
+                }}
+              >
+                <p>긍정적 응답: {Math.round(percents)}%</p>
+                <p>부정적 응답: {Math.round(100 - percents)}%</p>
+              </div>
+              <MypageChartIcon />
             </div>
           </StaticContainer>
         </div>

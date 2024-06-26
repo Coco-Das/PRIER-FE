@@ -328,13 +328,20 @@ export const ResponseTest = () => {
             </BlueInputDiv>
           </BlueDiv>
           {link && (
-            <GreenDiv
-              className="mt-2"
-              style={{ cursor: 'pointer' }}
-              onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
-            >
-              <span className="font-bold underline">바로가기 &rarr;</span>
-            </GreenDiv>
+            <div style={{ display: 'flex', height: '10%' }} className="mt-2">
+              <GreenDiv
+                style={{ cursor: 'pointer', backgroundColor: 'white', border: 'none' }}
+                onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+              >
+                <span className="font-bold underline">피드백 상세보기 &rarr;</span>
+              </GreenDiv>
+              <GreenDiv
+                style={{ cursor: 'pointer' }}
+                onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}
+              >
+                <span className="font-bold underline">바로가기 &rarr;</span>
+              </GreenDiv>
+            </div>
           )}
           <WhiteDiv className="mt-2">
             <div style={{ display: 'flex', height: 'auto' }}>
