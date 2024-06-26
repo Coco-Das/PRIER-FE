@@ -67,7 +67,7 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
       const response = await API_BASE_URL.get(`/projects/${projectId}/comment`);
       const Data = response.data;
       setComments(Data);
-      console.log(comments);
+      // console.log(comments);
     } catch (error) {
       console.error('에러:', error);
     }
@@ -96,14 +96,14 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
         textareaRef.current.style.height = `${textareaRef.current.scrollHeight}px`; // 높이 조정
       }
     }, 0); // 높이 조정을 강제.
-    console.log(editingCommentId);
+    // console.log(editingCommentId);
   };
 
   const handleSaveClick = async () => {
     if (!projectId || editingCommentId === null) return;
     const commentId = editingCommentId;
     const JsonData = { comment: editingContent, score: editingScore };
-    console.log(JsonData);
+    // console.log(JsonData);
     try {
       await API_BASE_URL.put(`/projects/${projectId}/comment/${commentId}`, JsonData);
       setEditingCommentId(null);

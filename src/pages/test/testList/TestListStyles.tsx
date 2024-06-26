@@ -118,7 +118,7 @@ export const TitleText = styled.h2`
 `;
 export const DetailText = styled.p`
   color: #828282;
-  font-size: 16px;
+  font-size: 14px;
 `;
 export const UniqueText = styled.h1`
   font-weight: 700;

@@ -16,7 +16,7 @@ import {
   TitleText,
   UniqueText,
 } from './TestListStyles';
-import { useOtherProfileStore } from '../../../states/user/UserStore';
+import { useOtherProfileStore, useUserStore } from '../../../states/user/UserStore';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { Link } from 'react-router-dom';
@@ -43,8 +43,11 @@ interface Project {
 
 function TestList() {
   const { userId } = useParams<{ userId: string }>();
+  const storedUserId = localStorage.getItem('userId');
+  const USER_ID = storedUserId ? Number(storedUserId) : null;
+  const myProfile = useUserStore(state => state.userProfile);
+
   const userProfile = useOtherProfileStore(state => state.otherProfile);
-  console.log(userProfile.nickname);
   const [filter, setFilter] = useState<number>(0);
   const [page, setPage] = useState(0);
   const [projects, setProjects] = useState<Project[]>([]);
@@ -128,7 +131,7 @@ function TestList() {
     queryParams.set('page', newPage.toString());
     navigate(`/testlist/${userId}?${queryParams.toString()}`);
     if (listWrapperRef.current) {
-      listWrapperRef.current.scrollTo(0, 0);
+      listWrapperRef.current.scrollTop = 0;
     }
   };
 
@@ -169,11 +172,11 @@ function TestList() {
     }
     return pages;
   };
-
+  const numericUserId = userId ? parseInt(userId, 10) : null;
   return (
     <ListWrapper ref={listWrapperRef}>
       <span className="ml-4 font-extrabold mt-3" style={{ wordBreak: 'break-word', color: '#315AF1' }}>
-        {userProfile.nickname} 님의 프로젝트
+        {USER_ID !== null && numericUserId === USER_ID ? myProfile.nickname : userProfile.nickname} 님의 프로젝트
       </span>
       <div className="ml-5 mt-2" style={{ display: 'flex', gap: '15px', width: '90%', height: '100%' }}>
         <FilterBtn $isActive={filter === 0} onClick={() => handleFilterChange(0)}>

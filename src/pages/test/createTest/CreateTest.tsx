@@ -317,7 +317,7 @@ export const CreateTest = () => {
     try {
       const response = await API_BASE_URL.post('/projects', formData, config);
       const projectId = response.data;
-      console.log(projectId);
+      // console.log(projectId);
       if (projectId === -1) {
         setAlert(true);
         setTimeout(() => {
@@ -327,7 +327,7 @@ export const CreateTest = () => {
       }
       const setProjectId = useProjectStore.getState().setProjectId;
       setProjectId(projectId);
-      console.log(jsonData);
+      // console.log(jsonData);
       setSnackbar({ message: '프로젝트가 등록되었습니다', type: 'success' });
       setTimeout(() => {
         navigate(`/responsetest/${projectId}`);
@@ -335,7 +335,7 @@ export const CreateTest = () => {
     } catch (error) {
       setSnackbar({ message: '프로젝트 등록이 실패하였습니다.', type: 'error' });
       console.error('에러:', error);
-      console.log('JSON Data:', jsonData);
+      // console.log('JSON Data:', jsonData);
     }
   };
 

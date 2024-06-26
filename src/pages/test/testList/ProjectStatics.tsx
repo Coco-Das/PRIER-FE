@@ -39,9 +39,11 @@ const ProjectStatistics = ({ project }: { project: Project }) => {
   return (
     <StaticContainer onClick={() => navigate(`/feedback/${project.projectId}`)}>
       <TitleText>통계</TitleText>
-      <UniqueText>평점</UniqueText>
-      <UniqueText>{percents !== null ? `${percents}%` : '...'}</UniqueText>
-      <DetailText>총 {count !== null ? `${count}` : '...'}개의 응답</DetailText>
+      <div className="mt-3" style={{ display: 'flex', alignItems: 'center' }}>
+        <UniqueText>긍정의 응답</UniqueText>
+        <UniqueText className="ml-2">{percents !== null ? `${Math.round(percents)}%` : '...'}</UniqueText>
+      </div>
+      <DetailText className="mt-2">총 {count !== null ? `${count}` : '...'}개의 응답</DetailText>
       <MypageChartIcon></MypageChartIcon>
     </StaticContainer>
   );
