@@ -45,7 +45,7 @@ const Board: React.FC = () => {
     setLoading(true);
     try {
       const response = await API_BASE_URL.get('/posts');
-      const sortedPosts = response.data.sort(
+      const sortedPosts = response.data.postListDto.sort(
         (a: BoardPost, b: BoardPost) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime(),
       );
       setPosts(sortedPosts);
@@ -61,7 +61,7 @@ const Board: React.FC = () => {
     setLoading(true);
     try {
       const response = await API_BASE_URL.get('/posts/my');
-      const myPosts = response.data.reverse();
+      const myPosts = response.data.postListDto.reverse();
       const filteredMyPosts =
         activeCategory === 'ALL' ? myPosts : myPosts.filter((post: BoardPost) => post.category === activeCategory);
       setPosts(filteredMyPosts);
@@ -76,7 +76,7 @@ const Board: React.FC = () => {
     setLoading(true);
     try {
       const response = await API_BASE_URL.get('/posts/like/my');
-      const likedPosts = response.data.reverse();
+      const likedPosts = response.data.postListDto.reverse();
       const filteredLikedPosts =
         activeCategory === 'ALL'
           ? likedPosts

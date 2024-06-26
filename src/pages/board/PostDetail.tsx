@@ -52,22 +52,24 @@ interface Media {
 }
 
 interface Comment {
-  userId: number;
+  writerId: number;
   nickname: string; // 닉네임 속성 추가
   content: string;
   createdAt: string;
   updatedAt: string | null;
   commentId: number;
+  writerProfileUrl: string;
 }
 
 interface Post {
   isLikedByMe: any;
-  userId: number;
+  writerId: number;
   postId: number;
   title: string;
   content: string;
   nickname: string;
   category: string;
+  writerProfileUrl: string;
   media: Media[];
   views: number;
   likes: number;
@@ -118,19 +120,16 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
     return <div>게시글을 찾을 수 없습니다.</div>;
   }
 
-  const handleProfileClick = async (e: React.MouseEvent, userId: number) => {
+  const handleProfileClick = async (e: React.MouseEvent, writerId: number) => {
     e.stopPropagation();
-    if (userId == USER_ID) {
+    if (writerId == USER_ID) {
       navigate(`/mypage`);
-      console.log('myID:', USER_ID);
-      console.log('Profile ID:', userId);
     } else {
-      await LinkUserProfile(userId);
-      navigate(`/profile/${userId}`);
-      console.log('myID:', USER_ID);
-      console.log('Profile ID:', userId);
+      await LinkUserProfile(writerId);
+      navigate(`/profile/${writerId}`);
     }
   };
+
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setNewComment(e.target.value);
   };
@@ -145,14 +144,11 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
           });
 
           if (response.status === 200) {
-            console.log('댓글 수정:', editingCommentId, newComment);
             const updatedComments = post.comments.map(comment =>
               comment.commentId === editingCommentId ? { ...comment, content: newComment } : comment,
             );
             setPost({ ...post, comments: updatedComments });
             setEditingCommentId(null);
-          } else {
-            console.error('댓글 수정 실패:', response.status);
           }
         } else {
           // 댓글 전송 로직
@@ -161,20 +157,18 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
           });
 
           if (response.status === 201) {
-            console.log('새 댓글 제출:', newComment);
             const newCommentData: Comment = {
-              userId: USER_ID!, // 실제 사용자 ID로 대체해야 합니다.
-              nickname: userProfile.nickname, // 댓글 작성자의 닉네임 추가
+              writerId: USER_ID!,
+              nickname: userProfile.nickname,
               content: newComment,
               createdAt: new Date().toISOString(),
               updatedAt: null,
               commentId: response.data.commentId,
+              writerProfileUrl: response.data.writerProfileUrl,
             };
-            window.location.reload(); // 페이지 새로고침
+            window.location.reload();
 
             setPost({ ...post, comments: [...post.comments, newCommentData] });
-          } else {
-            console.error('댓글 전송 실패:', response.status);
           }
         }
         setNewComment('');
@@ -196,12 +190,9 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
     try {
       const response = await axios.delete(`${API_BASE_URL}/posts/${postId}/comment/${commentId}`);
       if (response.status === 200) {
-        console.log('댓글 삭제:', commentId);
         const updatedComments = post.comments.filter(comment => comment.commentId !== commentId);
         setPost({ ...post, comments: updatedComments });
-        window.location.reload(); // 페이지 새로고침
-      } else {
-        console.error('댓글 삭제 실패:', response.status);
+        window.location.reload();
       }
     } catch (error) {
       console.error('댓글 삭제 중 오류 발생:', error);
@@ -217,7 +208,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
     setIsModalOpen(false);
     setTimeout(() => {
       setModalImageUrl(null);
-    }); // fadeOut 애니메이션 시간과 일치
+    });
   };
 
   const likeState = likes[post.postId] || { isLiked: post.isLikedByMe, likeCount: post.likes };
@@ -232,13 +223,16 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
           <UserContainer className="mt-[-16px]">
             <Avatar
               className="ml-[-8px] mt-[5px]"
-              onClick={e => handleProfileClick(e, post.userId)}
+              onClick={e => handleProfileClick(e, post.writerId)}
               category={post.category}
             >
-              <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
+              <AvatarImage
+                src={post.writerProfileUrl || (post.category === 'NOTICE' ? announcementAvatar : userAvatar)}
+                alt="Avatar"
+              />
             </Avatar>
             <AuthorContainer>
-              <Author onClick={e => handleProfileClick(e, post.userId)} category={post.category}>
+              <Author onClick={e => handleProfileClick(e, post.writerId)} category={post.category}>
                 {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
               </Author>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -247,7 +241,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
                 <TimeViews>조회수 {post.views}회 </TimeViews>
               </div>
             </AuthorContainer>
-            {USER_ID === post.userId && (
+            {USER_ID === post.writerId && (
               <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                 <PostMenu postId={post.postId} title={post.title} />
               </div>
@@ -308,18 +302,18 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
           post.comments.map(comment => {
             return (
               <CommentContainer key={comment.commentId} className="flex justify-between">
-                <CommentAvatar onClick={e => handleProfileClick(e, comment.userId)}>
-                  <AvatarImage src={userAvatar} alt="Avatar" />
+                <CommentAvatar onClick={e => handleProfileClick(e, comment.writerId)}>
+                  <AvatarImage src={comment.writerProfileUrl} alt="Avatar" />
                 </CommentAvatar>
                 <CommentContent className="flex-1">
                   <div className="flex flex-row items-center space-x-2 justify-between">
                     <div className="flex flex-row items-center space-x-2">
-                      <CommentAuthor onClick={e => handleProfileClick(e, comment.userId)} category={post.category}>
+                      <CommentAuthor onClick={e => handleProfileClick(e, comment.writerId)} category={post.category}>
                         {comment.nickname}
                       </CommentAuthor>
                       <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
                     </div>
-                    {USER_ID === comment.userId && (
+                    {USER_ID === comment.writerId && (
                       <div>
                         <CommentMenu
                           commentId={comment.commentId}
@@ -344,7 +338,6 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
         </CommentInputContainer>
       </CommentsContainer>
 
-      {/* 모달 컴포넌트 사용 */}
       {isModalOpen && <ImageModal imageUrl={modalImageUrl} onClose={closeModal} />}
     </PostDetailContainer>
   );

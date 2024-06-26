@@ -11,21 +11,16 @@ import {
   ContentContainer,
   LikesContainer,
   Likes,
-  LikeButton,
-  LikeIcon,
   Image,
 } from './BoardStyles';
 import { BoardPost } from '../../states/board/BoardStore';
-import userAvatar from '../../assets/user.svg';
-import announcementAvatar from '../../assets/Announcement.svg';
-import UnLike from '../../assets/UnLike.svg';
-import Like from '../../assets/Like.svg';
 import useFormatDate from '../../hooks/UseFormatDate';
 import PostMenu from '../../components/board/PostMenu';
 import { useNavigate } from 'react-router-dom';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 import useLike from '../../hooks/UseLike';
 import { LinkUserProfile } from '../../services/UserApi';
+import './BoardLikeStyles.css'; // 스타일 파일을 import 합니다.
 
 interface PostListProps {
   posts: BoardPost[];
@@ -43,17 +38,13 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
   const storedUserId = localStorage.getItem('userId');
   const USER_ID = storedUserId ? Number(storedUserId) : null;
 
-  const handleProfileClick = async (e: React.MouseEvent, userId: number) => {
+  const handleProfileClick = async (e: React.MouseEvent, writerId: number) => {
     e.stopPropagation();
-    if (userId == USER_ID) {
+    if (writerId == USER_ID) {
       navigate(`/mypage`);
-      console.log('myID:', USER_ID);
-      console.log('Profile ID:', userId);
     } else {
-      await LinkUserProfile(userId);
-      navigate(`/profile/${userId}`);
-      console.log('myID:', USER_ID);
-      console.log('Profile ID:', userId);
+      await LinkUserProfile(writerId);
+      navigate(`/profile/${writerId}`);
     }
   };
 
@@ -64,10 +55,6 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
       navigate(`/board/post/${postId}`);
     }, 2000);
   };
-
-  useEffect(() => {
-    console.log(likes);
-  }, [likes]);
 
   const sortedPosts = [...posts].sort((a, b) => {
     if (activeSort === 'latest') {
@@ -108,15 +95,15 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
               <UserContainer>
                 <Avatar
                   category={post.category}
-                  onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.userId)}
+                  onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.writerId)}
                   className="mt-[5px]"
                 >
-                  <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : userAvatar} alt="Avatar" />
+                  <AvatarImage src={post.writerProfileUrl} alt="Avatar" />
                 </Avatar>
                 <AuthorContainer>
                   <Author
                     category={post.category}
-                    onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.userId)}
+                    onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.writerId)}
                   >
                     {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
                   </Author>
@@ -126,7 +113,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                     <TimeViews>조회수 {post.views}회 </TimeViews>
                   </div>
                 </AuthorContainer>
-                {userId === post.userId && (
+                {userId === post.writerId && (
                   <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
                     <PostMenu postId={post.postId} title={post.title} insidePostBox />
                   </div>
@@ -149,14 +136,21 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
               </ContentContainer>
               <LikesContainer>
                 <Likes>Likes {likeState.likeCount}</Likes>
-                <LikeButton
-                  onClick={async (e: React.MouseEvent) => {
-                    e.stopPropagation();
-                    await toggleLike(post.postId, currentIsLiked);
-                  }}
-                >
-                  <LikeIcon src={currentIsLiked ? Like : UnLike} alt="좋아요/좋아요 취소" />
-                </LikeButton>
+                <label className="ui-like">
+                  <input
+                    type="checkbox"
+                    checked={currentIsLiked}
+                    onChange={async e => {
+                      e.stopPropagation();
+                      await toggleLike(post.postId, currentIsLiked);
+                    }}
+                  />
+                  <div className="like">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="">
+                      <path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path>
+                    </svg>
+                  </div>
+                </label>
               </LikesContainer>
             </PostBox>
           </BackgroundContainer>
