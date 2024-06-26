@@ -192,10 +192,10 @@ function TestList() {
                   {getStatusText(project.status)}
                 </span>
                 <Link
-                  to={`/responsetest/${project.projectId}`}
+                  to={`/feedback/${project.projectId}`}
                   style={{ marginLeft: 'auto', paddingRight: '10px', cursor: 'pointer' }}
                 >
-                  <span className="underline">자세히 보기 &gt;</span>
+                  <span className="underline">피드백 상세보기 &gt;</span>
                 </Link>
               </div>
               <div>
