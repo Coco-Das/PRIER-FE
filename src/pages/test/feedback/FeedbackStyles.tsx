@@ -54,10 +54,11 @@ export const UniqueText = styled.span`
   padding-left: 5px;
 `;
 export const MypageChartIcon = styled(ChartIcon)`
-  width: 100px;
-  height: 200px;
+  width: 20%;
   transform: scaleX(-1);
-  align-self: flex-end;
+  height: 60%;
+  margin-left: auto;
+  margin-top: auto;
 `;
 export const FeedbackContainer = styled.div`
   height: 30%;
