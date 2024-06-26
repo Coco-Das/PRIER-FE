@@ -8,7 +8,7 @@ export async function FetchMyPage() {
     const response = await API_BASE_URL.get('/mypage');
     console.log('마이페이지 정보 요청 성공', response.data);
     const userProfile = {
-      imgUrl: response.data.imgUrl,
+      imgUrl: response.data.profileImgDto.s3Key,
       nickname: response.data.nickname,
       belonging: response.data.belonging,
       rank: response.data.rank,
@@ -43,7 +43,7 @@ export async function LinkUserProfile(userId: number) {
     const response = await API_BASE_URL.get(`/mypage/${userId}`);
     console.log('유저 프로필 정보 요청 성공', response.data);
     const userProfile = {
-      imgUrl: response.data.imgUrl,
+      imgUrl: response.data.profileImgDto.s3Key,
       nickname: response.data.nickname,
       belonging: response.data.belonging,
       rank: response.data.rank,
@@ -95,16 +95,24 @@ export function FetchLogout() {
 }
 export const EditImg = async (newImg: string) => {
   try {
-    const respose = await API_BASE_URL.put(
-      '/users/img',
-      { imgUrl: newImg },
+    const response = await API_BASE_URL.put(
+      '/users/profile/img',
+      { media: newImg },
       { headers: { 'Content-Type': 'application/json' } },
     );
-    console.log('프로필 이미지 수정 요청 성공', respose.data);
+    console.log('프로필 이미지 수정 요청 성공', response.data);
     const setImgUrl = useUserStore.getState().setImgUrl;
     setImgUrl(newImg);
   } catch (error) {
     console.error('프로필 이미지 수정 실패', error);
+  }
+};
+export const DeleteImg = async () => {
+  try {
+    await API_BASE_URL.delete('/users/profile/img');
+    console.log('프로필 이미지 삭제');
+  } catch (error) {
+    console.error('프로필 이미지 삭제 실패', error);
   }
 };
 export const EditNickName = async (newNickName: string) => {
@@ -143,25 +151,6 @@ export const EditBelonging = async (newBelonging: string) => {
     setBelonging(newBelonging);
   } catch (error) {
     console.error('소속 수정 실패', error);
-    throw error;
-  }
-};
-export const EditEmail = async (newEmail: string) => {
-  try {
-    const response = await API_BASE_URL.put(
-      '/users/email',
-      { email: newEmail },
-      {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      },
-    );
-    console.log('메일 수정 성공', response.data);
-    const setEmail = useUserStore.getState().setEmail;
-    setEmail(newEmail);
-  } catch (error) {
-    console.error('메일 수정 실패', error);
     throw error;
   }
 };

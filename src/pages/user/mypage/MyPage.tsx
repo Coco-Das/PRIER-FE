@@ -44,7 +44,6 @@ import MyReview from '../../../components/user/MyReview';
 import {
   EditBelonging,
   EditBlog,
-  EditEmail,
   EditFigma,
   EditGithub,
   EditImg,
@@ -103,9 +102,6 @@ export default function MyPage() {
   const [showEditBelongingAlert, setShowEditBelongingAlert] = useState(false);
   const [isEditingBelonging, setIsEditingBelonging] = useState(false);
   const [newBelonging, setNewBelonging] = useState<string>('');
-  const [showEditEmailAlert, setShowEditEmailAlert] = useState(false);
-  const [isEditingEmail, setIsEditingEmail] = useState(false);
-  const [newEmail, setNewEmail] = useState<string>('');
   const [showEditBlogAlert, setShowEditBlogAlert] = useState(false);
   const [isEditingBlog, setIsEditingBlog] = useState(false);
   const [newBlog, setNewBlog] = useState<string>('');
@@ -227,30 +223,7 @@ export default function MyPage() {
     setShowEditBelongingAlert(false);
     setNewBelonging('');
   };
-  //이메일 수정
-  const EmailInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewEmail(event.target.value);
-  };
-  const setEditEmail = () => {
-    setIsEditingEmail(true);
-  };
-  const ConfirmEditEmail = () => {
-    setShowEditEmailAlert(true);
-  };
-  const saveEditEmail = async () => {
-    try {
-      await EditEmail(newEmail);
-      setIsEditingEmail(false);
-      setShowEditEmailAlert(false);
-    } catch (error) {
-      alert('메일 수정 중 오류 발생:');
-    }
-  };
-  const cancleEditEmail = () => {
-    setIsEditingEmail(false);
-    setShowEditEmailAlert(false);
-    setNewEmail('');
-  };
+
   //블로그 수정
   const BlogInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewBlog(event.target.value);
@@ -421,9 +394,7 @@ export default function MyPage() {
       {showEditBelongingAlert && (
         <CustomAlert message="소속을 수정 하시겠습니까?" onConfirm={saveEditBelonging} onCancel={cancleEditBelonging} />
       )}
-      {showEditEmailAlert && (
-        <CustomAlert message="계정 정보를 수정 하시겠습니까?" onConfirm={saveEditEmail} onCancel={cancleEditEmail} />
-      )}
+
       {showEditBlogAlert && (
         <AccountEdit
           message="블로그 주소를 수정 하시겠습니까?"
@@ -521,23 +492,14 @@ export default function MyPage() {
                 <ProfileDetail>{userProfile.rank} </ProfileDetail>
               </span>
             </ProfileTextContainer>
-            {isEditingEmail ? (
-              <ProfileTextContainer>
-                <span className="flex">
-                  <ProfileText>계정: </ProfileText>
-                  <StyledInput type="text" value={newEmail} onChange={EmailInputChange}></StyledInput>
-                </span>
-                <CorrectText onClick={ConfirmEditEmail}>확인</CorrectText>
-              </ProfileTextContainer>
-            ) : (
-              <ProfileTextContainer>
-                <span className="flex">
-                  <ProfileText>계정 : </ProfileText>
-                  <ProfileDetail> {userProfile.email} </ProfileDetail>
-                </span>
-                <CorrectText onClick={setEditEmail}>수정 하기</CorrectText>
-              </ProfileTextContainer>
-            )}
+
+            <ProfileTextContainer>
+              <span className="flex">
+                <ProfileText>계정 : </ProfileText>
+                <ProfileDetail> {userProfile.email} </ProfileDetail>
+              </span>
+            </ProfileTextContainer>
+
             <ProfileAccountContainer>
               <div className="flex items-center gap-5">
                 {isEditingBlog ? (
@@ -644,7 +606,7 @@ export default function MyPage() {
           <div className="flex w-full justify-between items-center">
             <Title>진행 중인 프로젝트</Title>
             <Link to={`/testlist/${localStorage.getItem('userId')}`}>
-              <LinkText>전체 프로젝트 &gt;</LinkText>
+              <LinkText>내 프로젝트 &gt;</LinkText>
             </Link>
           </div>
           {userProfile.nowProjectId !== null ? (
