@@ -66,6 +66,7 @@ export const AvatarImage = styled.img`
   width: 90%;
   height: 90%;
   object-fit: cover;
+  border-radius: 50%;
 `;
 
 export const AuthorContainer = styled.div`

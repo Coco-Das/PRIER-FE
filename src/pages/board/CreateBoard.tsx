@@ -272,7 +272,7 @@ const CreateBoard: React.FC = () => {
         <PostBox>
           <UserContainer>
             <Avatar>
-              <AvatarImage src={userAvatar} alt="Avatar" />
+              <AvatarImage src={userProfile.imgUrl} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
               <Author>{userProfile.nickname}</Author>
