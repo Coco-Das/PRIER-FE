@@ -40,8 +40,10 @@ import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import TextEditorToolbar from '../../components/board/TextEditorToolbar';
 import CustomAlert from '../../components/utils/CustomAlert';
 import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
+import { useUserStore } from '../../states/user/UserStore';
 
 const { hasCommandModifier } = KeyBindingUtil;
+const storedUserId = localStorage.getItem('userId');
 
 const styleMap = {
   RED: { color: 'red' },
@@ -92,6 +94,7 @@ const ModifyBoard: React.FC = () => {
   const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 상태 변수
   const [existingImages, setExistingImages] = useState<{ s3Url: string; s3Key: string }[]>([]); // 기존 이미지 상태 변수 초기화
   const [deleteimages, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
+  const userProfile = useUserStore(state => state.userProfile);
 
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
 
@@ -215,7 +218,6 @@ const ModifyBoard: React.FC = () => {
 
   const handleDeleteExistingImage = (index: number) => {
     setDeleteImages(prevDeleteImages => [...prevDeleteImages, existingImages[index].s3Key]);
-    console.log(deleteimages);
     setExistingImages(existingImages.filter((_, i) => i !== index));
   };
 
@@ -300,7 +302,7 @@ const ModifyBoard: React.FC = () => {
               <AvatarImage src={userAvatar} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author>개발자1</Author>
+              <Author>{userProfile.nickname}</Author>
             </AuthorContainer>
             <TextEditorToolbar editorState={editorState} onEditorChange={handleEditorChange} />
             <CustomButton onClick={handleImageUpload}>
