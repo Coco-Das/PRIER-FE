@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { styled } from 'styled-components';
-import StarGif from '../../assets/star.gif';
+import Star from '../../assets/star.json';
+import Lottie from '../utils/LottieComponent';
 interface QuestSuccessProps {
   onClose: () => void;
 }
@@ -14,25 +15,13 @@ const SuccessWrapper = styled.div`
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding: 1rem;
   justify-content: space-around;
   background: linear-gradient(45deg, rgba(119, 60, 209, 0.7), rgba(49, 90, 241, 0.8), rgba(35, 190, 135, 0.7));
+  background-filter: blur(30px);
   z-index: 5;
 `;
-const GifWrapper = styled.div`
-  display: inline-block;
-  img {
-    animation: play 0.8s steps(10) infinite;
-  }
 
-  @keyframes play {
-    from {
-      background-position: 0;
-    }
-    to {
-      background-position: -1000px;
-    }
-  }
-`;
 const SuccessTitle = styled.h1`
   color: white;
   font-size: 4rem;
@@ -52,7 +41,7 @@ const QuestSuccess: React.FC<QuestSuccessProps> = ({ onClose }) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       onClose();
-    }, 4500);
+    }, 3000);
 
     return () => clearTimeout(timer);
   }, [onClose]);
@@ -62,9 +51,7 @@ const QuestSuccess: React.FC<QuestSuccessProps> = ({ onClose }) => {
         <SuccessSubTitle>퀘스트 달성 성공</SuccessSubTitle>
         <SuccessTitle>오늘의 퀘스트를 달성했습니다</SuccessTitle>
       </span>
-      <GifWrapper>
-        <img src={StarGif} style={{ width: '800px' }} />
-      </GifWrapper>
+      <Lottie animationData={Star} loop={true} autoplay={true} style={{ width: '30%' }} />
       <span className="text-center">
         <TextWhite>오늘도 함께 해주셔서 감사해요</TextWhite>
         <TextWhite>퀘스트를 달성하여 코어를 모으면 보상을 받을 수 있어요</TextWhite>

@@ -1,5 +1,5 @@
 import React, { useEffect, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
 import {
   FirstContainer,
@@ -67,6 +67,8 @@ const GlobalStyle = createGlobalStyle`
 const FirstMain = () => {
   const secondContainerRef = useRef<HTMLDivElement>(null);
   const thirdContainerRef = useRef<HTMLDivElement>(null);
+  const endRef = useRef<HTMLDivElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const handleScroll = (entries: IntersectionObserverEntry[]) => {
@@ -110,6 +112,29 @@ const FirstMain = () => {
       }
     };
   }, []);
+  useEffect(() => {
+    const handleEndScroll = (entries: IntersectionObserverEntry[]) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          navigate('/login');
+        }
+      });
+    };
+
+    const endObserver = new IntersectionObserver(handleEndScroll, {
+      threshold: 1.0,
+    });
+
+    if (endRef.current) {
+      endObserver.observe(endRef.current);
+    }
+
+    return () => {
+      if (endRef.current) {
+        endObserver.unobserve(endRef.current);
+      }
+    };
+  }, []);
 
   return (
     <>
@@ -117,7 +142,9 @@ const FirstMain = () => {
       <FirstContainer>
         <Logo />
         <Text>테스트 그리고 피드백, 당신의 창조를 세상으로 연결합니다</Text>
-        <StartButton component={Link} to="/login" />
+        <Link to="/login">
+          <StartButton>지금 시작하기</StartButton>
+        </Link>
         <Img1 />
         <Img2 />
         <Img3 />
@@ -155,6 +182,15 @@ const FirstMain = () => {
         <Review2 />
         <Review5 />
       </ThirdContainer>
+      <div
+        ref={endRef}
+        style={{
+          height: '800px',
+          width: '100%',
+          background:
+            'linear-gradient(to bottom, rgba(28, 38, 49, 0.8), rgba(28, 38, 49, 0.6), rgba(28, 38, 49, 0.4), rgba(28, 38, 49, 0.2), rgba(28, 38, 49, 0))',
+        }}
+      />
     </>
   );
 };
