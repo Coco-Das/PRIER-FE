@@ -187,10 +187,11 @@ export const BlueInputDiv = styled.div`
 `;
 export const GreenDiv = styled.div`
   margin-left: 30px;
+  width: 50%;
   border-radius: 8px;
-  height: 10%;
+  height: 100%;
   background-color: #e1f9f0;
-  font-size: 15px;
+  font-size: 14px;
   padding: 0px 20px 0px 20px;
   display: flex;
   justify-content: flex-end;
