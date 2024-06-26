@@ -245,6 +245,7 @@ export const AvatarImage = styled.img`
   height: 90%;
   object-fit: cover;
   cursor: pointer;
+  border-radius: 50%;
 `;
 
 export const AuthorContainer = styled.div`
