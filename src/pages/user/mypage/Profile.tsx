@@ -189,7 +189,9 @@ export default function UserProfile() {
                 <StaticContainer>
                   <TitleText>통계</TitleText>
                   <UniqueText>평점</UniqueText>
-                  <UniqueText>{userProfile.nowProjectStaticPercentage} % </UniqueText>
+                  <UniqueText>
+                    {Math.round(parseFloat(userProfile.nowProjectStaticPercentage) * 100) / 100} %
+                  </UniqueText>
                   <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
                   <MypageChartIcon></MypageChartIcon>
                 </StaticContainer>
