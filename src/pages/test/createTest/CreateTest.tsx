@@ -190,17 +190,22 @@ export const CreateTest = () => {
 
   //태그 엔터 입력 & 태그 2개 제한
   const handleTagInputKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (event.key === 'Enter' && tagInput.trim()) {
-      event.preventDefault();
+    if (event.nativeEvent.isComposing) {
+      return;
+    } else {
+      if (event.key === 'Enter' && tagInput.trim()) {
+        event.preventDefault();
 
-      if (tags.length < 2) {
-        setTags(prevTags => [...prevTags, { tagName: tagInput.trim(), color: getRandomColor() }]);
-        setTagInput('');
-      } else {
-        setShowAlert(true);
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 800);
+        if (tags.length < 2) {
+          const newTag = tagInput.trim();
+          setTagInput(''); // 입력 필드를 비워서 커서 위치를 초기화합니다.
+          setTags(prevTags => [...prevTags, { tagName: newTag, color: getRandomColor() }]);
+        } else {
+          setShowAlert(true);
+          setTimeout(() => {
+            setShowAlert(false);
+          }, 800);
+        }
       }
     }
   };
@@ -317,7 +322,6 @@ export const CreateTest = () => {
     try {
       const response = await API_BASE_URL.post('/projects', formData, config);
       const projectId = response.data;
-      // console.log(projectId);
       if (projectId === -1) {
         setAlert(true);
         setTimeout(() => {
@@ -327,7 +331,7 @@ export const CreateTest = () => {
       }
       const setProjectId = useProjectStore.getState().setProjectId;
       setProjectId(projectId);
-      // console.log(jsonData);
+
       setSnackbar({ message: '프로젝트가 등록되었습니다', type: 'success' });
       setTimeout(() => {
         navigate(`/responsetest/${projectId}`);
@@ -335,7 +339,6 @@ export const CreateTest = () => {
     } catch (error) {
       setSnackbar({ message: '프로젝트 등록이 실패하였습니다.', type: 'error' });
       console.error('에러:', error);
-      // console.log('JSON Data:', jsonData);
     }
   };
 
