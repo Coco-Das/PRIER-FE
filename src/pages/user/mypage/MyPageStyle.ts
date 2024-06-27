@@ -1,7 +1,5 @@
 import { styled } from 'styled-components';
 
-import { ReactComponent as GraphIcon } from '../../../assets/Graph.svg';
-
 //프로필
 export const ProfileContainer = styled.div`
   display: flex;
@@ -292,7 +290,7 @@ export const MypageChartIcon = styled.img`
   transform: scaleX(-1);
   align-self: flex-end;
 `;
-export const StyledGraphIcon = styled(GraphIcon)`
+export const StyledGraphIcon = styled.img`
   width: 45px;
   height: 50px;
 `;

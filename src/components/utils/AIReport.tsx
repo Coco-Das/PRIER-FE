@@ -4,7 +4,7 @@ import { AIBestText, StyledGraphIcon, TitleText } from '../../pages/user/mypage/
 import { SmallText } from '../user/UserStyle';
 import { useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
-
+import graphIcon from '../../assets/Graph.png';
 const COLOR_MAP = ['#315AF1', '#28B381', '#FFBA6B', '#828282', '#828282'];
 const DIRECT_MAP = [null, [-1, -1], [1.2, -1], [1, 1], [-1, 1]];
 const AIOverlay = styled.div`
@@ -80,7 +80,7 @@ export default function AIReport() {
           <div className="flex-col items-start w-full">
             <span className="flex items-center">
               <TitleText>AI 분석 Report</TitleText>
-              <StyledGraphIcon />
+              <StyledGraphIcon src={graphIcon} />
             </span>
 
             <AIBestText>&quot; {userProfile.nowProjectKeywordList[0].content} &quot;</AIBestText>
