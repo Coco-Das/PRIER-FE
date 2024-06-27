@@ -27,6 +27,7 @@ import StarRating from '../../../components/utils/StarRating';
 import FeedbackAIReport from '../../../components/utils/FeedbackAIReport';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import ChartIcon from '../../../assets/MainChart.png';
 
 ChartJS.register(ArcElement, Tooltip, Legend);
 
@@ -362,7 +363,7 @@ function Feedback() {
                   )}
                 </p>
               </div>
-              <MypageChartIcon />
+              <MypageChartIcon src={ChartIcon} />
             </div>
           </StaticContainer>
         </div>
