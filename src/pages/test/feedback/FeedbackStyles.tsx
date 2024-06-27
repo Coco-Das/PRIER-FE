@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { ReactComponent as ChartIcon } from '../../../assets/main_chart.svg';
 
 export const FeedbackWrapper = styled.div`
   width: 100%;
@@ -53,7 +52,7 @@ export const UniqueText = styled.span`
   white-space: nowrap;
   padding-left: 5px;
 `;
-export const MypageChartIcon = styled(ChartIcon)`
+export const MypageChartIcon = styled.img`
   width: 20%;
   transform: scaleX(-1);
   height: 60%;

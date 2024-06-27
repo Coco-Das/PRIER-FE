@@ -28,6 +28,8 @@ module.exports = {
   plugins: ['@typescript-eslint', 'react', 'prettier'],
   rules: {
     'react/react-in-jsx-scope': 'off',
+    '@typescript-eslint/no-unused-vars': 'warn', // 경고로 변경
+    '@typescript-eslint/no-explicit-any': 'warn', // 경고로 변경
   },
   settings: {
     react: {

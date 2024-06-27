@@ -1,6 +1,5 @@
 import styled, { keyframes } from 'styled-components';
 import { device } from '../../styles/Media';
-import { ReactComponent as ChartIcon } from '../../assets/main_chart.svg';
 
 export const MainContainer = styled.div`
   display: flex;
@@ -74,7 +73,7 @@ export const MainText = styled.p`
     font-size: 24px;
   }
 `;
-export const StyledChartIcon = styled(ChartIcon)`
+export const StyledChartIcon = styled.img`
   width: 18%;
 `;
 

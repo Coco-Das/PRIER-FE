@@ -1,20 +1,4 @@
 import styled, { keyframes, css } from 'styled-components';
-import { ReactComponent as firstmainimg1 } from '../../assets/FirstMainImg1.svg';
-import { ReactComponent as firstmainimg2 } from '../../assets/FirstMainImg2.svg';
-import { ReactComponent as firstmainimg3 } from '../../assets/FirstMainImg3.svg';
-import { ReactComponent as firstmainimg4 } from '../../assets/FirstMainImg4.svg';
-import { ReactComponent as firstmainimg5 } from '../../assets/FirstMainImg5.svg';
-import { ReactComponent as firstmainimg6 } from '../../assets/FirstMainImg6.svg';
-import { ReactComponent as firstmainimg7 } from '../../assets/FirstMainImg7.svg';
-import { ReactComponent as firstmainimg8 } from '../../assets/FirstMainImg8.svg';
-import { ReactComponent as firstmainimg9 } from '../../assets/FirstMainImg9.svg';
-import { ReactComponent as firstmainimg10 } from '../../assets/FirstMainImg10.svg';
-import { ReactComponent as firstmainimg11 } from '../../assets/FirstMainImg11.svg';
-import { ReactComponent as firstmainimg12 } from '../../assets/FirstMainImg12.svg';
-import { ReactComponent as firstmainimg13 } from '../../assets/FirstMainImg13.svg';
-import { ReactComponent as firstmainimg14 } from '../../assets/FirstMainImg14.svg';
-import { ReactComponent as firstmainimg15 } from '../../assets/FirstMainImg15.svg';
-import { ReactComponent as logo } from '../../assets/Logo-firstMain.svg';
 
 const fadeInUp = keyframes`
   0% {
@@ -41,11 +25,12 @@ export const FirstContainer = styled.div`
   position: relative; /* 자식 요소의 절대 위치를 위한 상대 위치 */
 `;
 
-export const Logo = styled(logo)`
-  width: 30rem;
+export const Logo = styled.img`
+  width: 40rem;
   height: 10rem;
   margin-top: -10rem;
   position: relative;
+  left: 5rem;
   ${animationCSS};
 `;
 
@@ -138,110 +123,110 @@ export const StartButton = styled.button`
   }
 `;
 
-const animatedImgStyle = css`
-  position: absolute;
-  ${animationCSS};
-`;
+// const animatedImgStyle = css`
+//   position: absolute;
+//   ${animationCSS};
+// `;
 
-export const Img1 = styled(firstmainimg1)`
+export const Img1 = styled.img`
   position: absolute;
 
   left: 4rem;
   top: 1rem;
 `;
 
-export const Img2 = styled(firstmainimg2)`
+export const Img2 = styled.img`
   position: absolute;
 
   left: 18rem;
   top: 2rem;
 `;
 
-export const Img3 = styled(firstmainimg3)`
+export const Img3 = styled.img`
   position: absolute;
 
   left: 32rem;
   top: 1rem;
 `;
 
-export const Img4 = styled(firstmainimg4)`
+export const Img4 = styled.img`
   position: absolute;
 
   right: 13rem;
   top: 0.5rem;
 `;
 
-export const Img5 = styled(firstmainimg5)`
+export const Img5 = styled.img`
   position: absolute;
 
   right: 4rem;
   top: 4rem;
 `;
 
-export const Img6 = styled(firstmainimg6)`
+export const Img6 = styled.img`
   position: absolute;
 
   left: 14rem;
   top: 14rem;
 `;
 
-export const Img7 = styled(firstmainimg7)`
+export const Img7 = styled.img`
   position: absolute;
 
   left: 6rem;
   top: 20rem;
 `;
 
-export const Img8 = styled(firstmainimg8)`
+export const Img8 = styled.img`
   position: absolute;
 
   left: -3rem;
   top: 34rem;
 `;
 
-export const Img9 = styled(firstmainimg9)`
+export const Img9 = styled.img`
   position: absolute;
 
   left: 18rem;
   top: 41rem;
 `;
 
-export const Img10 = styled(firstmainimg10)`
+export const Img10 = styled.img`
   position: absolute;
 
   left: 25rem;
   top: 38rem;
 `;
 
-export const Img11 = styled(firstmainimg11)`
+export const Img11 = styled.img`
   position: absolute;
 
   right: 34rem;
   top: 35rem;
 `;
 
-export const Img12 = styled(firstmainimg12)`
+export const Img12 = styled.img`
   position: absolute;
 
   right: 23rem;
   bottom: 6rem;
 `;
 
-export const Img13 = styled(firstmainimg13)`
+export const Img13 = styled.img`
   position: absolute;
 
   right: 20rem;
   top: 30rem;
 `;
 
-export const Img14 = styled(firstmainimg14)`
+export const Img14 = styled.img`
   position: absolute;
 
   right: 4rem;
   top: 24rem;
 `;
 
-export const Img15 = styled(firstmainimg15)`
+export const Img15 = styled.img`
   position: absolute;
 
   right: 0rem;

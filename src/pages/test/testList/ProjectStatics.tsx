@@ -3,6 +3,7 @@ import { API_BASE_URL } from '../../../const/TokenApi';
 import { DetailText, MypageChartIcon, StaticContainer, TitleText, UniqueText } from './TestListStyles';
 import Skeleton from 'react-loading-skeleton';
 import 'react-loading-skeleton/dist/skeleton.css';
+import ChartIcon from '../../../assets/MainChart.png';
 
 interface Project {
   projectId: number;
@@ -39,7 +40,7 @@ const ProjectStatistics = ({ project }: { project: Project }) => {
         <UniqueText className="ml-2">{loading ? <Skeleton width={60} /> : `${Math.round(percents)}%`}</UniqueText>
       </div>
       <DetailText className="mt-2"> {loading ? <Skeleton width={30} /> : `총 ${count}개의 응답`}</DetailText>
-      <MypageChartIcon />
+      <MypageChartIcon src={ChartIcon} />
     </StaticContainer>
   );
 };
