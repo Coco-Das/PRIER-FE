@@ -339,7 +339,7 @@ export const ResponseTest = () => {
             </div>
           ) : (
             <div style={{ display: 'flex', height: '10%' }} className="mt-2">
-              <GreenDiv2 onClick={() => navigate(`/feedback/${projectId}`)}>
+              <GreenDiv2 onClick={() => navigate(`/feedback/${projectId}`)} style={{ width: '100%' }}>
                 <span className="font-bold underline">피드백 상세보기&rarr;</span>
               </GreenDiv2>
             </div>
