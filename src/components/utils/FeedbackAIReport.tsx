@@ -2,6 +2,7 @@ import React, { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 import { AIBestText, StyledGraphIcon, TitleText } from '../../pages/user/mypage/MyPageStyle';
+import GraphIcon from '../../assets/Graph.png';
 
 const COLOR_MAP = ['#315AF1', '#28B381', '#FFBA6B', '#828282', '#828282'];
 const DIRECT_MAP = [null, [-1, -1], [1.2, -1], [1, 1], [-1, 1]];
@@ -102,7 +103,7 @@ const FeedbackAIReport: React.FC<AIReportProps> = ({ keyWordResponseDtoList }) =
           <div className="flex-col items-start w-full">
             <span className="flex items-center">
               <TitleText>AI 분석 Report</TitleText>
-              <StyledGraphIcon />
+              <StyledGraphIcon src={GraphIcon} />
             </span>
 
             <AIBestText>&quot; {keyWordResponseDtoList[0]?.content || ''} &quot;</AIBestText>
@@ -133,7 +134,7 @@ const FeedbackAIReport: React.FC<AIReportProps> = ({ keyWordResponseDtoList }) =
           <div className="flex-col items-start w-full relative h-[23rem]">
             <span className="flex items-center w-full ">
               <TitleText>AI 분석 Report</TitleText>
-              <StyledGraphIcon />
+              <StyledGraphIcon src={GraphIcon} />
             </span>
             <SmallText>
               &quot; {keyWordResponseDtoList[0]?.content || getDefaultContent(0)} &quot; 라는 키워드가 &nbsp;{' '}
