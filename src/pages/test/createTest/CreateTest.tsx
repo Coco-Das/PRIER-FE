@@ -4,6 +4,8 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
 import { useProjectStore } from '../../../states/projects/ProjectStore'; // zustand 스토어 임포트
+import DeletePng from '../../../assets/trash.png';
+import SettingPng from '../../../assets/setting.png';
 
 import {
   BlueDiv,
@@ -348,7 +350,7 @@ export const CreateTest = () => {
         <ProjectDiv>
           {alert && <CustomAlert message="비어 있는 부분이 있습니다." showButtons={false} />}
           <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-            <Settings />
+            <Settings src={SettingPng} />
             <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
               테스트를 진행할 프로젝트에 대해 설명해주세요
             </span>
@@ -494,7 +496,7 @@ export const CreateTest = () => {
         </ProjectIntro>
       </Project>
       <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-        <Settings />
+        <Settings src={SettingPng} />
         <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
           상세한 피드백을 위한 원하는 질문 폼을 작성해주세요
         </span>
@@ -531,7 +533,7 @@ export const CreateTest = () => {
                   </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
+                  <QuestionDeleteButton src={DeletePng} onClick={() => handleQuestionDelete(question.id)} />
                 </div>
               </div>
             ) : (
@@ -577,7 +579,7 @@ export const CreateTest = () => {
                   ))}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.id)} />
+                  <QuestionDeleteButton src={DeletePng} onClick={() => handleQuestionDelete(question.id)} />
                 </div>
               </div>
             )}

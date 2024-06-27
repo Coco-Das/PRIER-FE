@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { ReactComponent as DeleteBtn } from '../../../assets/DeleteBtn.svg';
-import { ReactComponent as EditBtn } from '../../../assets/EditBtn.svg';
 
 export const SidebarContainer = styled.div<{ $show: boolean }>`
   position: fixed;
@@ -27,16 +25,16 @@ export const Button = styled.button`
   font-weight: bold;
   height: 90%;
 `;
-export const DeleteButton = styled(DeleteBtn)`
-  width: 15px;
-  height: 15px;
+export const DeleteButton = styled.img`
+  width: 14px;
+  height: 16px;
   &:hover {
     cursor: pointer;
   }
 `;
-export const EditButton = styled(EditBtn)`
-  width: 15px;
-  height: 15px;
+export const EditButton = styled.img`
+  width: 20px;
+  height: 20px;
   &:hover {
     cursor: pointer;
   }

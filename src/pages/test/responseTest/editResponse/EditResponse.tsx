@@ -40,6 +40,8 @@ import { HiddenInput } from '../../createTest/CreateTestStyles';
 import { DropDownContainer } from '../../../../components/utils/DropDown';
 import { ToggleBtn } from '../../../../components/utils/Toggle';
 import Snackbar from '../../../../components/user/Snackbar';
+import DeletePng from '../../../../assets/trash.png';
+import SettingPng from '../../../../assets/setting.png';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
@@ -443,7 +445,7 @@ export const EditResponse = () => {
       <Project>
         <ProjectDiv>
           <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-            <Settings />
+            <Settings src={SettingPng} />
             <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
               테스트를 진행할 프로젝트에 대해 설명해주세요
             </span>
@@ -588,7 +590,7 @@ export const EditResponse = () => {
         </ProjectIntro>
       </Project>
       <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-        <Settings />
+        <Settings src={SettingPng} />
         <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
           상세한 피드백을 위한 원하는 질문 폼을 작성해주세요
           <span style={{ fontSize: '12px', color: '#828282' }} className="font-medium">
@@ -619,7 +621,7 @@ export const EditResponse = () => {
                 </div>
 
                 <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.questionId)} />
+                  <QuestionDeleteButton src={DeletePng} onClick={() => handleQuestionDelete(question.questionId)} />
                 </div>
               </div>
             ) : (
@@ -661,7 +663,7 @@ export const EditResponse = () => {
                   ))}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.questionId)} />
+                  <QuestionDeleteButton src={DeletePng} onClick={() => handleQuestionDelete(question.questionId)} />
                 </div>
               </div>
             )}
@@ -694,7 +696,10 @@ export const EditResponse = () => {
                   </div>
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.newQuestionId ?? null)} />
+                  <QuestionDeleteButton
+                    src={DeletePng}
+                    onClick={() => handleQuestionDelete(question.newQuestionId ?? null)}
+                  />
                 </div>
               </div>
             ) : (
@@ -742,7 +747,10 @@ export const EditResponse = () => {
                   ))}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton onClick={() => handleQuestionDelete(question.newQuestionId ?? null)} />
+                  <QuestionDeleteButton
+                    src={DeletePng}
+                    onClick={() => handleQuestionDelete(question.newQuestionId ?? null)}
+                  />
                 </div>
               </div>
             )}

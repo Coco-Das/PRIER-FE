@@ -332,8 +332,15 @@ function Feedback() {
               </DetailText>
             </div>
             <div style={{ display: 'flex', width: '100%' }}>
-              <div style={{ width: '150px', height: '150px', marginTop: '25px', marginLeft: '40px' }}>
-                {loading ? <Skeleton width="100%" height={120} /> : renderPositiveResponseChart(Math.round(percents))}
+              <div
+                style={{
+                  width: '150px',
+                  height: '150px',
+                  marginTop: '25px',
+                  marginLeft: '45px',
+                }}
+              >
+                {loading ? <Skeleton width="100%" height={150} /> : renderPositiveResponseChart(Math.round(percents))}
               </div>
               <div
                 style={{
