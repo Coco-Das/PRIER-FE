@@ -38,7 +38,7 @@ jobs:
         run: npm install
 
       - name: Build
-        run: npm run build
+        run: CI='false' npm run build
 
       - name: 도커 이미지 빌드
         run: docker build -t potatoj1n/prier-fe . #도커허브아이디/서비스명으로 정의
