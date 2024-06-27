@@ -65,8 +65,11 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
     if (!projectId) return;
     try {
       const response = await API_BASE_URL.get(`/projects/${projectId}/comment`);
-      const Data = response.data;
-      setComments(Data);
+      const Data: CommentData[] = response.data;
+
+      // 댓글을 commentId 기준으로 내림차순 정렬
+      const sortedData = Data.sort((a: CommentData, b: CommentData) => b.commentId - a.commentId);
+      setComments(sortedData);
       // console.log(comments);
     } catch (error) {
       console.error('에러:', error);

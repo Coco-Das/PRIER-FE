@@ -2,7 +2,7 @@
   "name": "prier",
   "version": "0.1.0",
   "private": true,
-  "proxy": "http://54.180.163.49:8080",
+  "proxy": "http://3.38.244.34:8080",
   "dependencies": {
     "@emotion/react": "^11.11.4",
     "@emotion/styled": "^11.11.5",
@@ -30,6 +30,7 @@
     "react-datepicker": "^6.9.0",
     "react-day-picker": "^8.10.1",
     "react-dom": "^18.3.1",
+    "react-loading-skeleton": "^3.4.0",
     "react-quill": "^2.0.0",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
