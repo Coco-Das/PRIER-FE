@@ -52,7 +52,6 @@ function TestList() {
   const navigate = useNavigate();
   const location = useLocation();
   const listWrapperRef = useRef<HTMLDivElement>(null);
-  const [last, setLast] = useState(false);
 
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
 
@@ -100,7 +99,6 @@ function TestList() {
 
       setProjects(projectsWithColoredTags);
       saveTagColors(storedColors);
-      setLast(data.last);
 
       console.log(response.data);
     } catch (error) {
