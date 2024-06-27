@@ -1,7 +1,4 @@
 import styled from 'styled-components';
-import { ReactComponent as DeleteBtn } from '../../../../assets/DeleteBtn.svg';
-import { ReactComponent as EditBtn } from '../../../../assets/EditBtn.svg';
-import { ReactComponent as Setting } from '../../../../assets/Setting.svg';
 import { ReactComponent as AddBtn } from '../../../../assets/AddBtn.svg';
 export const CreateWrapper = styled.div`
   width: 100%;
@@ -93,16 +90,18 @@ export const CustomButton = styled.button`
   white-space: nowrap;
   text-align: center;
 `;
-export const Settings = styled(Setting)``;
+export const Settings = styled.img`
+  width: 40px;
+`;
 export const AddButton = styled(AddBtn)`
   margin-top: 5%;
   &:hover {
     cursor: pointer;
   }
 `;
-export const QuestionDeleteButton = styled(DeleteBtn)`
-  width: 23px;
-  height: 23px;
+export const QuestionDeleteButton = styled.img`
+  width: 20px;
+  height: 25px;
   &:hover {
     cursor: pointer;
   }
@@ -127,16 +126,6 @@ export const FileCount = styled.div`
   margin-top: 10px;
   font-size: 15px;
   color: #315af1;
-`;
-
-export const EditButton = styled(EditBtn)`
-  width: 20px;
-  height: 20px;
-  margin-left: auto;
-
-  &:hover {
-    cursor: pointer;
-  }
 `;
 
 export const TagDiv = styled.div`

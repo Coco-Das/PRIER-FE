@@ -36,7 +36,7 @@ import {
   StaticOverlay,
 } from './MyPageStyle';
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
-import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
+import TeamImg from '../../../assets/TeamProfile.png';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
 import { Link, useNavigate } from 'react-router-dom';
@@ -614,7 +614,7 @@ export default function MyPage() {
                 <Link to={`/responsetest/${userProfile.nowProjectId}`}>
                   <LinkProject>
                     <div className="flex items-center gap-3">
-                      <TeamProfile />
+                      <img src={TeamImg} />
                       <p className="text-lg">{userProfile.nowProjectTeamName}</p>
                     </div>
                     <p className="text-gray-600 text-center mt-2">{userProfile.nowProjectName}</p>

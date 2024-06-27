@@ -1,6 +1,4 @@
 import styled from 'styled-components';
-import { ReactComponent as DeleteBtn } from '../../../assets/DeleteBtn.svg';
-import { ReactComponent as EditBtn } from '../../../assets/EditBtn.svg';
 
 export const CreateWrapper = styled.div`
   width: 100%;
@@ -104,8 +102,8 @@ export const CommentBtn = styled.button`
   color: #315af1;
 `;
 
-export const DeleteButton = styled(DeleteBtn)`
-  width: 20px;
+export const DeleteButton = styled.img`
+  width: 18px;
   height: 20px;
   margin-left: auto;
 
@@ -113,9 +111,9 @@ export const DeleteButton = styled(DeleteBtn)`
     cursor: pointer;
   }
 `;
-export const EditButton = styled(EditBtn)`
-  width: 20px;
-  height: 20px;
+export const EditButton = styled.img`
+  width: 25px;
+  height: 25px;
   margin-left: auto;
 
   &:hover {

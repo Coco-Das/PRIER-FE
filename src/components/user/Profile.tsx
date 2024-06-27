@@ -12,6 +12,7 @@ import {
 } from './UserStyle';
 import { useUserStore } from '../../states/user/UserStore';
 import { userPointStore } from '../../states/user/PointStore';
+import Coin from '../../assets/Coin.png';
 
 export default function Profile() {
   const userProfile = useUserStore(state => state.userProfile);
@@ -40,10 +41,12 @@ export default function Profile() {
       <ProgressBarContainer>
         <Filler percentage={progress} />
       </ProgressBarContainer>
-      <MiddleText>등급 {userProfile.rank}</MiddleText>
+      <MiddleText>
+        등급 <span className="text-[#315AF1]">{userProfile.rank}</span>
+      </MiddleText>
       <div className="flex-col">
         <div className="flex items-center gap-3">
-          <StyledPointIcon></StyledPointIcon>
+          <StyledPointIcon src={Coin} />
           <MiddleText>포인트</MiddleText>
         </div>
         <PointText className="text-center">{pointStore.point} 코어 보유</PointText>

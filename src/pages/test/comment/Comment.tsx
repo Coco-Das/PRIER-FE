@@ -14,6 +14,8 @@ import {
 } from './CommentStyles';
 import StarRating from '../../../components/utils/StarRating';
 import SidebarAlert from '../../../components/utils/SidebarAlert';
+import DeletePng from '../../../assets/trash.png';
+import EditPng from '../../../assets/edit.png';
 
 //댓글 불러옴 get
 //댓글 등록 post
@@ -191,10 +193,14 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
                       <button onClick={() => setEditingCommentId(null)}>취소</button>
                     </>
                   ) : (
-                    <>
-                      <EditButton onClick={() => handleEditClick(comment)}>수정</EditButton>
-                      <DeleteButton onClick={() => handleDeleteClick(comment.commentId)}>삭제</DeleteButton>
-                    </>
+                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                      <EditButton src={EditPng} onClick={() => handleEditClick(comment)}>
+                        {/* 수정 */}
+                      </EditButton>
+                      <DeleteButton src={DeletePng} onClick={() => handleDeleteClick(comment.commentId)}>
+                        {/* 삭제 */}
+                      </DeleteButton>
+                    </div>
                   )}
                 </div>
               )}

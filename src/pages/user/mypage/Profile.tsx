@@ -30,7 +30,6 @@ import {
   StyledProfile,
   StaticOverlay,
 } from './MyPageStyle';
-import { ReactComponent as TeamProfile } from '../../../assets/MainAvatar.svg';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
 import { Link, useParams } from 'react-router-dom';
@@ -45,7 +44,7 @@ import { styled } from 'styled-components';
 import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
 import Snackbar from '../../../components/user/Snackbar';
 import ChartIcon from '../../../assets/MainChart.png';
-
+import TeamProfile from '../../../assets/TeamProfile.png';
 const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(() => ({
@@ -182,7 +181,7 @@ export default function UserProfile() {
                 <Link to={`/responsetest/${userProfile.nowProjectId}`}>
                   <LinkProject>
                     <div className="flex items-center gap-3">
-                      <TeamProfile />
+                      <img src={TeamProfile} />
                       <p className="text-lg">{userProfile.nowProjectTeamName}</p>
                     </div>
                     <p className="text-gray-600 text-center mt-2">{userProfile.nowProjectName}</p>

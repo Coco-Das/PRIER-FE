@@ -33,6 +33,8 @@ import styled from 'styled-components';
 import { Comment } from '../comment/Comment';
 import { useUserStore } from '../../../states/user/UserStore';
 import Snackbar from '../../../components/user/Snackbar';
+import DeletePng from '../../../assets/trash.png';
+import EditPng from '../../../assets/edit.png';
 
 interface Tag {
   tagName: string;
@@ -285,9 +287,9 @@ export const ResponseTest = () => {
                 alignItems: 'center',
               }}
             >
-              <div style={{ display: 'flex', marginLeft: 'auto', gap: '15px' }}>
-                <EditButton onClick={() => navigate(`/editproject/${projectId}`)} />
-                <DeleteButton onClick={() => setShowAlert(true)} />
+              <div style={{ display: 'flex', marginLeft: 'auto', gap: '15px', alignItems: 'center' }}>
+                <EditButton src={EditPng} onClick={() => navigate(`/editproject/${projectId}`)} />
+                <DeleteButton src={DeletePng} onClick={() => setShowAlert(true)} />
                 {showAlert && (
                   <CustomAlert
                     message="삭제하시겠습니까?"
