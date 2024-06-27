@@ -23,6 +23,7 @@ import LatestProject from '../../components/user/LatestProject';
 import { useAllProjectStore } from '../../states/user/UserProjectStore';
 import { FetchAllProject, FetchLatestProject, SearchProject } from '../../services/MainPageApi';
 import Alarm from '../../components/user/Alarm';
+import { FetchMyPage } from '../../services/UserApi';
 
 export default function Main() {
   const userProfile = useUserStore(state => state.userProfile);
@@ -42,6 +43,7 @@ export default function Main() {
       try {
         const pointsData = await CheckPoint();
         pointStore.setPoint(pointsData);
+        await FetchMyPage();
         console.log(pointStore.point);
       } catch (error) {
         console.error('메인 페이지 호출 실패:', error);
