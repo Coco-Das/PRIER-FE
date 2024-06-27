@@ -155,7 +155,9 @@ export default function MyPage() {
 
   //닉네임 수정
   const NickNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewNickName(event.target.value);
+    if (event.target.value.length <= 10) {
+      setNewNickName(event.target.value);
+    }
   };
   const setEditName = () => {
     setIsEditingName(true);
@@ -304,7 +306,9 @@ export default function MyPage() {
     setIsEditingFigma(false);
     setIsEditingNotion(false);
   };
-
+  const ClickNoLink = () => {
+    setSnackbar({ message: '링크가 등록되지 않았습니다.', type: 'error' });
+  };
   //자기 소개 수정
   const IntroInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setNewIntro(event.target.value);
@@ -429,7 +433,12 @@ export default function MyPage() {
               <ProfileTextContainer>
                 <span className="flex">
                   <ProfileText>이름 : </ProfileText>
-                  <StyledInput type="text" value={newNickName} onChange={NickNameInputChange}></StyledInput>
+                  <StyledInput
+                    type="text"
+                    value={newNickName}
+                    onChange={NickNameInputChange}
+                    placeholder="10글자로 제한됩니다."
+                  ></StyledInput>
                 </span>
                 <CorrectText onClick={ConfirmEditName}>확인</CorrectText>
               </ProfileTextContainer>
@@ -481,9 +490,13 @@ export default function MyPage() {
                   </EditAccountText>
                 ) : (
                   <AccountTooltip title="Blog" placement="bottom">
-                    <AccountLink href={userProfile.blog ?? ''} target="_blank">
-                      <AccountIcon src={BlogIcon}></AccountIcon>
-                    </AccountLink>
+                    {userProfile.blog ? (
+                      <AccountLink href={userProfile.blog} target="_blank">
+                        <AccountIcon src={BlogIcon} hasHref={true}></AccountIcon>
+                      </AccountLink>
+                    ) : (
+                      <AccountIcon src={BlogIcon} hasHref={false} onClick={ClickNoLink}></AccountIcon>
+                    )}
                   </AccountTooltip>
                 )}
                 {isEditingGithub ? (
@@ -492,9 +505,13 @@ export default function MyPage() {
                   </EditAccountText>
                 ) : (
                   <AccountTooltip title="Github" placement="bottom">
-                    <AccountLink href={userProfile.github ?? ''} target="_blank">
-                      <AccountGithub src={GithubIcon}></AccountGithub>
-                    </AccountLink>
+                    {userProfile.github ? (
+                      <AccountLink href={userProfile.github} target="_blank">
+                        <AccountGithub src={GithubIcon} hasHref={true}></AccountGithub>
+                      </AccountLink>
+                    ) : (
+                      <AccountGithub src={GithubIcon} hasHref={false} onClick={ClickNoLink}></AccountGithub>
+                    )}
                   </AccountTooltip>
                 )}
                 {isEditingFigma ? (
@@ -503,9 +520,13 @@ export default function MyPage() {
                   </EditAccountText>
                 ) : (
                   <AccountTooltip title="Figma" placement="bottom">
-                    <AccountLink href={userProfile.figma ?? ''} target="_blank">
-                      <AccountIcon src={FigmaIcon}></AccountIcon>
-                    </AccountLink>
+                    {userProfile.figma ? (
+                      <AccountLink href={userProfile.figma} target="_blank">
+                        <AccountIcon src={FigmaIcon} hasHref={true}></AccountIcon>
+                      </AccountLink>
+                    ) : (
+                      <AccountIcon src={FigmaIcon} hasHref={false} onClick={ClickNoLink}></AccountIcon>
+                    )}
                   </AccountTooltip>
                 )}
                 {isEditingNotion ? (
@@ -514,9 +535,13 @@ export default function MyPage() {
                   </div>
                 ) : (
                   <AccountTooltip title="Notion" placement="bottom">
-                    <AccountLink href={userProfile.notion ?? ''} target="_blank">
-                      <AccountIcon src={NotionIcon}></AccountIcon>
-                    </AccountLink>
+                    {userProfile.notion ? (
+                      <AccountLink href={userProfile.notion} target="_blank">
+                        <AccountIcon src={NotionIcon} hasHref={true}></AccountIcon>
+                      </AccountLink>
+                    ) : (
+                      <AccountIcon src={NotionIcon} hasHref={false} onClick={ClickNoLink}></AccountIcon>
+                    )}
                   </AccountTooltip>
                 )}
               </div>
@@ -595,7 +620,7 @@ export default function MyPage() {
                   </LinkProject>
                 </Link>
                 <FeedbackContainer>
-                  <Link to="/feedback">
+                  <Link to={`/feedback/${userProfile.nowProjectId}`}>
                     <TitleText className="mb-4">제출된 피드백</TitleText>
                     <UniqueText className="mb-4">{userProfile.nowProjectFeedbackCount}</UniqueText>
                     <DetailText>{userProfile.nowProjectFeedbackCount}개의 피드백이 제출되었습니다.</DetailText>

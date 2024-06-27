@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
   DetailText,
   FeedbackContainer,
@@ -43,6 +43,7 @@ import NotionIcon from '../../../assets/notion.png';
 import AIReport from '../../../components/utils/AIReport';
 import { styled } from 'styled-components';
 import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
+import Snackbar from '../../../components/user/Snackbar';
 
 const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -59,7 +60,10 @@ const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
 export default function UserProfile() {
   const userProfile = useOtherProfileStore(state => state.otherProfile);
   const { userId } = useParams();
-
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const ClickNoLink = () => {
+    setSnackbar({ message: '링크가 등록되지 않았습니다.', type: 'error' });
+  };
   return (
     <div className="flex-col overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
       <div className="flex w-full h-[40%] mb-5">
@@ -98,24 +102,40 @@ export default function UserProfile() {
             <ProfileAccountContainer>
               <div className="flex items-center gap-5">
                 <AccountTooltip title="Blog" placement="bottom">
-                  <AccountLink href={userProfile.blog ?? '#'} target="_blank">
-                    <AccountIcon src={BlogIcon}></AccountIcon>
-                  </AccountLink>
+                  {userProfile.blog ? (
+                    <AccountLink href={userProfile.blog} target="_blank">
+                      <AccountIcon src={BlogIcon} hasHref={true}></AccountIcon>
+                    </AccountLink>
+                  ) : (
+                    <AccountIcon src={BlogIcon} hasHref={false} onClick={ClickNoLink}></AccountIcon>
+                  )}
                 </AccountTooltip>
                 <AccountTooltip title="Github" placement="bottom">
-                  <AccountLink href={userProfile.github ?? '#'} target="_blank">
-                    <AccountGithub src={GithubIcon}></AccountGithub>
-                  </AccountLink>
+                  {userProfile.github ? (
+                    <AccountLink href={userProfile.github} target="_blank">
+                      <AccountGithub src={GithubIcon} hasHref={true}></AccountGithub>
+                    </AccountLink>
+                  ) : (
+                    <AccountGithub src={GithubIcon} hasHref={false} onClick={ClickNoLink}></AccountGithub>
+                  )}
                 </AccountTooltip>
                 <AccountTooltip title="Figma" placement="bottom">
-                  <AccountLink href={userProfile.figma ?? '#'} target="_blank">
-                    <AccountIcon src={FigmaIcon}></AccountIcon>
-                  </AccountLink>
+                  {userProfile.figma ? (
+                    <AccountLink href={userProfile.figma} target="_blank">
+                      <AccountIcon src={FigmaIcon} hasHref={true}></AccountIcon>
+                    </AccountLink>
+                  ) : (
+                    <AccountIcon src={FigmaIcon} hasHref={false} onClick={ClickNoLink}></AccountIcon>
+                  )}
                 </AccountTooltip>
                 <AccountTooltip title="Notion" placement="bottom">
-                  <AccountLink href={userProfile.notion ?? '#'} target="_blank">
-                    <AccountIcon src={NotionIcon}></AccountIcon>
-                  </AccountLink>
+                  {userProfile.notion ? (
+                    <AccountLink href={userProfile.notion} target="_blank">
+                      <AccountIcon src={NotionIcon} hasHref={true}></AccountIcon>
+                    </AccountLink>
+                  ) : (
+                    <AccountIcon src={NotionIcon} hasHref={false} onClick={ClickNoLink}></AccountIcon>
+                  )}
                 </AccountTooltip>
               </div>
             </ProfileAccountContainer>
@@ -168,7 +188,7 @@ export default function UserProfile() {
                   </LinkProject>
                 </Link>
                 <FeedbackContainer>
-                  <Link to="/feedback">
+                  <Link to={`/feedback/${userProfile.nowProjectId}`}>
                     <TitleText className="mb-4">제출된 피드백</TitleText>
                     <UniqueText className="mb-4">{userProfile.nowProjectFeedbackCount}</UniqueText>
                     <DetailText>{userProfile.nowProjectFeedbackCount}개의 피드백이 제출되었습니다.</DetailText>
@@ -213,6 +233,7 @@ export default function UserProfile() {
           </span>
         </ReviewWrapper>
       </div>
+      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </div>
   );
 }

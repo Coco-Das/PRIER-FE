@@ -91,12 +91,6 @@ export const CorrectText = styled.p`
     font-weight: 400;
   }
 `;
-export const AccountLink = styled.a`
-  display: flex;
-  font-size: 18px;
-  color: #828282;
-  cursor: pointer;
-`;
 export const EditAccountText = styled.p`
   cursor: pointer;
 `;
@@ -117,10 +111,19 @@ export const ProfileAccountContainer = styled.div`
   margin-left: 10px;
   width: 100%;
 `;
-export const AccountIcon = styled.img`
+export const AccountLink = styled.a`
+  display: flex;
+  cursor: pointer;
+`;
+interface AccountIconProps {
+  hasHref?: boolean;
+}
+export const AccountIcon = styled.img<AccountIconProps>`
+  filter: ${({ hasHref }) => (hasHref ? 'none' : 'blur(1px)')};
   width: 2.8rem;
 `;
-export const AccountGithub = styled.img`
+export const AccountGithub = styled.img<AccountIconProps>`
+  filter: ${({ hasHref }) => (hasHref ? 'none' : 'blur(1px)')};
   width: 2.4rem;
   border: none;
   border-radius: 10px;
