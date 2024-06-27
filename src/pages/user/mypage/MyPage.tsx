@@ -41,6 +41,7 @@ import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
 import { Link, useNavigate } from 'react-router-dom';
 import MyReview from '../../../components/user/MyReview';
+import ChartIcon from '../../../assets/MainChart.png';
 import {
   EditBelonging,
   EditBlog,
@@ -634,7 +635,7 @@ export default function MyPage() {
                   <UniqueText>평점</UniqueText>
                   <UniqueText>80 % </UniqueText>
                   <DetailText>평점 4의 별점</DetailText>
-                  <MypageChartIcon></MypageChartIcon>
+                  <MypageChartIcon src={ChartIcon}></MypageChartIcon>
                   <StaticOverlay>제출된 피드백이 없습니다.</StaticOverlay>
                 </StaticContainer>
               ) : (
@@ -645,7 +646,7 @@ export default function MyPage() {
                     {Math.round(parseFloat(userProfile.nowProjectStaticPercentage) * 100) / 100} %
                   </UniqueText>
                   <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
-                  <MypageChartIcon></MypageChartIcon>
+                  <MypageChartIcon src={ChartIcon}></MypageChartIcon>
                 </StaticContainer>
               )}
 

@@ -44,6 +44,7 @@ import AIReport from '../../../components/utils/AIReport';
 import { styled } from 'styled-components';
 import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
 import Snackbar from '../../../components/user/Snackbar';
+import ChartIcon from '../../../assets/MainChart.png';
 
 const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -202,7 +203,7 @@ export default function UserProfile() {
                   <UniqueText>평점</UniqueText>
                   <UniqueText>80 % </UniqueText>
                   <DetailText>평점 4의 별점</DetailText>
-                  <MypageChartIcon></MypageChartIcon>
+                  <MypageChartIcon src={ChartIcon}></MypageChartIcon>
                   <StaticOverlay>제출된 피드백이 없습니다.</StaticOverlay>
                 </StaticContainer>
               ) : (
@@ -213,7 +214,7 @@ export default function UserProfile() {
                     {Math.round(parseFloat(userProfile.nowProjectStaticPercentage) * 100) / 100} %
                   </UniqueText>
                   <DetailText>평점 {userProfile.nowProjectScore}의 별점</DetailText>
-                  <MypageChartIcon></MypageChartIcon>
+                  <MypageChartIcon src={ChartIcon}></MypageChartIcon>
                 </StaticContainer>
               )}
               <AIReportContainer>

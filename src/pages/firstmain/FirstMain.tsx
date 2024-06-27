@@ -24,6 +24,24 @@ import {
 } from './FirstMainContainer1Styles';
 import { Text2, Text3, Project1, Project2 } from './FirstMainContainer2Styles';
 import { ThirdContainer, Text4, Review1, Review2, Review3, Review4, Review5 } from './FirstMainContainer3Styles';
+import firstmainimg1 from '../../assets/FirstMainImg1.png';
+import firstmainimg2 from '../../assets/FirstMainImg2.png';
+import firstmainimg3 from '../../assets/FirstMainImg3.png';
+import firstmainimg4 from '../../assets/FirstMainImg4.png';
+import firstmainimg5 from '../../assets/FirstMainImg5.png';
+import firstmainimg6 from '../../assets/FirstMainImg6.png';
+import firstmainimg7 from '../../assets/FirstMainImg7.png';
+import firstmainimg8 from '../../assets/FirstMainImg8.png';
+import firstmainimg9 from '../../assets/FirstMainImg9.png';
+import firstmainimg10 from '../../assets/FirstMainImg10.png';
+import firstmainimg11 from '../../assets/FirstMainImg11.png';
+import firstmainimg12 from '../../assets/FirstMainImg12.png';
+import firstmainimg13 from '../../assets/FirstMainImg13.png';
+import firstmainimg14 from '../../assets/FirstMainImg14.png';
+import firstmainimg15 from '../../assets/FirstMainImg15.png';
+import logo from '../../assets/Logo-firstMain.png';
+import ProjectImg1 from '../../assets/ProjectImg1.png';
+import ProjectImg2 from '../../assets/ProjectImg2.png';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -140,26 +158,26 @@ const FirstMain = () => {
     <>
       <GlobalStyle />
       <FirstContainer>
-        <Logo />
+        <Logo src={logo} />
         <Text>테스트 그리고 피드백, 당신의 창조를 세상으로 연결합니다</Text>
         <Link to="/login">
           <StartButton>지금 시작하기</StartButton>
         </Link>
-        <Img1 />
-        <Img2 />
-        <Img3 />
-        <Img4 />
-        <Img5 />
-        <Img6 />
-        <Img7 />
-        <Img8 />
-        <Img9 />
-        <Img10 />
-        <Img11 />
-        <Img12 />
-        <Img13 />
-        <Img14 />
-        <Img15 />
+        <Img1 src={firstmainimg1} />
+        <Img2 src={firstmainimg2} />
+        <Img3 src={firstmainimg3} />
+        <Img4 src={firstmainimg4} />
+        <Img5 src={firstmainimg5} />
+        <Img6 src={firstmainimg6} />
+        <Img7 src={firstmainimg7} />
+        <Img8 src={firstmainimg8} />
+        <Img9 src={firstmainimg9} />
+        <Img10 src={firstmainimg10} />
+        <Img11 src={firstmainimg11} />
+        <Img12 src={firstmainimg12} />
+        <Img13 src={firstmainimg13} />
+        <Img14 src={firstmainimg14} />
+        <Img15 src={firstmainimg15} />
       </FirstContainer>
       <FirstContainer ref={secondContainerRef}>
         <Text2>프리어와 함께하는 프로젝트</Text2>
@@ -167,8 +185,8 @@ const FirstMain = () => {
           다양한 카테고리의 프로젝트들이 1,536개 <br />
           등록되고 있습니다.
         </Text3>
-        <Project1 />
-        <Project2 />
+        <Project1 src={ProjectImg1} />
+        <Project2 src={ProjectImg2} />
       </FirstContainer>
       <ThirdContainer ref={thirdContainerRef}>
         <Text2>실시간으로 등록되는 리뷰들</Text2>

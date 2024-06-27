@@ -24,6 +24,7 @@ import { useAllProjectStore } from '../../states/user/UserProjectStore';
 import { FetchAllProject, FetchLatestProject, SearchProject } from '../../services/MainPageApi';
 import Alarm from '../../components/user/Alarm';
 import { FetchMyPage } from '../../services/UserApi';
+import MainChart from '../../assets/MainChart.png';
 
 export default function Main() {
   const userProfile = useUserStore(state => state.userProfile);
@@ -103,7 +104,7 @@ export default function Main() {
     <div className="flex-col cursor-pointer" style={{ margin: '1% 7%' }}>
       <MainContainer>
         <GreetingContainer>
-          <StyledChartIcon />
+          <StyledChartIcon src={MainChart} />
           <div className="flex flex-col" style={{ marginTop: '3%', marginLeft: '4%' }}>
             <PointText className="mt-2">반갑습니다 {userProfile.nickname} 님</PointText>
             <MainText>

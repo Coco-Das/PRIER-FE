@@ -1,5 +1,5 @@
 import { styled } from 'styled-components';
-import { ReactComponent as ChartIcon } from '../../../assets/main_chart.svg';
+
 import { ReactComponent as GraphIcon } from '../../../assets/Graph.svg';
 
 //프로필
@@ -286,7 +286,7 @@ export const UniqueText = styled.h1`
   font-weight: 700;
   font-size: 30px;
 `;
-export const MypageChartIcon = styled(ChartIcon)`
+export const MypageChartIcon = styled.img`
   width: 100px;
   height: 200px;
   transform: scaleX(-1);

@@ -1,5 +1,4 @@
 import styled from 'styled-components';
-import { ReactComponent as ChartIcon } from '../../../assets/main_chart.svg';
 
 export const ListWrapper = styled.div`
   width: 100%;
@@ -121,7 +120,7 @@ export const UniqueText = styled.h1`
   font-weight: 700;
   font-size: 25px;
 `;
-export const MypageChartIcon = styled(ChartIcon)`
+export const MypageChartIcon = styled.img`
   width: 100px;
   height: 200px;
   transform: scaleX(-1);

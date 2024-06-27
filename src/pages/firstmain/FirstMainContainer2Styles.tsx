@@ -1,6 +1,4 @@
 import styled, { keyframes, css } from 'styled-components';
-import { ReactComponent as ProjectImg1 } from '../../assets/ProjectImg1.svg';
-import { ReactComponent as ProjectImg2 } from '../../assets/ProjectImg2.svg';
 
 const fadeInUp = keyframes`
   0% {
@@ -66,13 +64,13 @@ export const Text3 = styled.h1`
   ${animationCSS};
 `;
 
-export const Project1 = styled(ProjectImg1)`
+export const Project1 = styled.img`
   position: absolute;
   left: 12rem;
   top: 20rem;
   ${animationCSS};
 `;
-export const Project2 = styled(ProjectImg2)`
+export const Project2 = styled.img`
   position: absolute;
   right: 12rem;
   top: 35rem;
