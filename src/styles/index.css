@@ -1,4 +1,6 @@
 @import url('https://webfontworld.github.io/bccard/Paybooc.css');
+@import url('https://fonts.googleapis.com/css2?family=Moirai+One&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Moirai+One&family=Noto+Sans+KR:wght@100..900&display=swap');
 
 @tailwind base;
 @tailwind components;
