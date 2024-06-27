@@ -178,7 +178,7 @@ interface OtherProfile {
   nowProjectTeamName: string | null;
   nowProjectFeedbackCount: number | null;
   nowProjectScore: number | null;
-  nowProjectStaticPercentage: string | null;
+  nowProjectStaticPercentage: string;
   nowProjectKeywordList: OtherProjectKeyword[];
   myPageCommentDtoList: OtherComment[];
   balance: number;

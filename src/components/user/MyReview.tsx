@@ -9,12 +9,11 @@ import { useOtherProfileStore, useUserStore } from '../../states/user/UserStore'
 
 function MyReview() {
   const { pathname } = useLocation();
-  const userProfile = useUserStore(state => state.userProfile);
-  const otherProfile = useOtherProfileStore(state => state.otherProfile);
+  const userProfile = useUserStore(state => state.userProfile.myPageCommentDtoList);
+  const otherProfile = useOtherProfileStore(state => state.otherProfile.myPageCommentDtoList);
 
-  const reviews = (
-    pathname === '/mypage' ? userProfile.myPageCommentDtoList || [] : otherProfile.myPageCommentDtoList || []
-  ).reverse();
+  const originalList = pathname === '/mypage' ? userProfile || [] : otherProfile || [];
+  const reviews = [...originalList].reverse();
   const StyledRating = styled(Rating)({
     '& .MuiRating-iconFilled': {
       color: 'black',
