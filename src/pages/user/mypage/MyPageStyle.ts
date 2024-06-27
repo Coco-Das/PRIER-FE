@@ -285,14 +285,15 @@ export const UniqueText = styled.h1`
   font-size: 30px;
 `;
 export const MypageChartIcon = styled.img`
-  width: 100px;
-  height: 200px;
+  width: 40%;
+  height: 45%;
   transform: scaleX(-1);
   align-self: flex-end;
 `;
 export const StyledGraphIcon = styled.img`
-  width: 45px;
-  height: 50px;
+  margin-left: 1%;
+  width: 11%;
+  height: 11%;
 `;
 
 export const EmptyContainer = styled.div`

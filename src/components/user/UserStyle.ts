@@ -1,5 +1,4 @@
 import { css, styled } from 'styled-components';
-import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import { ReactComponent as BaseImg } from '../../assets/BaseImg.svg';
 
 export const LatestProjectContainer = styled.div`
@@ -158,7 +157,7 @@ export const PointText = styled.p`
   color: #315af1;
   font-size: 16px;
 `;
-export const StyledPointIcon = styled(PointIcon)`
+export const StyledPointIcon = styled.img`
   width: 40px;
   height: 40px;
   -webkit-animation: icon-move 1s ease-in-out 3;

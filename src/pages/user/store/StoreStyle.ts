@@ -1,5 +1,4 @@
 import styled, { keyframes } from 'styled-components';
-import { ReactComponent as PointIcon } from '../../../assets/Coin.svg';
 
 export const StoreWrapper = styled.div`
   display: flex;
@@ -12,6 +11,7 @@ export const StoreWrapper = styled.div`
 export const PointContainer = styled.div`
   display: flex;
   align-items: center;
+  justify-content: center;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
   margin-right: 20px;
@@ -22,9 +22,9 @@ export const PointContainer = styled.div`
   max-height: 11rem;
 `;
 
-export const StyledPointIcon = styled(PointIcon)`
-  width: 10rem;
-  height: 5rem;
+export const StyledPointIcon = styled.img`
+  width: 7rem;
+  height: 6rem;
 `;
 const iconMove = keyframes`
   50% {
@@ -32,6 +32,9 @@ const iconMove = keyframes`
   }
 `;
 export const PriceContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
   transition: transform 0.3s ease-in-out;
   &:hover {
     color: #315af1;

@@ -17,6 +17,7 @@ import PaymentModal from '../../../components/user/PaymentModal';
 import CoinLog from '../../../components/user/CoinLog';
 import { useGifticonStore, userPointStore } from '../../../states/user/PointStore';
 import { CheckPoint, FetchGiftList, FetchKakaoPayment, FetchPointHistory } from '../../../services/StoreApi';
+import Coin from '../../../assets/Coin.png';
 
 export default function Store() {
   const pointStore = userPointStore();
@@ -83,7 +84,7 @@ export default function Store() {
       <Title>상점</Title>
       <div className="flex w-full">
         <PointContainer>
-          <StyledPointIcon className="mb-3"></StyledPointIcon>
+          <StyledPointIcon src={Coin} className="mb-3" />
           <div className="flex-col w-[60%] ">
             <PointText className="mb-5">포인트</PointText>
             <BlueText className="mb-5">{pointStore.point} 코어 보유</BlueText>
@@ -96,15 +97,15 @@ export default function Store() {
           <PointText>코어 충전하기</PointText>
           <div className="flex w-[80%] items-center justify-between  cursor-pointer">
             <PriceContainer onClick={() => SelectAmount(1000, '100 코어')}>
-              <StyledPointIcon></StyledPointIcon>
+              <StyledPointIcon src={Coin} />
               <PriceText>100코어 : 1000원</PriceText>
             </PriceContainer>
             <PriceContainer onClick={() => SelectAmount(5000, '500 코어')}>
-              <StyledPointIcon></StyledPointIcon>
+              <StyledPointIcon src={Coin} />
               <PriceText>500코어 : 5000원</PriceText>
             </PriceContainer>
             <PriceContainer onClick={() => SelectAmount(10000, '1000 코어')}>
-              <StyledPointIcon></StyledPointIcon>
+              <StyledPointIcon src={Coin} />
               <PriceText>1000코어 : 10000원</PriceText>
             </PriceContainer>
           </div>

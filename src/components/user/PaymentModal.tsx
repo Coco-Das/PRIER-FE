@@ -1,6 +1,6 @@
 import React from 'react';
 import { keyframes, styled } from 'styled-components';
-import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
+import PointIcon from '../../assets/Coin.png';
 interface PaymentModalProps {
   amount: number;
   itemName: string;
@@ -21,6 +21,7 @@ const PaymentOverlay = styled.div`
   z-index: 5;
 `;
 const PaymentContainer = styled.div`
+  position: relative;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -35,6 +36,7 @@ const PaymentContainer = styled.div`
 const PaymentText = styled.h2`
   color: #315af1;
   margin-bottom: 0.5rem;
+  margin-top: 0.5rem;
 `;
 const AlertText = styled.p`
   font-size: 1rem;
@@ -76,7 +78,7 @@ const bounce = keyframes`
 `;
 const Tooltip = styled.div`
   position: absolute;
-  bottom: 360px; // 버튼 위에 위치하도록 조정
+  bottom: 40%;
   background-color: white;
   border: 1px solid red;
   border-radius: 50px;
@@ -97,14 +99,12 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ amount, itemName, onConfirm
   return (
     <PaymentOverlay>
       <PaymentContainer>
-        <PointIcon className="w-20" />
+        <img src={PointIcon} className="w-20" />
         <PaymentText>{amount} 원을 충전하시겠습니까?</PaymentText>
         <AlertText>충전 후 포인트를 사용할 시에는 취소가 불가합니다.</AlertText>
         <span className="flex mt-36 gap-8">
           <Tooltip>카카오 페이로 결제하기</Tooltip>
-          <PaymentButton className="relative" onClick={() => onConfirm(amount, itemName)}>
-            결제
-          </PaymentButton>
+          <PaymentButton onClick={() => onConfirm(amount, itemName)}>결제</PaymentButton>
           <CancleButton onClick={onCancel}>취소</CancleButton>
         </span>
       </PaymentContainer>

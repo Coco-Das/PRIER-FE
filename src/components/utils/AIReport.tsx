@@ -112,7 +112,7 @@ export default function AIReport() {
           <div className="flex-col items-start w-full relative h-[23rem]">
             <span className="flex items-center w-full ">
               <TitleText>AI 분석 Report</TitleText>
-              <StyledGraphIcon />
+              <StyledGraphIcon src={graphIcon} />
             </span>
             <SmallText>
               &quot; 새롭다 &quot; 라는 키워드가 &nbsp; 3회 제출되었습니다. &quot; 좋다 &quot;가 2 회, 그 외로 &quot;

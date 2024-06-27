@@ -174,7 +174,7 @@ export const OrderButton = styled.button<OrderButtonProps>`
   margin-bottom: 3%;
   font-size: 14px;
   font-weight: 300;
-  background-color: ${props => (props.active ? '#315af1' : '#f0f0f0')};
+  background-color: ${props => (props.active ? '#315af1' : 'white')};
   color: ${props => (props.active ? '#ffffff' : '#000000')};
   transition: 0.4s;
 `;
