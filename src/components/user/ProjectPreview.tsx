@@ -10,22 +10,12 @@ import {
   colors,
   ProfileImg,
 } from './UserStyle';
-import StarBorderRoundedIcon from '@mui/icons-material/StarBorderRounded';
-import Rating from '@mui/material/Rating';
-import StarRateRoundedIcon from '@mui/icons-material/StarRateRounded';
-import { styled } from 'styled-components';
+
 import { useAllProjectStore } from '../../states/user/UserProjectStore';
+import StarRating from '../utils/StarRating';
 
 export default function ProjectPreview() {
   const { content } = useAllProjectStore();
-  const StyledRating = styled(Rating)({
-    '& .MuiRating-iconFilled': {
-      color: 'black',
-    },
-    '& .MuiRating-iconHover': {
-      color: '#315af1',
-    },
-  });
 
   return (
     <ProjectWrapper>
@@ -51,13 +41,7 @@ export default function ProjectPreview() {
             ))}
           </div>
           <div className="flex justify-between">
-            <StyledRating
-              defaultValue={project.score}
-              precision={0.5}
-              icon={<StarRateRoundedIcon fontSize="inherit" />}
-              emptyIcon={<StarBorderRoundedIcon fontSize="inherit" />}
-              readOnly
-            />
+            <StarRating initialScore={project.score} readOnly={true} onHover={false} />
             <Link to={`/responsetest/${project.projectId}`}>
               <LinkText>피드백 참여하기 &gt;</LinkText>
             </Link>
