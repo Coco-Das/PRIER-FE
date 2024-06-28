@@ -43,7 +43,7 @@ export async function LinkUserProfile(userId: number) {
     const response = await API_BASE_URL.get(`/mypage/${userId}`);
     console.log('유저 프로필 정보 요청 성공', response.data);
     const userProfile = {
-      imgUrl: response.data.profileImgDto.s3Key,
+      imgUrl: response.data.otherProfileImg,
       nickname: response.data.nickname,
       belonging: response.data.belonging,
       rank: response.data.rank,

@@ -372,7 +372,7 @@ export const CreateTest = () => {
             <p>프로젝트 목표</p>
             <AutoResizeTextarea value={goal} onChange={handleGoalChange} placeholder="프로젝트 목표를 입력하세요..." />
             <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
-            <div style={{ display: 'flex' }}>
+            {/* <div style={{ display: 'flex' }}>
               <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
               <span className="ml-2" style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato' }}>
                 * 메인이미지는 필수입니다
@@ -400,7 +400,7 @@ export const CreateTest = () => {
                   <DeleteButton onClick={() => handleDeleteAdditionalImage(index)}>×</DeleteButton>
                 </ImageWrapper>
               ))}
-            </div>
+            </div> */}
           </ProjectTextArea>
         </ProjectDiv>
         <ProjectIntro>
@@ -457,24 +457,24 @@ export const CreateTest = () => {
             </OrangeInputDiv>
           </OrangeDiv>
           <BlueDiv className="mt-2">
-            <span className="font-bold">팀소개</span>
+            <span className="font-bold">팀 소개</span>
             <BlueInputDiv>
-              <span>팀명 :</span>
-              <Input style={{ width: '67%' }} onChange={handleTeamNameChange} value={teamName} />
+              <span>팀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;명 :</span>
+              <Input style={{ width: '73%' }} onChange={handleTeamNameChange} value={teamName} />
             </BlueInputDiv>
             <BlueInputDiv>
               <span>한줄소개 :</span>
               <Input
-                style={{ width: '61%', overflowY: 'auto' }}
+                style={{ width: '73%', overflowY: 'auto' }}
                 onChange={handleTeamDescriptionChange}
                 value={teamDescription}
               />
             </BlueInputDiv>
             <BlueInputDiv style={{ alignItems: 'normal' }}>
-              <span>팀원 :</span>
+              <span>팀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;원 :</span>
               <Textarea
                 style={{
-                  width: '67%',
+                  width: '73%',
                   borderRadius: '10px',
                   backgroundColor: 'inherit',
                   fontSize: '15px',
@@ -490,7 +490,7 @@ export const CreateTest = () => {
           <GreenDiv className="mt-2">
             <GreenInputDiv>
               <span className="font-bold">배포 링크</span>
-              <Input style={{ width: '60%' }} onChange={handleLinkChange} value={link} />
+              <Input style={{ width: '73%' }} onChange={handleLinkChange} value={link} />
             </GreenInputDiv>
           </GreenDiv>
         </ProjectIntro>

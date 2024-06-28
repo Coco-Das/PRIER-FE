@@ -22,14 +22,6 @@ export const Question = styled.div`
   align-items: center;
 `;
 
-export const ProjectDiv = styled.div`
-  width: 65%;
-  display: flex;
-  flex-direction: column;
-  flex: 1;
-  overflow-y: auto;
-`;
-
 export const ProjectIntro = styled.div`
   width: 35%;
 `;
@@ -48,6 +40,11 @@ export const QuestionDeleteButton = styled.img`
   &:hover {
     cursor: pointer;
   }
+`;
+export const ProjectDiv = styled.div`
+  width: 65%;
+  display: flex;
+  flex-direction: column;
 `;
 
 export const ProjectTextArea = styled.div`
