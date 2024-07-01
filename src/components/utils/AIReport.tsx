@@ -2,7 +2,6 @@ import { useEffect, useRef } from 'react';
 import { useUserStore } from '../../states/user/UserStore';
 import { AIBestText, StyledGraphIcon, TitleText } from '../../pages/user/mypage/MyPageStyle';
 import { SmallText } from '../user/UserStyle';
-import { useLocation } from 'react-router-dom';
 import { styled } from 'styled-components';
 import graphIcon from '../../assets/Graph.png';
 const COLOR_MAP = ['#315AF1', '#28B381', '#FFBA6B', '#828282', '#828282'];
@@ -24,7 +23,6 @@ const AIOverlay = styled.div`
 `;
 
 export default function AIReport() {
-  const { pathname } = useLocation();
   const userProfile = useUserStore(state => state.userProfile);
   const canvasRef = useRef<HTMLDivElement>(null);
 
@@ -83,29 +81,19 @@ export default function AIReport() {
               <StyledGraphIcon src={graphIcon} />
             </span>
 
-            <AIBestText>&quot; {userProfile.nowProjectKeywordList[0].content} &quot;</AIBestText>
+            <AIBestText>&quot; {userProfile.nowProjectKeywordList[0]?.content} &quot;</AIBestText>
             <SmallText>
-              &quot; {userProfile.nowProjectKeywordList[0].content} &quot; 라는 단어가 가장 많이 응답되었습니다.
+              &quot; {userProfile.nowProjectKeywordList[0]?.content} &quot; 라는 단어가 가장 많이 응답되었습니다.
             </SmallText>
           </div>
           <div className="relative w-[400px] h-[300px]" ref={canvasRef}></div>
-          {pathname === '/mypage' ? (
-            <SmallText>
-              &quot; {userProfile.nowProjectKeywordList[0].content}&quot; 라는 키워드가 &nbsp;
-              {userProfile.nowProjectKeywordList[0].count}회 제출되었습니다. &quot;
-              {userProfile.nowProjectKeywordList[1].content} &quot;가 {userProfile.nowProjectKeywordList[1].count}
-              회, 그 외로 &quot;{userProfile.nowProjectKeywordList[2].content}&quot; 등의 키워드가 제출되어 당신의
-              프로젝트를 대표했습니다.
-            </SmallText>
-          ) : (
-            <SmallText>
-              {userProfile.nowProjectKeywordList[0].content}의 키워드가 {userProfile.nowProjectKeywordList[0].count}회
-              제출되었습니다. {userProfile.nowProjectKeywordList[1].content}가
-              {userProfile.nowProjectKeywordList[1].count}
-              회, 그 외로{userProfile.nowProjectKeywordList[2].content},{userProfile.nowProjectKeywordList[3].content}{' '}
-              등의 키워드가 제출되어 당신의 프로젝트를 대표했습니다.
-            </SmallText>
-          )}
+          <SmallText>
+            &quot; {userProfile.nowProjectKeywordList[0]?.content}&quot; 라는 키워드가 &nbsp;
+            {userProfile.nowProjectKeywordList[0]?.count}회 제출되었습니다. &quot;
+            {userProfile.nowProjectKeywordList[1]?.content} &quot;가 {userProfile.nowProjectKeywordList[1].count}
+            회, 그 외로 &quot;{userProfile.nowProjectKeywordList[2]?.content}&quot; 등의 키워드가 제출되어 당신의
+            프로젝트를 대표했습니다.
+          </SmallText>
         </>
       ) : (
         <>
