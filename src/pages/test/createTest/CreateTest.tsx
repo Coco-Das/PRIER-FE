@@ -58,7 +58,14 @@ const AutoResizeTextarea: React.FC<AutoResizeTextareaProps> = ({ value, ...props
     }
   }, [value]);
 
-  return <Textarea ref={textareaRef} value={value} {...props} />;
+  return (
+    <Textarea
+      ref={textareaRef}
+      value={value}
+      {...props}
+      style={{ flexGrow: 1 }} // textarea가 유연하게 높이가 늘어나도록 설정
+    />
+  );
 };
 
 AutoResizeTextarea.propTypes = {
@@ -372,7 +379,7 @@ export const CreateTest = () => {
             <p>프로젝트 목표</p>
             <AutoResizeTextarea value={goal} onChange={handleGoalChange} placeholder="프로젝트 목표를 입력하세요..." />
             <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
-            {/* <div style={{ display: 'flex' }}>
+            <div style={{ display: 'flex' }}>
               <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
               <span className="ml-2" style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato' }}>
                 * 메인이미지는 필수입니다
@@ -400,7 +407,7 @@ export const CreateTest = () => {
                   <DeleteButton onClick={() => handleDeleteAdditionalImage(index)}>×</DeleteButton>
                 </ImageWrapper>
               ))}
-            </div> */}
+            </div>
           </ProjectTextArea>
         </ProjectDiv>
         <ProjectIntro>
