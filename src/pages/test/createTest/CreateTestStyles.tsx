@@ -71,9 +71,8 @@ export const Textarea = styled.textarea`
   font-size: 16px;
   font-family: inherit;
   resize: none;
-  min-height: 100px;
+  min-height: 150px;
   overflow: hidden;
-  box-sizing: border-box;
 `;
 export const StyledImg = styled.img`
   max-width: 100%;
