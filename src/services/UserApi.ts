@@ -71,12 +71,22 @@ export async function LinkUserProfile(userId: number) {
     console.error('유저 프로필 정보 요청 실패', error);
   }
 }
+export const SendLog = async (lastLogoutAt: string) => {
+  try {
+    const response = await API_BASE_URL.post('/logout', { lastLogoutAt: lastLogoutAt });
+    console.log('로그아웃 로그 전송 성공', response.data);
+  } catch (error) {
+    console.error('로그아웃 로그 전송 실패', error);
+  }
+};
 
 export function FetchLogout() {
   const setLogout = useUserStore(state => state.setLogout);
+  const now = new Date().toISOString();
 
   return useCallback(async () => {
     try {
+      await SendLog(now);
       const response = await axios.get('https://kapi.kakao.com/v1/user/logout', {
         headers: { Authorization: `Bearer ${KAKAO_ACCESS_TOKEN}` },
       });
@@ -93,6 +103,7 @@ export function FetchLogout() {
     }
   }, [setLogout]);
 }
+
 export const EditImg = async (newImg: File) => {
   try {
     // FormData 객체 생성 및 이미지 데이터 추가
