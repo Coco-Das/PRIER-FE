@@ -95,10 +95,8 @@ export default function Gifticon() {
                   <div className="flex">
                     <GiftImg src={gifticon.imageUrl} alt={gifticon.productName} />
                     <GiftTextWrapper>
-                      <div className="flex items-center justify-between">
-                        <Title>{gifticon.productName}</Title>
-                        <LinkText>{gifticon.stock} 개 남음</LinkText>
-                      </div>
+                      <Title>{gifticon.productName}</Title>
+                      <LinkText>{gifticon.stock} 개 남음</LinkText>
                       <div className="flex items-center">
                         <StyledCoinIcon />
                         <p>{gifticon.price} 코어</p>
@@ -111,7 +109,7 @@ export default function Gifticon() {
                 <>
                   <GiftImg src={gifticon.imageUrl} alt={gifticon.productName} />
                   <GiftTextWrapper>
-                    <div className="flex items-center justify-between">
+                    <div>
                       <GiftTitle>{gifticon.productName}</GiftTitle>
                       <LinkText>{gifticon.stock} 개 남음</LinkText>
                     </div>

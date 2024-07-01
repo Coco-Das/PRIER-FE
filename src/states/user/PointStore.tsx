@@ -13,17 +13,13 @@ interface UserPointStore {
   point: number;
   transactions: Transaction[];
   setPoint: (point: number) => void;
-  updatePoint: (transaction: Transaction) => void;
+  updatePoint: (transaction: Transaction[]) => void;
 }
 export const userPointStore = create<UserPointStore>(set => ({
   point: 0,
   transactions: [],
   setPoint: point => set({ point }),
-  updatePoint: transaction =>
-    set(state => ({
-      point: transaction.balance,
-      transactions: [...state.transactions, transaction],
-    })),
+  updatePoint: transactions => set({ transactions }),
 }));
 
 //기프티콘
