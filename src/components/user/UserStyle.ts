@@ -8,6 +8,7 @@ export const LatestProjectContainer = styled.div`
   background-color: #ffffff;
   display: flex;
   flex-direction: column;
+  align-items: center;
   justify-content: space-between;
   padding: 12px;
   border-radius: 15px;
@@ -59,10 +60,11 @@ export const ProjectContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-between;
+  align-items: center;
   width: 18rem;
   height: 22rem;
   border-radius: 15px;
-  padding: 0.5rem;
+  padding: 1rem;
   cursor: pointer;
   background-color: #ffffff;
 
@@ -96,8 +98,11 @@ export const ProfileImg = styled.img`
 export const ProjectImg = styled.img`
   border-radius: 10px;
   margin-bottom: 0.5rem;
-  height: 50%;
+  width: 240px;
+  height: 200px;
+  border: 0.8px solid #e0e0e0;
   align-self: center;
+  object-fit: cover;
 `;
 export const Base = styled(BaseImg)`
   margin-bottom: 0.5rem;
