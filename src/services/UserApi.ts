@@ -73,7 +73,7 @@ export async function LinkUserProfile(userId: number) {
 }
 export const SendLog = async (lastLogoutAt: string) => {
   try {
-    const response = await API_BASE_URL.post('/logout', { lastLogoutAt: lastLogoutAt });
+    const response = await API_BASE_URL.put('/logout', { lastLogoutAt: lastLogoutAt });
     console.log('로그아웃 로그 전송 성공', response.data);
   } catch (error) {
     console.error('로그아웃 로그 전송 실패', error);
