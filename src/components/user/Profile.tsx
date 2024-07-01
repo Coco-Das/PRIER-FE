@@ -47,7 +47,7 @@ export default function Profile() {
       <div className="flex-col">
         <div className="flex items-center gap-3">
           <StyledPointIcon src={Coin} />
-          <MiddleText>포인트</MiddleText>
+          <MiddleText>코어</MiddleText>
         </div>
         <PointText className="text-center">{pointStore.point} 코어 보유</PointText>
         <Link to="/store">
