@@ -84,9 +84,9 @@ export default function Store() {
       <Title>상점</Title>
       <div className="flex w-full">
         <PointContainer>
-          <StyledPointIcon src={Coin} className="mb-3" />
+          <StyledPointIcon src={Coin} className="w-[6rem] h-[6rem] mb-5" />
           <div className="flex-col w-[60%] ">
-            <PointText className="mb-5">포인트</PointText>
+            <PointText className="mb-5">코어</PointText>
             <BlueText className="mb-5">{pointStore.point} 코어 보유</BlueText>
             <LinkText className="text-end" onClick={OpenLog}>
               사용 로그 보기 &gt;
@@ -95,17 +95,17 @@ export default function Store() {
         </PointContainer>
         <ChargeContainer>
           <PointText>코어 충전하기</PointText>
-          <div className="flex w-[80%] items-center justify-between  cursor-pointer">
+          <div className="flex w-[80%] items-baseline justify-between  cursor-pointer">
             <PriceContainer onClick={() => SelectAmount(1000, '100 코어')}>
-              <StyledPointIcon src={Coin} />
+              <StyledPointIcon src={Coin} className="w-[4rem] h-[4rem]" />
               <PriceText>100코어 : 1000원</PriceText>
             </PriceContainer>
             <PriceContainer onClick={() => SelectAmount(5000, '500 코어')}>
-              <StyledPointIcon src={Coin} />
+              <StyledPointIcon src={Coin} className="w-[5rem] h-[5rem]" />
               <PriceText>500코어 : 5000원</PriceText>
             </PriceContainer>
             <PriceContainer onClick={() => SelectAmount(10000, '1000 코어')}>
-              <StyledPointIcon src={Coin} />
+              <StyledPointIcon src={Coin} className="w-[6rem] h-[6rem]" />
               <PriceText>1000코어 : 10000원</PriceText>
             </PriceContainer>
           </div>

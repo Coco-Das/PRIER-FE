@@ -22,10 +22,7 @@ export const PointContainer = styled.div`
   max-height: 11rem;
 `;
 
-export const StyledPointIcon = styled.img`
-  width: 7rem;
-  height: 6rem;
-`;
+export const StyledPointIcon = styled.img``;
 const iconMove = keyframes`
   50% {
     transform: rotate(30deg);
