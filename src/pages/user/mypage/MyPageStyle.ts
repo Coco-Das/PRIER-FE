@@ -201,7 +201,7 @@ export const LinkProject = styled.div`
   margin-right: 20px;
   box-sizing: border-box;
 `;
-export const LinkText = styled.p`
+export const LinkProjectText = styled.p`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;

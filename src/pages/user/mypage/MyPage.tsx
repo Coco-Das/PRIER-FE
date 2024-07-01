@@ -34,6 +34,7 @@ import {
   EditingOverlay,
   StyledProfile,
   StaticOverlay,
+  LinkProjectText,
 } from './MyPageStyle';
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import TeamImg from '../../../assets/TeamProfile.png';
@@ -66,6 +67,8 @@ import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
 import { styled } from '@mui/material';
 import QuestSuccess from '../../../components/user/QuestSuccess';
 import Snackbar from '../../../components/user/Snackbar';
+import { CheckPoint } from '../../../services/StoreApi';
+import { userPointStore } from '../../../states/user/PointStore';
 
 const LightTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
@@ -91,6 +94,7 @@ const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
 }));
 export default function MyPage() {
   const navigate = useNavigate();
+  const pointStore = userPointStore();
   const userProfile = useUserStore(state => state.userProfile);
   const [showLogoutAlert, setShowLogoutAlert] = useState(false);
   const [showEditImgAlert, setShowEditImgAlert] = useState(false);
@@ -156,7 +160,7 @@ export default function MyPage() {
 
   //닉네임 수정
   const NickNameInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value.length <= 10) {
+    if (event.target.value.length <= 5) {
       setNewNickName(event.target.value);
     }
   };
@@ -182,7 +186,9 @@ export default function MyPage() {
   };
   //소속 수정
   const BelongingInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewBelonging(event.target.value);
+    if (event.target.value.length <= 10) {
+      setNewBelonging(event.target.value);
+    }
   };
   const setEditBelonging = () => {
     setIsEditingBelonging(true);
@@ -312,7 +318,9 @@ export default function MyPage() {
   };
   //자기 소개 수정
   const IntroInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setNewIntro(event.target.value);
+    if (event.target.value.length <= 24) {
+      setNewIntro(event.target.value);
+    }
   };
   const setEditIntro = () => {
     setIsEditingIntro(true);
@@ -350,6 +358,8 @@ export default function MyPage() {
     if (success === '퀘스트가 성공적으로 업데이트되었습니다.') {
       useUserStore.getState().setQuest(sequence);
       setShowSuccess(true);
+      const remain = await CheckPoint();
+      pointStore.setPoint(remain);
     } else {
       setSnackbar({ message: `${success}`, type: 'error' });
     }
@@ -438,7 +448,7 @@ export default function MyPage() {
                     type="text"
                     value={newNickName}
                     onChange={NickNameInputChange}
-                    placeholder="10글자로 제한됩니다."
+                    placeholder="5글자로 제한됩니다."
                   ></StyledInput>
                 </span>
                 <CorrectText onClick={ConfirmEditName}>확인</CorrectText>
@@ -456,7 +466,12 @@ export default function MyPage() {
               <ProfileTextContainer>
                 <span className="flex">
                   <ProfileText>소속: </ProfileText>
-                  <StyledInput type="text" value={newBelonging} onChange={BelongingInputChange}></StyledInput>
+                  <StyledInput
+                    type="text"
+                    value={newBelonging}
+                    onChange={BelongingInputChange}
+                    placeholder="10글자로 제한됩니다."
+                  ></StyledInput>
                 </span>
                 <CorrectText onClick={ConfirmEditBelonging}>확인</CorrectText>
               </ProfileTextContainer>
@@ -602,10 +617,10 @@ export default function MyPage() {
       </div>
       <div className="flex w-screen h-[60%]">
         <ProjectContainer>
-          <div className="flex w-full justify-between items-center">
+          <div className="flex w-full items-center">
             <Title>진행 중인 프로젝트</Title>
             <Link to={`/testlist/${localStorage.getItem('userId')}`}>
-              <LinkText>내 프로젝트 &gt;</LinkText>
+              <LinkText className="ml-5">내 프로젝트 &gt;</LinkText>
             </Link>
           </div>
           {userProfile.nowProjectId !== null ? (
@@ -615,14 +630,16 @@ export default function MyPage() {
                   <LinkProject>
                     <div className="flex items-center gap-3">
                       <img src={TeamImg} />
-                      <LinkText className="text-lg">{userProfile.nowProjectTeamName}</LinkText>
+                      <LinkProjectText className="text-lg">{userProfile.nowProjectTeamName}</LinkProjectText>
                     </div>
-                    <LinkText className="text-gray-600 text-center mt-2">{userProfile.nowProjectName}</LinkText>
+                    <LinkProjectText className="text-gray-600 text-center mt-2">
+                      {userProfile.nowProjectName}
+                    </LinkProjectText>
                   </LinkProject>
                 </Link>
                 <FeedbackContainer>
                   <Link to={`/feedback/${userProfile.nowProjectId}`}>
-                    <TitleText className="mb-4">제출된 피드백</TitleText>
+                    <TitleText className="mb-4">받은 피드백</TitleText>
                     <UniqueText className="mb-4">{userProfile.nowProjectFeedbackCount}</UniqueText>
                     <DetailText>{userProfile.nowProjectFeedbackCount}개의 피드백이 제출되었습니다.</DetailText>
                     <LinkText className="text-end">모아보기 &gt;</LinkText>
@@ -636,7 +653,7 @@ export default function MyPage() {
                   <UniqueText>80 % </UniqueText>
                   <DetailText>평점 4의 별점</DetailText>
                   <MypageChartIcon src={ChartIcon}></MypageChartIcon>
-                  <StaticOverlay>제출된 피드백이 없습니다.</StaticOverlay>
+                  <StaticOverlay>받은 피드백이 없습니다.</StaticOverlay>
                 </StaticContainer>
               ) : (
                 <StaticContainer>

@@ -249,7 +249,7 @@ export const CardContainer = styled.div`
   cursor: pointer;
   perspective: 1000px;
   display: flex;
-  width: 35rem;
+  width: 25rem;
   height: 13.5rem;
   max-height: 13.5rem;
 `;
