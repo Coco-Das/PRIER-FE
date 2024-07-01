@@ -75,9 +75,9 @@ export default function Alarm() {
 
   useEffect(() => {
     const timer = setTimeout(() => {
-      setIsOpen(false);
       sessionStorage.setItem('responseAmount', '0');
       sessionStorage.setItem('commentAmount', '0');
+      setIsOpen(false);
     }, 7000);
 
     const expandTimer = setTimeout(() => {
