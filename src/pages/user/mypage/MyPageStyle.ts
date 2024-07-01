@@ -201,6 +201,11 @@ export const LinkProject = styled.div`
   margin-right: 20px;
   box-sizing: border-box;
 `;
+export const LinkText = styled.p`
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+`;
 //피드백 수
 export const FeedbackContainer = styled.div`
   height: 14.5rem;

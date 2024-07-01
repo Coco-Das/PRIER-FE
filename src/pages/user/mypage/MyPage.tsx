@@ -615,9 +615,9 @@ export default function MyPage() {
                   <LinkProject>
                     <div className="flex items-center gap-3">
                       <img src={TeamImg} />
-                      <p className="text-lg">{userProfile.nowProjectTeamName}</p>
+                      <LinkText className="text-lg">{userProfile.nowProjectTeamName}</LinkText>
                     </div>
-                    <p className="text-gray-600 text-center mt-2">{userProfile.nowProjectName}</p>
+                    <LinkText className="text-gray-600 text-center mt-2">{userProfile.nowProjectName}</LinkText>
                   </LinkProject>
                 </Link>
                 <FeedbackContainer>
