@@ -275,9 +275,15 @@ export const CardFront = styled.div`
   top: 0;
   left: 0;
   padding: 20px;
-  border: 1.5px solid transparent;
+  border: 1px solid transparent;
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
+  transition: transform 0.6s;
+  &:hover {
+    transform: scale(1.05, 1.05);
+    border: 1.5px solid transparent;
+    background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
+  }
 `;
 
 export const CardBack = styled.div`
