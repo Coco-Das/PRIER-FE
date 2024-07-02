@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from 'react';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { CustomButton, Question, QuestionDiv, Textarea } from './ResponseQuestionStyles';
 import PropTypes from 'prop-types';
+import Snackbar from '../../../components/user/Snackbar';
 
 interface Question {
   content: string;
@@ -37,6 +38,7 @@ export const ResponseQuestion = () => {
   const [questions, setQuestions] = useState<Question[]>([]);
   const [responses, setResponses] = useState<{ [key: number]: string }>({});
   const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const optionToValueMap: { [key: string]: string } = {
     '매우 좋음': '50',
@@ -92,7 +94,10 @@ export const ResponseQuestion = () => {
       }));
       const response = await API_BASE_URL.post(`/projects/${projectId}/responses`, responsePayload);
       console.log(response);
-      navigate(`/feedback/${projectId}`); //제출 후 다시 프로젝트 페이지로
+      setSnackbar({ message: '제출되었습니다', type: 'success' });
+      setTimeout(() => {
+        navigate(`/responsetest/${projectId}`); //제출 후 다시 프로젝트 페이지로
+      }, 800);
     } catch (error) {
       console.error('에러:', error);
     }
@@ -196,6 +201,7 @@ export const ResponseQuestion = () => {
             제출하기
           </CustomButton>
         </div>
+        {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
       </Question>
     </>
   );
