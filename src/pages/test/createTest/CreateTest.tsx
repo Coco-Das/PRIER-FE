@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
 import { format } from 'date-fns';
 import { useProjectStore } from '../../../states/projects/ProjectStore'; // zustand 스토어 임포트
-import DeletePng from '../../../assets/trash.png';
+import DeletePng from '../../../assets/delete.png';
 import SettingPng from '../../../assets/setting.png';
 
 import {
@@ -111,7 +111,7 @@ export const CreateTest = () => {
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-  const [ImageAlert, setImageAlert] = useState(false);
+
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -311,10 +311,6 @@ export const CreateTest = () => {
     if (mainFileInputRef.current?.files && mainFileInputRef.current.files.length > 0) {
       formData.append('mainImage', mainFileInputRef.current.files[0]);
     } else {
-      setImageAlert(true);
-      setTimeout(() => {
-        setImageAlert(false);
-      }, 800);
       return;
     }
     if (additionalFileInputRef.current?.files) {
@@ -381,7 +377,10 @@ export const CreateTest = () => {
             <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
             <div style={{ display: 'flex' }}>
               <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
-              <span className="ml-2" style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato' }}>
+              <span
+                className="ml-2"
+                style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato', fontWeight: 'bold' }}
+              >
                 * 메인이미지는 필수입니다
               </span>
             </div>
@@ -486,7 +485,7 @@ export const CreateTest = () => {
                   backgroundColor: 'inherit',
                   fontSize: '15px',
                   border: '1px solid #315AF1',
-                  height: '110px',
+                  minHeight: '110px',
                   overflowY: 'auto',
                 }}
                 onChange={handleTeamMateChange}
@@ -602,7 +601,6 @@ export const CreateTest = () => {
         </div>
       </Question>
       {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
-      {ImageAlert && <CustomAlert message="메인이미지는 필수입니다" showButtons={false} />}
     </CreateWrapper>
   );
 };
