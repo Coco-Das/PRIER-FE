@@ -103,8 +103,8 @@ export const CommentBtn = styled.button`
 `;
 
 export const DeleteButton = styled.img`
-  width: 18px;
-  height: 20px;
+  width: 23px;
+  height: 23px;
   margin-left: auto;
 
   &:hover {
@@ -184,10 +184,9 @@ export const BlueInputDiv = styled.div`
   }
 `;
 export const GreenDiv = styled.div`
-  /* margin-left: 30px; */
-  width: 50%;
+  margin-left: 30px;
   border-radius: 8px;
-  height: 100%;
+  height: 10%;
   background-color: white;
   font-size: 14px;
   padding: 0px 20px 0px 20px;
@@ -198,26 +197,6 @@ export const GreenDiv = styled.div`
   gap: 5px;
   border: 1px solid #e0e0e0;
 
-  &:hover {
-    transition: 0.3s;
-    cursor: pointer;
-    background-color: #e1f9f0;
-    color: black;
-  }
-`;
-export const GreenDiv2 = styled.div`
-  margin-left: 30px;
-  width: 50%;
-  border-radius: 8px;
-  color: #828282;
-  height: 100%;
-  font-size: 14px;
-  padding: 0px 20px 0px 20px;
-  display: flex;
-  justify-content: flex-end;
-  align-items: center;
-  gap: 5px;
-  border: 1px solid #e0e0e0;
   &:hover {
     transition: 0.3s;
     cursor: pointer;

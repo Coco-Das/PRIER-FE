@@ -1,7 +1,7 @@
 import * as React from 'react';
 import styled from 'styled-components';
 import { ReactComponent as Menu } from '../../assets/Menu.svg';
-import { ReactComponent as Logo } from '../../assets/Logo.svg';
+import Logo from '../../assets/Logo.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SideBar from './SideBar';
 import Profile from '../user/Profile';
@@ -23,7 +23,7 @@ const StyledMenu = styled(Menu)`
   margin-left: 20px;
 `;
 
-const StyledLogo = styled(Logo)`
+const StyledLogo = styled.img`
   &:hover {
     cursor: pointer;
   }
@@ -70,7 +70,7 @@ export const Header = () => {
   return (
     <HeaderContainer onMouseLeave={handleMouseLeave}>
       <StyledMenu onClick={() => toggleSideBar(!sideBarOpen)} />
-      <StyledLogo onClick={handleLogoCick} />
+      <StyledLogo src={Logo} onClick={handleLogoCick} />
       <UserContainer onMouseEnter={handleMouseEnter}>
         <StyledImg src={userProfile.imgUrl} />
         {profileOpen && <Profile />}

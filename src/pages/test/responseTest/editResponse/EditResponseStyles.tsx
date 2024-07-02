@@ -100,7 +100,7 @@ export const AddButton = styled(AddBtn)`
   }
 `;
 export const QuestionDeleteButton = styled.img`
-  width: 20px;
+  width: 25px;
   height: 25px;
   &:hover {
     cursor: pointer;
