@@ -14,7 +14,7 @@ import {
 } from './CommentStyles';
 import StarRating from '../../../components/utils/StarRating';
 import SidebarAlert from '../../../components/utils/SidebarAlert';
-import DeletePng from '../../../assets/trash.png';
+import DeletePng from '../../../assets/delete.png';
 import EditPng from '../../../assets/edit.png';
 
 //댓글 불러옴 get
@@ -171,6 +171,7 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
               flexDirection: 'column',
               alignItems: 'center',
               justifyContent: 'center',
+              fontSize: '18px',
             }}
           >
             <p>작성된 댓글이 없습니다</p>
