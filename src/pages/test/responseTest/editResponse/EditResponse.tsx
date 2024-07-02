@@ -40,7 +40,7 @@ import { HiddenInput } from '../../createTest/CreateTestStyles';
 import { DropDownContainer } from '../../../../components/utils/DropDown';
 import { ToggleBtn } from '../../../../components/utils/Toggle';
 import Snackbar from '../../../../components/user/Snackbar';
-import DeletePng from '../../../../assets/trash.png';
+import DeletePng from '../../../../assets/delete.png';
 import SettingPng from '../../../../assets/setting.png';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
@@ -392,10 +392,6 @@ export const EditResponse = () => {
       formData.append('mainImage', mainFileInputRef.current.files[0]);
     } else {
       if (deleteMainImage) {
-        setImageAlert(true);
-        setTimeout(() => {
-          setImageAlert(false);
-        }, 800);
         return;
       }
     }
@@ -469,7 +465,10 @@ export const EditResponse = () => {
             <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
             <div style={{ display: 'flex' }}>
               <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
-              <span className="ml-2" style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato' }}>
+              <span
+                className="ml-2"
+                style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato', fontWeight: 'bold' }}
+              >
                 * 메인이미지는 필수입니다
               </span>
             </div>
