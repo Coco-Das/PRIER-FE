@@ -30,10 +30,11 @@ export default function Profile() {
     }
   };
   const progress = progressTrans(userProfile.rank);
+  const NickName = sessionStorage.getItem('nickname');
   return (
     <ProfileContainer>
       <div className="flex justify-between items-center gap-10 mb-3">
-        <Title>반갑습니다 {userProfile.nickname} 님</Title>
+        <Title>반갑습니다 {NickName} 님</Title>
         <Link to="/mypage">
           <LinkText>마이 페이지 &gt;</LinkText>
         </Link>
