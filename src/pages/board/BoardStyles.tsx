@@ -370,8 +370,9 @@ export const CommentsContainer = styled(PostBox)`
 `;
 
 export const Backto = styled.img`
-  width: 24px;
-  height: 24px;
+  width: 25px;
+  height: 15px;
+  margin-top: 5px;
 `;
 
 export const CommentContainer = styled.div`
