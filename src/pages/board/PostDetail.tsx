@@ -379,9 +379,11 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
             );
           })
         )}
-        <CommentInputContainer>
+        <CommentInputContainer className="">
           <CommentInput type="text" value={newComment} onChange={handleCommentChange} placeholder="댓글 달기..." />
-          <CommentButton onClick={handleCommentSubmit}>{editingCommentId !== null ? '수정' : '게시'}</CommentButton>
+          <CommentButton onClick={handleCommentSubmit} disabled={!newComment.trim()}>
+            {editingCommentId !== null ? '수정' : '게시'}
+          </CommentButton>
         </CommentInputContainer>
       </CommentsContainer>
 
