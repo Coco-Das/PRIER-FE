@@ -35,23 +35,26 @@ const CustomDrawer = styled(Drawer)(({ theme }) => ({
     marginLeft: '5px', // 사이드바 마진 레프트 추가
     transition: 'transform 0.3s ease-in-out', // 애니메이션 효과 추가
     transform: 'translateY(-100%)', // 기본적으로 위로 숨김 처리
+
     '&.MuiDrawer-open': {
       transform: 'translateY(0)', // 열릴 때 아래로 내려옴
     },
   },
 }));
 
-const CustomListItemButton = styled('div')(({ theme }) => ({
+const CustomListItemButton = styled('div')<{ current: boolean }>(({ theme, current }) => ({
   color: '#000000', // 텍스트 색상 검정색
   textDecoration: 'none',
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'center',
+  marginBottom: '5px', // 메뉴 간격 설정
   width: '4.5rem',
   height: '3rem',
   borderRadius: '8px',
   position: 'relative',
   overflow: 'visible',
+  backgroundColor: current ? '#D1E0FC' : 'inherit', // 활성화된 메뉴의 배경 색상
   '&:hover, &:focus': {
     backgroundColor: '#E6F3FF', // 호버 시 색상
     outline: 0,
@@ -71,7 +74,6 @@ const CustomListItemButton = styled('div')(({ theme }) => ({
     position: 'absolute',
     backgroundColor: '#E6F3FF',
     boxShadow: '0 2px 5px 0 rgba(5, 4, 62, 0.25)',
-
     whiteSpace: 'nowrap',
     padding: '.5rem 1rem',
     borderRadius: '6px',
@@ -95,7 +97,7 @@ const CustomListItemButton = styled('div')(({ theme }) => ({
   },
 }));
 
-const LogoutButton = styled('div')(({ theme }) => ({
+const LogoutButton = styled('div')<{ current: boolean }>(({ theme, current }) => ({
   color: '#000000', // 텍스트 색상 검정색
   textDecoration: 'none',
   display: 'flex',
@@ -105,7 +107,9 @@ const LogoutButton = styled('div')(({ theme }) => ({
   height: '3rem', // 메뉴 높이 수정
   borderRadius: '8px',
   position: 'relative',
-  overflow: 'visible', // 호버 시 텍스트가 잘 보이도록 설정
+  overflow: 'visible',
+  marginBottom: '-5px',
+  backgroundColor: current ? '#D1E0FC' : 'inherit', // 활성화된 메뉴의 배경 색상
   '&:hover, &:focus': {
     backgroundColor: '#E6F3FF', // 호버 시 색상
     outline: 0,
@@ -127,7 +131,6 @@ const LogoutButton = styled('div')(({ theme }) => ({
     left: 'calc(100% + 1.5rem)',
     transformOrigin: 'center left',
     boxShadow: '0 2px 5px 0 rgba(5, 4, 62, 0.25)',
-
     transform: 'scale(0)',
     opacity: 0,
     transition: 'opacity .15s ease, transform .15s ease',
@@ -191,8 +194,8 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
       PaperProps={{
         className: open ? 'MuiDrawer-open' : '',
         style: {
-          position: 'absolute',
-          marginTop: '64px',
+          position: 'fixed',
+          top: '64px',
           height: 'calc(100% - 70px)',
           overflow: 'visible', // 호버 시 텍스트가 잘 보이도록 설정
         },
@@ -214,8 +217,8 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
         )}
         <List>
           {menuItems.map(item => (
-            <ListItem key={item.text} disablePadding>
-              <CustomListItemButton onClick={() => handleNavigation(item.path)}>
+            <ListItem key={item.text} disablePadding sx={{ mb: '5px' }}>
+              <CustomListItemButton current={currentPath === item.path} onClick={() => handleNavigation(item.path)}>
                 <img src={item.icon} alt={`${item.text} icon`} />
                 <span>{item.text}</span>
               </CustomListItemButton>
@@ -224,8 +227,8 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
         </List>
         <Box sx={{ mt: 'auto' }}>
           <List>
-            <ListItem disablePadding>
-              <LogoutButton onClick={confirmLogout}>
+            <ListItem disablePadding sx={{ mb: '5px' }}>
+              <LogoutButton current={currentPath === '/logout'} onClick={confirmLogout}>
                 <h1 style={{ fontSize: '10px', textAlign: 'center', margin: '0' }}>
                   LOG
                   <br />
