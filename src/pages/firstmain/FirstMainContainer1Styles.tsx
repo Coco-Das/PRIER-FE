@@ -27,7 +27,7 @@ export const FirstContainer = styled.div`
 
 export const Logo = styled.img`
   width: 40rem;
-  height: 10rem;
+  height: 12rem;
   margin-top: -10rem;
   position: relative;
   left: 5rem;
