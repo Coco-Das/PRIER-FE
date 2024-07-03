@@ -61,8 +61,6 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox 
           <MoreVert />
         </MenuButton>
         <Menu placement="bottom-end" sx={{ zIndex: 2, border: 'none' }}>
-          {' '}
-          {/* z-index 설정 */}
           <MenuItem onClick={handleEditClick}>
             <ListItemDecorator>
               <Edit />

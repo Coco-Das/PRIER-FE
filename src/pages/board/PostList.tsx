@@ -22,7 +22,7 @@ import useLike from '../../hooks/UseLike';
 import { LinkUserProfile } from '../../services/UserApi';
 import announcementAvatar from '../../assets/Announcement.svg';
 
-import './BoardLikeStyles.css'; // 스타일 파일을 import 합니다.
+import './BoardLikeStyles.css'; // Import the new styles
 
 interface PostListProps {
   posts: BoardPost[];
@@ -42,7 +42,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
 
   const handleProfileClick = async (e: React.MouseEvent, writerId: number) => {
     e.stopPropagation();
-    if (writerId == USER_ID) {
+    if (writerId === USER_ID) {
       navigate(`/mypage`);
     } else {
       await LinkUserProfile(writerId);
@@ -93,12 +93,13 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
             isActive={post.postId === activePostId}
             onClick={() => handlePostClick(post.postId)}
           >
-            <PostBox category={post.category}>
+            <PostBox category={post.category} style={{ cursor: 'pointer' }}>
               <UserContainer>
                 <Avatar
                   category={post.category}
                   onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.writerId)}
                   className="mt-[5px]"
+                  style={{ cursor: 'pointer' }}
                 >
                   <AvatarImage
                     src={post.category === 'NOTICE' ? announcementAvatar : post.writerProfileUrl}
@@ -109,6 +110,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                   <Author
                     category={post.category}
                     onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.writerId)}
+                    style={{ cursor: 'pointer' }}
                   >
                     {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
                   </Author>
@@ -119,15 +121,23 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                   </div>
                 </AuthorContainer>
                 {userId === post.writerId && (
-                  <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+                  <div
+                    style={{ marginLeft: 'auto', cursor: 'pointer' }}
+                    onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                  >
                     <PostMenu postId={post.postId} title={post.title} insidePostBox />
                   </div>
                 )}
               </UserContainer>
-              <ContentContainer className="flex flex-col items-start w-[1000px] self-center">
+              <ContentContainer
+                className="flex flex-col items-start self-center w-[100%]"
+                style={{ paddingLeft: '50px', paddingRight: '50px' }}
+              >
                 <h1 className="text-xl font-bold mb-8">{post.title}</h1>
                 {post.media && post.media.length > 0 ? (
-                  <ImageSlider images={post.media.map(m => m.s3Url)} category={post.category} />
+                  <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                    <ImageSlider images={post.media.map(m => m.s3Url)} category={post.category} />
+                  </div>
                 ) : (
                   <p className="single-line-text">
                     {displayContent.split('\n').map((line, index) => (
@@ -141,7 +151,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
               </ContentContainer>
               <LikesContainer>
                 <Likes>Likes {likeState.likeCount}</Likes>
-                <label className="ui-like">
+                <label className="ui-like" style={{ cursor: 'pointer' }}>
                   <input
                     type="checkbox"
                     checked={currentIsLiked}
@@ -217,7 +227,6 @@ const ImageSlider: React.FC<{ images: string[]; category: string }> = ({ images,
             position: 'absolute',
             top: '50%',
             left: '50%',
-            width: '100%',
             transform: 'translate(-50%, -50%)',
             transition: 'opacity 1s ease-in-out',
             opacity: index === currentIndex ? 1 : 0,
