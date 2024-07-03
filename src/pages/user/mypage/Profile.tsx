@@ -29,6 +29,7 @@ import {
   ProfileImgContainer,
   StyledProfile,
   StaticOverlay,
+  LinkProjectText,
 } from './MyPageStyle';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
@@ -169,10 +170,10 @@ export default function UserProfile() {
       </div>
       <div className="flex w-screen h-[60%]">
         <ProjectContainer>
-          <div className="flex justify-between items-center">
+          <div className="flex items-center">
             <Title>진행 중인 프로젝트</Title>
             <Link to={`/testlist/${userId}`}>
-              <LinkText>모든 프로젝트 &gt;</LinkText>
+              <LinkText className="ml-5">모든 프로젝트 &gt;</LinkText>
             </Link>
           </div>
           {userProfile.nowProjectId !== null ? (
@@ -182,14 +183,16 @@ export default function UserProfile() {
                   <LinkProject>
                     <div className="flex items-center gap-3">
                       <img src={TeamProfile} />
-                      <p className="text-lg">{userProfile.nowProjectTeamName}</p>
+                      <LinkProjectText className="text-lg">{userProfile.nowProjectTeamName}</LinkProjectText>
                     </div>
-                    <p className="text-gray-600 text-center mt-2">{userProfile.nowProjectName}</p>
+                    <LinkProjectText className="text-gray-600 text-center mt-2">
+                      {userProfile.nowProjectName}
+                    </LinkProjectText>
                   </LinkProject>
                 </Link>
                 <FeedbackContainer>
                   <Link to={`/feedback/${userProfile.nowProjectId}`}>
-                    <TitleText className="mb-4">제출된 피드백</TitleText>
+                    <TitleText className="mb-4">받은 피드백</TitleText>
                     <UniqueText className="mb-4">{userProfile.nowProjectFeedbackCount}</UniqueText>
                     <DetailText>{userProfile.nowProjectFeedbackCount}개의 피드백이 제출되었습니다.</DetailText>
                     <LinkText className="text-end">모아보기 &gt;</LinkText>
@@ -203,7 +206,7 @@ export default function UserProfile() {
                   <UniqueText>80 % </UniqueText>
                   <DetailText>평점 4의 별점</DetailText>
                   <MypageChartIcon src={ChartIcon}></MypageChartIcon>
-                  <StaticOverlay>제출된 피드백이 없습니다.</StaticOverlay>
+                  <StaticOverlay>받은 피드백이 없습니다.</StaticOverlay>
                 </StaticContainer>
               ) : (
                 <StaticContainer>

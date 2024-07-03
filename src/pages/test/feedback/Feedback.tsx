@@ -311,7 +311,7 @@ function Feedback() {
                   </div>
                 ) : (
                   <>
-                    {amount[0]} 명의 유저에게 댓글과 별점을 받았습니다.
+                    {amount[0]}명의 유저에게 댓글과 별점을 받았습니다.
                     <br />
                     {amount[1]}명의 유저가 상세 응답에 응했습니다.
                   </>
@@ -424,7 +424,7 @@ function Feedback() {
                   <div>
                     <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
                       {index + 1}번 문항
-                      <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      <div style={{ display: 'flex' }}>
                         <span
                           style={{
                             marginLeft: '20px',
@@ -434,9 +434,9 @@ function Feedback() {
                           }}
                         >
                           {question.questionContent}
-                        </span>
-                        <span className="ml-5" style={{ fontSize: '12px', color: '#828282' }}>
-                          응답 {question.feedbackCount}개
+                          <span className="ml-5" style={{ fontSize: '12px', color: '#828282' }}>
+                            응답 {question.feedbackCount}개
+                          </span>
                         </span>
                       </div>
                     </div>
@@ -448,7 +448,7 @@ function Feedback() {
                   <div>
                     <div style={{ display: 'inline-flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
                       {index + 1}번 문항
-                      <div style={{ display: 'flex', alignItems: 'flex-end' }}>
+                      <div style={{ display: 'flex' }}>
                         <span
                           style={{
                             marginLeft: '20px',
@@ -458,9 +458,9 @@ function Feedback() {
                           }}
                         >
                           {question.questionContent}
-                        </span>
-                        <span className="ml-5" style={{ fontSize: '12px', color: '#828282' }}>
-                          응답 {question.feedbackCount}개
+                          <span className="ml-5" style={{ fontSize: '12px', color: '#828282' }}>
+                            응답 {question.feedbackCount}개
+                          </span>
                         </span>
                       </div>
                     </div>

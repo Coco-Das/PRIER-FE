@@ -86,6 +86,7 @@ export async function SearchProject(keyword: string) {
         title: project.title,
         teamName: project.teamName,
         mainImageUrl: project.mainImageUrl,
+        profileImageUrl: project.profileImageUrl,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tags: project.tags.map((tag: any) => ({
           tagId: tag.tagId,

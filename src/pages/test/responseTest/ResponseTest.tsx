@@ -21,7 +21,6 @@ import {
   DeleteButton,
   EditButton,
   CommentBtn,
-  GreenDiv2,
 } from './ResponseTestStyles';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -33,7 +32,7 @@ import styled from 'styled-components';
 import { Comment } from '../comment/Comment';
 import { useUserStore } from '../../../states/user/UserStore';
 import Snackbar from '../../../components/user/Snackbar';
-import DeletePng from '../../../assets/trash.png';
+import DeletePng from '../../../assets/delete.png';
 import EditPng from '../../../assets/edit.png';
 
 interface Tag {
@@ -330,33 +329,33 @@ export const ResponseTest = () => {
               <span dangerouslySetInnerHTML={{ __html: teamMate }}></span>
             </BlueInputDiv>
           </BlueDiv>
-          {link ? (
-            <div style={{ display: 'flex', height: '10%', gap: '8px' }} className="mt-2">
-              <GreenDiv2 onClick={() => navigate(`/feedback/${projectId}`)}>
-                <span className="font-bold underline">피드백 상세보기 &rarr;</span>
-              </GreenDiv2>
-              <GreenDiv onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}>
-                <span className="font-bold underline">바로가기 &rarr;</span>
-              </GreenDiv>
-            </div>
-          ) : (
-            <div style={{ display: 'flex', height: '10%' }} className="mt-2">
-              <GreenDiv2 onClick={() => navigate(`/feedback/${projectId}`)} style={{ width: '100%' }}>
-                <span className="font-bold underline">피드백 상세보기&rarr;</span>
-              </GreenDiv2>
-            </div>
+          {link && (
+            <GreenDiv className="mt-2" onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}>
+              <span className="font-bold underline">바로가기 &rarr;</span>
+            </GreenDiv>
           )}
           <WhiteDiv className="mt-2">
             <div style={{ display: 'flex', height: 'auto' }}>
               <span className="font-bold">댓글 달기</span>
-              <StarRating initialScore={score} onRatingChange={handleRatingChange} />
+              {!isMine && <StarRating initialScore={score} onRatingChange={handleRatingChange} />}
             </div>
-            <textarea
-              style={{ padding: '5px 10px', outline: 'none', marginTop: '5px', resize: 'none' }}
-              placeholder="한줄 평"
-              value={comment}
-              onChange={handleCommentChange}
-            />
+            {isMine ? (
+              <textarea
+                style={{ padding: '5px 10px', outline: 'none', marginTop: '5px', resize: 'none' }}
+                placeholder="전체 댓글을 눌러 댓글을 확인해보세요!"
+                // value={comment}
+                // onChange={handleCommentChange}
+                readOnly
+              />
+            ) : (
+              <textarea
+                style={{ padding: '5px 10px', outline: 'none', marginTop: '5px', resize: 'none' }}
+                placeholder="한줄 평"
+                value={comment}
+                onChange={handleCommentChange}
+              />
+            )}
+
             <div
               style={{
                 display: 'flex',
@@ -367,7 +366,7 @@ export const ResponseTest = () => {
               }}
             >
               <CommentBtn onClick={() => setShowSidebar(true)}>전체댓글</CommentBtn>
-              <CommentBtn onClick={handleCommentSubmit}>등록</CommentBtn>
+              {!isMine && <CommentBtn onClick={handleCommentSubmit}>등록</CommentBtn>}
             </div>
           </WhiteDiv>
           <div style={{ display: 'flex', justifyContent: 'space-between', paddingLeft: '30px' }}>
@@ -387,12 +386,14 @@ export const ResponseTest = () => {
                 )}
               </ButtonContainer>
             )}
-            <CustomButton
-              style={{ marginLeft: 'auto', width: '30%' }}
-              onClick={() => navigate(`/responsequestions/${projectId}`)}
-            >
-              테스트폼 참여하기
-            </CustomButton>
+            {!isMine && (
+              <CustomButton
+                style={{ marginLeft: 'auto', width: '30%' }}
+                onClick={() => navigate(`/responsequestions/${projectId}`)}
+              >
+                테스트폼 참여하기
+              </CustomButton>
+            )}
           </div>
         </ProjectIntro>
       </Project>

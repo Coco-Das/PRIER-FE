@@ -22,10 +22,7 @@ export const PointContainer = styled.div`
   max-height: 11rem;
 `;
 
-export const StyledPointIcon = styled.img`
-  width: 7rem;
-  height: 6rem;
-`;
+export const StyledPointIcon = styled.img``;
 const iconMove = keyframes`
   50% {
     transform: rotate(30deg);
@@ -67,8 +64,8 @@ export const ChargeContainer = styled.div`
   padding: 20px;
 `;
 export const GiftWrapper = styled.div`
-  margin: 0% 7% 0 9%;
+  margin: 0%;
   display: grid;
-  grid-template-columns: repeat(2, minmax(36rem, 1fr));
+  grid-template-columns: repeat(3, minmax(auto, 1fr));
   gap: 2rem;
 `;

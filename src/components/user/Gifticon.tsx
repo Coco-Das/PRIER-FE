@@ -14,14 +14,14 @@ import {
   SoldOutFlag,
   Title,
 } from './UserStyle';
-import { ReactComponent as PointIcon } from '../../assets/Coin.svg';
 import { styled } from 'styled-components';
 import { useGifticonStore } from '../../states/user/PointStore';
 import { DescriptionGift, FetchGiftList, PurchaseGift } from '../../services/StoreApi';
 import GiftPurchaseModal from './GiftPurchaseModal';
 import Snackbar from './Snackbar';
+import CoinIcon from '../../assets/Coin.png';
 
-const StyledCoinIcon = styled(PointIcon)`
+const StyledCoinIcon = styled.img`
   width: 40px;
   height: 40px;
   margin-right: 10px;
@@ -95,12 +95,10 @@ export default function Gifticon() {
                   <div className="flex">
                     <GiftImg src={gifticon.imageUrl} alt={gifticon.productName} />
                     <GiftTextWrapper>
-                      <div className="flex items-center justify-between">
-                        <Title>{gifticon.productName}</Title>
-                        <LinkText>{gifticon.stock} 개 남음</LinkText>
-                      </div>
+                      <Title>{gifticon.productName}</Title>
+                      <LinkText>{gifticon.stock} 개 남음</LinkText>
                       <div className="flex items-center">
-                        <StyledCoinIcon />
+                        <StyledCoinIcon src={CoinIcon} />
                         <p>{gifticon.price} 코어</p>
                       </div>
                     </GiftTextWrapper>
@@ -111,12 +109,12 @@ export default function Gifticon() {
                 <>
                   <GiftImg src={gifticon.imageUrl} alt={gifticon.productName} />
                   <GiftTextWrapper>
-                    <div className="flex items-center justify-between">
+                    <div>
                       <GiftTitle>{gifticon.productName}</GiftTitle>
                       <LinkText>{gifticon.stock} 개 남음</LinkText>
                     </div>
                     <div className="flex items-center">
-                      <StyledCoinIcon />
+                      <StyledCoinIcon src={CoinIcon} />
                       <p>{gifticon.price} 코어</p>
                     </div>
                     <LinkText className="text-end">상세 보기 &gt;</LinkText>

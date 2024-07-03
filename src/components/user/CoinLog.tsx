@@ -51,7 +51,8 @@ const TransactionList = styled.ul`
   padding: 0;
   margin: 0;
   list-style: none;
-  overflow: scroll;
+  overflow-y: scroll;
+  overflow-x: hidden;
 `;
 
 const TransactionItem = styled.li`
@@ -64,6 +65,13 @@ const TransactionItem = styled.li`
     background: #e1f9f0;
     transition: 0.3s;
   }
+`;
+const TransactionTitleList = styled.li`
+  display: flex;
+  justify-content: space-between;
+  padding: 10px;
+  border-bottom: 1px solid #e0e0e0;
+  position: relative;
 `;
 const TransactionTitle = styled.p`
   font-size: 18px;
@@ -193,13 +201,13 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
           </OrderButton>
         </span>
         <TransactionList>
-          <TransactionItem>
-            <TransactionTitle className="">사용 금액</TransactionTitle>
+          <TransactionTitleList>
+            <TransactionTitle>사용 금액</TransactionTitle>
             <TransactionTitle>거래 내용</TransactionTitle>
             <TransactionTitle> 잔액</TransactionTitle>
             <TransactionTime style={{ fontWeight: '500' }}>거래 시간 </TransactionTime>
             <TransactionTitle> 거래 취소</TransactionTitle>
-          </TransactionItem>
+          </TransactionTitleList>
           {sortedTransactions.map(transaction => (
             <TransactionItem key={transaction.transactionId}>
               <TransactionText>{transaction.amount}</TransactionText>
@@ -215,7 +223,6 @@ const CoinLog: React.FC<CoinLogProps> = ({ onCancel }) => {
                 </LightTooltip>
               ) : (
                 <>
-                  {' '}
                   <div className="flex-1"></div>
                 </>
               )}

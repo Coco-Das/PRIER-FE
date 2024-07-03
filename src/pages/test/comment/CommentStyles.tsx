@@ -26,8 +26,8 @@ export const Button = styled.button`
   height: 90%;
 `;
 export const DeleteButton = styled.img`
-  width: 14px;
-  height: 16px;
+  width: 19px;
+  height: 19px;
   &:hover {
     cursor: pointer;
   }
