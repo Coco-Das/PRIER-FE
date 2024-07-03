@@ -134,7 +134,9 @@ const FirstMain = () => {
     const handleEndScroll = (entries: IntersectionObserverEntry[]) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          navigate('/login');
+          setTimeout(() => {
+            navigate('/login');
+          }, 700);
         }
       });
     };
@@ -205,8 +207,6 @@ const FirstMain = () => {
         style={{
           height: '800px',
           width: '100%',
-          background:
-            'linear-gradient(to bottom, rgba(28, 38, 49, 0.8), rgba(28, 38, 49, 0.6), rgba(28, 38, 49, 0.4), rgba(28, 38, 49, 0.2), rgba(28, 38, 49, 0))',
         }}
       />
     </>
