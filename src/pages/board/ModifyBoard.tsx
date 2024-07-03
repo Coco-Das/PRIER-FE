@@ -101,7 +101,8 @@ const ModifyBoard: React.FC = () => {
   >([]); // 기존 이미지 상태 변수 초기화
   const [postMediaIds, setDeleteImages] = useState<string[]>([]); // 삭제할 이미지 상태 변수
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null); // 스낵바 상태 변수
-  const userProfile = useUserStore(state => state.userProfile);
+  const profileNickname = sessionStorage.getItem('nickname');
+  const profileImg = sessionStorage.getItem('profileImg') || userAvatar;
 
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
 
@@ -322,10 +323,10 @@ const ModifyBoard: React.FC = () => {
         <PostBox>
           <UserContainer>
             <Avatar>
-              <AvatarImage src={userProfile.imgUrl} alt="Avatar" />
+              <AvatarImage src={profileImg} />
             </Avatar>
             <AuthorContainer>
-              <Author>{userProfile.nickname}</Author>
+              <Author>{profileNickname}</Author>
             </AuthorContainer>
             <TextEditorToolbar editorState={editorState} onEditorChange={handleEditorChange} />
             <CustomButton onClick={handleImageUpload}>

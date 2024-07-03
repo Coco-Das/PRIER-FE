@@ -92,7 +92,6 @@ const CreateBoard: React.FC = () => {
   const [images, setImages] = useState<File[]>([]); // 업로드된 이미지 상태 변수
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null); // 스낵바 상태 변수
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
-  const userProfile = useUserStore(state => state.userProfile);
   const profileNickname = sessionStorage.getItem('nickname');
   const profileImg = sessionStorage.getItem('profileImg') || userAvatar;
   // 에디터 변경 핸들러
