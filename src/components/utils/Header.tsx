@@ -5,7 +5,6 @@ import Logo from '../../assets/Logo.png';
 import { useNavigate, useLocation } from 'react-router-dom';
 import SideBar from './SideBar';
 import Profile from '../user/Profile';
-import { useUserStore } from '../../states/user/UserStore';
 
 const HeaderContainer = styled.nav`
   position: relative;
@@ -48,10 +47,10 @@ const UserContainer = styled.div`
 export const Header = () => {
   const [sideBarOpen, setSideBarOpen] = React.useState(false);
   const [profileOpen, setProfileOpen] = React.useState(false);
-  const userProfile = useUserStore(state => state.userProfile);
   const navigate = useNavigate();
   const location = useLocation();
   const currentPath = location.pathname;
+  const ProfileImg = sessionStorage.getItem('profileImg');
 
   const handleLogoCick = () => {
     navigate('/main');
@@ -72,7 +71,7 @@ export const Header = () => {
       <StyledMenu onClick={() => toggleSideBar(!sideBarOpen)} />
       <StyledLogo src={Logo} onClick={handleLogoCick} />
       <UserContainer onMouseEnter={handleMouseEnter}>
-        <StyledImg src={userProfile.imgUrl} />
+        {ProfileImg ? <StyledImg src={ProfileImg} /> : <></>}
         {profileOpen && <Profile />}
       </UserContainer>
       <SideBar open={sideBarOpen} toggleDrawer={toggleSideBar} currentPath={currentPath} />
