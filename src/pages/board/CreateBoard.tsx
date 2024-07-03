@@ -94,6 +94,7 @@ const CreateBoard: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
   const userProfile = useUserStore(state => state.userProfile);
   const profileNickname = sessionStorage.getItem('nickname');
+  const profileImg = sessionStorage.getItem('profileImg') || userAvatar;
   // 에디터 변경 핸들러
   const handleEditorChange = (state: EditorState) => {
     setEditorState(state);
@@ -272,7 +273,7 @@ const CreateBoard: React.FC = () => {
         <PostBox>
           <UserContainer>
             <Avatar>
-              <AvatarImage src={userProfile.imgUrl} alt="Avatar" />
+              <AvatarImage src={profileImg} />
             </Avatar>
             <AuthorContainer>
               <Author>{profileNickname}</Author>
