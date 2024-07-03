@@ -301,9 +301,11 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
               </div>
             )}
           </UserContainer>
-          <ContentContainer className="flex flex-col items-start w-[600px] self-center">
-            <h1 className="text-xl font-bold  mb-8">{post.title}</h1>
-
+          <ContentContainer
+            className="flex flex-col items-start self-center w-[100%]"
+            style={{ paddingLeft: '50px', paddingRight: '50px' }}
+          >
+            <h1 className="text-xl font-bold mb-8">{post.title}</h1>
             <Editor editorState={editorState} customStyleMap={styleMap} readOnly={true} onChange={() => {}} />
 
             {post.media && post.media.length > 0 && (
