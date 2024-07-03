@@ -3,9 +3,7 @@ import Box from '@mui/material/Box';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
-import ListItemButton, { ListItemButtonProps } from '@mui/material/ListItemButton';
-import ListItemText from '@mui/material/ListItemText';
-import { styled, keyframes } from '@mui/material/styles';
+import { styled } from '@mui/material/styles';
 import { useNavigate } from 'react-router-dom';
 import sidebar1 from '../../assets/sidebar1.svg';
 import sidebar2 from '../../assets/sidebar2.svg';
@@ -24,66 +22,127 @@ interface SideBarProps {
 
 const CustomDrawer = styled(Drawer)(({ theme }) => ({
   '& .MuiDrawer-paper': {
-    backgroundColor: '#F3F5FB',
-    fontFamily: 'Paybooc, sans-serif',
+    backgroundColor: '#FFFFFF', // 사이드바 메뉴 배경 색상 흰색
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',
-    height: '100%', // Drawer height set to 100%
+    height: 'calc(100% - 70px)',
+    width: '4.5rem', // 너비를 줄여서 이미지만 들어갈 정도로 설정
+    padding: '.75rem',
+    borderRadius: '10px',
+    boxShadow: '0 10px 10px 0 rgba(5, 4, 62, 0.25)',
+    overflow: 'visible', // 호버 시 텍스트가 잘 보이도록 설정
+    marginLeft: '5px', // 사이드바 마진 레프트 추가
+    transition: 'transform 0.3s ease-in-out', // 애니메이션 효과 추가
+    transform: 'translateY(-100%)', // 기본적으로 위로 숨김 처리
+    '&.MuiDrawer-open': {
+      transform: 'translateY(0)', // 열릴 때 아래로 내려옴
+    },
   },
 }));
 
-interface CustomListItemButtonProps extends ListItemButtonProps {
-  current: boolean;
-}
-
-const tilt = keyframes`
-  0% { transform: rotate(0deg); }
-  50% { transform: rotate(-10deg); }
-  100% { transform: rotate(0deg); }
-`;
-
-const CustomListItemButton = styled(ListItemButton, {
-  shouldForwardProp: (prop: any) => prop !== 'current',
-})<CustomListItemButtonProps>(({ theme, current }) => ({
-  '&:hover': {
-    backgroundColor: '#D1E0FC',
-    '& img': {
-      animation: `${tilt} 0.3s`,
+const CustomListItemButton = styled('div')(({ theme }) => ({
+  color: '#000000', // 텍스트 색상 검정색
+  textDecoration: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '4.5rem',
+  height: '3rem',
+  borderRadius: '8px',
+  position: 'relative',
+  overflow: 'visible',
+  '&:hover, &:focus': {
+    backgroundColor: '#E6F3FF', // 호버 시 색상
+    outline: 0,
+    '& span': {
+      transform: 'scale(1)',
+      opacity: 1,
     },
-  },
-  backgroundColor: current ? '#D1E0FC' : 'inherit',
-  padding: '8px 16px', // 버튼 크기 줄이기
-}));
-
-const CustomListItemIcon = styled('img')({
-  width: 24,
-  height: 24,
-  marginRight: 20, // 이미지와 텍스트 사이 간격 줄이기
-});
-
-const LogoutButton = styled(ListItemButton)(({ theme }) => ({
-  '&:hover': {
-    backgroundColor: 'inherit',
-    '& .MuiListItemText-root': {
-      color: theme.palette.primary.main,
-      textDecoration: 'underline',
-    },
-  },
-  '&.Mui-selected': {
-    backgroundColor: 'inherit',
-    '& .MuiListItemText-root': {
-      color: theme.palette.primary.main,
-    },
-  },
-  '&.Mui-focusVisible': {
-    backgroundColor: 'inherit',
-  },
-  '&.Mui-selected:hover': {
-    backgroundColor: 'inherit',
   },
   '&:active': {
-    backgroundColor: 'inherit',
+    backgroundColor: '#D1E0FC', // 클릭 시 색상
+    outline: 0,
+  },
+  '& img': {
+    fontSize: '1.375rem',
+  },
+  '& span': {
+    position: 'absolute',
+    backgroundColor: '#E6F3FF',
+    boxShadow: '0 2px 5px 0 rgba(5, 4, 62, 0.25)',
+
+    whiteSpace: 'nowrap',
+    padding: '.5rem 1rem',
+    borderRadius: '6px',
+    left: 'calc(100% + 1.5rem)',
+    transformOrigin: 'center left',
+    transform: 'scale(0)',
+    opacity: 0,
+    transition: 'opacity .15s ease, transform .15s ease',
+    '&:before': {
+      content: '""',
+      display: 'block',
+      width: '12px',
+      height: '12px',
+      position: 'absolute',
+      backgroundColor: '#E6F3FF',
+      left: '-5px',
+      top: '50%',
+      transform: 'translateY(-50%) rotate(45deg)',
+      borderRadius: '3px',
+    },
+  },
+}));
+
+const LogoutButton = styled('div')(({ theme }) => ({
+  color: '#000000', // 텍스트 색상 검정색
+  textDecoration: 'none',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  width: '4.5rem', // 메뉴 높이 수정
+  height: '3rem', // 메뉴 높이 수정
+  borderRadius: '8px',
+  position: 'relative',
+  overflow: 'visible', // 호버 시 텍스트가 잘 보이도록 설정
+  '&:hover, &:focus': {
+    backgroundColor: '#E6F3FF', // 호버 시 색상
+    outline: 0,
+    '& span': {
+      transform: 'scale(1)',
+      opacity: 1,
+    },
+  },
+  '&:active': {
+    backgroundColor: '#D1E0FC', // 클릭 시 색상
+    outline: 0,
+  },
+  '& span': {
+    position: 'absolute',
+    backgroundColor: '#E6F3FF',
+    whiteSpace: 'nowrap',
+    padding: '.5rem 1rem',
+    borderRadius: '6px',
+    left: 'calc(100% + 1.5rem)',
+    transformOrigin: 'center left',
+    boxShadow: '0 2px 5px 0 rgba(5, 4, 62, 0.25)',
+
+    transform: 'scale(0)',
+    opacity: 0,
+    transition: 'opacity .15s ease, transform .15s ease',
+    '&:before': {
+      content: '""',
+      display: 'block',
+      width: '12px',
+      height: '12px',
+      position: 'absolute',
+      backgroundColor: '#E6F3FF',
+      left: '-5px',
+      top: '50%',
+      transform: 'translateY(-50%) rotate(45deg)',
+      borderRadius: '3px',
+    },
   },
 }));
 
@@ -130,11 +189,12 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
       open={open}
       onClose={() => toggleDrawer(false)}
       PaperProps={{
+        className: open ? 'MuiDrawer-open' : '',
         style: {
           position: 'absolute',
           marginTop: '64px',
-          height: 'calc(100% - 64px)',
-          overflow: 'hidden',
+          height: 'calc(100% - 70px)',
+          overflow: 'visible', // 호버 시 텍스트가 잘 보이도록 설정
         },
       }}
       ModalProps={{
@@ -148,16 +208,16 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
       }}
       variant="temporary"
     >
-      <Box sx={{ width: 250, display: 'flex', flexDirection: 'column', height: '100%' }} role="presentation">
+      <Box sx={{ display: 'flex', flexDirection: 'column', height: '100%' }} role="presentation">
         {showLogoutAlert && (
           <CustomAlert message="정말 로그아웃 하시겠습니까?" onConfirm={handleLogout} onCancel={cancelLogout} />
         )}
         <List>
           {menuItems.map(item => (
             <ListItem key={item.text} disablePadding>
-              <CustomListItemButton current={currentPath === item.path} onClick={() => handleNavigation(item.path)}>
-                <CustomListItemIcon src={item.icon} alt={`${item.text} icon`} />
-                <ListItemText primary={item.text} />
+              <CustomListItemButton onClick={() => handleNavigation(item.path)}>
+                <img src={item.icon} alt={`${item.text} icon`} />
+                <span>{item.text}</span>
               </CustomListItemButton>
             </ListItem>
           ))}
@@ -166,7 +226,12 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
           <List>
             <ListItem disablePadding>
               <LogoutButton onClick={confirmLogout}>
-                <ListItemText primary="로그아웃" />
+                <h1 style={{ fontSize: '10px', textAlign: 'center', margin: '0' }}>
+                  LOG
+                  <br />
+                  OUT
+                </h1>
+                <span>로그아웃</span>
               </LogoutButton>
             </ListItem>
           </List>

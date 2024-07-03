@@ -20,7 +20,7 @@ const StyledMenu = styled(Menu)`
   &:hover {
     cursor: pointer;
   }
-  margin-left: 20px;
+  margin-left: 24px;
 `;
 
 const StyledLogo = styled.img`
