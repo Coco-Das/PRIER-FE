@@ -295,6 +295,7 @@ export const LikesContainer = styled.div`
   font-size: 16px;
   line-height: 150%;
   font-weight: 500;
+  z-index: 5;
 `;
 
 export const Likes = styled.div`

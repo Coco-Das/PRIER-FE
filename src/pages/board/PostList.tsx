@@ -22,7 +22,7 @@ import useLike from '../../hooks/UseLike';
 import { LinkUserProfile } from '../../services/UserApi';
 import announcementAvatar from '../../assets/Announcement.svg';
 
-import './BoardLikeStyles.css'; // 스타일 파일을 import 합니다.
+import './BoardLikeStyles.css'; // Import the new styles
 
 interface PostListProps {
   posts: BoardPost[];
@@ -42,7 +42,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
 
   const handleProfileClick = async (e: React.MouseEvent, writerId: number) => {
     e.stopPropagation();
-    if (writerId == USER_ID) {
+    if (writerId === USER_ID) {
       navigate(`/mypage`);
     } else {
       await LinkUserProfile(writerId);
