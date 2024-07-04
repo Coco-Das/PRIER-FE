@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
+import { FetchAllProject } from '../../services/MainPageApi';
+
 import {
   FirstContainer,
   Img1,
@@ -91,7 +93,20 @@ const FirstMain = () => {
   const thirdContainerRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const [totalElements, setTotalElements] = useState(0);
 
+  useEffect(() => {
+    const fetchTotalElements = async () => {
+      try {
+        const projectData = await FetchAllProject(1, 0);
+        setTotalElements(projectData.totalElements);
+      } catch (error) {
+        console.error('총 프로젝트 개수 가져오기 실패:', error);
+      }
+    };
+
+    fetchTotalElements();
+  }, []);
   useEffect(() => {
     const handleScroll = (entries: IntersectionObserverEntry[]) => {
       entries.forEach(entry => {
@@ -188,7 +203,7 @@ const FirstMain = () => {
       <FirstContainer ref={secondContainerRef}>
         <Text2>프리어와 함께하는 프로젝트</Text2>
         <Text3>
-          다양한 카테고리의 프로젝트들이 1,536개 <br />
+          다양한 카테고리의 프로젝트들이 {totalElements}개 <br />
           등록되고 있습니다.
         </Text3>
         <Project1 src={ProjectImg1} />
