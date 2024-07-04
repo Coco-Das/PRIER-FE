@@ -51,7 +51,7 @@ const DropdownContent = styled.div`
   width: 100px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
   border-radius: 10px;
-  z-index: 1;
+  z-index: 3;
   margin-left: 0;
   ${Dropdown}:hover & {
     display: block;
@@ -83,7 +83,6 @@ const CustomCategoryButton = styled(CategoryButton)`
     color: #426e5e;
   }
 `;
-
 const NavigationBar: React.FC<NavigationBarProps> = ({
   activeCategory,
   activeFilter,
@@ -110,12 +109,25 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
     setTitle('Community');
   };
 
-  const isNoticeCategory = activeCategory === 'NOTICE';
+  const handleTitleClick = () => {
+    if (title === '내가 좋아요한 글') {
+      handleFilterClick('likes');
+      setTitle('내가 좋아요한 글');
+    } else if (title === '내가 작성한 글') {
+      handleFilterClick('myposts');
+      setTitle('내가 작성한 글');
+    } else {
+      handleFilterClick('all');
+      setTitle('Community');
+    }
+  };
 
   return (
     <Navigation>
       <TopContainer>
-        <Title>{title}</Title>
+        <Title onClick={handleTitleClick} style={{ cursor: 'pointer' }}>
+          {title}
+        </Title>
       </TopContainer>
       <BottomContainer>
         <SegmentedControlContainer>
