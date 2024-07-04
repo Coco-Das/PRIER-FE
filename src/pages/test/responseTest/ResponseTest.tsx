@@ -34,6 +34,7 @@ import { useUserStore } from '../../../states/user/UserStore';
 import Snackbar from '../../../components/user/Snackbar';
 import DeletePng from '../../../assets/delete.png';
 import EditPng from '../../../assets/edit.png';
+import LinkImg from '../../../assets/link_gray.png';
 
 interface Tag {
   tagName: string;
@@ -243,6 +244,11 @@ export const ResponseTest = () => {
     handleRatingChange(0);
   };
 
+  const handleClick = () => {
+    const formattedLink = link.startsWith('http://') || link.startsWith('https://') ? link : `http://${link}`;
+    window.open(formattedLink, '_blank', 'noopener,noreferrer');
+  };
+
   return (
     <CreateWrapper>
       <Project>
@@ -330,8 +336,14 @@ export const ResponseTest = () => {
             </BlueInputDiv>
           </BlueDiv>
           {link && (
-            <GreenDiv className="mt-2" onClick={() => window.open(link, '_blank', 'noopener,noreferrer')}>
-              <span className="font-bold underline">바로가기 &rarr;</span>
+            <GreenDiv className="mt-2" onClick={handleClick}>
+              <span className="underline" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
+                <img style={{ width: '18px', height: '18px' }} src={LinkImg} />
+                {link}
+              </span>
+              {/* <span className="font-bold underline" style={{ marginLeft: 'auto' }}>
+                바로가기 &rarr;
+              </span> */}
             </GreenDiv>
           )}
           <WhiteDiv className="mt-2">

@@ -443,6 +443,12 @@ function Feedback() {
                     {question.feedbackCount > 0 && (
                       <p style={{ marginLeft: '60px', fontSize: '18px', padding: '20px' }}>{question.summary}</p>
                     )}
+                    <span
+                      className="underline"
+                      style={{ fontSize: '12px', color: '#828282', fontWeight: 'bold', cursor: 'pointer' }}
+                    >
+                      전체보기&rarr;
+                    </span>
                   </div>
                 ) : (
                   <div>
