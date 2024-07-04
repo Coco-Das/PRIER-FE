@@ -159,10 +159,10 @@ function Feedback() {
           data: [question.veryGood, question.good, question.soso, question.bad, question.veryBad],
           backgroundColor: [
             '#315AF1', // 진한 파란색
-            '#315AF170', // 중간 회색
-            '#B0B0B0', // 더 연한 회색
-            '#D3D3D3', // 더 연한 회색
-            '#E0E0E0', // 거의 흰색에 가까운 회색
+            '#a4c8ff', // 중간 회색
+            '#cadbf3', // 더 연한 회색
+            '#ccd3dc',
+            '#bcc0c5', // 더 연한 회색
           ],
         },
       ],
@@ -443,6 +443,12 @@ function Feedback() {
                     {question.feedbackCount > 0 && (
                       <p style={{ marginLeft: '60px', fontSize: '18px', padding: '20px' }}>{question.summary}</p>
                     )}
+                    <span
+                      className="underline"
+                      style={{ fontSize: '12px', color: '#828282', fontWeight: 'bold', cursor: 'pointer' }}
+                    >
+                      전체보기&rarr;
+                    </span>
                   </div>
                 ) : (
                   <div>
