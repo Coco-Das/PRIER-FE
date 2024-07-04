@@ -122,6 +122,17 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
     }
   };
 
+  const handleCategorySelection = (category: string) => {
+    handleCategoryClick(category);
+    if (title === '내가 좋아요한 글') {
+      handleFilterClick('likes');
+    } else if (title === '내가 작성한 글') {
+      handleFilterClick('myposts');
+    } else {
+      handleFilterClick('all');
+    }
+  };
+
   return (
     <Navigation>
       <TopContainer>
@@ -136,12 +147,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
               <MenuItem
                 key={category}
                 active={activeCategory === category}
-                onClick={() => {
-                  if (activeFilter === 'myposts' && category === 'NOTICE') {
-                    handleFilterClick('all');
-                  }
-                  handleCategoryClick(category);
-                }}
+                onClick={() => handleCategorySelection(category)}
               >
                 {categoryLabels[category]}
               </MenuItem>

@@ -35,24 +35,6 @@ export const ProjectTextArea = styled.div`
   width: 100%;
   border: 1.5px solid transparent; // 투명한 테두리 설정
   overflow-y: auto;
-
-  &::-webkit-scrollbar {
-    width: 8px; /* 스크롤바 너비 설정 */
-  }
-
-  &::-webkit-scrollbar-track {
-    margin-top: 8px;
-
-    margin-bottom: 8px;
-    background: transparent; /* 스크롤바 트랙 배경을 투명하게 설정 */
-  }
-
-  &::-webkit-scrollbar-thumb {
-    background-color: lightgray; /* 스크롤바 thumb 색상 설정 */
-    border-radius: 15px; /* 스크롤바 thumb 모서리 둥글게 설정 */
-    border: 3px solid transparent; /* 스크롤바 thumb과 트랙 사이의 간격 설정 */
-  }
-
   border-radius: 15px;
   background: linear-gradient(#fff, #fff), /* 내부 백그라운드 */ linear-gradient(90deg, #aaead3, #773cd1); /* 외부 그라데이션 */
   background-clip: padding-box, border-box;
@@ -210,6 +192,7 @@ export const GreenDiv = styled.div`
   padding: 0px 20px 0px 20px;
   display: flex;
   color: #828282;
+  justify-content: flex-end;
   align-items: center;
   gap: 5px;
   border: 1px solid #e0e0e0;
@@ -218,6 +201,7 @@ export const GreenDiv = styled.div`
     transition: 0.3s;
     cursor: pointer;
     background-color: #e1f9f0;
+    color: black;
   }
 `;
 

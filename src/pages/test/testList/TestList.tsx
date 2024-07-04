@@ -6,7 +6,6 @@ import {
   GreenDiv,
   ImageWrapper,
   Img,
-  LinkImage,
   ListDiv,
   ListWrapper,
   PurpleDiv,
@@ -20,7 +19,6 @@ import { Link } from 'react-router-dom';
 import StarRating from '../../../components/utils/StarRating';
 import ProjectStatistics from './ProjectStatics';
 import PaginationComponent from '../../../components/board/PaginationComponent';
-import LinkImg from '../../../assets/link_gray.png';
 
 interface Tag {
   tagId: number;
@@ -38,7 +36,6 @@ interface Project {
   devStartDate: string;
   status: string;
   link: string;
-  mine: boolean;
 }
 
 function TestList() {
@@ -192,22 +189,12 @@ function TestList() {
                 <span style={{ color: getStatusText(project.status) === '배포 완료' ? 'inherit' : '#315AF1' }}>
                   {getStatusText(project.status)}
                 </span>
-
-                {project.mine ? (
-                  <Link
-                    to={`/feedback/${project.projectId}`}
-                    style={{ marginLeft: 'auto', paddingRight: '10px', cursor: 'pointer' }}
-                  >
-                    <span className="underline">피드백 상세보기 &gt;</span>
-                  </Link>
-                ) : (
-                  <Link
-                    to={`/responsetest/${project.projectId}`}
-                    style={{ marginLeft: 'auto', paddingRight: '10px', cursor: 'pointer' }}
-                  >
-                    <span className="underline">프로젝트 상세보기 &gt;</span>
-                  </Link>
-                )}
+                <Link
+                  to={`/feedback/${project.projectId}`}
+                  style={{ marginLeft: 'auto', paddingRight: '10px', cursor: 'pointer' }}
+                >
+                  <span className="underline">피드백 상세보기 &gt;</span>
+                </Link>
               </div>
               <div>
                 <StarRating initialScore={project.score} onHover={false} readOnly={true}></StarRating>
@@ -237,18 +224,11 @@ function TestList() {
               <GreenDiv onClick={() => window.open(project.link, '_blank', 'noopener,noreferrer')}>
                 <p>배포 링크</p>
                 <span
-                  className="font-medium underline"
-                  style={{ fontSize: '14px', color: '#828282', display: 'flex', marginTop: '10px', gap: '5px' }}
-                >
-                  <LinkImage src={LinkImg} />
-                  {project.link}
-                </span>
-                {/* <span
                   className="font-bold underline"
                   style={{ marginLeft: 'auto', fontSize: '14px', color: '#828282', marginTop: 'auto' }}
                 >
                   바로가기 &rarr;
-                </span> */}
+                </span>
               </GreenDiv>
             </DivWrapper>
             <ProjectStatistics project={project} />
