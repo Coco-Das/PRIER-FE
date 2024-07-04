@@ -6,7 +6,6 @@ import PaginationComponent from '../../components/board/PaginationComponent';
 import NavigationBar from '../../components/board/NavigationBar';
 import PostList from './PostList';
 import PostDetail from './PostDetail';
-import PostSkeleton from '../../components/board/PostSkeleton';
 import usePagination from '../../hooks/UsePagination';
 import { API_BASE_URL } from '../../const/TokenApi';
 
@@ -90,14 +89,17 @@ const Board: React.FC = () => {
   };
 
   useEffect(() => {
-    if (activeFilter === 'all') {
-      fetchPosts();
-    } else if (activeFilter === 'myposts') {
-      fetchMyPosts();
-    } else if (activeFilter === 'likes') {
-      fetchLikedPosts();
-    }
-  }, [activeCategory, activeFilter, activeSort]);
+    const fetchData = async () => {
+      if (title === 'Community') {
+        await fetchPosts();
+      } else if (title === '내가 좋아요한 글') {
+        await fetchLikedPosts();
+      } else if (title === '내가 작성한 글') {
+        await fetchMyPosts();
+      }
+    };
+    fetchData();
+  }, [activeCategory, title]);
 
   useEffect(() => {
     const applySearchFilter = (posts: BoardPost[]) => {
@@ -149,6 +151,10 @@ const Board: React.FC = () => {
 
   const handleCategoryClick = (category: string) => {
     setActiveCategory(category);
+    setPage(1);
+
+    fetchPosts(); // 모든 카테고리에서 데이터를 가져오도록 호출
+
     navigate(`/board?category=${category}&filter=${activeFilter}`);
   };
 
