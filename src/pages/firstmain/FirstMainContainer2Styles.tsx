@@ -66,13 +66,57 @@ export const Text3 = styled.h1`
 
 export const Project1 = styled.img`
   position: absolute;
-  left: 12rem;
-  top: 20rem;
+  left: 17rem;
+  top: 33rem;
+  width: 300px;
+  height: auto;
   ${animationCSS};
 `;
 export const Project2 = styled.img`
   position: absolute;
-  right: 12rem;
+  right: 15rem;
   top: 35rem;
+  width: 300px;
+  height: auto;
+  ${animationCSS};
+`;
+export const Project3 = styled.img`
+  position: absolute;
+  left: 9rem;
+  top: 22rem;
+  width: 300px;
+  height: auto;
+  border-radius: 30px;
+
+  ${animationCSS};
+`;
+export const Project4 = styled.img`
+  position: absolute;
+  left: 22rem;
+  top: 1rem;
+  width: 300px;
+  height: auto;
+  border-radius: 30px;
+
+  ${animationCSS};
+`;
+export const Project5 = styled.img`
+  position: absolute;
+  right: 10rem;
+  top: 10rem;
+  width: 250px;
+  height: auto;
+  border-radius: 30px;
+
+  ${animationCSS};
+`;
+export const Project6 = styled.img`
+  position: absolute;
+  right: 27rem;
+  top: 5rem;
+  width: 300px;
+  height: auto;
+  border-radius: 30px;
+
   ${animationCSS};
 `;
