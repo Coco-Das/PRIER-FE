@@ -91,9 +91,13 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
           <BackgroundContainer
             key={post.postId}
             isActive={post.postId === activePostId}
-            onClick={() => handlePostClick(post.postId)}
+            style={{ position: 'relative' }}
           >
-            <PostBox category={post.category} style={{ cursor: 'pointer' }}>
+            <PostBox
+              category={post.category}
+              onClick={() => handlePostClick(post.postId)}
+              style={{ cursor: 'pointer' }}
+            >
               <UserContainer>
                 <Avatar
                   category={post.category}
@@ -123,7 +127,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                 {userId === post.writerId && (
                   <div
                     style={{ marginLeft: 'auto', cursor: 'pointer' }}
-                    onClick={(e: React.MouseEvent) => e.stopPropagation()}
+                    onClick={(e: React.MouseEvent) => e.stopPropagation()} // 이벤트 전파 차단
                   >
                     <PostMenu postId={post.postId} title={post.title} insidePostBox />
                   </div>
@@ -131,7 +135,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
               </UserContainer>
               <ContentContainer
                 className="flex flex-col items-start self-center w-[100%]"
-                style={{ paddingLeft: '50px', paddingRight: '50px' }}
+                style={{ paddingLeft: '50px', paddingRight: '50px', paddingBottom: '50px' }}
               >
                 <h1 className="text-xl font-bold mb-8">{post.title}</h1>
                 {post.media && post.media.length > 0 ? (
@@ -149,25 +153,28 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                   </p>
                 )}
               </ContentContainer>
-              <LikesContainer>
-                <Likes>Likes {likeState.likeCount}</Likes>
-                <label className="ui-like" style={{ cursor: 'pointer' }}>
-                  <input
-                    type="checkbox"
-                    checked={currentIsLiked}
-                    onChange={async e => {
-                      e.stopPropagation();
-                      await toggleLike(post.postId, currentIsLiked);
-                    }}
-                  />
-                  <div className="like">
-                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="">
-                      <path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path>
-                    </svg>
-                  </div>
-                </label>
-              </LikesContainer>
             </PostBox>
+            <LikesContainer
+              style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1, marginBottom: '10px' }}
+              onClick={(e: React.MouseEvent) => e.stopPropagation()}
+            >
+              <Likes>Likes {likeState.likeCount}</Likes>
+              <label className="ui-like" style={{ cursor: 'pointer' }}>
+                <input
+                  type="checkbox"
+                  checked={currentIsLiked}
+                  onChange={async e => {
+                    e.stopPropagation(); // 이벤트 전파 차단
+                    await toggleLike(post.postId, currentIsLiked);
+                  }}
+                />
+                <div className="like">
+                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="">
+                    <path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path>
+                  </svg>
+                </div>
+              </label>
+            </LikesContainer>
           </BackgroundContainer>
         );
       })}
