@@ -453,6 +453,7 @@ export const CreateTest = () => {
                 selected={endDate}
                 onChange={(date: Date) => setEndDate(date)}
                 dateFormat="yyyy-MM-dd"
+                minDate={startDate}
                 placeholderText="종료 날짜"
                 customInput={<Input style={{ width: '90%', textAlign: 'center', cursor: 'pointer' }} />}
               />
