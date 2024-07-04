@@ -22,7 +22,7 @@ import {
   StartButton,
   Text,
 } from './FirstMainContainer1Styles';
-import { Text2, Text3, Project1, Project2 } from './FirstMainContainer2Styles';
+import { Text2, Text3, Project1, Project2, Project3, Project4, Project5, Project6 } from './FirstMainContainer2Styles';
 import { ThirdContainer, Text4, Review1, Review2, Review3, Review4, Review5 } from './FirstMainContainer3Styles';
 import firstmainimg1 from '../../assets/FirstMainImg1.png';
 import firstmainimg2 from '../../assets/FirstMainImg2.png';
@@ -42,6 +42,10 @@ import firstmainimg15 from '../../assets/FirstMainImg15.png';
 import logo from '../../assets/Logo-firstMain.png';
 import ProjectImg1 from '../../assets/ProjectImg1.png';
 import ProjectImg2 from '../../assets/ProjectImg2.png';
+import ProjectImg3 from '../../assets/ProjectImg3.png';
+import ProjectImg4 from '../../assets/ProjectImg4.png';
+import ProjectImg5 from '../../assets/ProjectImg5.png';
+import ProjectImg6 from '../../assets/ProjectImg6.png';
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -189,6 +193,10 @@ const FirstMain = () => {
         </Text3>
         <Project1 src={ProjectImg1} />
         <Project2 src={ProjectImg2} />
+        <Project3 src={ProjectImg3} />
+        <Project4 src={ProjectImg4} />
+        <Project5 src={ProjectImg5} />
+        <Project6 src={ProjectImg6} />
       </FirstContainer>
       <ThirdContainer ref={thirdContainerRef}>
         <Text2>실시간으로 등록되는 리뷰들</Text2>

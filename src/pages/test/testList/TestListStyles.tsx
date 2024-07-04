@@ -38,10 +38,10 @@ export const ImageWrapper = styled.div`
 `;
 export const Img = styled.img`
   object-fit: cover;
+  align-self: center;
   border-radius: 15px;
   width: 100%;
   height: 70%;
-  /* border: 1px solid red; */
 `;
 export const DivWrapper = styled.div`
   width: 35%;
@@ -49,6 +49,10 @@ export const DivWrapper = styled.div`
   display: flex;
   flex-direction: column;
   gap: 10px;
+`;
+export const LinkImage = styled.img`
+  width: 20px;
+  height: 20px;
 `;
 export const PurpleDiv = styled.div`
   background-color: #b193d040;
