@@ -10,6 +10,7 @@ import {
   Modifier,
   DraftHandleValue,
   convertToRaw,
+  RawDraftContentState,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import {
@@ -38,12 +39,11 @@ import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import TextEditorToolbar from '../../components/board/TextEditorToolbar';
 import CustomAlert from '../../components/utils/CustomAlert';
-import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
+import { API_BASE_URL } from '../../const/TokenApi';
 import { useUserStore } from '../../states/user/UserStore';
 import Snackbar from '../../components/user/Snackbar';
 
 const { hasCommandModifier } = KeyBindingUtil;
-const storedUserId = localStorage.getItem('userId');
 const styleMap = {
   RED: { color: 'red' },
   ORANGE: { color: 'orange' },
@@ -55,6 +55,11 @@ const styleMap = {
   BLACK: { color: 'black' },
   WHITE: { color: 'white' },
   BACKGROUND_YELLOW: { backgroundColor: 'yellow' },
+  // 폰트 크기 스타일 추가
+  ...Array.from({ length: 100 }, (_, i) => i + 1).reduce((acc, size) => {
+    acc[`FONTSIZE_${size}`] = { fontSize: `${size}px` };
+    return acc;
+  }, {} as Record<string, React.CSSProperties>),
 };
 
 // 링크 엔티티를 찾는 전략을 정의합니다.
@@ -94,6 +99,7 @@ const CreateBoard: React.FC = () => {
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
   const profileNickname = sessionStorage.getItem('nickname');
   const profileImg = sessionStorage.getItem('profileImg') || userAvatar;
+
   // 에디터 변경 핸들러
   const handleEditorChange = (state: EditorState) => {
     setEditorState(state);
@@ -189,8 +195,10 @@ const CreateBoard: React.FC = () => {
   // 게시물 생성 확인 핸들러
   const confirmCreateBoard = async () => {
     const contentState = editorState.getCurrentContent();
-    const contentRaw = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
-    const contentString = JSON.stringify(contentRaw); // Raw 데이터를 문자열로 변환
+    const rawContent = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
+    const filteredContent = filterFontSizeStyles(rawContent);
+    const contentString = JSON.stringify(filteredContent); // Raw 데이터를 문자열로 변환
+
     const formData = new FormData();
     formData.append(
       'dto',
@@ -239,6 +247,17 @@ const CreateBoard: React.FC = () => {
       return;
     }
     setShowCreateBoardAlert(true);
+  };
+
+  // 폰트 크기 스타일 필터링 함수
+  const filterFontSizeStyles = (content: RawDraftContentState): RawDraftContentState => {
+    const newBlocks = content.blocks.map(block => {
+      const newInlineStyleRanges = block.inlineStyleRanges.reduce((acc, style) => {
+        return acc.concat(style);
+      }, [] as typeof block.inlineStyleRanges);
+      return { ...block, inlineStyleRanges: newInlineStyleRanges };
+    });
+    return { ...content, blocks: newBlocks };
   };
 
   return (
@@ -292,7 +311,15 @@ const CreateBoard: React.FC = () => {
           </UserContainer>
           <ContentContainer>
             <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
-            <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '10px', minHeight: '400px' }}>
+            <div
+              style={{
+                border: '1px solid #ccc',
+                borderRadius: '5px',
+                padding: '10px',
+                minHeight: '400px',
+                fontSize: '12px',
+              }}
+            >
               <Editor
                 editorState={editorState}
                 customStyleMap={styleMap}
@@ -317,7 +344,7 @@ const CreateBoard: React.FC = () => {
         </PostBox>
         <div>
           <Button onClick={handleCompleteClick} className="ml-auto">
-            <ButtonText>완료</ButtonText>
+            완료
           </Button>
           {showCreateBoardAlert && (
             <CustomAlert

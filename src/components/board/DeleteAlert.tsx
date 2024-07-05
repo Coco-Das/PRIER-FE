@@ -19,7 +19,8 @@ const ModalOverlay = styled.div<{ insidePostBox?: boolean }>`
   display: flex;
   justify-content: center;
   align-items: center;
-  z-index: 2;
+  z-index: 1000;
+  border-radius: 20px;
 `;
 
 const ModalContent = styled.div`
@@ -33,15 +34,8 @@ const ModalContent = styled.div`
   border: 1px solid transparent;
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
-  z-index: 3;
-
-  @media (max-width: 799px) {
-    height: 30%;
-  }
-
-  @media (min-width: 800px) {
-    height: 80%;
-  }
+  z-index: 1001; /* z-index 값을 1001로 설정하여 모달 내용이 오버레이 위에 나타나도록 합니다. */
+  height: 200px;
 `;
 const AgreeButton = styled.button`
   background-color: #4188fe;

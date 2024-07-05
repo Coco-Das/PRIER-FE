@@ -1,6 +1,8 @@
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { createGlobalStyle } from 'styled-components';
+import { FetchAllProject } from '../../services/MainPageApi';
+
 import {
   FirstContainer,
   Img1,
@@ -22,7 +24,7 @@ import {
   StartButton,
   Text,
 } from './FirstMainContainer1Styles';
-import { Text2, Text3, Project1, Project2 } from './FirstMainContainer2Styles';
+import { Text2, Text3, Project1, Project2, Project3, Project4, Project5, Project6 } from './FirstMainContainer2Styles';
 import { ThirdContainer, Text4, Review1, Review2, Review3, Review4, Review5 } from './FirstMainContainer3Styles';
 import firstmainimg1 from '../../assets/FirstMainImg1.png';
 import firstmainimg2 from '../../assets/FirstMainImg2.png';
@@ -44,6 +46,11 @@ import ProjectImg1 from '../../assets/ProjectImg1.png';
 import ProjectImg2 from '../../assets/ProjectImg2.png';
 import Star from '../../assets/star.json';
 import Lottie from '../../components/utils/LottieComponent';
+import ProjectImg3 from '../../assets/ProjectImg3.png';
+import ProjectImg4 from '../../assets/ProjectImg4.png';
+import ProjectImg5 from '../../assets/ProjectImg5.png';
+import ProjectImg6 from '../../assets/ProjectImg6.png';
+
 
 const GlobalStyle = createGlobalStyle`
   body {
@@ -89,7 +96,20 @@ const FirstMain = () => {
   const thirdContainerRef = useRef<HTMLDivElement>(null);
   const endRef = useRef<HTMLDivElement>(null);
   const navigate = useNavigate();
+  const [totalElements, setTotalElements] = useState(0);
 
+  useEffect(() => {
+    const fetchTotalElements = async () => {
+      try {
+        const projectData = await FetchAllProject(1, 0);
+        setTotalElements(projectData.totalElements);
+      } catch (error) {
+        console.error('총 프로젝트 개수 가져오기 실패:', error);
+      }
+    };
+
+    fetchTotalElements();
+  }, []);
   useEffect(() => {
     const handleScroll = (entries: IntersectionObserverEntry[]) => {
       entries.forEach(entry => {
@@ -186,11 +206,15 @@ const FirstMain = () => {
       <FirstContainer ref={secondContainerRef}>
         <Text2>프리어와 함께하는 프로젝트</Text2>
         <Text3>
-          다양한 카테고리의 프로젝트들이 1,536개 <br />
+          다양한 카테고리의 프로젝트들이 {totalElements}개 <br />
           등록되고 있습니다.
         </Text3>
         <Project1 src={ProjectImg1} />
         <Project2 src={ProjectImg2} />
+        <Project3 src={ProjectImg3} />
+        <Project4 src={ProjectImg4} />
+        <Project5 src={ProjectImg5} />
+        <Project6 src={ProjectImg6} />
       </FirstContainer>
       <ThirdContainer ref={thirdContainerRef}>
         <Text2>실시간으로 등록되는 리뷰들</Text2>
