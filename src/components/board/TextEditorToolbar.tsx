@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { EditorState, RichUtils, DraftInlineStyleType, Modifier } from 'draft-js';
+import { EditorState, RichUtils, Modifier } from 'draft-js';
 import {
   ToggleButtonGroup,
   ToggleButton,
@@ -28,11 +28,12 @@ const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEd
   const fontSizes = ['9', '10', '12', '15', '16', '18', '20', '24', '28', '30', '32'];
   const fontColors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'black', 'white'];
 
-  const applyStyle = (style: DraftInlineStyleType) => {
+  const applyStyle = (style: string) => {
     onEditorChange(RichUtils.toggleInlineStyle(editorState, style));
   };
 
   const applyFontSize = (size: string) => {
+    console.log(`Applying font size: ${size}`);
     const selection = editorState.getSelection();
     const contentState = Modifier.applyInlineStyle(editorState.getCurrentContent(), selection, `FONTSIZE_${size}`);
     onEditorChange(EditorState.push(editorState, contentState, 'change-inline-style'));
@@ -127,7 +128,7 @@ const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEd
       <ToggleButtonGroup size="small" exclusive>
         <ToggleButton
           value="fontColor"
-          selected={currentStyle.has(fontColor.toUpperCase() as DraftInlineStyleType)}
+          selected={currentStyle.has(fontColor.toUpperCase())}
           onClick={handleFontColorClick}
         >
           <FormatColorText style={{ color: fontColor }} />
