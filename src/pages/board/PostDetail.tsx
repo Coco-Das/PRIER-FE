@@ -69,6 +69,11 @@ const styleMap = {
   BLACK: { color: 'black' },
   WHITE: { color: 'white' },
   BACKGROUND_YELLOW: { backgroundColor: 'yellow' },
+  // 폰트 크기 스타일 추가
+  ...Array.from({ length: 1000 }, (_, i) => i + 1).reduce((acc, size) => {
+    acc[`FONTSIZE_${size}`] = { fontSize: `${size}px` };
+    return acc;
+  }, {} as Record<string, React.CSSProperties>),
 };
 
 // 링크 엔티티를 찾는 전략을 정의합니다.
