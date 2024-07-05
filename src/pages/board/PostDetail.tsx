@@ -69,6 +69,11 @@ const styleMap = {
   BLACK: { color: 'black' },
   WHITE: { color: 'white' },
   BACKGROUND_YELLOW: { backgroundColor: 'yellow' },
+  // 폰트 크기 스타일 추가
+  ...Array.from({ length: 1000 }, (_, i) => i + 1).reduce((acc, size) => {
+    acc[`FONTSIZE_${size}`] = { fontSize: `${size}px` };
+    return acc;
+  }, {} as Record<string, React.CSSProperties>),
 };
 
 // 링크 엔티티를 찾는 전략을 정의합니다.
@@ -151,26 +156,23 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const userProfile = useUserStore(state => state.userProfile);
 
   const { likes, toggleLike, isLikedByMe } = useLike();
-
+  const fetchPost = async () => {
+    setLoading(true);
+    try {
+      const response = await API_BASE_URL.get(`/posts/${postId}`);
+      setPost(response.data);
+      console.log(response.data);
+    } catch (error) {
+      console.error('게시글을 가져오는 중 오류 발생:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
   useEffect(() => {
-    const fetchPost = async () => {
-      setLoading(true);
-      try {
-        const response = await API_BASE_URL.get(`/posts/${postId}`);
-        setPost(response.data);
-        console.log(response.data);
-      } catch (error) {
-        console.error('게시글을 가져오는 중 오류 발생:', error);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchPost();
   }, [postId]);
-
   if (!post) {
-    return <div>게시글을 찾을 수 없습니다.</div>;
+    return <div></div>;
   }
 
   const handleProfileClick = async (e: React.MouseEvent, writerId: number) => {
@@ -209,6 +211,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
             content: newComment,
           });
 
+          fetchPost();
           if (response.status === 201) {
             const newCommentData: Comment = {
               writerId: USER_ID!,
@@ -276,127 +279,135 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
       {loading ? (
         <Loading />
       ) : (
-        <PostContentContainer className="self-start mt-0" category={post.category}>
-          <UserContainer className="mt-[-16px]">
-            <Avatar
-              className="ml-[-8px] mt-[5px]"
-              onClick={e => handleProfileClick(e, post.writerId)}
-              category={post.category}
-            >
-              <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : post.writerProfileUrl} alt="Avatar" />
-            </Avatar>
-            <AuthorContainer>
-              <Author onClick={e => handleProfileClick(e, post.writerId)} category={post.category}>
-                {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
-              </Author>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
-                <TimeViews>{formatDate(post.createdAt)}</TimeViews>
-                <div style={{ width: '4px', height: '4px', backgroundColor: '#828282', borderRadius: '50%' }}></div>
-                <TimeViews>조회수 {post.views}회 </TimeViews>
-              </div>
-            </AuthorContainer>
-            {USER_ID === post.writerId && (
-              <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
-                <PostMenu postId={post.postId} title={post.title} />
-              </div>
-            )}
-          </UserContainer>
-          <ContentContainer
-            className="flex flex-col items-start self-center w-[100%]"
-            style={{ paddingLeft: '50px', paddingRight: '50px' }}
-          >
-            <h1 className="text-xl font-bold mb-8">{post.title}</h1>
-            <Editor editorState={editorState} customStyleMap={styleMap} readOnly={true} onChange={() => {}} />
-
-            {post.media && post.media.length > 0 && (
-              <div className="flex flex-wrap gap-4">
-                {post.media.map((mediaItem, index) => (
-                  <Image
-                    key={index}
-                    src={mediaItem.s3Url}
-                    alt={mediaItem.metadata}
-                    onClick={() => openModal(mediaItem.s3Url)}
-                  />
-                ))}
-              </div>
-            )}
-          </ContentContainer>
-          <LikeBackContainer>
-            <button onClick={onBackToList} className="w-[15px] mt-[10px]">
-              <Backto src={backto} />
-            </button>
-            <LikesContainer>
-              <Likes>Likes {likeState.likeCount}</Likes>
-              <label className="ui-like" style={{ cursor: 'pointer' }}>
-                <input
-                  type="checkbox"
-                  checked={currentIsLiked}
-                  onChange={async e => {
-                    e.stopPropagation();
-                    await toggleLike(post.postId, currentIsLiked);
-                  }}
+        <>
+          <PostContentContainer className="self-start mt-0" category={post.category}>
+            <UserContainer className="mt-[-16px]">
+              <Avatar
+                className="ml-[-8px] mt-[5px]"
+                onClick={e => handleProfileClick(e, post.writerId)}
+                category={post.category}
+              >
+                <AvatarImage
+                  src={post.category === 'NOTICE' ? announcementAvatar : post.writerProfileUrl}
+                  alt="Avatar"
                 />
-                <div className="like">
-                  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="">
-                    <path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path>
-                  </svg>
+              </Avatar>
+              <AuthorContainer>
+                <Author onClick={e => handleProfileClick(e, post.writerId)} category={post.category}>
+                  {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
+                </Author>
+                <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
+                  <TimeViews>{formatDate(post.createdAt)}</TimeViews>
+                  <div style={{ width: '4px', height: '4px', backgroundColor: '#828282', borderRadius: '50%' }}></div>
+                  <TimeViews>조회수 {post.views}회 </TimeViews>
                 </div>
-              </label>
-            </LikesContainer>
-          </LikeBackContainer>
-        </PostContentContainer>
-      )}
-      <CommentsContainer className="mt-0">
-        {loading ? (
-          <Loading />
-        ) : post.comments.length === 0 ? (
-          <div className="flex flex-col items-center">
-            <p className="text-lg font-semibold">아직 댓글이 없습니다.</p>
-            <p className="text-sm text-gray-600 mt-2">댓글을 남겨보세요.</p>
-          </div>
-        ) : (
-          post.comments.map(comment => {
-            return (
-              <CommentContainer key={comment.commentId} className="flex justify-between">
-                <CommentAvatar onClick={e => handleProfileClick(e, comment.writerId)}>
-                  <AvatarImage src={comment.writerProfileUrl} alt="Avatar" />
-                </CommentAvatar>
-                <CommentContent className="flex-1">
-                  <div className="flex flex-row items-center space-x-2 justify-between">
-                    <div className="flex flex-row items-center space-x-2">
-                      <CommentAuthor onClick={e => handleProfileClick(e, comment.writerId)} category={post.category}>
-                        {comment.nickname}
-                      </CommentAuthor>
-                      <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
-                    </div>
-                    {USER_ID === comment.writerId && (
-                      <div>
-                        <CommentMenu
-                          commentId={comment.commentId}
-                          postId={post.postId}
-                          title={post.title}
-                          onEditClick={handleEditComment}
-                          onDeleteSuccess={() => handleDeleteComment(comment.commentId)}
-                          commentContent={comment.content}
-                        />
-                      </div>
-                    )}
-                  </div>
-                  <CommentText>{comment.content}</CommentText>
-                </CommentContent>
-              </CommentContainer>
-            );
-          })
-        )}
-        <CommentInputContainer className="">
-          <CommentInput type="text" value={newComment} onChange={handleCommentChange} placeholder="댓글 달기..." />
-          <CommentButton onClick={handleCommentSubmit} disabled={!newComment.trim()}>
-            {editingCommentId !== null ? '수정' : '게시'}
-          </CommentButton>
-        </CommentInputContainer>
-      </CommentsContainer>
+              </AuthorContainer>
+              {USER_ID === post.writerId && (
+                <div style={{ marginLeft: 'auto' }} onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+                  <PostMenu postId={post.postId} title={post.title} />
+                </div>
+              )}
+            </UserContainer>
+            <ContentContainer
+              className="flex flex-col items-start self-center w-[100%]"
+              style={{ paddingLeft: '50px', paddingRight: '50px' }}
+            >
+              <h1 className="text-xl font-bold mb-8">{post.title}</h1>
+              <Editor editorState={editorState} customStyleMap={styleMap} readOnly={true} onChange={() => {}} />
 
-      {isModalOpen && <ImageModal imageUrl={modalImageUrl} onClose={closeModal} />}
+              {post.media && post.media.length > 0 && (
+                <div className="flex flex-wrap gap-4">
+                  {post.media.map((mediaItem, index) => (
+                    <Image
+                      key={index}
+                      src={mediaItem.s3Url}
+                      alt={mediaItem.metadata}
+                      onClick={() => openModal(mediaItem.s3Url)}
+                    />
+                  ))}
+                </div>
+              )}
+            </ContentContainer>
+            <LikeBackContainer>
+              <button onClick={onBackToList} className="w-[15px] mt-[10px]">
+                <Backto src={backto} />
+              </button>
+              <LikesContainer style={{ zIndex: 1 }}>
+                <Likes>Likes {likeState.likeCount}</Likes>
+                <label className="ui-like" style={{ cursor: 'pointer' }}>
+                  <input
+                    type="checkbox"
+                    checked={currentIsLiked}
+                    onChange={async e => {
+                      e.stopPropagation();
+                      await toggleLike(post.postId, currentIsLiked);
+                    }}
+                  />
+                  <div className="like">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="">
+                      <path d="M20.808,11.079C19.829,16.132,12,20.5,12,20.5s-7.829-4.368-8.808-9.421C2.227,6.1,5.066,3.5,8,3.5a4.444,4.444,0,0,1,4,2,4.444,4.444,0,0,1,4-2C18.934,3.5,21.773,6.1,20.808,11.079Z"></path>
+                    </svg>
+                  </div>
+                </label>
+              </LikesContainer>
+            </LikeBackContainer>
+          </PostContentContainer>
+          <CommentsContainer className="mt-0">
+            {loading ? (
+              <Loading />
+            ) : post.comments.length === 0 ? (
+              <div className="flex flex-col items-center">
+                <p className="text-lg font-semibold">아직 댓글이 없습니다.</p>
+                <p className="text-sm text-gray-600 mt-2">댓글을 남겨보세요.</p>
+              </div>
+            ) : (
+              post.comments.map(comment => {
+                return (
+                  <CommentContainer key={comment.commentId} className="flex justify-between">
+                    <CommentAvatar onClick={e => handleProfileClick(e, comment.writerId)}>
+                      <AvatarImage src={comment.writerProfileUrl} alt="Avatar" />
+                    </CommentAvatar>
+                    <CommentContent className="flex-1">
+                      <div className="flex flex-row items-center space-x-2 justify-between">
+                        <div className="flex flex-row items-center space-x-2">
+                          <CommentAuthor
+                            onClick={e => handleProfileClick(e, comment.writerId)}
+                            category={post.category}
+                          >
+                            {comment.nickname}
+                          </CommentAuthor>
+                          <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
+                        </div>
+                        {USER_ID === comment.writerId && (
+                          <div>
+                            <CommentMenu
+                              commentId={comment.commentId}
+                              postId={post.postId}
+                              title={post.title}
+                              onEditClick={handleEditComment}
+                              onDeleteSuccess={() => handleDeleteComment(comment.commentId)}
+                              commentContent={comment.content}
+                            />
+                          </div>
+                        )}
+                      </div>
+                      <CommentText>{comment.content}</CommentText>
+                    </CommentContent>
+                  </CommentContainer>
+                );
+              })
+            )}
+            <CommentInputContainer className="">
+              <CommentInput type="text" value={newComment} onChange={handleCommentChange} placeholder="댓글 달기..." />
+              <CommentButton onClick={handleCommentSubmit} disabled={!newComment.trim()}>
+                {editingCommentId !== null ? '수정' : '게시'}
+              </CommentButton>
+            </CommentInputContainer>
+          </CommentsContainer>
+
+          {isModalOpen && <ImageModal imageUrl={modalImageUrl} onClose={closeModal} />}
+        </>
+      )}
     </PostDetailContainer>
   );
 };

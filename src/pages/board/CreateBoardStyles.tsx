@@ -93,6 +93,18 @@ export const Button = styled.div`
   height: 40px;
   width: 100px;
   margin-bottom: 30px;
+  color: #ffffff;
+  text-align: left;
+  font-size: 16px;
+  font-weight: 700;
+  &:hover {
+    background-color: #cc9af5;
+    color: #9723f6;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
 export const ButtonText = styled.div`
@@ -161,15 +173,13 @@ export const DeleteButton = styled.button`
 `;
 
 export const FileCount = styled.div`
-  background: #24be87;
-  background: linear-gradient(0deg, #24be87 0%, #24be87 100%);
+  color: #24be87;
   border: none;
   width: 150px;
   height: 30px;
-  color: #fff;
+  //color: #fff;
   border-radius: 5px;
   font-weight: 500;
-  cursor: pointer;
   padding: 4px 0;
   transition: all 0.3s ease;
   position: relative;
@@ -177,8 +187,6 @@ export const FileCount = styled.div`
   text-align: center;
   margin-left: 5px;
   margin-top: 10px;
-  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, 0.1),
-    4px 4px 5px 0px rgba(0, 0, 0, 0.1);
   outline: none;
   white-space: nowrap;
 
@@ -205,8 +213,6 @@ export const Btn1 = styled.button`
   position: relative;
   display: inline-block;
   margin-left: 5px;
-  box-shadow: inset 2px 2px 2px 0px rgba(255, 255, 255, 0.5), 7px 7px 20px 0px rgba(0, 0, 0, 0.1),
-    4px 4px 5px 0px rgba(0, 0, 0, 0.1);
   outline: none;
   white-space: nowrap;
 
@@ -216,17 +222,25 @@ export const Btn1 = styled.button`
 // btn-1 스타일을 확장
 export const CustomButton = styled(Btn1)`
   background: #004dff;
-  background: linear-gradient(0deg, #004dff 0%, #004dff 100%);
   border: none;
+  overflow: hidden;
 
   &:before {
     content: '';
-    height: 0%;
-    width: 2px;
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    width: 0;
+    background: rgba(255, 255, 255, 0.3);
+    transition: all 0.3s ease;
   }
 
   &:hover {
-    box-shadow: 4px 4px 6px 0 rgba(255, 255, 255, 0.5), -4px -4px 6px 0 rgba(116, 125, 136, 0.5),
-      inset -4px -4px 6px 0 rgba(255, 255, 255, 0.2), inset 4px 4px 6px 0 rgba(0, 0, 0, 0.4);
+    background: #003bb5;
+  }
+
+  &:hover:before {
+    width: 100%;
   }
 `;

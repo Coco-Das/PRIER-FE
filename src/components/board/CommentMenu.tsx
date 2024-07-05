@@ -65,7 +65,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
         >
           <MoreVert />
         </MenuButton>
-        <Menu placement="bottom-end" sx={{ zIndex: 0, border: 'none' }}>
+        <Menu placement="bottom-end" sx={{ zIndex: 2, border: 'none' }}>
           <MenuItem onClick={() => onEditClick(commentId)}>
             <ListItemDecorator>
               <Edit />

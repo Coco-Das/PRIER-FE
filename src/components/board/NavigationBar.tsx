@@ -71,6 +71,11 @@ const DropdownOption = styled.div<{ active?: boolean }>`
     background-color: #e1f9f0;
     color: #426e5e;
   }
+
+  &:active {
+    background: #24be87;
+    color: #ffff;
+  }
 `;
 
 const CustomCategoryButton = styled(CategoryButton)`
@@ -81,6 +86,10 @@ const CustomCategoryButton = styled(CategoryButton)`
   &:hover {
     background: #d9f2e9;
     color: #426e5e;
+  }
+  &:active {
+    background: #24be87;
+    color: #ffff;
   }
 `;
 const NavigationBar: React.FC<NavigationBarProps> = ({
@@ -155,7 +164,7 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
           </SegmentedControl>
         </SegmentedControlContainer>
         <Button as={Link} to="/CreateBoard">
-          <ButtonText>새 글 작성하기</ButtonText>
+          새 글 작성하기
         </Button>
       </BottomContainer>
       <div className="tabs flex flex-row gap-2 items-start justify-start relative">

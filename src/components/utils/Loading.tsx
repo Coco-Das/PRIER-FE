@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import styled, { keyframes } from 'styled-components';
 import Gif2 from '../../assets/projectloading.json';
 import Lottie from './LottieComponent';
@@ -55,17 +55,27 @@ const ShootingStar = styled.div`
 `;
 
 export const Loading = () => {
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const timer = setTimeout(() => setLoading(false), 3000);
+    return () => clearTimeout(timer);
+  }, []);
   const stars = Array.from({ length: 10 });
 
   return (
-    <Container>
-      <Lottie animationData={Gif2} loop={true} autoplay={true} style={{ width: '35%' }} />
-      {stars.map((_, index) => (
-        <ShootingStar
-          key={index}
-          style={{ top: `${Math.random() * 100}%`, animationDelay: `${Math.random() * 10}s` }}
-        />
-      ))}
-    </Container>
+    <>
+      {loading && (
+        <Container>
+          <Lottie animationData={Gif2} loop={true} autoplay={true} style={{ width: '35%' }} />
+          {stars.map((_, index) => (
+            <ShootingStar
+              key={index}
+              style={{ top: `${Math.random() * 100}%`, animationDelay: `${Math.random() * 10}s` }}
+            />
+          ))}
+        </Container>
+      )}
+    </>
   );
 };
