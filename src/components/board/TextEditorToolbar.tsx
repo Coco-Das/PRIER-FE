@@ -37,7 +37,6 @@ const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEd
     const contentState = Modifier.applyInlineStyle(editorState.getCurrentContent(), selection, `FONTSIZE_${size}`);
     onEditorChange(EditorState.push(editorState, contentState, 'change-inline-style'));
     setFontSize(size);
-    handleClose();
   };
 
   const applyFontColor = (color: string) => {
@@ -49,9 +48,17 @@ const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEd
   };
 
   const handleFontSizeChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    const size = event.target.value;
-    setFontSize(size);
-    applyFontSize(size);
+    setFontSize(event.target.value);
+  };
+
+  const handleFontSizeKeyDown = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (event.key === 'Enter') {
+      const size = fontSize;
+      if (!isNaN(Number(size)) && Number(size) > 0) {
+        applyFontSize(size);
+        handleClose();
+      }
+    }
   };
 
   const handleClick = (event: React.MouseEvent<HTMLElement>) => {
@@ -94,6 +101,7 @@ const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEd
       <TextField
         value={fontSize}
         onChange={handleFontSizeChange}
+        onKeyDown={handleFontSizeKeyDown}
         style={{ width: '90px', height: '40px' }}
         inputProps={{
           style: { height: '7px' },
