@@ -43,7 +43,6 @@ import { useUserStore } from '../../states/user/UserStore';
 import Snackbar from '../../components/user/Snackbar';
 
 const { hasCommandModifier } = KeyBindingUtil;
-const storedUserId = localStorage.getItem('userId');
 const styleMap = {
   RED: { color: 'red' },
   ORANGE: { color: 'orange' },
@@ -317,7 +316,7 @@ const CreateBoard: React.FC = () => {
         </PostBox>
         <div>
           <Button onClick={handleCompleteClick} className="ml-auto">
-            <ButtonText>완료</ButtonText>
+            완료
           </Button>
           {showCreateBoardAlert && (
             <CustomAlert

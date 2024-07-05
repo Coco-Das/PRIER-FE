@@ -60,6 +60,19 @@ export const Button = styled.div`
   justify-content: center;
   height: 40px;
   margin-top: -10px;
+  color: #ffffff;
+  text-align: left;
+  font-size: 16px;
+  line-height: 150%;
+  font-weight: 700;
+  &:hover {
+    background-color: #cc9af5;
+    color: #9723f6;
+  }
+
+  &:active {
+    transform: scale(0.95);
+  }
 `;
 
 // 버튼 텍스트 스타일
