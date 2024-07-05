@@ -9,7 +9,7 @@ import {
   Author,
   TimeViews,
   ContentContainer,
-  LikesContainer,
+  ListLikesContainer,
   Likes,
   Image,
 } from './BoardStyles';
@@ -154,10 +154,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                 )}
               </ContentContainer>
             </PostBox>
-            <LikesContainer
-              style={{ position: 'absolute', bottom: '10px', right: '10px', zIndex: 1, marginBottom: '10px' }}
-              onClick={(e: React.MouseEvent) => e.stopPropagation()}
-            >
+            <ListLikesContainer onClick={(e: React.MouseEvent) => e.stopPropagation()}>
               <Likes>Likes {likeState.likeCount}</Likes>
               <label className="ui-like" style={{ cursor: 'pointer' }}>
                 <input
@@ -174,7 +171,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                   </svg>
                 </div>
               </label>
-            </LikesContainer>
+            </ListLikesContainer>
           </BackgroundContainer>
         );
       })}

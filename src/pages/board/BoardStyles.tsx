@@ -295,11 +295,23 @@ export const LikesContainer = styled.div`
   font-size: 16px;
   line-height: 150%;
   font-weight: 500;
-  z-index: 5;
+  z-index: 0;
+`;
+export const ListLikesContainer = styled.div`
+  display: flex;
+  font-size: 16px;
+  line-height: 150%;
+  font-weight: 500;
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  margin-bottom: 10px;
+  z-index: 0;
 `;
 
 export const Likes = styled.div`
   margin-right: 5px;
+  z-index: 0;
 `;
 
 export const LikeButton = styled.button`
@@ -311,6 +323,7 @@ export const LikeButton = styled.button`
   align-items: center;
   justify-content: center;
   transition: transform 0.1s ease-in-out;
+  z-index: 0;
 
   &:active {
     transform: scale(0.9);

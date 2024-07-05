@@ -7,6 +7,7 @@
   --icon-circle-border: 1px solid var(--icon-primary-color);
   --icon-circle-size: 35px;
   --icon-anmt-duration: 0.3s;
+  z-index: 0;
 }
 
 .ui-like input {

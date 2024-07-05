@@ -327,7 +327,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
               <button onClick={onBackToList} className="w-[15px] mt-[10px]">
                 <Backto src={backto} />
               </button>
-              <LikesContainer>
+              <LikesContainer style={{ zIndex: 1 }}>
                 <Likes>Likes {likeState.likeCount}</Likes>
                 <label className="ui-like" style={{ cursor: 'pointer' }}>
                   <input
