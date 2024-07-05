@@ -83,7 +83,7 @@ export const LinkButton = styled.div`
   border: none;
   border-radius: 8px;
   padding: 10px;
-  margin-left: auto;
+  align-self: end;
   margin-top: 1%;
   width: max-content;
   background-color: #b0c9ff;
