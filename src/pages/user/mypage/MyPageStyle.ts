@@ -117,11 +117,11 @@ interface AccountIconProps {
   hasHref?: boolean;
 }
 export const AccountIcon = styled.img<AccountIconProps>`
-  filter: ${({ hasHref }) => (hasHref ? 'none' : 'blur(1px)')};
+  filter: ${({ hasHref }) => (hasHref ? 'none' : 'blur(0.5px)')};
   width: 2.8rem;
 `;
 export const AccountGithub = styled.img<AccountIconProps>`
-  filter: ${({ hasHref }) => (hasHref ? 'none' : 'blur(1px)')};
+  filter: ${({ hasHref }) => (hasHref ? 'none' : 'blur(0.5px)')};
   width: 2.4rem;
   border: none;
   border-radius: 10px;

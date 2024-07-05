@@ -92,6 +92,7 @@ export const useUserStore = create<UserStore>(set => ({
     set(state => ({
       userProfile: { ...state.userProfile, imgUrl },
     }));
+    sessionStorage.setItem('profileImg', imgUrl);
   },
   setNickname: (nickname: string) => {
     set(state => ({
