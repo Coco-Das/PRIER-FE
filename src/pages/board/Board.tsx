@@ -88,16 +88,17 @@ const Board: React.FC = () => {
     }
   };
 
+  const fetchData = async () => {
+    if (title === 'Community') {
+      await fetchPosts();
+    } else if (title === '내가 좋아요한 글') {
+      await fetchLikedPosts();
+    } else if (title === '내가 작성한 글') {
+      await fetchMyPosts();
+    }
+  };
+
   useEffect(() => {
-    const fetchData = async () => {
-      if (title === 'Community') {
-        await fetchPosts();
-      } else if (title === '내가 좋아요한 글') {
-        await fetchLikedPosts();
-      } else if (title === '내가 작성한 글') {
-        await fetchMyPosts();
-      }
-    };
     fetchData();
   }, [activeCategory, title]);
 
@@ -182,7 +183,8 @@ const Board: React.FC = () => {
     navigate(`/board/post/${postId}`);
   };
 
-  const handleBackToList = () => {
+  const handleBackToList = async () => {
+    await fetchData(); // 필터에 맞는 데이터를 가져옴
     navigate(`/board?category=${activeCategory}&filter=${activeFilter}`);
   };
 

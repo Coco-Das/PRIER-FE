@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+
 interface CustomAlertProps {
   message: string;
   showButtons?: boolean;
@@ -21,6 +22,7 @@ const ModalOverlay = styled.div`
 `;
 
 const ModalContent = styled.div`
+  all: unset; // 모든 상속된 스타일 초기화
   padding: 30px;
   width: 30%;
   height: 30%;
@@ -31,6 +33,13 @@ const ModalContent = styled.div`
   border: 1px solid transparent;
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
+`;
+
+const MessageText = styled.p`
+  font-size: 1.2rem;
+  font-family: 'Paybooc', 'sans-serif';
+  text-align: center;
+  margin: 0;
 `;
 
 const AgreeButton = styled.button`
@@ -46,6 +55,7 @@ const AgreeButton = styled.button`
     transition: 0.3s;
   }
 `;
+
 const DisagreeButton = styled.button`
   background-color: #ffffff;
   color: #315af1;
@@ -64,7 +74,7 @@ const CustomAlert: React.FC<CustomAlertProps> = ({ message, showButtons = true, 
   return (
     <ModalOverlay>
       <ModalContent>
-        <p>{message}</p>
+        <MessageText>{message}</MessageText>
         {showButtons && (
           <span className="flex justify-center items-center gap-7">
             <AgreeButton onClick={onConfirm}>확인</AgreeButton>
