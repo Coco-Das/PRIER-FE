@@ -26,11 +26,11 @@ export const FirstContainer = styled.div`
 `;
 
 export const Logo = styled.img`
-  width: 40rem;
-  height: 12rem;
+  width: 30rem;
+  height: 9rem;
   margin-top: -10rem;
   position: relative;
-  left: 5rem;
+  left: 3rem;
   ${animationCSS};
 `;
 
@@ -130,105 +130,105 @@ export const StartButton = styled.button`
 
 export const Img1 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   left: 4rem;
   top: 1rem;
 `;
 
 export const Img2 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   left: 18rem;
   top: 2rem;
 `;
 
 export const Img3 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   left: 32rem;
   top: 1rem;
 `;
 
 export const Img4 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   right: 13rem;
   top: 0.5rem;
 `;
 
 export const Img5 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   right: 4rem;
   top: 4rem;
 `;
 
 export const Img6 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   left: 14rem;
   top: 14rem;
 `;
 
 export const Img7 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   left: 6rem;
   top: 20rem;
 `;
 
 export const Img8 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   left: -3rem;
   top: 34rem;
 `;
 
 export const Img9 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   left: 18rem;
   top: 41rem;
 `;
 
 export const Img10 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   left: 25rem;
   top: 38rem;
 `;
 
 export const Img11 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   right: 34rem;
   top: 35rem;
 `;
 
 export const Img12 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   right: 23rem;
   bottom: 6rem;
 `;
 
 export const Img13 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   right: 20rem;
   top: 30rem;
 `;
 
 export const Img14 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   right: 4rem;
   top: 24rem;
 `;
 
 export const Img15 = styled.img`
   position: absolute;
-
+  ${animationCSS};
   right: 0rem;
   top: 33rem;
 `;

@@ -78,7 +78,7 @@ export default function Alarm() {
       sessionStorage.setItem('responseAmount', '0');
       sessionStorage.setItem('commentAmount', '0');
       setIsOpen(false);
-    }, 5000);
+    }, 4000);
 
     const expandTimer = setTimeout(() => {
       setIsExpanded(true);
