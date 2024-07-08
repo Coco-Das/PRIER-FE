@@ -15,7 +15,7 @@ export const CreateContainer = styled.div`
   align-self: center;
   justify-content: center;
   width: 100%;
-  max-width: 1000px;
+  max-width: 730px;
 `;
 
 export const Header = styled.div`
@@ -72,7 +72,7 @@ export const AvatarImage = styled.img`
 export const AuthorContainer = styled.div`
   display: flex;
   flex-direction: column;
-  margin-right: 10vh;
+  margin-right: 5vh;
 `;
 
 export const Author = styled.div`
@@ -173,7 +173,7 @@ export const DeleteButton = styled.button`
 `;
 
 export const FileCount = styled.div`
-  color: #24be87;
+  color: #004dff;
   border: none;
   width: 150px;
   height: 30px;
@@ -209,7 +209,6 @@ export const Btn1 = styled.button`
   padding: 0 15px;
   background: transparent;
   cursor: pointer;
-  transition: all 0.3s ease;
   position: relative;
   display: inline-block;
   margin-left: 5px;
@@ -224,23 +223,4 @@ export const CustomButton = styled(Btn1)`
   background: #004dff;
   border: none;
   overflow: hidden;
-
-  &:before {
-    content: '';
-    position: absolute;
-    left: 0;
-    top: 0;
-    height: 100%;
-    width: 0;
-    background: rgba(255, 255, 255, 0.3);
-    transition: all 0.3s ease;
-  }
-
-  &:hover {
-    background: #003bb5;
-  }
-
-  &:hover:before {
-    width: 100%;
-  }
 `;
