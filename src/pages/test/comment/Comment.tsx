@@ -1,4 +1,4 @@
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
 import { useEffect, useRef, useState } from 'react';
 import { API_BASE_URL } from '../../../const/TokenApi';
@@ -48,6 +48,7 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
   const [showAlert, setShowAlert] = useState(false);
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const navigate = useNavigate();
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -222,8 +223,14 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
                   alignItems: 'center',
                 }}
               >
-                <ProfileImg src={comment.profileUrl}></ProfileImg>
-                <strong className="ml-1">{comment.userName}</strong>
+                <div
+                  onClick={() => navigate(`/profile/${comment.userId}`)}
+                  style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                >
+                  <ProfileImg src={comment.profileUrl}></ProfileImg>
+                  <strong className="ml-1">{comment.userName}</strong>
+                </div>
+
                 {editingCommentId === comment.commentId ? (
                   <StarRating initialScore={editingScore} onRatingChange={handleRatingChange} />
                 ) : (
