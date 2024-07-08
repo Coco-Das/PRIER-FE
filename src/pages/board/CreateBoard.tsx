@@ -33,7 +33,7 @@ import {
   FileCount,
   Header,
 } from './CreateBoardStyles';
-import userAvatar from '../../assets/user.svg';
+import userAvatar from '../../assets/userProfile.png';
 import Select, { selectClasses } from '@mui/joy/Select';
 import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
