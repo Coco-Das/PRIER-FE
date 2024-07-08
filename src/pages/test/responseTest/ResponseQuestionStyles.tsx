@@ -1,16 +1,20 @@
 import styled from 'styled-components';
 
+export const QuestionWrapper = styled.div`
+  display: flex;
+  flex-direction: column;
+  padding: 0px 90px 0px 90px;
+`;
 export const Question = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   height: auto;
-  padding: 0px 30px 0px 30px;
   align-items: center;
 `;
 
 export const QuestionDiv = styled.div`
-  width: 90%;
+  width: 100%;
   height: auto;
   padding: 10px 30px;
   border-radius: 8px;
