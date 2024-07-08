@@ -40,7 +40,9 @@ export default function ProjectPreview() {
             {device.small ? (
               <>
                 <div className="flex items-center gap-1">
-                  <ProfileImg src={project.profileImageUrl} />
+                  <Link to={`/profile/${project.userId}`}>
+                    <ProfileImg src={project.profileImageUrl} />
+                  </Link>
                   <span className="flex-col ">
                     <ProjectTitle>{project.title}</ProjectTitle>
                     <ProjectTeam style={{ color: '#828282' }}>Team : {project.teamName}</ProjectTeam>

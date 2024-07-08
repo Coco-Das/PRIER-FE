@@ -11,6 +11,7 @@ interface Content {
   teamName: string;
   mainImageUrl: string;
   profileImageUrl: string;
+  userId: number;
   tags: Tag[];
   score: number;
 }
