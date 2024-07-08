@@ -19,6 +19,7 @@ export async function FetchAllProject(filter: number, page: number) {
         teamName: project.teamName,
         mainImageUrl: project.mainImageUrl,
         profileImageUrl: project.profileImageUrl,
+        userId: project.userId,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tags: project.tags.map((tag: any) => ({
           tagId: tag.tagId,
@@ -53,6 +54,7 @@ export async function FetchLatestProject() {
         teamName: project.teamName,
         mainImageUrl: project.mainImageUrl,
         profileImageUrl: project.profileImageUrl,
+        userId: project.userId,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tags: project.tags.map((tag: any) => ({
           tagId: tag.tagId,
@@ -87,6 +89,7 @@ export async function SearchProject(keyword: string) {
         teamName: project.teamName,
         mainImageUrl: project.mainImageUrl,
         profileImageUrl: project.profileImageUrl,
+        userId: project.userId,
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         tags: project.tags.map((tag: any) => ({
           tagId: tag.tagId,

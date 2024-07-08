@@ -25,7 +25,16 @@ import {
   Text,
 } from './FirstMainContainer1Styles';
 import { Text2, Text3, Project1, Project2, Project3, Project4, Project5, Project6 } from './FirstMainContainer2Styles';
-import { ThirdContainer, Text4, Review1, Review2, Review3, Review4, Review5 } from './FirstMainContainer3Styles';
+import {
+  ThirdContainer,
+  Text4,
+  Review1,
+  Review2,
+  Review3,
+  Review4,
+  Review5,
+  Review6,
+} from './FirstMainContainer3Styles';
 import firstmainimg1 from '../../assets/FirstMainImg1.png';
 import firstmainimg2 from '../../assets/FirstMainImg2.png';
 import firstmainimg3 from '../../assets/FirstMainImg3.png';
@@ -186,6 +195,7 @@ const FirstMain = () => {
         <Link to="/login">
           <StartButton>지금 시작하기</StartButton>
         </Link>
+
         <Img1 src={firstmainimg1} />
         <Img2 src={firstmainimg2} />
         <Img3 src={firstmainimg3} />
@@ -226,6 +236,7 @@ const FirstMain = () => {
         <Review1 />
         <Review2 />
         <Review5 />
+        <Review6 />
       </ThirdContainer>
       <div
         ref={endRef}

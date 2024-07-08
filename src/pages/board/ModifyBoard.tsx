@@ -11,6 +11,7 @@ import {
   DraftHandleValue,
   convertToRaw,
   convertFromRaw,
+  RawDraftContentState,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import {
@@ -39,7 +40,7 @@ import Option from '@mui/joy/Option';
 import KeyboardArrowDown from '@mui/icons-material/KeyboardArrowDown';
 import TextEditorToolbar from '../../components/board/TextEditorToolbar';
 import CustomAlert from '../../components/utils/CustomAlert';
-import { API_BASE_URL } from '../../const/TokenApi'; // Axios 인스턴스 가져오기
+import { API_BASE_URL } from '../../const/TokenApi';
 import { useUserStore } from '../../states/user/UserStore';
 import Snackbar from '../../components/user/Snackbar';
 
@@ -56,6 +57,12 @@ const styleMap = {
   BLACK: { color: 'black' },
   WHITE: { color: 'white' },
   BACKGROUND_YELLOW: { backgroundColor: 'yellow' },
+  DEFAULT_FONT_SIZE: { fontSize: '12px' },
+  // 폰트 크기 스타일 추가
+  ...Array.from({ length: 100 }, (_, i) => i + 1).reduce((acc, size) => {
+    acc[`FONTSIZE_${size}`] = { fontSize: `${size}px` };
+    return acc;
+  }, {} as Record<string, React.CSSProperties>),
 };
 
 // 링크 엔티티를 찾는 전략을 정의합니다.
@@ -103,6 +110,7 @@ const ModifyBoard: React.FC = () => {
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null); // 스낵바 상태 변수
   const profileNickname = sessionStorage.getItem('nickname');
   const profileImg = sessionStorage.getItem('profileImg') || userAvatar;
+  const [currentFontSize, setCurrentFontSize] = useState<string>('12'); // 현재 폰트 크기 상태 변수
 
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
 
@@ -112,9 +120,10 @@ const ModifyBoard: React.FC = () => {
         const response = await API_BASE_URL.get(`/posts/${postId}`);
         const post = response.data;
         setTitle(post.title);
-        setEditorState(EditorState.createWithContent(convertFromRaw(JSON.parse(post.content)), decorator));
+        const contentState = convertFromRaw(JSON.parse(post.content));
+        setEditorState(EditorState.createWithContent(contentState, decorator));
         setCategory(post.category);
-
+        console.log(response.data);
         if (post.media && post.media.length > 0) {
           setExistingImages(
             post.media.map((media: { postMediaId: number; s3Url: string; s3Key: string }) => ({
@@ -124,7 +133,17 @@ const ModifyBoard: React.FC = () => {
             })),
           ); // 이미지가 있을 경우에만 상태 업데이트
           setDeleteImages([]); // deleteImages를 초기화
-          console.log(post.media.postMediaId);
+        }
+
+        // 마지막 문자 폰트 크기 설정
+        const lastBlock = contentState.getLastBlock();
+        const lastBlockLength = lastBlock.getLength();
+        if (lastBlockLength > 0) {
+          const lastCharStyle = contentState.getBlockForKey(lastBlock.getKey()).getInlineStyleAt(lastBlockLength - 1);
+          const fontSize = lastCharStyle.find(style => style !== undefined && style.startsWith('FONTSIZE_'));
+          if (fontSize) {
+            setCurrentFontSize(fontSize.replace('FONTSIZE_', ''));
+          }
         }
       } catch (error) {
         console.error('Error fetching post:', error);
@@ -137,6 +156,18 @@ const ModifyBoard: React.FC = () => {
   // 에디터 변경 핸들러
   const handleEditorChange = (state: EditorState) => {
     setEditorState(state);
+
+    // 현재 커서 위치의 폰트 크기 업데이트
+    const selection = state.getSelection();
+    if (selection.isCollapsed()) {
+      const currentInlineStyle = state.getCurrentInlineStyle();
+      const fontSize = currentInlineStyle.find(style => style !== undefined && style.startsWith('FONTSIZE_'));
+      if (fontSize) {
+        setCurrentFontSize(fontSize.replace('FONTSIZE_', ''));
+      } else {
+        setCurrentFontSize('12'); // 기본 폰트 크기 설정
+      }
+    }
   };
 
   // 키 명령 핸들러
@@ -236,8 +267,8 @@ const ModifyBoard: React.FC = () => {
     setShowCreateBoardAlert(false);
 
     const contentState = editorState.getCurrentContent();
-    const contentRaw = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
-    const contentString = JSON.stringify(contentRaw); // Raw 데이터를 문자열로 변환
+    const rawContent = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
+    const contentString = JSON.stringify(rawContent); // Raw 데이터를 문자열로 변환
     const formData = new FormData();
 
     formData.append(
@@ -273,9 +304,18 @@ const ModifyBoard: React.FC = () => {
     }
   };
 
-  // 게시물 수정 취소 핸들러
-  const cancelCreateBoard = () => {
-    setShowCreateBoardAlert(false);
+  // 폰트 크기 스타일 필터링 함수
+  const filterFontSizeStyles = (content: RawDraftContentState): RawDraftContentState => {
+    const newBlocks = content.blocks.map(block => {
+      const newInlineStyleRanges = block.inlineStyleRanges.reduce((acc, style) => {
+        if (!style.style.startsWith('FONTSIZE_')) {
+          acc.push(style);
+        }
+        return acc.concat(style);
+      }, [] as typeof block.inlineStyleRanges);
+      return { ...block, inlineStyleRanges: newInlineStyleRanges };
+    });
+    return { ...content, blocks: newBlocks };
   };
 
   // 수정 버튼 클릭 핸들러
@@ -300,7 +340,7 @@ const ModifyBoard: React.FC = () => {
               placeholder="카테고리"
               indicator={<KeyboardArrowDown />}
               sx={{
-                width: 110,
+                width: 145,
                 [`& .${selectClasses.indicator}`]: {
                   transition: '0.2s',
                   [`&.${selectClasses.expanded}`]: {
@@ -308,7 +348,6 @@ const ModifyBoard: React.FC = () => {
                   },
                 },
               }}
-              className="ml-auto"
               onChange={(event, newValue) => setCategory(newValue as string)}
               value={category}
             >
@@ -328,7 +367,11 @@ const ModifyBoard: React.FC = () => {
             <AuthorContainer>
               <Author>{profileNickname}</Author>
             </AuthorContainer>
-            <TextEditorToolbar editorState={editorState} onEditorChange={handleEditorChange} />
+            <TextEditorToolbar
+              editorState={editorState}
+              onEditorChange={handleEditorChange}
+              currentFontSize={currentFontSize}
+            />
             <CustomButton onClick={handleImageUpload}>
               <ButtonText>이미지 업로드</ButtonText>
             </CustomButton>
@@ -353,6 +396,7 @@ const ModifyBoard: React.FC = () => {
                 handleBeforeInput={handleBeforeInput}
                 handleReturn={handleReturn}
                 placeholder="내용을 입력하세요"
+                blockStyleFn={() => 'block-default-font-size'}
               />
             </div>
           </ContentContainer>
@@ -376,13 +420,13 @@ const ModifyBoard: React.FC = () => {
         </PostBox>
         <div>
           <Button onClick={handleModifyClick} className="ml-auto">
-            <ButtonText>수정</ButtonText>
+            수정
           </Button>
           {showCreateBoardAlert && (
             <CustomAlert
               message="게시물을 수정하시겠습니까?"
               onConfirm={confirmCreateBoard}
-              onCancel={cancelCreateBoard}
+              onCancel={() => setShowCreateBoardAlert(false)}
             />
           )}
         </div>

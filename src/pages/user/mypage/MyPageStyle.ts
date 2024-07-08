@@ -182,7 +182,7 @@ export const IntroduceWrapper = styled.div`
 `;
 export const IntroduceText = styled.p`
   font-weight: 600;
-  font-size: 24px;
+  font-size: 22px;
   ${device.small} {
     font-size: 16px;
   }
@@ -205,7 +205,7 @@ export const IntroduceContainer = styled.div`
 //퀘스트
 export const SubTitle = styled.p`
   font-size: 20px;
-  margin-bottom: 1.25rem;
+  margin-bottom: 1rem;
   cursor: pointer;
   ${device.small} {
     font-size: 16px;

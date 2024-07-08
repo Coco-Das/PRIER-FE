@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { EditorState, RichUtils, Modifier } from 'draft-js';
 import {
   ToggleButtonGroup,
@@ -15,11 +15,12 @@ import { FormatBold, FormatItalic, FormatUnderlined, FormatColorText, ArrowDropD
 interface TextEditorToolbarProps {
   editorState: EditorState;
   onEditorChange: (editorState: EditorState) => void;
+  currentFontSize: string; // 추가된 속성
 }
 
-const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEditorChange }) => {
+const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEditorChange, currentFontSize }) => {
   const currentStyle = editorState.getCurrentInlineStyle();
-  const [fontSize, setFontSize] = useState<string>('12');
+  const [fontSize, setFontSize] = useState<string>(currentFontSize);
   const [fontColor, setFontColor] = useState<string>('black');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [fontColorAnchorEl, setFontColorAnchorEl] = useState<null | HTMLElement>(null);
@@ -28,12 +29,15 @@ const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEd
   const fontSizes = ['9', '10', '12', '15', '16', '18', '20', '24', '28', '30', '32'];
   const fontColors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'black', 'white'];
 
+  useEffect(() => {
+    setFontSize(currentFontSize);
+  }, [currentFontSize]);
+
   const applyStyle = (style: string) => {
     onEditorChange(RichUtils.toggleInlineStyle(editorState, style));
   };
 
   const applyFontSize = (size: string) => {
-    console.log(`Applying font size: ${size}`);
     const selection = editorState.getSelection();
     const contentState = Modifier.applyInlineStyle(editorState.getCurrentContent(), selection, `FONTSIZE_${size}`);
     onEditorChange(EditorState.push(editorState, contentState, 'change-inline-style'));

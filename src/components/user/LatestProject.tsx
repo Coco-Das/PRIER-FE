@@ -27,7 +27,9 @@ export default function LatestProject() {
           <Link to={`/responsetest/${project.projectId}`}>
             <div className="flex items-center mt-2 justify-between w-full">
               <div className="flex items-center mb-2">
-                <ProfileImg src={project.profileImageUrl} />
+                <Link to={`/profile/${project.userId}`}>
+                  <ProfileImg src={project.profileImageUrl} />
+                </Link>
                 <span className="flex-col ml-4">
                   <ProjectTitle>{project.title}</ProjectTitle>
                   <ProjectTeam className="text-base font-light" style={{ color: '#828282' }}>
