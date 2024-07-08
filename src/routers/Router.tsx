@@ -17,6 +17,7 @@ import { CreateTest } from '../pages/test/createTest/CreateTest';
 import { ResponseQuestion } from '../pages/test/responseTest/ResponseQuestion';
 import { EditResponse } from '../pages/test/responseTest/editResponse/EditResponse';
 import Profile from '../pages/user/mypage/\bProfile';
+import SubjectiveList from '../pages/test/feedback/SubjectiveList';
 
 const router = createBrowserRouter([
   {
@@ -50,6 +51,10 @@ const router = createBrowserRouter([
       {
         path: '/feedback/:projectId',
         element: <Feedback />,
+      },
+      {
+        path: '/subjectivelist/:projectId/:questionId',
+        element: <SubjectiveList />,
       },
       {
         path: '/responsetest/:projectId',
