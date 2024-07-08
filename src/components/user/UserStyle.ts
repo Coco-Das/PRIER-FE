@@ -62,7 +62,7 @@ export const LatestProjectWrapper = styled.div`
   transition: 0.3s ease-out;
   ${device.small} {
     display: grid;
-    grid-template-columns: repeat(1, minmax(19rem, 1fr));
+    grid-template-columns: repeat(4, minmax(19rem, 1fr));
     gap: 1rem;
     width: 100%;
     align-items: center;
@@ -350,6 +350,10 @@ export const CardContainer = styled.div`
   width: 25rem;
   height: 13.5rem;
   max-height: 13.5rem;
+  ${device.small} {
+    width: 100%;
+    height: 10rem;
+  }
 `;
 
 export const Card = styled.div<{ isFlipped: boolean }>`
@@ -382,6 +386,16 @@ export const CardFront = styled.div`
     border: 1.5px solid transparent;
     background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
   }
+  ${device.small} {
+    padding: 10px;
+  }
+`;
+export const CardFrontContainer = styled.div`
+  display: flex;
+  ${device.small} {
+    flex-direction: column;
+    justify-content: center;
+  }
 `;
 
 export const CardBack = styled.div`
@@ -396,6 +410,11 @@ export const CardBack = styled.div`
   border: 2px solid transparent;
   border-radius: 20px;
   background: linear-gradient(#fff, #fff) padding-box, linear-gradient(45deg, #315af1, #23be87, #773cd1) border-box;
+  ${device.small} {
+    padding: 10px;
+    justify-content: center;
+    align-items: center;
+  }
 `;
 export const GiftTitle = styled.h1`
   color: #315af1;
@@ -405,6 +424,14 @@ export const GiftTitle = styled.h1`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  ${device.small} {
+    font-size: 15px;
+  }
+`;
+export const GiftText = styled.p`
+  ${device.small} {
+    font-size: 11px;
+  }
 `;
 export const PurchaseButton = styled.button`
   display: flex;
@@ -465,6 +492,10 @@ export const PurchaseButton = styled.button`
       left: 100%;
     }
   }
+  ${device.small} {
+    width: max-content;
+    font-size: 8px;
+  }
 `;
 
 export const GiftTextWrapper = styled.div`
@@ -473,6 +504,9 @@ export const GiftTextWrapper = styled.div`
   justify-content: space-between;
   width: 100%;
   gap: 1em;
+  ${device.small} {
+    gap: 0.5rem;
+  }
 `;
 
 export const GiftImg = styled.img`
@@ -485,6 +519,9 @@ export const DescriptionText = styled.p`
   font-size: 18px;
   word-break: break-all;
   white-space: normal;
+  ${device.small} {
+    font-size: 12px;
+  }
 `;
 
 export const SoldOutContainer = styled.div`

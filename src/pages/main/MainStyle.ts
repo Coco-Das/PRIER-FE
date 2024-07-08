@@ -176,7 +176,7 @@ export const Title = styled.h2`
   margin-top: 2%;
   margin-bottom: 2%;
   ${device.small} {
-    font-size: 14px;
+    font-size: 16px;
     margin-top: 4%;
     margin-bottom: 4%;
   }
