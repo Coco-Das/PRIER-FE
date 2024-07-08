@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
 import {
   AIReportContainer,
@@ -21,7 +21,7 @@ import {
 } from './FeedbackStyles';
 import { API_BASE_URL } from '../../../const/TokenApi';
 import { Link } from 'react-router-dom';
-import { Doughnut, Pie } from 'react-chartjs-2';
+import { Pie } from 'react-chartjs-2';
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
 import StarRating from '../../../components/utils/StarRating';
 import FeedbackAIReport from '../../../components/utils/FeedbackAIReport';
@@ -67,7 +67,7 @@ function Feedback() {
   const setProjectId = useProjectStore(state => state.setProjectId);
   const [title, setTitle] = useState('');
   const [teamName, setTeamName] = useState('');
-  const [introduce, setIntroduce] = useState('');
+  // const [introduce, setIntroduce] = useState('');
   const [teamDescription, setTeamDescription] = useState('');
   const [mainImgUrl, setMainImgUrl] = useState('');
   const [questions, setQuestions] = useState<Question[]>([]);
@@ -77,7 +77,7 @@ function Feedback() {
   const [comments, setComments] = useState<CommentData[]>([]);
   const [keywords, setKeywords] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     if (projectId) {
       setProjectId(projectId); // URL 파라미터로부터 projectId를 상태로 설정
@@ -91,10 +91,10 @@ function Feedback() {
       const Data = response.data;
       const Data1 = response1.data;
       // console.log(Data1);
-      // console.log(Data);
+      console.log(Data);
       setTitle(Data.title);
       setTeamName(Data.teamName);
-      setIntroduce(Data.introduce);
+      // setIntroduce(Data.introduce);
       setMainImgUrl(Data.projectImage);
       setPercents(Data.percentage);
       setAverageScore(Data.averageScore);
@@ -355,20 +355,18 @@ function Feedback() {
                   marginLeft: '10px',
                 }}
               >
-                <p>
-                  {loading ? (
-                    <div style={{ display: 'flex', flexDirection: 'column' }}>
-                      <Skeleton width={100} height={15} />
-                      <Skeleton width={100} height={15} />
-                    </div>
-                  ) : (
-                    <>
-                      긍정적 응답: {Math.round(percents)}%
-                      <br />
-                      부정적 응답: {Math.round(100 - percents)}%
-                    </>
-                  )}
-                </p>
+                {loading ? (
+                  <div style={{ display: 'flex', flexDirection: 'column' }}>
+                    <Skeleton width={100} height={15} />
+                    <Skeleton width={100} height={15} />
+                  </div>
+                ) : (
+                  <>
+                    긍정적 응답: {Math.round(percents)}%
+                    <br />
+                    부정적 응답: {Math.round(100 - percents)}%
+                  </>
+                )}
               </div>
               <MypageChartIcon src={ChartIcon} />
             </div>
@@ -419,7 +417,7 @@ function Feedback() {
                 : 0;
 
             return (
-              <QuestionDiv key={question.questionId} className="mt-4">
+              <QuestionDiv key={question.questionId} className="mt-5">
                 {question.category === 'SUBJECTIVE' ? (
                   <div>
                     <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
@@ -441,14 +439,21 @@ function Feedback() {
                       </div>
                     </div>
                     {question.feedbackCount > 0 && (
-                      <p style={{ marginLeft: '60px', fontSize: '18px', padding: '20px' }}>{question.summary}</p>
+                      <>
+                        <p style={{ marginLeft: '60px', fontSize: '18px', padding: '20px' }}>{question.summary}</p>
+                        <span
+                          className="underline"
+                          style={{ fontSize: '12px', color: '#828282', fontWeight: 'bold', cursor: 'pointer' }}
+                          onClick={() =>
+                            navigate(`/subjectivelist/${projectId}/${question.questionId}`, {
+                              state: { questionContent: question.questionContent },
+                            })
+                          }
+                        >
+                          전체보기&rarr;
+                        </span>
+                      </>
                     )}
-                    <span
-                      className="underline"
-                      style={{ fontSize: '12px', color: '#828282', fontWeight: 'bold', cursor: 'pointer' }}
-                    >
-                      전체보기&rarr;
-                    </span>
                   </div>
                 ) : (
                   <div>
@@ -507,7 +512,7 @@ function Feedback() {
       <span className="mt-5 font-bold" style={{ color: '#315AF1' }}>
         댓글
       </span>
-      <CommentDiv $isEmpty={loading || comments.length === 0}>
+      <CommentDiv className="mt-5" $isEmpty={loading || comments.length === 0}>
         {loading ? (
           <div
             style={{
