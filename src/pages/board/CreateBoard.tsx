@@ -296,7 +296,7 @@ const CreateBoard: React.FC = () => {
             <AuthorContainer>
               <Author>{profileNickname}</Author>
             </AuthorContainer>
-            <TextEditorToolbar editorState={editorState} onEditorChange={handleEditorChange} />
+            <TextEditorToolbar editorState={editorState} onEditorChange={handleEditorChange} currentFontSize={'12'} />
             <CustomButton onClick={handleImageUpload}>
               <ButtonText>이미지 업로드</ButtonText>
             </CustomButton>
