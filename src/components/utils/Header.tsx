@@ -6,6 +6,8 @@ import { useNavigate, useLocation } from 'react-router-dom';
 import SideBar from './SideBar';
 import Profile from '../user/Profile';
 import { ReactComponent as Logo } from '../../assets/Logo.svg';
+import { device } from '../../styles/Media';
+
 const HeaderContainer = styled.nav`
   position: relative;
   height: 64px; // 16px * 4
@@ -27,9 +29,16 @@ const StyledLogo = styled(Logo)`
     cursor: pointer;
   }
   height: 100%;
-  width: 9%;
+  width: 120px;
   margin-left: 40px;
   margin-bottom: 6px;
+  ${device.small} {
+    margin-left: 10px;
+  }
+
+  ${device.medium} {
+    margin-left: 30px;
+  }
 `;
 const StyledImg = styled.img`
   width: 3rem;
@@ -37,6 +46,10 @@ const StyledImg = styled.img`
   border: none;
   border-radius: 50%;
   object-fit: cover;
+  ${device.small} {
+    width: 2.5rem;
+    height: 2.5rem;
+  }
 `;
 const UserContainer = styled.div`
   &:hover {

@@ -105,7 +105,7 @@ export default function Main() {
       <MainContainer>
         <GreetingContainer>
           <StyledChartIcon src={MainChart} />
-          <div className="flex flex-col w-full" style={{ marginTop: '3%', marginLeft: '4%' }}>
+          <div className="flex flex-col w-full" style={{ marginTop: '1%', marginLeft: '4%' }}>
             <PointText className="mt-2">반갑습니다 {userProfile.nickname} 님</PointText>
             <MainText>
               새로운 아이디어를 시험해보고, 실제 사용자의 피드백으로 완성도를 높이세요. <br />

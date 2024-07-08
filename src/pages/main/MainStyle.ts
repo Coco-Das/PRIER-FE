@@ -9,9 +9,11 @@ export const MainContainer = styled.div`
 export const GreetingContainer = styled.div`
   position: relative;
   display: flex;
+  justify-content: center;
+  align-items: center;
   border-radius: 11px;
   width: 100vw;
-  padding: 0 3%;
+  padding: 1% 3%;
   background-color: #f3f8ff;
 
   &::before {
@@ -42,6 +44,13 @@ export const GreetingContainer = styled.div`
       background-position: 0% 50%;
     }
   }
+  ${device.small} {
+    border: 1px solid transparent;
+  }
+
+  ${device.medium} {
+    border: 1px solid transparent;
+  }
 `;
 
 export const PointText = styled.h1`
@@ -49,7 +58,7 @@ export const PointText = styled.h1`
   font-weight: 700;
   margin-bottom: 2%;
   ${device.small} {
-    font-size: 18px;
+    font-size: 14px;
   }
 
   ${device.medium} {
@@ -62,7 +71,7 @@ export const PointText = styled.h1`
 `;
 export const MainText = styled.p`
   ${device.small} {
-    font-size: 14px;
+    font-size: 9px;
   }
 
   ${device.medium} {
@@ -74,7 +83,19 @@ export const MainText = styled.p`
   }
 `;
 export const StyledChartIcon = styled.img`
-  width: 18%;
+  ${device.small} {
+    width: 80px;
+    height: 80px;
+  }
+
+  ${device.medium} {
+    width: 15%;
+  }
+
+  ${device.large} {
+    width: 18%;
+    height: 200px;
+  }
 `;
 
 export const LinkButton = styled.div`
@@ -91,10 +112,14 @@ export const LinkButton = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 6px 20px rgba(0, 0, 0, 0.1);
   ${device.small} {
     font-size: 8px;
+    padding: 4px;
+    border-radius: 5px;
+    margin-bottom: 5px;
   }
 
   ${device.medium} {
     font-size: 14px;
+    margin-bottom: 5px;
   }
   -webkit-transition: all 0.5s ease-in;
   -moz-transition: all 0.5s ease-in;
@@ -152,10 +177,14 @@ export const Title = styled.h2`
   margin-bottom: 2%;
   ${device.small} {
     font-size: 14px;
+    margin-top: 4%;
+    margin-bottom: 4%;
   }
 
   ${device.medium} {
     font-size: 20px;
+    margin-top: 3%;
+    margin-bottom: 3%;
   }
 
   ${device.large} {
@@ -177,6 +206,13 @@ export const OrderButton = styled.button<OrderButtonProps>`
   background-color: ${props => (props.active ? '#315af1' : 'white')};
   color: ${props => (props.active ? '#ffffff' : '#000000')};
   transition: 0.4s;
+  ${device.small} {
+    font-size: 8px;
+  }
+
+  ${device.medium} {
+    font-size: 12px;
+  }
 `;
 const expandInput = keyframes`
   from {
@@ -184,6 +220,9 @@ const expandInput = keyframes`
   }
   to {
     width: 200px;
+     ${device.small} {
+    width: 80px;
+  }
  box-shadow: 0.7px 0.7px 1px #4188fe, -0.7px -0.7px 1px #4188fe, inset 0px 0px 0px #0e0e0e, inset 0px -0px 0px #4188fe;
   }
 `;
@@ -192,6 +231,14 @@ export const SearchInputWrapper = styled.div`
   position: relative;
   --size-button: 40px;
   color: #315af1;
+  ${device.small} {
+    --size-button: 30px;
+  }
+
+  ${device.medium} {
+    --size-button: 35px;
+  }
+  z-index: 10;
 `;
 
 export const StyledInput = styled.input`
@@ -210,6 +257,9 @@ export const StyledInput = styled.input`
   &:focus {
     width: 200px;
     cursor: text;
+    ${device.small} {
+      width: 80px;
+    }
     animation: ${expandInput} 0.3s forwards; /* 애니메이션 적용 */
   }
 `;

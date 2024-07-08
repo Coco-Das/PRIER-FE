@@ -13,6 +13,7 @@ import {
 import { useUserStore } from '../../states/user/UserStore';
 import { userPointStore } from '../../states/user/PointStore';
 import Coin from '../../assets/Coin.png';
+import { device } from '../../styles/Media';
 
 export default function Profile() {
   const userProfile = useUserStore(state => state.userProfile);
@@ -33,12 +34,22 @@ export default function Profile() {
   const NickName = sessionStorage.getItem('nickname');
   return (
     <ProfileContainer>
-      <div className="flex justify-between items-center gap-10 mb-3">
-        <Title>반갑습니다 {NickName} 님</Title>
-        <Link to="/mypage">
-          <LinkText>마이 페이지 &gt;</LinkText>
-        </Link>
-      </div>
+      {device.small ? (
+        <div className="flex-col ">
+          <Title>반갑습니다 {NickName} 님</Title>
+          <Link to="/mypage">
+            <LinkText className="text-end mb-3">마이 페이지 &gt;</LinkText>
+          </Link>
+        </div>
+      ) : (
+        <div className="flex justify-between items-center gap-10 mb-3">
+          <Title>반갑습니다 {NickName} 님</Title>
+          <Link to="/mypage">
+            <LinkText>마이 페이지 &gt;</LinkText>
+          </Link>
+        </div>
+      )}
+
       <ProgressBarContainer>
         <Filler percentage={progress} />
       </ProgressBarContainer>
