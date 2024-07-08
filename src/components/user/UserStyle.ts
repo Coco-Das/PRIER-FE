@@ -1,6 +1,6 @@
 import { css, styled } from 'styled-components';
 import { ReactComponent as BaseImg } from '../../assets/BaseImg.svg';
-
+import { device } from '../../styles/Media';
 export const LatestProjectContainer = styled.div`
   position: relative;
   width: 17rem;
@@ -27,6 +27,10 @@ export const LatestProjectContainer = styled.div`
     pointer-events: none;
     background: #f3f5fb;
     transition: all 0.6s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    ${device.small} {
+      width: 13rem;
+      height: 9rem;
+    }
   }
 
   &:hover::after {
@@ -37,6 +41,15 @@ export const LatestProjectContainer = styled.div`
     transform: rotate(-90deg) scaleX(1.3) scaleY(0.8);
     background: linear-gradient(-45deg, #28b381 0%, #40c9ff 100%);
     box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
+    ${device.small} {
+      transform: rotate(-90deg) scaleX(0.9) scaleY(1.3);
+    }
+  }
+  ${device.small} {
+    margin-top: 10px;
+    width: 10rem;
+    height: 12rem;
+    padding: 8px;
   }
 `;
 
@@ -47,6 +60,13 @@ export const LatestProjectWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(19rem, 1fr));
   transition: 0.3s ease-out;
+  ${device.small} {
+    display: grid;
+    grid-template-columns: repeat(1, minmax(19rem, 1fr));
+    gap: 1rem;
+    width: 100%;
+    align-items: center;
+  }
 `;
 
 export const ProjectWrapper = styled.div`
@@ -54,6 +74,14 @@ export const ProjectWrapper = styled.div`
   display: grid;
   grid-template-columns: repeat(4, minmax(19rem, 1fr));
   gap: 2rem;
+  ${device.small} {
+    grid-template-columns: repeat(2, minmax(8rem, 1fr));
+    gap: 1rem;
+  }
+  ${device.medium} {
+    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
+    gap: 1rem;
+  }
 `;
 export const ProjectContainer = styled.div`
   position: relative;
@@ -80,11 +108,34 @@ export const ProjectContainer = styled.div`
     z-index: -10;
     pointer-events: none;
     background: #f3f5fb;
+    ${device.small} {
+      left: -0.125rem;
+      width: 8.25rem;
+      height: 9.75rem;
+    }
   }
   &:hover::before {
     background: #4188fe;
     box-shadow: 0 4px 18px 0 rgba(0, 0, 0, 0.25);
     transition: 0.3s ease-out;
+  }
+  ${device.small} {
+    width: 8rem;
+    padding: 0.5rem;
+    height: 9.5rem;
+  }
+`;
+export const ProjectTitle = styled.h1`
+  font-size: 18px;
+  ${device.small} {
+    font-size: 12px;
+  }
+`;
+export const ProjectTeam = styled.h2`
+  font-size: 16px;
+  font-weight: 300;
+  ${device.small} {
+    font-size: 10px;
   }
 `;
 export const ProfileImg = styled.img`
@@ -93,6 +144,10 @@ export const ProfileImg = styled.img`
   border: 0.7px solid #e0e0e0;
   border-radius: 50%;
   object-fit: cover;
+  ${device.small} {
+    width: 30px;
+    height: 30px;
+  }
 `;
 
 export const ProjectImg = styled.img`
@@ -103,6 +158,10 @@ export const ProjectImg = styled.img`
   border: 0.8px solid #e0e0e0;
   align-self: center;
   object-fit: cover;
+  ${device.small} {
+    width: 200px;
+    height: 80px;
+  }
 `;
 export const Base = styled(BaseImg)`
   margin-bottom: 0.5rem;
@@ -118,12 +177,18 @@ export const LinkText = styled.p`
   &:hover {
     color: #4188fe;
   }
+  ${device.small} {
+    font-size: 10px;
+  }
 `;
 export const SmallText = styled.p`
   font-size: 15px;
   font-weight: 300;
   color: #828282;
   cursor: pointer;
+  ${device.small} {
+    font-size: 10px;
+  }
 `;
 export const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0', '#ACA4D5', '#4188FE'];
 
@@ -134,6 +199,10 @@ export const TagContainer = styled.div`
   font-weight: 300;
   border-radius: 15px;
   margin-right: 10px;
+  ${device.small} {
+    font-size: 8px;
+    margin-right: 5px;
+  }
 `;
 //프로필
 export const ProfileContainer = styled.div`
@@ -149,18 +218,30 @@ export const ProfileContainer = styled.div`
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2), 0 6px 20px rgba(0, 0, 0, 0.2);
   overflow: hidden;
   cursor: pointer;
+  ${device.small} {
+    width: 250px;
+  }
 `;
 export const Title = styled.h1`
   color: #315af1;
   font-weight: 500;
   font-size: 22px;
+  ${device.small} {
+    font-size: 16px;
+  }
 `;
 export const MiddleText = styled.h2`
   font-size: 18px;
+  ${device.small} {
+    font-size: 14px;
+  }
 `;
 export const PointText = styled.p`
   color: #315af1;
   font-size: 16px;
+  ${device.small} {
+    font-size: 12px;
+  }
 `;
 export const StyledPointIcon = styled.img`
   width: 40px;
@@ -170,6 +251,10 @@ export const StyledPointIcon = styled.img`
     50% {
       -webkit-transform: rotate(30deg);
     }
+  }
+  ${device.small} {
+    width: 30px;
+    height: 30px;
   }
 `;
 
@@ -228,20 +313,33 @@ export const ReviewContainer = styled.div`
   height: 9rem;
   padding: 20px;
   margin-bottom: 1rem;
+  ${device.small} {
+    width: 100%;
+    height: 7rem;
+  }
 `;
 export const ReviewText = styled.p`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
+  ${device.small} {
+    font-size: 16px;
+  }
 `;
 export const ReviewProject = styled.h1`
   font-size: 20px;
   margin-top: 1rem;
+  ${device.small} {
+    font-size: 16px;
+  }
 `;
 
 export const ReviewTeam = styled.h2`
   color: #315af1;
   font-size: 18px;
+  ${device.small} {
+    font-size: 14px;
+  }
 `;
 
 //기프티콘
