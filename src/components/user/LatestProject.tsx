@@ -7,6 +7,8 @@ import {
   LinkText,
   ProfileImg,
   ProjectImg,
+  ProjectTeam,
+  ProjectTitle,
   TagContainer,
   colors,
 } from './UserStyle';
@@ -27,10 +29,10 @@ export default function LatestProject() {
               <div className="flex items-center mb-2">
                 <ProfileImg src={project.profileImageUrl} />
                 <span className="flex-col ml-4">
-                  <p className="text-lg">{project.title}</p>
-                  <p className="text-base font-light" style={{ color: '#828282' }}>
+                  <ProjectTitle>{project.title}</ProjectTitle>
+                  <ProjectTeam className="text-base font-light" style={{ color: '#828282' }}>
                     Team : {project.teamName}
-                  </p>
+                  </ProjectTeam>
                 </span>
               </div>
             </div>
@@ -42,7 +44,7 @@ export default function LatestProject() {
                 </TagContainer>
               ))}
             </div>
-            <div className="flex justify-between gap-2">
+            <div className="flex justify-between items-center gap-2">
               <StarRating initialScore={project.score} readOnly={true} onHover={false} />
 
               <LinkText>피드백 참여하기 &gt;</LinkText>
