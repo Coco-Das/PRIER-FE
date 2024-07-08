@@ -44,6 +44,8 @@ import firstmainimg15 from '../../assets/FirstMainImg15.png';
 import logo from '../../assets/Logo-firstMain.png';
 import ProjectImg1 from '../../assets/ProjectImg1.png';
 import ProjectImg2 from '../../assets/ProjectImg2.png';
+import Star from '../../assets/star.json';
+import Lottie from '../../components/utils/LottieComponent';
 import ProjectImg3 from '../../assets/ProjectImg3.png';
 import ProjectImg4 from '../../assets/ProjectImg4.png';
 import ProjectImg5 from '../../assets/ProjectImg5.png';
@@ -155,7 +157,7 @@ const FirstMain = () => {
         if (entry.isIntersecting) {
           setTimeout(() => {
             navigate('/login');
-          }, 700);
+          }, 1800);
         }
       });
     };
@@ -231,7 +233,10 @@ const FirstMain = () => {
           height: '800px',
           width: '100%',
         }}
-      />
+        className="flex items-center justify-center"
+      >
+        <Lottie animationData={Star} loop={true} autoplay={true} style={{ width: '25%' }} />
+      </div>
     </>
   );
 };

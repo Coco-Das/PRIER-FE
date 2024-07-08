@@ -120,10 +120,16 @@ export const CreateTest = () => {
 
   //질문 추가
   const addQuestion = useCallback(() => {
-    setQuestions(prevQuestions => [
-      ...prevQuestions,
-      { id: prevQuestions.length + 1, type: 'SUBJECTIVE', content: '' },
-    ]);
+    setQuestions(prevQuestions => {
+      if (prevQuestions.length >= 10) {
+        setSnackbar({
+          message: '질문은 10개까지 가능합니다.',
+          type: 'error',
+        });
+        return prevQuestions;
+      }
+      return [...prevQuestions, { id: prevQuestions.length + 1, type: 'SUBJECTIVE', content: '' }];
+    });
   }, []);
 
   //토글
@@ -593,7 +599,7 @@ export const CreateTest = () => {
           </QuestionDiv>
         ))}
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-          <AddButton onClick={addQuestion}>질문 추가</AddButton>
+          <AddButton onClick={addQuestion} />
         </div>
         <div style={{ width: '100%', display: 'flex', marginBottom: '20px' }}>
           <CustomButton onClick={handleSubmit} style={{ marginLeft: 'auto', width: '15%' }}>

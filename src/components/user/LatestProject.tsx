@@ -7,6 +7,8 @@ import {
   LinkText,
   ProfileImg,
   ProjectImg,
+  ProjectTeam,
+  ProjectTitle,
   TagContainer,
   colors,
 } from './UserStyle';
@@ -24,13 +26,13 @@ export default function LatestProject() {
         <LatestProjectContainer key={project.projectId}>
           <Link to={`/responsetest/${project.projectId}`}>
             <div className="flex items-center mt-2 justify-between w-full">
-              <div className="flex items-center">
+              <div className="flex items-center mb-2">
                 <ProfileImg src={project.profileImageUrl} />
-                <span className="flex-col ml-2">
-                  <p className="text-lg">{project.title}</p>
-                  <p className="text-base font-light" style={{ color: '#828282' }}>
+                <span className="flex-col ml-4">
+                  <ProjectTitle>{project.title}</ProjectTitle>
+                  <ProjectTeam className="text-base font-light" style={{ color: '#828282' }}>
                     Team : {project.teamName}
-                  </p>
+                  </ProjectTeam>
                 </span>
               </div>
             </div>
@@ -42,7 +44,7 @@ export default function LatestProject() {
                 </TagContainer>
               ))}
             </div>
-            <div className="flex justify-between">
+            <div className="flex justify-between items-center gap-2">
               <StarRating initialScore={project.score} readOnly={true} onHover={false} />
 
               <LinkText>피드백 참여하기 &gt;</LinkText>

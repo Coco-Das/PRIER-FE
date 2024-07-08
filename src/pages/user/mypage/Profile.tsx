@@ -30,6 +30,13 @@ import {
   StyledProfile,
   StaticOverlay,
   LinkProjectText,
+  ProfileWapper,
+  ProjectWrapper,
+  IntroduceWrapper,
+  SubTitle,
+  IntroduceText,
+  LinkWrapper,
+  LinkContainer,
 } from './MyPageStyle';
 import { Title } from '../../main/MainStyle';
 import { LinkText } from '../../../components/user/UserStyle';
@@ -46,6 +53,7 @@ import { Tooltip, TooltipProps, tooltipClasses } from '@mui/material';
 import Snackbar from '../../../components/user/Snackbar';
 import ChartIcon from '../../../assets/MainChart.png';
 import TeamProfile from '../../../assets/TeamProfile.png';
+
 const AccountTooltip = styled(({ className, ...props }: TooltipProps) => (
   <Tooltip {...props} classes={{ popper: className }} />
 ))(() => ({
@@ -67,7 +75,7 @@ export default function UserProfile() {
   };
   return (
     <div className="flex-col overflow-hidden" style={{ margin: '1% 4% 0 4%' }}>
-      <div className="flex w-full h-[40%] mb-5">
+      <ProfileWapper>
         <ProfileContainer>
           <ProfileImgContainer>
             <StyledProfile src={userProfile.imgUrl} alt="profile" />
@@ -142,13 +150,13 @@ export default function UserProfile() {
             </ProfileAccountContainer>
           </div>
         </ProfileContainer>
-        <div className="flex-col w-[50%]">
+        <IntroduceWrapper>
           <IntroduceContainer>
-            <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
-            <h1 className="text-2xl font-semibold">{userProfile.intro}</h1>
+            <SubTitle>자신을 한줄로 소개</SubTitle>
+            <IntroduceText>{userProfile.intro}</IntroduceText>
           </IntroduceContainer>
           <QuestContainer>
-            <h1 className="mb-5 cursor-pointer">오늘의 퀘스트</h1>
+            <SubTitle>오늘의 퀘스트</SubTitle>
             <StepsContainer>
               <Step>
                 <StepLabel completed={userProfile.firstQuest === true}>출석하기</StepLabel>
@@ -166,9 +174,9 @@ export default function UserProfile() {
               </Step>
             </StepsContainer>
           </QuestContainer>
-        </div>
-      </div>
-      <div className="flex w-screen h-[60%]">
+        </IntroduceWrapper>
+      </ProfileWapper>
+      <ProjectWrapper>
         <ProjectContainer>
           <div className="flex items-center">
             <Title>진행 중인 프로젝트</Title>
@@ -177,8 +185,8 @@ export default function UserProfile() {
             </Link>
           </div>
           {userProfile.nowProjectId !== null ? (
-            <div className="flex w-full h-full">
-              <div className="flex-col w-[30%] h-full">
+            <LinkWrapper>
+              <LinkContainer>
                 <Link to={`/responsetest/${userProfile.nowProjectId}`}>
                   <LinkProject>
                     <div className="flex items-center gap-3">
@@ -198,7 +206,7 @@ export default function UserProfile() {
                     <LinkText className="text-end">모아보기 &gt;</LinkText>
                   </Link>
                 </FeedbackContainer>
-              </div>
+              </LinkContainer>
               {userProfile.nowProjectFeedbackCount === 0 ? (
                 <StaticContainer className="relative">
                   <TitleText>통계</TitleText>
@@ -222,7 +230,7 @@ export default function UserProfile() {
               <AIReportContainer>
                 <AIReport />
               </AIReportContainer>
-            </div>
+            </LinkWrapper>
           ) : (
             <EmptyContainer>
               <p>생성한 테스트가 없습니다.</p>
@@ -235,7 +243,7 @@ export default function UserProfile() {
             <MyReview />
           </span>
         </ReviewWrapper>
-      </div>
+      </ProjectWrapper>
       {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </div>
   );

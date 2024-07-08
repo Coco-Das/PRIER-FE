@@ -2,7 +2,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
 import { useEffect, useRef, useState } from 'react';
 import { API_BASE_URL } from '../../../const/TokenApi';
-import { CustomButton, Question, QuestionDiv, Textarea } from './ResponseQuestionStyles';
+import { CustomButton, Question, QuestionDiv, QuestionWrapper, Textarea } from './ResponseQuestionStyles';
 import PropTypes from 'prop-types';
 import Snackbar from '../../../components/user/Snackbar';
 
@@ -117,9 +117,15 @@ export const ResponseQuestion = () => {
   };
 
   return (
-    <>
-      <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-        <span className="ml-10 font-extrabold" style={{ color: '#315AF1' }}>
+    <QuestionWrapper>
+      <div
+        className="mt-4"
+        style={{
+          display: 'flex',
+          alignItems: 'center',
+        }}
+      >
+        <span className="font-extrabold" style={{ color: '#315AF1' }}>
           프로젝트에 대한 솔직한 의견을 남겨주세요
         </span>
       </div>
@@ -203,6 +209,6 @@ export const ResponseQuestion = () => {
         </div>
         {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
       </Question>
-    </>
+    </QuestionWrapper>
   );
 };
