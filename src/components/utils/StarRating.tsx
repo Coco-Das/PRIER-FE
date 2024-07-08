@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
-
+import { device } from '../../styles/Media';
 const StarRatingDiv = styled.div`
   display: flex;
   flex-direction: row;
@@ -20,6 +20,11 @@ const Star = styled.span<{ $onHover: boolean }>`
     width: 100%;
     height: 100%;
   }
+  ${device.small} {
+    width: 10px;
+    height: 10px;
+    gap: 1px;
+  }
 `;
 
 const StarIcon = styled(Star)<{ $isFilled: boolean }>`
@@ -36,6 +41,10 @@ const HalfStar = styled(Star)`
     height: 24px;
     overflow: hidden;
     color: gold;
+  }
+  ${device.small} {
+    width: 5px;
+    height: 10px;
   }
 `;
 

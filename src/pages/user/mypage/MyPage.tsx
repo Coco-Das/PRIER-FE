@@ -35,6 +35,13 @@ import {
   StyledProfile,
   StaticOverlay,
   LinkProjectText,
+  ProfileWapper,
+  IntroduceWrapper,
+  SubTitle,
+  IntroduceText,
+  ProjectWrapper,
+  LinkContainer,
+  LinkWrapper,
 } from './MyPageStyle';
 import ModeEditOutlineRoundedIcon from '@mui/icons-material/ModeEditOutlineRounded';
 import TeamImg from '../../../assets/TeamProfile.png';
@@ -418,8 +425,7 @@ export default function MyPage() {
       {showEditIntroAlert && (
         <CustomAlert message="한 줄 소개를 수정 하시겠습니까?" onConfirm={saveEditIntro} onCancel={cancleEditIntro} />
       )}
-
-      <div className="flex w-full h-[40%] mb-5">
+      <ProfileWapper>
         <ProfileContainer>
           {isEditingImg ? (
             <ProfileImgContainer>
@@ -569,10 +575,10 @@ export default function MyPage() {
             </ProfileAccountContainer>
           </div>
         </ProfileContainer>
-        <div className="flex-col w-[50%]">
+        <IntroduceWrapper>
           {isEditingIntro ? (
             <IntroduceContainer>
-              <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
+              <SubTitle>자신을 한줄로 소개</SubTitle>
               <StyledInput type="text" value={newIntro} onChange={IntroInputChange}></StyledInput>
               <CorrectText className="text-end" onClick={ConfirmEditIntro}>
                 확인
@@ -580,15 +586,15 @@ export default function MyPage() {
             </IntroduceContainer>
           ) : (
             <IntroduceContainer>
-              <p className="text-base mb-2 cursor-pointer">자신을 한줄로 소개</p>
-              <h1 className="text-2xl font-semibold">{userProfile.intro}</h1>
+              <SubTitle>자신을 한줄로 소개</SubTitle>
+              <IntroduceText>{userProfile.intro}</IntroduceText>
               <CorrectText className="text-end" onClick={setEditIntro}>
                 수정하기
               </CorrectText>
             </IntroduceContainer>
           )}
           <QuestContainer>
-            <h1 className="mb-5 cursor-pointer">오늘의 퀘스트</h1>
+            <SubTitle>오늘의 퀘스트</SubTitle>
             <StepsContainer>
               <LightTooltip title="+ 1코어" placement="top">
                 <Step onClick={() => QuestClick('1')}>
@@ -613,9 +619,9 @@ export default function MyPage() {
             </StepsContainer>
           </QuestContainer>
           {showSuccess && <QuestSuccess onClose={closeSuccessMessage} />}
-        </div>
-      </div>
-      <div className="flex w-screen h-[60%]">
+        </IntroduceWrapper>
+      </ProfileWapper>
+      <ProjectWrapper>
         <ProjectContainer>
           <div className="flex w-full items-center">
             <Title>진행 중인 프로젝트</Title>
@@ -624,8 +630,8 @@ export default function MyPage() {
             </Link>
           </div>
           {userProfile.nowProjectId !== null ? (
-            <div className="flex w-full h-full">
-              <div className="flex-col w-[30%] h-full">
+            <LinkWrapper>
+              <LinkContainer>
                 <Link to={`/responsetest/${userProfile.nowProjectId}`}>
                   <LinkProject>
                     <div className="flex items-center gap-3">
@@ -639,13 +645,13 @@ export default function MyPage() {
                 </Link>
                 <FeedbackContainer>
                   <Link to={`/feedback/${userProfile.nowProjectId}`}>
-                    <TitleText className="mb-4">받은 피드백</TitleText>
-                    <UniqueText className="mb-4">{userProfile.nowProjectFeedbackCount}</UniqueText>
+                    <TitleText>받은 피드백</TitleText>
+                    <UniqueText>{userProfile.nowProjectFeedbackCount}</UniqueText>
                     <DetailText>{userProfile.nowProjectFeedbackCount}개의 피드백이 제출되었습니다.</DetailText>
                     <LinkText className="text-end">모아보기 &gt;</LinkText>
                   </Link>
                 </FeedbackContainer>
-              </div>
+              </LinkContainer>
               {userProfile.nowProjectFeedbackCount === 0 ? (
                 <StaticContainer className="relative">
                   <TitleText>통계</TitleText>
@@ -670,7 +676,7 @@ export default function MyPage() {
               <AIReportContainer>
                 <AIReport />
               </AIReportContainer>
-            </div>
+            </LinkWrapper>
           ) : (
             <Link to="/createtest">
               <EmptyContainer>
@@ -686,7 +692,7 @@ export default function MyPage() {
             <MyReview />
           </span>
         </ReviewWrapper>
-      </div>
+      </ProjectWrapper>
       {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
     </div>
   );
