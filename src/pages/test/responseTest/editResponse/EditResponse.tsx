@@ -118,7 +118,6 @@ export const EditResponse = () => {
   const [newQuestions, setNewQuestions] = useState<Question[]>([]);
   const [deleteMainImage, setDeleteMainImage] = useState(false);
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
-  const [ImageAlert, setImageAlert] = useState(false);
 
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
@@ -174,13 +173,6 @@ export const EditResponse = () => {
       console.error('에러:', error);
     }
   };
-  // useEffect(() => {
-  //   console.log('Main Key:', mainKeys);
-  // }, [mainKeys]);
-
-  // useEffect(() => {
-  //   console.log('Add Keys:', addKeys);
-  // }, [addKeys]);
 
   if (!projectId) {
     console.log(projectId);
@@ -264,13 +256,6 @@ export const EditResponse = () => {
     console.log(additionalImageUrls);
     console.log('삭제될이미지의 key:', deleteImages);
   };
-  // useEffect(() => {
-  //   console.log('현재 보이는 이미지', additionalImageUrls);
-  // }, [additionalImageUrls]);
-
-  // useEffect(() => {
-  //   console.log('삭제될 이미지:', deleteImages);
-  // }, [deleteImages]);
 
   const handleTagInputChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTagInput(event.target.value);
@@ -336,6 +321,10 @@ export const EditResponse = () => {
 
   const addQuestion = () => {
     const allQuestions = [...questions, ...newQuestions];
+    if (allQuestions.length >= 10) {
+      setSnackbar({ message: '질문은 최대 10개까지 추가할 수 있습니다.', type: 'error' });
+      return;
+    }
     const maxId = allQuestions.reduce((max, question) => {
       const id = question.questionId ?? question.newQuestionId ?? 0;
       return Math.max(max, id);
@@ -406,20 +395,6 @@ export const EditResponse = () => {
         'Content-Type': 'multipart/form-data',
       },
     };
-
-    // formData.forEach((value, key) => {
-    //   if (key === 'form') {
-    //     const reader = new FileReader();
-    //     reader.onload = event => {
-    //       console.log(`${key}: ${event.target?.result}`);
-    //     };
-    //     reader.readAsText(value as Blob);
-    //   } else if (value instanceof File) {
-    //     console.log(`${key}: ${value.name}`);
-    //   } else {
-    //     console.log(`${key}: ${value}`);
-    //   }
-    // });
 
     try {
       // console.log(jsonData);
@@ -615,7 +590,6 @@ export const EditResponse = () => {
                     }}
                     readOnly={true}
                     value={question.content}
-                    // onChange={e => handleQuestionContentChange(question.questionId, e.target.value)}
                   />
                 </div>
 
@@ -765,7 +739,6 @@ export const EditResponse = () => {
         </div>
       </Question>
       {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
-      {ImageAlert && <CustomAlert message="메인이미지는 필수입니다" showButtons={false} />}
     </CreateWrapper>
   );
 };
