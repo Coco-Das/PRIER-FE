@@ -269,7 +269,7 @@ const CreateBoard: React.FC = () => {
               placeholder="카테고리"
               indicator={<KeyboardArrowDown />}
               sx={{
-                width: 110,
+                width: 145,
                 [`& .${selectClasses.indicator}`]: {
                   transition: '0.2s',
                   [`&.${selectClasses.expanded}`]: {
@@ -277,7 +277,6 @@ const CreateBoard: React.FC = () => {
                   },
                 },
               }}
-              className="ml-auto"
               onChange={(event, newValue) => setCategory(newValue as string)}
             >
               <Option value="ITNEWS">IT 지식</Option>
@@ -296,7 +295,7 @@ const CreateBoard: React.FC = () => {
             <AuthorContainer>
               <Author>{profileNickname}</Author>
             </AuthorContainer>
-            <TextEditorToolbar editorState={editorState} onEditorChange={handleEditorChange} />
+            <TextEditorToolbar editorState={editorState} onEditorChange={handleEditorChange} currentFontSize={'12'} />
             <CustomButton onClick={handleImageUpload}>
               <ButtonText>이미지 업로드</ButtonText>
             </CustomButton>

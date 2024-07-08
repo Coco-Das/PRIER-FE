@@ -1,7 +1,10 @@
 import styled, { keyframes, css } from 'styled-components';
-import { ReactComponent as ReviewImg1 } from '../../assets/ReviewImg1.svg';
-import { ReactComponent as ReviewImg2 } from '../../assets/ReviewImg2.svg';
-import { ReactComponent as ReviewImg3 } from '../../assets/ReviewImg3.svg';
+import ReviewImg1 from '../../assets/FirstMainReview1.png';
+import ReviewImg2 from '../../assets/FirstMainReview2.png';
+import ReviewImg3 from '../../assets/FirstMainReview3.png';
+import ReviewImg4 from '../../assets/FirstMainReview4.png';
+import ReviewImg5 from '../../assets/FirstMainReview5.png';
+import ReviewImg6 from '../../assets/FirstMainReview6.png';
 
 const fadeInUp = keyframes`
   0% {
@@ -62,33 +65,57 @@ export const Text4 = styled.h1`
   ${animationCSS};
 `;
 
-export const Review1 = styled(ReviewImg1)`
+// ReviewImg 컴포넌트를 img 태그로 바꾸고 styled-components로 스타일링 적용
+const ReviewImage = styled.img`
   position: absolute;
+  box-shadow: rgba(0, 0, 0, 0.8);
+  ${animationCSS};
+`;
+
+export const Review2 = styled(ReviewImage).attrs({
+  src: ReviewImg2,
+  alt: 'Review1',
+})`
   right: 24rem;
-  top: 10rem;
-  ${animationCSS};
+  top: 20rem;
 `;
-export const Review2 = styled(ReviewImg2)`
-  position: absolute;
+
+export const Review5 = styled(ReviewImage).attrs({
+  src: ReviewImg5,
+  alt: 'Review2',
+})`
   right: 30rem;
-  top: 24rem;
-  ${animationCSS};
+  top: 27rem;
 `;
-export const Review3 = styled(ReviewImg3)`
-  position: absolute;
+
+export const Review3 = styled(ReviewImage).attrs({
+  src: ReviewImg3,
+  alt: 'Review3',
+})`
   right: 8rem;
   top: 32rem;
-  ${animationCSS};
 `;
-export const Review4 = styled(ReviewImg3)`
-  position: absolute;
-  right: 18rem;
-  top: 20rem;
-  ${animationCSS};
+
+export const Review4 = styled(ReviewImage).attrs({
+  src: ReviewImg4,
+  alt: 'Review4',
+})`
+  right: 5rem;
+  top: 15rem;
 `;
-export const Review5 = styled(ReviewImg2)`
-  position: absolute;
+
+export const Review6 = styled(ReviewImage).attrs({
+  src: ReviewImg6,
+  alt: 'Review5',
+})`
   right: 2rem;
   top: 23rem;
-  ${animationCSS};
+`;
+
+export const Review1 = styled(ReviewImage).attrs({
+  src: ReviewImg1,
+  alt: 'Review6',
+})`
+  right: 22rem;
+  top: 10rem;
 `;
