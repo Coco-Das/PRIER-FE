@@ -113,7 +113,6 @@ export const EditResponse = () => {
   const [teamDescription, setTeamDescription] = useState('');
   const [teamMate, setTeamMate] = useState('');
   const [teamName, setTeamName] = useState('');
-  const [showAlert, setShowAlert] = useState(false);
   const [questions, setQuestions] = useState<Question[]>([]);
   const [newQuestions, setNewQuestions] = useState<Question[]>([]);
   const [deleteMainImage, setDeleteMainImage] = useState(false);
@@ -268,10 +267,7 @@ export const EditResponse = () => {
         setTags(prevTags => [...prevTags, { tagName: tagInput.trim(), color: getRandomColor() }]);
         setTagInput('');
       } else {
-        setShowAlert(true);
-        setTimeout(() => {
-          setShowAlert(false);
-        }, 800);
+        setSnackbar({ message: '태그는 최대 2개까지 가능합니다.', type: 'error' });
       }
     }
   };
@@ -381,6 +377,7 @@ export const EditResponse = () => {
       formData.append('mainImage', mainFileInputRef.current.files[0]);
     } else {
       if (deleteMainImage) {
+        setSnackbar({ message: '메인이미지는 필수입니다.', type: 'error' });
         return;
       }
     }
@@ -482,7 +479,6 @@ export const EditResponse = () => {
               onKeyDown={handleTagInputKeyDown}
             />
           </TagDiv>
-          {showAlert && <CustomAlert message="태그는 최대 2개까지 설정할 수 있습니다." showButtons={false} />}
           <TagWrapper $isMine={isMine}>
             {tags.map((tag, index) => (
               <Tag key={index} $bgColor={tag.color}>
