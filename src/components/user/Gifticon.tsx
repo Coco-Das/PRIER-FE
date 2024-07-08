@@ -4,8 +4,10 @@ import {
   CardBack,
   CardContainer,
   CardFront,
+  CardFrontContainer,
   DescriptionText,
   GiftImg,
+  GiftText,
   GiftTextWrapper,
   GiftTitle,
   LinkText,
@@ -20,11 +22,16 @@ import { DescriptionGift, FetchGiftList, PurchaseGift } from '../../services/Sto
 import GiftPurchaseModal from './GiftPurchaseModal';
 import Snackbar from './Snackbar';
 import CoinIcon from '../../assets/Coin.png';
+import { device } from '../../styles/Media';
 
 const StyledCoinIcon = styled.img`
   width: 40px;
   height: 40px;
   margin-right: 10px;
+  ${device.small} {
+    width: 25px;
+    height: 25px;
+  }
 `;
 
 export default function Gifticon() {
@@ -92,17 +99,17 @@ export default function Gifticon() {
             <CardFront>
               {gifticon.stock === 0 ? (
                 <SoldOutContainer>
-                  <div className="flex">
+                  <CardFrontContainer>
                     <GiftImg src={gifticon.imageUrl} alt={gifticon.productName} />
                     <GiftTextWrapper>
                       <Title>{gifticon.productName}</Title>
                       <LinkText>{gifticon.stock} 개 남음</LinkText>
                       <div className="flex items-center">
                         <StyledCoinIcon src={CoinIcon} />
-                        <p>{gifticon.price} 코어</p>
+                        <GiftText>{gifticon.price} 코어</GiftText>
                       </div>
                     </GiftTextWrapper>
-                  </div>
+                  </CardFrontContainer>
                   <SoldOutFlag>일시 품절</SoldOutFlag>
                 </SoldOutContainer>
               ) : (
@@ -115,7 +122,7 @@ export default function Gifticon() {
                     </div>
                     <div className="flex items-center">
                       <StyledCoinIcon src={CoinIcon} />
-                      <p>{gifticon.price} 코어</p>
+                      <GiftText>{gifticon.price} 코어</GiftText>
                     </div>
                     <LinkText className="text-end">상세 보기 &gt;</LinkText>
                   </GiftTextWrapper>

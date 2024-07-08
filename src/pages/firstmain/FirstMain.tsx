@@ -51,7 +51,6 @@ import ProjectImg4 from '../../assets/ProjectImg4.png';
 import ProjectImg5 from '../../assets/ProjectImg5.png';
 import ProjectImg6 from '../../assets/ProjectImg6.png';
 
-
 const GlobalStyle = createGlobalStyle`
   body {
     background-color: #1C2631;

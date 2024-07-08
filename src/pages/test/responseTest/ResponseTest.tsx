@@ -341,9 +341,6 @@ export const ResponseTest = () => {
                 <img style={{ width: '18px', height: '18px' }} src={LinkImg} />
                 {link}
               </span>
-              {/* <span className="font-bold underline" style={{ marginLeft: 'auto' }}>
-                바로가기 &rarr;
-              </span> */}
             </GreenDiv>
           )}
           <WhiteDiv className="mt-2">
@@ -355,8 +352,6 @@ export const ResponseTest = () => {
               <textarea
                 style={{ padding: '5px 10px', outline: 'none', marginTop: '5px', resize: 'none' }}
                 placeholder="전체 댓글을 눌러 댓글을 확인해보세요!"
-                // value={comment}
-                // onChange={handleCommentChange}
                 readOnly
               />
             ) : (
@@ -398,12 +393,20 @@ export const ResponseTest = () => {
                 )}
               </ButtonContainer>
             )}
-            {!isMine && (
+
+            {!isMine ? (
               <CustomButton
                 style={{ marginLeft: 'auto', width: '30%' }}
                 onClick={() => navigate(`/responsequestions/${projectId}`)}
               >
                 테스트폼 참여하기
+              </CustomButton>
+            ) : (
+              <CustomButton
+                style={{ marginLeft: 'auto', width: '30%' }}
+                onClick={() => navigate(`/feedback/${projectId}`)}
+              >
+                피드백 상세보기
               </CustomButton>
             )}
           </div>

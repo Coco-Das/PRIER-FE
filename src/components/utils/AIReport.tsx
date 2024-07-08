@@ -4,6 +4,7 @@ import { AIBestText, StyledGraphIcon, TitleText } from '../../pages/user/mypage/
 import { SmallText } from '../user/UserStyle';
 import { styled } from 'styled-components';
 import graphIcon from '../../assets/Graph.png';
+import { device } from '../../styles/Media';
 const COLOR_MAP = ['#315AF1', '#28B381', '#FFBA6B', '#828282', '#828282'];
 const DIRECT_MAP = [null, [-1, -1], [1.2, -1], [1, 1], [-1, 1]];
 const AIOverlay = styled.div`
@@ -20,6 +21,10 @@ const AIOverlay = styled.div`
   justify-content: center;
   color: #828282;
   z-index: 3;
+  ${device.small} {
+    height: 13rem;
+    font-size: 14px;
+  }
 `;
 
 export default function AIReport() {
