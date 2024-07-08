@@ -340,7 +340,7 @@ const ModifyBoard: React.FC = () => {
               placeholder="카테고리"
               indicator={<KeyboardArrowDown />}
               sx={{
-                width: 110,
+                width: 145,
                 [`& .${selectClasses.indicator}`]: {
                   transition: '0.2s',
                   [`&.${selectClasses.expanded}`]: {
@@ -348,7 +348,6 @@ const ModifyBoard: React.FC = () => {
                   },
                 },
               }}
-              className="ml-auto"
               onChange={(event, newValue) => setCategory(newValue as string)}
               value={category}
             >
