@@ -150,6 +150,11 @@ function TestList() {
     navigateToPage(value - 1, filter);
   };
 
+  const handleClick = (link: string) => {
+    const formattedLink = link.startsWith('http://') || link.startsWith('https://') ? link : `http://${link}`;
+    window.open(formattedLink, '_blank', 'noopener,noreferrer');
+  };
+
   const numericUserId = userId ? parseInt(userId, 10) : null;
   return (
     <ListWrapper ref={listWrapperRef}>
@@ -234,7 +239,7 @@ function TestList() {
                   ))}
                 </TagWrapper>
               </PurpleDiv>
-              <GreenDiv onClick={() => window.open(project.link, '_blank', 'noopener,noreferrer')}>
+              <GreenDiv onClick={() => handleClick(project.link)}>
                 <p>배포 링크</p>
                 <span
                   className="font-medium underline"
@@ -243,12 +248,6 @@ function TestList() {
                   <LinkImage src={LinkImg} />
                   {project.link}
                 </span>
-                {/* <span
-                  className="font-bold underline"
-                  style={{ marginLeft: 'auto', fontSize: '14px', color: '#828282', marginTop: 'auto' }}
-                >
-                  바로가기 &rarr;
-                </span> */}
               </GreenDiv>
             </DivWrapper>
             <ProjectStatistics project={project} />
