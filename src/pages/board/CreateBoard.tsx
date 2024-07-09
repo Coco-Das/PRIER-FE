@@ -11,6 +11,8 @@ import {
   DraftHandleValue,
   convertToRaw,
   RawDraftContentState,
+  ContentState,
+  SelectionState,
 } from 'draft-js';
 import 'draft-js/dist/Draft.css';
 import {
@@ -260,6 +262,52 @@ const CreateBoard: React.FC = () => {
     return { ...content, blocks: newBlocks };
   };
 
+  // 붙여넣기 처리 핸들러
+  const handlePastedText = (text: string, html: string | undefined, editorState: EditorState): DraftHandleValue => {
+    const URL_PATTERN = /https?:\/\/[^\s]+/g;
+    const contentState = editorState.getCurrentContent();
+    const selectionState = editorState.getSelection();
+    const blocks = contentState.getBlockMap().toArray();
+    const currentBlock = contentState.getBlockForKey(selectionState.getStartKey());
+    const blockIndex = blocks.indexOf(currentBlock);
+    let newContentState = contentState;
+
+    const textArray = text.split(URL_PATTERN);
+    const urlArray = text.match(URL_PATTERN);
+
+    let currentSelection = selectionState;
+    let startOffset = selectionState.getStartOffset();
+
+    textArray.forEach((textSegment, index) => {
+      if (textSegment) {
+        newContentState = Modifier.insertText(newContentState, currentSelection, textSegment);
+        startOffset += textSegment.length;
+        currentSelection = new SelectionState({
+          anchorKey: currentSelection.getStartKey(),
+          anchorOffset: startOffset,
+          focusKey: currentSelection.getStartKey(),
+          focusOffset: startOffset,
+        });
+      }
+
+      if (urlArray && urlArray[index]) {
+        const url = urlArray[index];
+        const entityKey = newContentState.createEntity('LINK', 'MUTABLE', { url }).getLastCreatedEntityKey();
+        newContentState = Modifier.insertText(newContentState, currentSelection, url, undefined, entityKey);
+        startOffset += url.length;
+        currentSelection = new SelectionState({
+          anchorKey: currentSelection.getStartKey(),
+          anchorOffset: startOffset,
+          focusKey: currentSelection.getStartKey(),
+          focusOffset: startOffset,
+        });
+      }
+    });
+
+    setEditorState(EditorState.push(editorState, newContentState, 'insert-characters'));
+    return 'handled';
+  };
+
   return (
     <Container>
       <CreateContainer>
@@ -325,6 +373,7 @@ const CreateBoard: React.FC = () => {
                 onChange={handleEditorChange}
                 handleBeforeInput={handleBeforeInput}
                 handleReturn={handleReturn}
+                handlePastedText={handlePastedText}
                 placeholder="내용을 입력하세요"
               />
             </div>

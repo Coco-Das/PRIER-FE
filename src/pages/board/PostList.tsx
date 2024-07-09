@@ -55,7 +55,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
     setTimeout(() => {
       onPostClick(postId);
       navigate(`/board/post/${postId}`);
-    }, 2000);
+    }, 100);
   };
 
   const sortedPosts = [...posts].sort((a, b) => {
