@@ -1,12 +1,14 @@
 import { useLocation, useParams } from 'react-router-dom';
-import { QuestionDiv, ResponseDiv, SubjectiveWrapper } from './SubjectiveListStyles';
+import styled from 'styled-components';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
 import { useEffect, useState } from 'react';
 import { API_BASE_URL } from '../../../const/TokenApi';
+import { QuestionDiv, ResponseDiv, SubjectiveWrapper, Wrapper } from './SubjectiveListStyles';
 
 interface Response {
   content: string;
 }
+
 const SubjectiveList = () => {
   const { projectId } = useParams<{ projectId: string }>();
   const { questionId } = useParams<{ questionId: string }>();
@@ -14,6 +16,7 @@ const SubjectiveList = () => {
   const location = useLocation();
   const { questionContent } = location.state || {};
   const [subresponse, setSubresponses] = useState<Response[]>([]);
+
   useEffect(() => {
     if (projectId) {
       setProjectId(projectId); // URL 파라미터로부터 projectId를 상태로 설정
@@ -29,25 +32,26 @@ const SubjectiveList = () => {
       const response = await API_BASE_URL.get(`/projects/${projectId}/${questionId}/responses`);
       const Data = response.data;
       setSubresponses(Data);
-      //   console.log(subresponse);
     } catch (error) {
       console.log(error);
     }
   };
 
   return (
-    <SubjectiveWrapper>
+    <Wrapper>
       <span className="mt-5 font-bold" style={{ color: '#315AF1' }}>
-        &quot; {questionContent} &quot;에 대한 응답 전체보기
+        질문 &quot; <span style={{ color: '#23BE87' }}>{questionContent}</span> &quot;에 대한 응답 전체보기
       </span>
-      <ResponseDiv className="my-5">
-        {subresponse.map((res, index) => (
-          <QuestionDiv key={index}>
-            <p style={{ marginLeft: '20px', fontSize: '18px', padding: '20px' }}>{res.content}</p>
-          </QuestionDiv>
-        ))}
-      </ResponseDiv>
-    </SubjectiveWrapper>
+      <SubjectiveWrapper>
+        <ResponseDiv className="my-5">
+          {subresponse.map((res, index) => (
+            <QuestionDiv key={index} $isOdd={index % 2 === 0}>
+              <p style={{ marginLeft: '20px', fontSize: '18px', padding: '20px' }}>{res.content}</p>
+            </QuestionDiv>
+          ))}
+        </ResponseDiv>
+      </SubjectiveWrapper>
+    </Wrapper>
   );
 };
 
