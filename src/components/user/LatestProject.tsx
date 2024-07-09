@@ -28,7 +28,7 @@ export default function LatestProject() {
           <Link to={`/responsetest/${project.projectId}`}>
             <div className="flex items-center mt-2 justify-between w-full">
               <div className="flex items-center mb-2">
-                <Link to={project.projectId === Number(myId) ? `/mypage` : `/profile/${project.projectId}`}>
+                <Link to={project.projectId === Number(myId) ? `/mypage` : `/profile/${project.userId}`}>
                   <ProfileImg src={project.profileImageUrl} />
                 </Link>
                 <span className="flex-col ml-4">
