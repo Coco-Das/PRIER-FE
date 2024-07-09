@@ -127,6 +127,10 @@ export const ProjectContainer = styled.div`
 `;
 export const ProjectTitle = styled.h1`
   font-size: 18px;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  max-width: 14rem;
   ${device.small} {
     font-size: 12px;
   }
@@ -226,6 +230,7 @@ export const Title = styled.h1`
   color: #315af1;
   font-weight: 500;
   font-size: 22px;
+
   ${device.small} {
     font-size: 16px;
   }
