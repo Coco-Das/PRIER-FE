@@ -228,7 +228,13 @@ export const CreateTest = () => {
 
   //질문 삭제
   const handleQuestionDelete = (id: number) => {
-    setQuestions(prevQuestions => prevQuestions.filter(question => question.id !== id));
+    setQuestions(prevQuestions => {
+      const updatedQuestions = prevQuestions.filter(question => question.id !== id);
+      if (updatedQuestions.length < 10) {
+        setHidden(false);
+      }
+      return updatedQuestions;
+    });
   };
 
   //소개 변경
