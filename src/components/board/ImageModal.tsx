@@ -25,6 +25,7 @@ const ModalBackground = styled.div`
   justify-content: center;
   background-color: rgba(0, 0, 0, 0.75);
   z-index: 50;
+  overflow: auto;
 `;
 
 const ImageContainer = styled.div<{ visible: boolean }>`
@@ -40,7 +41,7 @@ const ImageWrapper = styled.div`
 
 const CloseButton = styled.button`
   position: absolute;
-  right: -25px; /* 이미지 오른쪽으로 10px */
+  right: -25px;
   top: -25px;
   color: white;
   font-size: 1.25rem;
@@ -50,6 +51,13 @@ const CloseButton = styled.button`
   border: none;
   padding: 0;
   margin: 0;
+`;
+
+const ModalImage = styled.img`
+  max-width: 100%;
+  max-height: 100%;
+  display: block;
+  margin: 40px 0;
 `;
 
 const ImageModal: React.FC<ImageModalProps> = ({ imageUrl, onClose }) => {
@@ -82,13 +90,11 @@ const ImageModal: React.FC<ImageModalProps> = ({ imageUrl, onClose }) => {
   };
 
   return (
-    <ModalBackground className="fixed inset-0 flex items-center overflow-auto justify-center bg-black bg-opacity-75 z-50">
-      <ImageContainer visible={visible} className="relative max-w-full max-h-full">
+    <ModalBackground>
+      <ImageContainer visible={visible}>
         <ImageWrapper>
-          <CloseButton onClick={handleClose} className="absolute text-white text-xl">
-            &times;
-          </CloseButton>
-          <img src={imageUrl} alt="Modal" className="max-w-full max-h-full block my-[30px]" onLoad={handleImageLoad} />
+          <CloseButton onClick={handleClose}>&times;</CloseButton>
+          <ModalImage src={imageUrl} alt="Modal" onLoad={handleImageLoad} />
         </ImageWrapper>
       </ImageContainer>
     </ModalBackground>

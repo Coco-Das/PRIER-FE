@@ -107,7 +107,6 @@ export const CreateTest = () => {
   const [endDate, setEndDate] = useState<Date | null>(null);
   const colors = ['#FFD09B', '#CEE7FF', '#E1F9F0'];
   const [showAlert, setShowAlert] = useState(false);
-  const [alert, setAlert] = useState(false);
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
@@ -317,6 +316,7 @@ export const CreateTest = () => {
     if (mainFileInputRef.current?.files && mainFileInputRef.current.files.length > 0) {
       formData.append('mainImage', mainFileInputRef.current.files[0]);
     } else {
+      setSnackbar({ message: '메인이미지는 필수입니다.', type: 'error' });
       return;
     }
     if (additionalFileInputRef.current?.files) {
@@ -334,10 +334,7 @@ export const CreateTest = () => {
       const response = await API_BASE_URL.post('/projects', formData, config);
       const projectId = response.data;
       if (projectId === -1) {
-        setAlert(true);
-        setTimeout(() => {
-          setAlert(false);
-        }, 800);
+        setSnackbar({ message: '비어있는 부분이 있습니다.', type: 'error' });
         return;
       }
       const setProjectId = useProjectStore.getState().setProjectId;
@@ -357,7 +354,6 @@ export const CreateTest = () => {
     <CreateWrapper>
       <Project>
         <ProjectDiv>
-          {alert && <CustomAlert message="비어 있는 부분이 있습니다." showButtons={false} />}
           <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
             <Settings src={SettingPng} />
             <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
@@ -515,9 +511,9 @@ export const CreateTest = () => {
         </span>
       </div>
 
-      <Question>
+      <Question className="mt-2">
         {questions.map((question, index) => (
-          <QuestionDiv key={question.id} className="mt-4">
+          <QuestionDiv key={question.id}>
             {question.type === 'SUBJECTIVE' ? (
               <div>
                 <div
@@ -528,7 +524,7 @@ export const CreateTest = () => {
                     fontWeight: 'bold',
                   }}
                 >
-                  {index + 1}번 문항
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
                   <input
                     placeholder="질문을 입력하세요"
                     style={{
@@ -559,7 +555,7 @@ export const CreateTest = () => {
                     fontWeight: 'bold',
                   }}
                 >
-                  {index + 1}번 문항
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
                   <input
                     placeholder="질문을 입력하세요"
                     style={{ marginLeft: '30px', fontSize: '20px', outline: 'none', width: '80%' }}

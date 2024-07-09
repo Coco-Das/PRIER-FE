@@ -39,6 +39,7 @@ export const ResponseQuestion = () => {
   const [responses, setResponses] = useState<{ [key: number]: string }>({});
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [errors, setErrors] = useState<{ [key: number]: string }>({});
 
   const optionToValueMap: { [key: string]: string } = {
     '매우 좋음': '50',
@@ -81,12 +82,35 @@ export const ResponseQuestion = () => {
     handleGetQuestions();
   }, [projectId]);
 
-  if (!questions) {
-    console.log(projectId);
-    return <div>Loading...</div>;
-  }
-
   const handleQuestionSubmit = async () => {
+    let valid = true;
+    const newErrors: { [key: number]: string } = {};
+
+    for (const question of questions) {
+      if (question.category === 'SUBJECTIVE') {
+        const response = responses[question.questionId];
+        if (!response || response.trim() === '') {
+          newErrors[question.questionId] = '응답을 입력해주세요';
+          valid = false;
+        } else if (response.trim().length < 20) {
+          newErrors[question.questionId] = '20자 이상 작성해주세요';
+          valid = false;
+        }
+      } else if (
+        question.category === 'OBJECTIVE' &&
+        (!responses[question.questionId] || responses[question.questionId].trim() === '')
+      ) {
+        newErrors[question.questionId] = '객관식 답변을 선택해주세요';
+        valid = false;
+      }
+    }
+
+    if (!valid) {
+      setErrors(newErrors);
+      setSnackbar({ message: '모든 질문에 유효한 응답을 작성해주세요.', type: 'error' });
+      return;
+    }
+
     try {
       const responsePayload = Object.keys(responses).map(questionId => ({
         questionId: Number(questionId),
@@ -129,47 +153,50 @@ export const ResponseQuestion = () => {
           프로젝트에 대한 솔직한 의견을 남겨주세요
         </span>
       </div>
-      <Question>
+      <Question className="mt-2">
         {questions.map((question, index) => (
-          <QuestionDiv key={question.questionId} className="mt-4">
+          <QuestionDiv key={question.questionId}>
             {question.category === 'SUBJECTIVE' ? (
               <div>
                 <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  {index + 1}번 문항
-                  <input
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
+                  <span
                     style={{
                       marginLeft: '20px',
                       fontSize: '20px',
                       outline: 'none',
                       fontWeight: 'bold',
-                      width: '80%',
+                      width: '90%',
                     }}
-                    value={question.content}
-                    readOnly
-                  />
+                  >
+                    {question.content}
+                  </span>
                 </div>
 
                 <AutoResizeTextarea
-                  placeholder="답변을 입력해주세요..."
+                  placeholder="20자 이상 작성해주세요."
                   style={{
                     marginTop: '10px',
                     marginLeft: '75px',
                     overflowY: 'auto',
-                    width: '80%',
+                    width: '90%',
                   }}
                   onChange={e => TextChange(question.questionId, e.target.value)}
                   value={responses[question.questionId] || ''}
                 />
+                {errors[question.questionId] && (
+                  <div style={{ color: 'red', marginLeft: '75px', marginTop: '5px', fontSize: '14px' }}>
+                    {errors[question.questionId]}
+                  </div>
+                )}
               </div>
             ) : (
               <div>
                 <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  {index + 1}번 문항
-                  <input
-                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
-                    readOnly
-                    value={question.content}
-                  />
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
+                  <span style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '90%' }}>
+                    {question.content}
+                  </span>
                 </div>
                 <div
                   style={{
@@ -198,6 +225,11 @@ export const ResponseQuestion = () => {
                     </div>
                   ))}
                 </div>
+                {errors[question.questionId] && (
+                  <div style={{ color: 'red', marginLeft: '75px', marginTop: '5px', fontSize: '14px' }}>
+                    {errors[question.questionId]}
+                  </div>
+                )}
               </div>
             )}
           </QuestionDiv>

@@ -150,6 +150,11 @@ function TestList() {
     navigateToPage(value - 1, filter);
   };
 
+  const handleClick = (link: string) => {
+    const formattedLink = link.startsWith('http://') || link.startsWith('https://') ? link : `http://${link}`;
+    window.open(formattedLink, '_blank', 'noopener,noreferrer');
+  };
+
   const numericUserId = userId ? parseInt(userId, 10) : null;
   return (
     <ListWrapper ref={listWrapperRef}>
@@ -179,7 +184,15 @@ function TestList() {
         {projects.map(project => (
           <ListDiv key={project.projectId}>
             <ImageWrapper>
-              <p style={{ fontSize: '20px', fontWeight: 'bold' }}>{project.title}</p>
+              <span
+                style={{
+                  fontSize: '20px',
+                  fontWeight: 'bold',
+                  cursor: 'pointer',
+                }}
+              >
+                {project.title}
+              </span>
               <div
                 style={{
                   width: '100%',
@@ -212,12 +225,8 @@ function TestList() {
               <div>
                 <StarRating initialScore={project.score} onHover={false} readOnly={true}></StarRating>
               </div>
-              {/* 이미지 있을 때만 보이도록 */}
               <div style={{ padding: '10px 10px 0px 0px', height: '100%', width: '100%', position: 'relative' }}>
-                {project.mainImageUrl && <Img src={project.mainImageUrl} alt={project.title} />}
-                {/* <div style={{ position: 'absolute', top: '5%' }}>
-                  <StarRating initialScore={project.score}></StarRating>
-                </div> */}
+                <Img src={project.mainImageUrl} alt={project.title} />
               </div>
             </ImageWrapper>
             <DivWrapper>
@@ -234,21 +243,23 @@ function TestList() {
                   ))}
                 </TagWrapper>
               </PurpleDiv>
-              <GreenDiv onClick={() => window.open(project.link, '_blank', 'noopener,noreferrer')}>
+              <GreenDiv onClick={() => handleClick(project.link)}>
                 <p>배포 링크</p>
-                <span
-                  className="font-medium underline"
-                  style={{ fontSize: '14px', color: '#828282', display: 'flex', marginTop: '10px', gap: '5px' }}
-                >
+                <div style={{ display: 'flex', alignItems: 'center', marginTop: '10px', gap: '5px' }}>
                   <LinkImage src={LinkImg} />
-                  {project.link}
-                </span>
-                {/* <span
-                  className="font-bold underline"
-                  style={{ marginLeft: 'auto', fontSize: '14px', color: '#828282', marginTop: 'auto' }}
-                >
-                  바로가기 &rarr;
-                </span> */}
+                  <span
+                    className="font-medium underline"
+                    style={{
+                      fontSize: '14px',
+                      color: '#828282',
+                      width: '320px',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {project.link}
+                  </span>
+                </div>
               </GreenDiv>
             </DivWrapper>
             <ProjectStatistics project={project} />

@@ -57,7 +57,7 @@ const styleMap = {
   BLACK: { color: 'black' },
   WHITE: { color: 'white' },
   BACKGROUND_YELLOW: { backgroundColor: 'yellow' },
-  DEFAULT_FONT_SIZE: { fontSize: '12px' },
+  DEFAULT_FONT_SIZE: { fontSize: '14px' },
   // 폰트 크기 스타일 추가
   ...Array.from({ length: 100 }, (_, i) => i + 1).reduce((acc, size) => {
     acc[`FONTSIZE_${size}`] = { fontSize: `${size}px` };
@@ -110,7 +110,7 @@ const ModifyBoard: React.FC = () => {
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null); // 스낵바 상태 변수
   const profileNickname = sessionStorage.getItem('nickname');
   const profileImg = sessionStorage.getItem('profileImg') || userAvatar;
-  const [currentFontSize, setCurrentFontSize] = useState<string>('12'); // 현재 폰트 크기 상태 변수
+  const [currentFontSize, setCurrentFontSize] = useState<string>('14'); // 현재 폰트 크기 상태 변수
 
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
 
@@ -165,7 +165,7 @@ const ModifyBoard: React.FC = () => {
       if (fontSize) {
         setCurrentFontSize(fontSize.replace('FONTSIZE_', ''));
       } else {
-        setCurrentFontSize('12'); // 기본 폰트 크기 설정
+        setCurrentFontSize('14'); // 기본 폰트 크기 설정
       }
     }
   };
@@ -372,6 +372,7 @@ const ModifyBoard: React.FC = () => {
               onEditorChange={handleEditorChange}
               currentFontSize={currentFontSize}
             />
+
             <CustomButton onClick={handleImageUpload}>
               <ButtonText>이미지 업로드</ButtonText>
             </CustomButton>
@@ -384,9 +385,15 @@ const ModifyBoard: React.FC = () => {
               accept="image/*"
             />
           </UserContainer>
-          <ContentContainer>
+          <ContentContainer className="px-[50px]">
             <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
-            <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '10px', minHeight: '400px' }}>
+            <div
+              style={{
+                borderRadius: '5px',
+                minHeight: '400px',
+                fontSize: '14px',
+              }}
+            >
               <Editor
                 editorState={editorState}
                 customStyleMap={styleMap}

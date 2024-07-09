@@ -5,7 +5,7 @@ export const KAKAO_ACCESS_TOKEN = localStorage.getItem('kakaoAccessToken');
 export const API_BASE_URL = axios.create({
   baseURL: 'http://3.38.181.14:8080/api', // 배포
 });
-//    baseURL: 'http://3.35.18.26:8080/api', //로컬
+//   baseURL: 'http://3.35.18.26:8080/api', //로컬
 //요청 인터셉터
 API_BASE_URL.interceptors.request.use(
   config => {
