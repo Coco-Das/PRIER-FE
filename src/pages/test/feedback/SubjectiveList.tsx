@@ -40,7 +40,7 @@ const SubjectiveList = () => {
   return (
     <Wrapper>
       <span className="mt-5 font-bold" style={{ color: '#315AF1' }}>
-        질문 &quot; <span style={{ color: '#23BE87' }}>{questionContent}</span> &quot;에 대한 응답 전체보기
+        &quot; <span style={{ color: '#23BE87' }}>{questionContent}</span> &quot;에 대한 응답 전체보기
       </span>
       <SubjectiveWrapper>
         <ResponseDiv className="my-5">
