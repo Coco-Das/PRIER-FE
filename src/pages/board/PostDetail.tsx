@@ -298,7 +298,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
               )}
             </UserContainer>
             <ContentContainer className=" px-[50px] flex flex-col items-start self-center w-[100%]">
-              <h1 className="text-xl font-bold mb-8">{post.title}</h1>
+              <h1 className="text-xl font-semibold	 mb-8">{post.title}</h1>
               <div className=" w-[100%]" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
                 <div
                   style={{

@@ -137,7 +137,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                 className="flex flex-col items-start self-center w-[100%]"
                 style={{ paddingLeft: '50px', paddingRight: '50px', paddingBottom: '50px' }}
               >
-                <h1 className="text-xl font-bold mb-8">{post.title}</h1>
+                <h1 className="text-xl font-semibold mb-8">{post.title}</h1>
                 {post.media && post.media.length > 0 ? (
                   <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
                     <ImageSlider images={post.media.map(m => m.s3Url)} category={post.category} />

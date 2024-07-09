@@ -29,7 +29,6 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox 
   const handleDelete = async () => {
     try {
       await API_BASE_URL.delete(`/posts/${postId}`);
-      alert('게시글이 삭제되었습니다.');
       window.location.reload(); // 페이지 새로고침
     } catch (error) {
       console.error('게시글 삭제 중 오류가 발생했습니다:', error);

@@ -386,26 +386,24 @@ const ModifyBoard: React.FC = () => {
           </UserContainer>
           <ContentContainer className="px-[50px]">
             <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
-            <div style={{ borderRadius: '5px', padding: '10px', minHeight: '400px' }}>
-              <div
-                style={{
-                  borderRadius: '5px',
-                  minHeight: '400px',
-                  fontSize: '12px',
-                }}
-              >
-                <Editor
-                  editorState={editorState}
-                  customStyleMap={styleMap}
-                  handleKeyCommand={handleKeyCommand}
-                  keyBindingFn={mapKeyToEditorCommand}
-                  onChange={handleEditorChange}
-                  handleBeforeInput={handleBeforeInput}
-                  handleReturn={handleReturn}
-                  placeholder="내용을 입력하세요"
-                  blockStyleFn={() => 'block-default-font-size'}
-                />
-              </div>
+            <div
+              style={{
+                borderRadius: '5px',
+                minHeight: '400px',
+                fontSize: '12px',
+              }}
+            >
+              <Editor
+                editorState={editorState}
+                customStyleMap={styleMap}
+                handleKeyCommand={handleKeyCommand}
+                keyBindingFn={mapKeyToEditorCommand}
+                onChange={handleEditorChange}
+                handleBeforeInput={handleBeforeInput}
+                handleReturn={handleReturn}
+                placeholder="내용을 입력하세요"
+                blockStyleFn={() => 'block-default-font-size'}
+              />
             </div>
           </ContentContainer>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>

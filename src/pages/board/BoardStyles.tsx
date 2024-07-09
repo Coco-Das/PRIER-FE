@@ -17,9 +17,9 @@ export const Container = styled.div`
 export const Title = styled.div`
   color: #4188fe;
   text-align: left;
-  font-size: 28px;
-  line-height: 140%;
-  font-weight: 800;
+  font-size: 1.25rem; /* 20px */
+  line-height: 1.75rem; /* 28px */
+  font-weight: 600;
   width: 100%;
   max-width: 1000px;
   margin-top: 10px;

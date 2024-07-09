@@ -124,10 +124,12 @@ export const ContentContainer = styled.div`
 `;
 
 export const Title = styled.input`
-  padding: 10px;
+  padding: 10px 10px 10px 0px;
   margin-bottom: 10px;
   border-radius: 5px;
   font-size: 20px;
+  outline: none; // 포커스 시 보더 제거
+  font-weight: 600;
 `;
 
 export const ContentText = styled.textarea`
