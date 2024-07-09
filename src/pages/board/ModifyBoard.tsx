@@ -407,7 +407,7 @@ const ModifyBoard: React.FC = () => {
               />
             </div>
           </ContentContainer>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '0px', margin: '0 50px' }}>
             {existingImages &&
               existingImages.map((image, index) => (
                 <ImageWrapper key={index}>

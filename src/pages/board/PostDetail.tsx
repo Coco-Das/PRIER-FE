@@ -12,7 +12,7 @@ import { Loading } from '../../components/utils/Loading';
 import axios from 'axios';
 import { API_BASE_URL } from '../../const/TokenApi';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
-import ImageModal from '../../components/board/ImageModal'; // 모달 컴포넌트 임포트
+import ImageModal from '../../components/board/ImageModal';
 import useLike from '../../hooks/UseLike';
 import { LinkUserProfile } from '../../services/UserApi';
 import { useUserStore } from '../../states/user/UserStore';
@@ -200,14 +200,15 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
     return <div></div>;
   }
 
-  const handleProfileClick = async (e: React.MouseEvent, writerId: number) => {
-    e.stopPropagation();
-    if (writerId === USER_ID) {
-      navigate(`/mypage`);
-    } else {
+  const handleProfileClick = async (writerId: number) => {
+    setLoading(true);
+    try {
       await LinkUserProfile(writerId);
       navigate(`/profile/${writerId}`);
+    } finally {
+      setLoading(false);
     }
+    navigate(`/profile/${writerId}`);
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -245,7 +246,6 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
               commentId: response.data.commentId,
               writerProfileUrl: response.data.writerProfileUrl,
             };
-            window.location.reload();
             setPost({ ...post, comments: [...post.comments, newCommentData] });
           }
         }
@@ -302,13 +302,13 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
           <UserContainer className="mt-[-16px]">
             <Avatar
               className="ml-[-8px] mt-[5px]"
-              onClick={e => handleProfileClick(e, post.writerId)}
+              onClick={e => handleProfileClick(post.writerId)}
               category={post.category}
             >
               <AvatarImage src={post.category === 'NOTICE' ? announcementAvatar : post.writerProfileUrl} alt="Avatar" />
             </Avatar>
             <AuthorContainer>
-              <Author onClick={e => handleProfileClick(e, post.writerId)} category={post.category}>
+              <Author onClick={e => handleProfileClick(post.writerId)} category={post.category}>
                 {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
               </Author>
               <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
@@ -371,13 +371,13 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
           ) : (
             post.comments.map(comment => (
               <CommentContainer key={comment.commentId} className="flex justify-between">
-                <CommentAvatar onClick={e => handleProfileClick(e, comment.writerId)}>
+                <CommentAvatar onClick={e => handleProfileClick(comment.writerId)}>
                   <AvatarImage src={comment.writerProfileUrl} alt="Avatar" />
                 </CommentAvatar>
                 <CommentContent className="flex-1">
                   <div className="flex flex-row items-center space-x-2 justify-between">
                     <div className="flex flex-row items-center space-x-2">
-                      <CommentAuthor onClick={e => handleProfileClick(e, comment.writerId)} category={post.category}>
+                      <CommentAuthor onClick={e => handleProfileClick(comment.writerId)} category={post.category}>
                         {comment.nickname}
                       </CommentAuthor>
                       <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
