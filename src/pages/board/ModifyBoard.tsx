@@ -384,9 +384,15 @@ const ModifyBoard: React.FC = () => {
               accept="image/*"
             />
           </UserContainer>
-          <ContentContainer>
+          <ContentContainer className="px-[50px]">
             <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
-            <div style={{ border: '1px solid #ccc', borderRadius: '5px', padding: '10px', minHeight: '400px' }}>
+            <div
+              style={{
+                borderRadius: '5px',
+                minHeight: '400px',
+                fontSize: '14px',
+              }}
+            >
               <Editor
                 editorState={editorState}
                 customStyleMap={styleMap}

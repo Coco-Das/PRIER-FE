@@ -85,13 +85,13 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
 
         const content = extractTextFromContent(post.content);
         const lines = content.split('\n');
-        const displayContent = lines.length > 2 ? `${lines.slice(0, 2).join('\n')}\n...` : content;
+        const displayContent = lines.length > 3 ? `${lines.slice(0, 2).join('\n')}...` : content;
 
         return (
           <BackgroundContainer
             key={post.postId}
             isActive={post.postId === activePostId}
-            style={{ position: 'relative' }}
+            style={{ position: 'relative', zIndex: '0' }}
           >
             <PostBox
               category={post.category}
@@ -137,9 +137,9 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                 className="flex flex-col items-start self-center w-[100%]"
                 style={{ paddingLeft: '50px', paddingRight: '50px', paddingBottom: '50px' }}
               >
-                <h1 className="text-xl font-bold mb-8">{post.title}</h1>
+                <h1 className="text-xl font-semibold mb-8">{post.title}</h1>
                 {post.media && post.media.length > 0 ? (
-                  <div style={{ display: 'flex', justifyContent: 'center', width: '100%' }}>
+                  <div style={{ display: 'flex', justifyContent: 'center', width: '100%', height: '300px' }}>
                     <ImageSlider images={post.media.map(m => m.s3Url)} category={post.category} />
                   </div>
                 ) : (
@@ -154,14 +154,13 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                 )}
               </ContentContainer>
             </PostBox>
-            <ListLikesContainer onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+            <ListLikesContainer style={{ zIndex: 1 }}>
               <Likes>Likes {likeState.likeCount}</Likes>
               <label className="ui-like" style={{ cursor: 'pointer' }}>
                 <input
                   type="checkbox"
                   checked={currentIsLiked}
                   onChange={async e => {
-                    e.stopPropagation(); // 이벤트 전파 차단
                     await toggleLike(post.postId, currentIsLiked);
                   }}
                 />
@@ -203,11 +202,11 @@ const ImageSlider: React.FC<{ images: string[]; category: string }> = ({ images,
               img.src = src;
               img.onload = () => {
                 if (img.width > img.height) {
-                  resolve({ width: '100%', height: 'auto', maxHeight: '300px' });
+                  resolve({ width: 'auto', height: '100%', objectFit: 'contain' });
                 } else if (img.height > img.width) {
-                  resolve({ width: 'auto', height: '300px', maxWidth: '500px', objectFit: 'cover' });
+                  resolve({ width: 'auto', height: '100%', objectFit: 'contain' });
                 } else {
-                  resolve({ width: 'auto', height: '300px', objectFit: 'contain' });
+                  resolve({ width: '100%', height: '100%', objectFit: 'contain' });
                 }
               };
             }),
@@ -220,7 +219,7 @@ const ImageSlider: React.FC<{ images: string[]; category: string }> = ({ images,
   }, [images]);
 
   return (
-    <div style={{ position: 'relative', width: '100%', height: '300px', overflow: 'hidden' }}>
+    <div style={{ position: 'relative', width: '100%', height: '300px', overflow: 'hidden', margin: '0' }}>
       {images.map((image, index) => (
         <Image
           key={index}
@@ -235,6 +234,7 @@ const ImageSlider: React.FC<{ images: string[]; category: string }> = ({ images,
             transition: 'opacity 1s ease-in-out',
             opacity: index === currentIndex ? 1 : 0,
             ...imageStyles[index],
+            margin: '0',
           }}
         />
       ))}

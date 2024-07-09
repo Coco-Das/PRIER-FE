@@ -308,15 +308,13 @@ const CreateBoard: React.FC = () => {
               accept="image/*"
             />
           </UserContainer>
-          <ContentContainer>
+          <ContentContainer className="px-[50px]">
             <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
             <div
               style={{
-                border: '1px solid #ccc',
                 borderRadius: '5px',
-                padding: '10px',
                 minHeight: '400px',
-                fontSize: '12px',
+                fontSize: '14px',
               }}
             >
               <Editor
@@ -331,7 +329,7 @@ const CreateBoard: React.FC = () => {
               />
             </div>
           </ContentContainer>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '0px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '0px', margin: '0 50px' }}>
             {images.map((image, index) => (
               <ImageWrapper key={index}>
                 <StyledImg src={URL.createObjectURL(image)} alt={`Uploaded image ${index}`} />
