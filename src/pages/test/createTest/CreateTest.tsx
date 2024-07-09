@@ -110,7 +110,7 @@ export const CreateTest = () => {
   const navigate = useNavigate();
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
-
+  const [hidden, setHidden] = useState(false);
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
     const randomIndex = Math.floor(Math.random() * colors.length);
@@ -125,6 +125,7 @@ export const CreateTest = () => {
           message: '질문은 10개까지 가능합니다.',
           type: 'error',
         });
+        setHidden(true);
         return prevQuestions;
       }
       return [...prevQuestions, { id: prevQuestions.length + 1, type: 'SUBJECTIVE', content: '' }];
@@ -595,7 +596,7 @@ export const CreateTest = () => {
           </QuestionDiv>
         ))}
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-          <AddButton onClick={addQuestion} />
+          {!hidden && <AddButton onClick={addQuestion} />}
         </div>
         <div style={{ width: '100%', display: 'flex', marginBottom: '20px' }}>
           <CustomButton onClick={handleSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
