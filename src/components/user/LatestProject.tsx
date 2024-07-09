@@ -14,12 +14,17 @@ import {
 } from './UserStyle';
 import { useNewProjectStore } from '../../states/user/UserProjectStore';
 import StarRating from '../utils/StarRating';
+import { LinkUserProfile } from '../../services/UserApi';
 
 export default function LatestProject() {
   const { content } = useNewProjectStore();
 
   const displayedProjects = content.slice(0, 4);
   const myId = localStorage.getItem('userId');
+
+  const handleProfileClick = async (userId: number) => {
+    await LinkUserProfile(userId);
+  };
 
   return (
     <LatestProjectWrapper>
@@ -28,8 +33,8 @@ export default function LatestProject() {
           <Link to={`/responsetest/${project.projectId}`}>
             <div className="flex items-center mt-2 justify-between w-full">
               <div className="flex items-center mb-2">
-                <Link to={project.projectId === Number(myId) ? `/mypage` : `/profile/${project.userId}`}>
-                  <ProfileImg src={project.profileImageUrl} />
+                <Link to={project.userId === Number(myId) ? `/mypage` : `/profile/${project.userId}`}>
+                  <ProfileImg src={project.profileImageUrl} onClick={() => handleProfileClick(project.userId)} />
                 </Link>
                 <span className="flex-col ml-4">
                   <ProjectTitle>{project.title}</ProjectTitle>
