@@ -15,23 +15,19 @@ import {
   Image,
   LikesContainer,
   Likes,
-  LikeButton,
-  LikeIcon,
+  LikeBackContainer,
   CommentContainer,
   CommentAvatar,
   CommentContent,
   CommentAuthor,
   CommentText,
   CommentCreatedAt,
-  LikeBackContainer,
   CommentInputContainer,
   CommentInput,
   CommentButton,
 } from './BoardStyles';
 import backto from '../../assets/BackTo.svg';
 import announcementAvatar from '../../assets/Announcement.svg';
-import UnLike from '../../assets/UnLike.svg';
-import Like from '../../assets/Like.svg';
 import useFormatDate from '../../hooks/UseFormatDate';
 import PostMenu from '../../components/board/PostMenu';
 import CommentMenu from '../../components/board/CommentMenu';
@@ -44,17 +40,7 @@ import ImageModal from '../../components/board/ImageModal'; // 모달 컴포넌�
 import useLike from '../../hooks/UseLike';
 import { LinkUserProfile } from '../../services/UserApi';
 import { useUserStore } from '../../states/user/UserStore';
-import {
-  Editor,
-  EditorState,
-  convertFromRaw,
-  CompositeDecorator,
-  getDefaultKeyBinding,
-  KeyBindingUtil,
-  Modifier,
-  RichUtils,
-  DraftHandleValue,
-} from 'draft-js'; // Draft.js 임포트
+import { Editor, EditorState, convertFromRaw, CompositeDecorator } from 'draft-js'; // Draft.js 임포트
 import 'draft-js/dist/Draft.css';
 
 // CreateBoard에서 사용한 styleMap과 decorator를 가져옵니다.
@@ -74,6 +60,9 @@ const styleMap = {
     acc[`FONTSIZE_${size}`] = { fontSize: `${size}px` };
     return acc;
   }, {} as Record<string, React.CSSProperties>),
+  default: {
+    fontSize: '12px', // 기본 폰트 크기 설정
+  },
 };
 
 // 링크 엔티티를 찾는 전략을 정의합니다.
@@ -155,7 +144,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const USER_ID = storedUserId ? Number(storedUserId) : null;
   const userProfile = useUserStore(state => state.userProfile);
 
-  const { likes, toggleLike, isLikedByMe } = useLike();
+  const { likes, toggleLike } = useLike();
   const fetchPost = async () => {
     setLoading(true);
     try {
@@ -177,7 +166,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
 
   const handleProfileClick = async (e: React.MouseEvent, writerId: number) => {
     e.stopPropagation();
-    if (writerId == USER_ID) {
+    if (writerId === USER_ID) {
       navigate(`/mypage`);
     } else {
       await LinkUserProfile(writerId);
@@ -308,13 +297,17 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
                 </div>
               )}
             </UserContainer>
-            <ContentContainer
-              className="flex flex-col items-start self-center w-[100%]"
-              style={{ paddingLeft: '50px', paddingRight: '50px' }}
-            >
+            <ContentContainer className=" px-[50px] flex flex-col items-start self-center w-[100%]">
               <h1 className="text-xl font-bold mb-8">{post.title}</h1>
-              <Editor editorState={editorState} customStyleMap={styleMap} readOnly={true} onChange={() => {}} />
-
+              <div className=" w-[100%]" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
+                <div
+                  style={{
+                    fontSize: '12px',
+                  }}
+                >
+                  <Editor editorState={editorState} customStyleMap={styleMap} readOnly={true} onChange={() => {}} />
+                </div>
+              </div>
               {post.media && post.media.length > 0 && (
                 <div className="flex flex-wrap gap-4">
                   {post.media.map((mediaItem, index) => (
