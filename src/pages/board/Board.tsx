@@ -23,7 +23,7 @@ const Board: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [USER_ID, setUserId] = useState<number | null>(null);
   const [allFetched, setAllFetched] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('Community'); // 추가된 상태
+  const [title, setTitle] = useState<string>('Community');
 
   const POSTS_PER_PAGE = 3;
   const {
@@ -157,7 +157,13 @@ const Board: React.FC = () => {
     setActiveCategory(category);
     setPage(1);
 
-    fetchPosts(); // 모든 카테고리에서 데이터를 가져오도록 호출
+    if (activeFilter === 'all') {
+      fetchPosts();
+    } else if (activeFilter === 'myposts') {
+      fetchMyPosts();
+    } else if (activeFilter === 'likes') {
+      fetchLikedPosts();
+    }
 
     navigate(`/board?category=${category}&filter=${activeFilter}`);
   };
@@ -167,12 +173,22 @@ const Board: React.FC = () => {
     if (filter === 'all') {
       setAllFetched(false);
     }
+
+    if (filter === 'all') {
+      fetchPosts();
+    } else if (filter === 'myposts') {
+      fetchMyPosts();
+    } else if (filter === 'likes') {
+      fetchLikedPosts();
+    }
+
     navigate(`/board?category=${activeCategory}&filter=${filter}`);
   };
 
   const handleSortClick = (sort: string) => {
     setActiveSort(sort);
     setPage(1);
+
     if (activeFilter === 'all') {
       fetchPosts();
     } else if (activeFilter === 'myposts') {
@@ -180,6 +196,7 @@ const Board: React.FC = () => {
     } else if (activeFilter === 'likes') {
       fetchLikedPosts();
     }
+    navigate(`/board?category=${activeCategory}&filter=${activeFilter}`);
   };
 
   const handlePostClick = (postId: number) => {
@@ -187,7 +204,7 @@ const Board: React.FC = () => {
   };
 
   const handleBackToList = async () => {
-    await fetchData(); // 필터에 맞는 데이터를 가져옴
+    await fetchData();
     navigate(`/board?category=${activeCategory}&filter=${activeFilter}`);
   };
 
