@@ -157,7 +157,7 @@ const ImageComponent: React.FC<ImageComponentProps> = ({ mediaItem, index, openM
         widthRatio={widthRatio}
         heightRatio={heightRatio}
       />
-      <HoverButton onClick={() => openModal(mediaItem.s3Url)}>클릭해서 크게보기</HoverButton>
+      <HoverButton onClick={() => openModal(mediaItem.s3Url)}>크게보기</HoverButton>
     </ImageContainer>
   );
 };
