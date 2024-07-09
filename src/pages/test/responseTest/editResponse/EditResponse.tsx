@@ -575,20 +575,19 @@ export const EditResponse = () => {
             {question.category === 'SUBJECTIVE' ? (
               <div>
                 <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  {index + 1}번 문항
-                  <input
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
+                  <span
                     style={{
                       marginLeft: '20px',
                       fontSize: '20px',
                       outline: 'none',
                       fontWeight: 'bold',
-                      width: '80%',
+                      width: '90%',
                     }}
-                    readOnly={true}
-                    value={question.content}
-                  />
+                  >
+                    {question.content}
+                  </span>
                 </div>
-
                 <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
                   <QuestionDeleteButton src={DeletePng} onClick={() => handleQuestionDelete(question.questionId)} />
                 </div>
@@ -596,13 +595,10 @@ export const EditResponse = () => {
             ) : (
               <div>
                 <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  {index + 1}번 문항
-                  <input
-                    placeholder="질문을 입력하세요"
-                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
-                    value={question.content}
-                    readOnly={true}
-                  />
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
+                  <span style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '90%' }}>
+                    {question.content}
+                  </span>
                 </div>
                 <div
                   style={{
@@ -644,7 +640,7 @@ export const EditResponse = () => {
             {question.category === 'SUBJECTIVE' ? (
               <div>
                 <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  {index + questions.length + 1}번 문항
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + questions.length + 1}번 문항</span>
                   <input
                     placeholder="질문을 입력하세요"
                     style={{
@@ -652,7 +648,7 @@ export const EditResponse = () => {
                       fontSize: '20px',
                       outline: 'none',
                       fontWeight: 'bold',
-                      width: '80%',
+                      width: '90%',
                     }}
                     value={question.content}
                     onChange={e => handleQuestionContentChange(question.newQuestionId ?? null, e.target.value)}
@@ -674,10 +670,10 @@ export const EditResponse = () => {
             ) : (
               <div>
                 <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  {index + questions.length + 1}번 문항
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + questions.length + 1}번 문항</span>
                   <input
                     placeholder="질문을 입력하세요"
-                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '80%' }}
+                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '90%' }}
                     onChange={e => handleQuestionContentChange(question.newQuestionId ?? null, e.target.value)}
                     value={question.content}
                   />
