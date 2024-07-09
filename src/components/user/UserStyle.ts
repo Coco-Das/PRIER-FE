@@ -130,7 +130,7 @@ export const ProjectTitle = styled.h1`
   overflow: hidden;
   white-space: nowrap;
   text-overflow: ellipsis;
-  max-width: 14rem;
+  max-width: 12rem;
   ${device.small} {
     font-size: 12px;
   }
