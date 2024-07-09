@@ -142,7 +142,9 @@ export const CreateTest = () => {
                 ...question,
                 type: question.type === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
                 options:
-                  question.type === 'SUBJECTIVE' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
+                  question.type === 'SUBJECTIVE'
+                    ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨']
+                    : question.options,
               }
             : question,
         ),
@@ -226,7 +228,13 @@ export const CreateTest = () => {
 
   //질문 삭제
   const handleQuestionDelete = (id: number) => {
-    setQuestions(prevQuestions => prevQuestions.filter(question => question.id !== id));
+    setQuestions(prevQuestions => {
+      const updatedQuestions = prevQuestions.filter(question => question.id !== id);
+      if (updatedQuestions.length < 10) {
+        setHidden(false);
+      }
+      return updatedQuestions;
+    });
   };
 
   //소개 변경
