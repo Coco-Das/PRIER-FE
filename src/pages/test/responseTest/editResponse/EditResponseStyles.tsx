@@ -242,7 +242,7 @@ export const Question = styled.div`
 export const QuestionDiv = styled.div`
   width: 90%;
   height: auto;
-  padding: 10px 30px;
+  padding: 15px 30px;
   border-radius: 8px;
   border: 2px solid transparent;
   background: linear-gradient(#fff, #fff), linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc);

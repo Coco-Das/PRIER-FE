@@ -221,10 +221,32 @@ function Feedback() {
     <FeedbackWrapper>
       <ProjectDiv>
         <ProjectContainer>
-          <span style={{ color: '#315AF1', fontWeight: 'bold' }}>
+          <span
+            style={{
+              color: '#315AF1',
+              fontWeight: 'bold',
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 1, // 원하는 줄 수로 조정
+              lineHeight: '1.2em', // 줄 높이 설정
+              maxHeight: '3.6em', // lineHeight * WebkitLineClamp
+            }}
+          >
             프로젝트: {loading ? <Skeleton width={120} /> : title}
           </span>
-          <span style={{ fontSize: '18px', fontWeight: 'bold' }}>
+          <span
+            style={{
+              fontSize: '18px',
+              fontWeight: 'bold',
+              overflow: 'hidden',
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 1, // 원하는 줄 수로 조정
+              lineHeight: '1.2em', // 줄 높이 설정
+              maxHeight: '3.6em', // lineHeight * WebkitLineClamp
+            }}
+          >
             팀: {loading ? <Skeleton width={120} /> : teamName}
           </span>
           <p
@@ -236,7 +258,7 @@ function Feedback() {
               overflow: 'hidden',
               display: '-webkit-box',
               WebkitBoxOrient: 'vertical',
-              WebkitLineClamp: 1, // 원하는 줄 수로 조정
+              WebkitLineClamp: 2, // 원하는 줄 수로 조정
               lineHeight: '1.2em', // 줄 높이 설정
               maxHeight: '3.6em', // lineHeight * WebkitLineClamp
             }}
@@ -376,7 +398,7 @@ function Feedback() {
       <span className="mt-5 font-bold" style={{ color: '#315AF1' }}>
         상세 응답 분석
       </span>
-      <ResponseDiv>
+      <ResponseDiv className="mt-3">
         {loading ? (
           <div
             style={{
@@ -417,18 +439,25 @@ function Feedback() {
                 : 0;
 
             return (
-              <QuestionDiv key={question.questionId} className="mt-5">
+              <QuestionDiv key={question.questionId}>
                 {question.category === 'SUBJECTIVE' ? (
                   <div>
-                    <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                      {index + 1}번 문항
+                    <div
+                      style={{
+                        display: 'flex',
+                        fontSize: '15px',
+                        alignItems: 'center',
+                        fontWeight: 'bold',
+                      }}
+                    >
+                      <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
                       <div style={{ display: 'flex' }}>
                         <span
                           style={{
                             marginLeft: '20px',
                             fontSize: '22px',
                             outline: 'none',
-                            width: 'auto',
+                            width: '100%',
                           }}
                         >
                           {question.questionContent}
@@ -458,14 +487,14 @@ function Feedback() {
                 ) : (
                   <div>
                     <div style={{ display: 'inline-flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                      {index + 1}번 문항
+                      <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
                       <div style={{ display: 'flex' }}>
                         <span
                           style={{
                             marginLeft: '20px',
                             fontSize: '22px',
                             outline: 'none',
-                            width: 'auto',
+                            width: '100%',
                           }}
                         >
                           {question.questionContent}
@@ -512,7 +541,7 @@ function Feedback() {
       <span className="mt-5 font-bold" style={{ color: '#315AF1' }}>
         댓글
       </span>
-      <CommentDiv className="mt-5" $isEmpty={loading || comments.length === 0}>
+      <CommentDiv className="mt-3" $isEmpty={loading || comments.length === 0}>
         {loading ? (
           <div
             style={{

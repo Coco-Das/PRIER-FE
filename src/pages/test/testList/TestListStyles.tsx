@@ -51,8 +51,8 @@ export const DivWrapper = styled.div`
   gap: 10px;
 `;
 export const LinkImage = styled.img`
-  width: 20px;
-  height: 20px;
+  width: 18px;
+  height: 18px;
 `;
 export const PurpleDiv = styled.div`
   background-color: #b193d040;

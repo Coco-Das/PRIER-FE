@@ -337,8 +337,16 @@ export const ResponseTest = () => {
           </BlueDiv>
           {link && (
             <GreenDiv className="mt-2" onClick={handleClick}>
-              <span className="underline" style={{ display: 'flex', alignItems: 'center', gap: '5px' }}>
-                <img style={{ width: '18px', height: '18px' }} src={LinkImg} />
+              <img style={{ width: '18px', height: '18px' }} src={LinkImg} />
+              <span
+                className="underline"
+                style={{
+                  alignItems: 'center',
+                  width: '100%',
+                  overflow: 'hidden',
+                  textOverflow: 'ellipsis',
+                }}
+              >
                 {link}
               </span>
             </GreenDiv>

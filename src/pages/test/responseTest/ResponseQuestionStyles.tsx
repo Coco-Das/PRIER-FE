@@ -10,13 +10,14 @@ export const Question = styled.div`
   display: flex;
   flex-direction: column;
   height: auto;
+  gap: 15px;
   align-items: center;
 `;
 
 export const QuestionDiv = styled.div`
   width: 100%;
   height: auto;
-  padding: 10px 30px;
+  padding: 15px 30px;
   border-radius: 8px;
   border: 2px solid transparent;
   background: linear-gradient(#fff, #fff), linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc);

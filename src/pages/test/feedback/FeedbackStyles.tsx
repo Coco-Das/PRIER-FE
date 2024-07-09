@@ -21,6 +21,7 @@ export const ProjectContainer = styled.div`
   height: 400px;
   padding: 20px;
   display: flex;
+  gap: 3px;
   flex-direction: column;
 `;
 
@@ -96,6 +97,7 @@ export const ResponseDiv = styled.div`
   height: auto;
   width: 100%;
   display: flex;
+  gap: 15px;
   flex-direction: column;
   align-items: center;
 `;
@@ -110,7 +112,7 @@ export const Img = styled.img`
 export const QuestionDiv = styled.div`
   width: 100%;
   height: auto;
-  padding: 10px 30px;
+  padding: 15px 30px;
   border-radius: 8px;
   border: 2px solid transparent;
   background: linear-gradient(#fff, #fff), linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc);
