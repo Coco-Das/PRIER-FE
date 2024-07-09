@@ -184,7 +184,7 @@ export const ResponseTest = () => {
     try {
       const response = await API_BASE_URL.delete(`/projects/${projectId}`);
       console.log('삭제 요청 성공', response.data);
-      navigate(`/testlist/${USER_ID}`);
+      navigate(`/main`);
     } catch (error) {
       console.error('에러:', error);
     }

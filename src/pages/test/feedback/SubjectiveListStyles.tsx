@@ -1,31 +1,45 @@
 import styled from 'styled-components';
 
-export const SubjectiveWrapper = styled.div`
+export const Wrapper = styled.div`
   width: 100%;
   display: flex;
   flex-direction: column;
   padding-left: 90px;
   padding-right: 90px;
 `;
-export const ResponseDiv = styled.div`
-  height: auto;
-
+export const SubjectiveWrapper = styled.div`
   width: 100%;
-  gap: 20px;
-
-  display: grid;
-  grid-template-columns: repeat(2, 1fr); /* 두 개의 열로 설정 */
-  /* flex-direction: column; */
-`;
-export const QuestionDiv = styled.div`
-  width: 100%;
-  height: auto;
   display: flex;
-  align-items: center;
-  padding: 10px 30px;
-  border-radius: 8px;
-  border: 2px solid transparent;
-  background: linear-gradient(#fff, #fff), linear-gradient(90deg, #315af1, #7eb4d2, #b5f4bc);
-  background-clip: padding-box, border-box;
-  background-origin: padding-box, border-box;
+  flex-direction: column;
+  padding-left: 20px;
+  padding-right: 20px;
+`;
+
+export const ResponseDiv = styled.div`
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+`;
+export const QuestionDiv = styled.div<{ $isOdd: boolean }>`
+  background-color: ${props => (props.$isOdd ? '#23BE87' : '#315AF1')};
+  color: white;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 10px 0;
+  width: 70%;
+  text-align: left;
+  position: relative;
+  align-self: ${props => (props.$isOdd ? 'flex-start' : 'flex-end')};
+
+&:before {
+  content: '';
+  position: absolute;
+  top: 20px;
+  ${props => (props.$isOdd ? 'left' : 'right')}: -20px;
+  width: 0;
+  height: 0;
+  border: 10px solid transparent;
+  border-${props => (props.$isOdd ? 'right' : 'left')}-color: ${props => (props.$isOdd ? '#23BE87' : '#315AF1')};
+}
 `;
