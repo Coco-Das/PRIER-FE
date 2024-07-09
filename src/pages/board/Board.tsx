@@ -170,6 +170,8 @@ const Board: React.FC = () => {
 
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
+    setPage(1);
+
     if (filter === 'all') {
       setAllFetched(false);
     }
