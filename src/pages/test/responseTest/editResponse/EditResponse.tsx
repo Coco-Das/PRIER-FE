@@ -117,6 +117,7 @@ export const EditResponse = () => {
   const [newQuestions, setNewQuestions] = useState<Question[]>([]);
   const [deleteMainImage, setDeleteMainImage] = useState(false);
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [hidden, setHidden] = useState(false);
 
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
@@ -303,22 +304,38 @@ export const EditResponse = () => {
               ...question,
               category: question.category === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
               options:
-                question.category === 'SUBJECTIVE' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
-              content: '',
+                question.category === 'SUBJECTIVE'
+                  ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨']
+                  : question.options,
             }
           : question,
       ),
     );
   };
   const handleQuestionDelete = (id: number | null) => {
-    setQuestions(prevQuestions => prevQuestions.filter(question => question.questionId !== id));
-    setNewQuestions(prevNewQuestions => prevNewQuestions.filter(question => question.newQuestionId !== id));
+    setQuestions(prevQuestions => {
+      const updatedQuestions = prevQuestions.filter(question => question.questionId !== id);
+      setNewQuestions(prevNewQuestions => {
+        const updatedNewQuestions = prevNewQuestions.filter(question => question.newQuestionId !== id);
+
+        // 합산 길이 계산
+        const totalQuestions = updatedQuestions.length + updatedNewQuestions.length;
+        if (totalQuestions < 10) {
+          setHidden(false);
+        }
+
+        return updatedNewQuestions;
+      });
+
+      return updatedQuestions;
+    });
   };
 
   const addQuestion = () => {
     const allQuestions = [...questions, ...newQuestions];
     if (allQuestions.length >= 10) {
       setSnackbar({ message: '질문은 최대 10개까지 추가할 수 있습니다.', type: 'error' });
+      setHidden(true);
       return;
     }
     const maxId = allQuestions.reduce((max, question) => {
@@ -722,7 +739,7 @@ export const EditResponse = () => {
           </QuestionDiv>
         ))}
         <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-          <AddButton onClick={addQuestion}>질문 추가</AddButton>
+          {!hidden && <AddButton onClick={addQuestion} />}
         </div>
         <div style={{ width: '100%', display: 'flex', marginBottom: '20px' }}>
           <CustomButton onClick={handleEditSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
