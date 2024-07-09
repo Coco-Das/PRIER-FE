@@ -353,7 +353,7 @@ export const ListLikesContainer = styled.div`
   bottom: 10px;
   right: 10px;
   margin-bottom: 10px;
-  z-index: 0;
+  z-index: 1;
 `;
 
 export const Likes = styled.div`

@@ -390,7 +390,7 @@ const ModifyBoard: React.FC = () => {
               style={{
                 borderRadius: '5px',
                 minHeight: '400px',
-                fontSize: '12px',
+                fontSize: '14px',
               }}
             >
               <Editor

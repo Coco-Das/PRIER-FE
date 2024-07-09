@@ -20,17 +20,19 @@ interface TextEditorToolbarProps {
 
 const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEditorChange, currentFontSize }) => {
   const currentStyle = editorState.getCurrentInlineStyle();
-  const [fontSize, setFontSize] = useState<string>(currentFontSize);
+  const [fontSize, setFontSize] = useState<string>('14'); // 기본값을 '14'로 설정
   const [fontColor, setFontColor] = useState<string>('black');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [fontColorAnchorEl, setFontColorAnchorEl] = useState<null | HTMLElement>(null);
   const open = Boolean(anchorEl);
   const fontColorOpen = Boolean(fontColorAnchorEl);
-  const fontSizes = ['9', '10', '12', '15', '16', '18', '20', '24', '28', '30', '32'];
+  const fontSizes = ['9', '10', '12', '14', '15', '16', '18', '20', '24', '28', '30', '32', '38', '50'];
   const fontColors = ['red', 'orange', 'yellow', 'green', 'blue', 'indigo', 'violet', 'black', 'white'];
 
   useEffect(() => {
-    setFontSize(currentFontSize);
+    if (currentFontSize) {
+      setFontSize(currentFontSize);
+    }
   }, [currentFontSize]);
 
   const applyStyle = (style: string) => {

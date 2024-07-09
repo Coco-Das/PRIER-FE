@@ -61,7 +61,7 @@ const styleMap = {
     return acc;
   }, {} as Record<string, React.CSSProperties>),
   default: {
-    fontSize: '12px',
+    fontSize: '14px',
   },
 };
 
@@ -330,7 +330,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
             <ContentContainer className="px-[50px] flex flex-col items-start self-center w-[100%]">
               <h1 className="text-xl font-semibold mb-8">{post.title}</h1>
               <div className="w-[100%]" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
-                <div style={{ fontSize: '12px' }}>
+                <div style={{ fontSize: '14px' }}>
                   <Editor editorState={editorState} customStyleMap={styleMap} readOnly={true} onChange={() => {}} />
                 </div>
               </div>

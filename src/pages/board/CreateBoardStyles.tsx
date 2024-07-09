@@ -145,14 +145,14 @@ export const ImageWrapper = styled.div`
   position: relative;
   display: inline-block;
   margin-top: 10px;
-  width: 400px;
+  width: 200px;
   max-width: 100%;
 `;
 
 export const StyledImg = styled.img`
   max-width: 100%;
-  width: 400px;
-  height: 300px;
+  width: 300px;
+  height: 150px;
   object-fit: contain;
   border: 1px solid #ccc;
   border-radius: 20px;
@@ -187,8 +187,7 @@ export const FileCount = styled.div`
   position: relative;
   display: inline-block;
   text-align: center;
-  margin-left: 5px;
-  margin-top: 10px;
+  margin: 10px 10px 10px 50px;
   outline: none;
   white-space: nowrap;
 

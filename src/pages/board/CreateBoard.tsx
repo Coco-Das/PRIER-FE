@@ -314,7 +314,7 @@ const CreateBoard: React.FC = () => {
               style={{
                 borderRadius: '5px',
                 minHeight: '400px',
-                fontSize: '12px',
+                fontSize: '14px',
               }}
             >
               <Editor
@@ -329,7 +329,7 @@ const CreateBoard: React.FC = () => {
               />
             </div>
           </ContentContainer>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '0px' }}>
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '0px', margin: '0 50px' }}>
             {images.map((image, index) => (
               <ImageWrapper key={index}>
                 <StyledImg src={URL.createObjectURL(image)} alt={`Uploaded image ${index}`} />

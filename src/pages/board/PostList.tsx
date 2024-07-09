@@ -91,7 +91,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
           <BackgroundContainer
             key={post.postId}
             isActive={post.postId === activePostId}
-            style={{ position: 'relative' }}
+            style={{ position: 'relative', zIndex: '0' }}
           >
             <PostBox
               category={post.category}
@@ -154,14 +154,13 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                 )}
               </ContentContainer>
             </PostBox>
-            <ListLikesContainer onClick={(e: React.MouseEvent) => e.stopPropagation()}>
+            <ListLikesContainer style={{ zIndex: 1 }}>
               <Likes>Likes {likeState.likeCount}</Likes>
               <label className="ui-like" style={{ cursor: 'pointer' }}>
                 <input
                   type="checkbox"
                   checked={currentIsLiked}
                   onChange={async e => {
-                    e.stopPropagation(); // 이벤트 전파 차단
                     await toggleLike(post.postId, currentIsLiked);
                   }}
                 />
