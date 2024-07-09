@@ -85,7 +85,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
 
         const content = extractTextFromContent(post.content);
         const lines = content.split('\n');
-        const displayContent = lines.length > 2 ? `${lines.slice(0, 2).join('\n')}\n...` : content;
+        const displayContent = lines.length > 3 ? `${lines.slice(0, 2).join('\n')}...` : content;
 
         return (
           <BackgroundContainer
