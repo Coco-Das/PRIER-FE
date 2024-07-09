@@ -288,5 +288,3 @@ function TestList() {
 }
 
 export default TestList;
-
-// api/chatgpt/projectId
