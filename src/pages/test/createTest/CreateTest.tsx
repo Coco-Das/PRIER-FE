@@ -511,9 +511,9 @@ export const CreateTest = () => {
         </span>
       </div>
 
-      <Question>
+      <Question className="mt-2">
         {questions.map((question, index) => (
-          <QuestionDiv key={question.id} className="mt-4">
+          <QuestionDiv key={question.id}>
             {question.type === 'SUBJECTIVE' ? (
               <div>
                 <div
@@ -524,7 +524,7 @@ export const CreateTest = () => {
                     fontWeight: 'bold',
                   }}
                 >
-                  {index + 1}번 문항
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
                   <input
                     placeholder="질문을 입력하세요"
                     style={{
@@ -555,7 +555,7 @@ export const CreateTest = () => {
                     fontWeight: 'bold',
                   }}
                 >
-                  {index + 1}번 문항
+                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
                   <input
                     placeholder="질문을 입력하세요"
                     style={{ marginLeft: '30px', fontSize: '20px', outline: 'none', width: '80%' }}
