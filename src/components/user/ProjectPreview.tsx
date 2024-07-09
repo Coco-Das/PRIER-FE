@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   LinkText,
   ProjectContainer,
@@ -18,6 +18,16 @@ import { styled } from 'styled-components';
 
 export default function ProjectPreview() {
   const { content } = useAllProjectStore();
+  const navigate = useNavigate();
+  const myId = localStorage.getItem('userId');
+
+  const handleProfileClick = async (userId: number) => {
+    if (userId == Number(myId)) {
+      navigate(`/mypage`);
+    } else {
+      navigate(`/profile/${userId}`);
+    }
+  };
 
   const ProjectImg = styled.img`
     border-radius: 10px;
@@ -40,9 +50,7 @@ export default function ProjectPreview() {
             {device.small ? (
               <>
                 <div className="flex items-center gap-1">
-                  <Link to={`/profile/${project.userId}`}>
-                    <ProfileImg src={project.profileImageUrl} />
-                  </Link>
+                  <ProfileImg src={project.profileImageUrl} onClick={() => handleProfileClick(project.userId)} />
                   <span className="flex-col ">
                     <ProjectTitle>{project.title}</ProjectTitle>
                     <ProjectTeam style={{ color: '#828282' }}>Team : {project.teamName}</ProjectTeam>

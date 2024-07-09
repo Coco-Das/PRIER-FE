@@ -1,5 +1,5 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Base,
   LatestProjectContainer,
@@ -17,8 +17,17 @@ import StarRating from '../utils/StarRating';
 
 export default function LatestProject() {
   const { content } = useNewProjectStore();
-
+  const navigate = useNavigate();
   const displayedProjects = content.slice(0, 4);
+  const myId = localStorage.getItem('userId');
+
+  const handleProfileClick = async (userId: number) => {
+    if (userId == Number(myId)) {
+      navigate(`/mypage`);
+    } else {
+      navigate(`/profile/${userId}`);
+    }
+  };
 
   return (
     <LatestProjectWrapper>
@@ -27,9 +36,7 @@ export default function LatestProject() {
           <Link to={`/responsetest/${project.projectId}`}>
             <div className="flex items-center mt-2 justify-between w-full">
               <div className="flex items-center mb-2">
-                <Link to={`/profile/${project.userId}`}>
-                  <ProfileImg src={project.profileImageUrl} />
-                </Link>
+                <ProfileImg src={project.profileImageUrl} onClick={() => handleProfileClick(project.userId)} />
                 <span className="flex-col ml-4">
                   <ProjectTitle>{project.title}</ProjectTitle>
                   <ProjectTeam className="text-base font-light" style={{ color: '#828282' }}>
