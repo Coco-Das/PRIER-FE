@@ -142,7 +142,9 @@ export const CreateTest = () => {
                 ...question,
                 type: question.type === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
                 options:
-                  question.type === 'SUBJECTIVE' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
+                  question.type === 'SUBJECTIVE'
+                    ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨']
+                    : question.options,
               }
             : question,
         ),

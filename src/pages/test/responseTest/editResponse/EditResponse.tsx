@@ -303,8 +303,9 @@ export const EditResponse = () => {
               ...question,
               category: question.category === 'SUBJECTIVE' ? 'OBJECTIVE' : 'SUBJECTIVE',
               options:
-                question.category === 'SUBJECTIVE' ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨'] : undefined,
-              content: '',
+                question.category === 'SUBJECTIVE'
+                  ? ['매우 좋음', '좋음', '보통', '나쁨', '매우 나쁨']
+                  : question.options,
             }
           : question,
       ),
