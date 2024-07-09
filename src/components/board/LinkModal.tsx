@@ -44,6 +44,9 @@ const InputField = styled.input`
   padding: 10px;
   width: 100%;
   box-sizing: border-box;
+  padding-bottom: 20px;
+  margin-bottom: -20px;
+
   &:focus {
     outline: none;
   }
