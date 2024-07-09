@@ -1,5 +1,5 @@
-import React from 'react';
-import { Link } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { Link, useParams } from 'react-router-dom';
 import {
   Filler,
   LinkText,
@@ -14,6 +14,7 @@ import { useUserStore } from '../../states/user/UserStore';
 import { userPointStore } from '../../states/user/PointStore';
 import Coin from '../../assets/Coin.png';
 import { device } from '../../styles/Media';
+import { LinkUserProfile } from '../../services/UserApi';
 
 export default function Profile() {
   const userProfile = useUserStore(state => state.userProfile);
@@ -32,6 +33,17 @@ export default function Profile() {
   };
   const progress = progressTrans(userProfile.rank);
   const NickName = sessionStorage.getItem('nickname');
+  const { userId } = useParams();
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        await LinkUserProfile(Number(userId));
+      } catch (error) {
+        console.error(error);
+      }
+    };
+    fetchData();
+  }, []);
   return (
     <ProfileContainer>
       {device.small ? (
