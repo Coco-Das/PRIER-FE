@@ -453,7 +453,7 @@ export const CommentAvatar = styled(Avatar)`
   width: 40px;
   height: 40px;
   align-self: start;
-  margin-top: 7px;
+  margin-top: 1px;
 `;
 
 export const CommentContent = styled.div`
@@ -464,11 +464,17 @@ export const CommentContent = styled.div`
 
 export const CommentAuthor = styled(Author)`
   font-size: 14px;
+  margin-bottom: 2px;
 `;
 
 export const CommentText = styled.div`
   font-size: 14px;
   color: #000;
+  width: 300px;
+  word-wrap: break-word; /* 줄 바꿈 설정 */
+  white-space: pre-wrap; /* 공백과 줄바꿈 문자 유지 */
+  overflow-wrap: break-word; /* 긴 단어 줄 바꿈 */
+  word-break: break-word; /* 단어가 너무 길 경우 줄 바꿈 */
 `;
 
 export const CommentCreatedAt = styled(TimeViews)`

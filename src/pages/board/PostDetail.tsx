@@ -389,7 +389,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
                         <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
                       </div>
                       {USER_ID === comment.writerId && (
-                        <div>
+                        <div className=" right-[16px] mt-[7px] absolute">
                           <CommentMenu
                             commentId={comment.commentId}
                             postId={post.postId}
