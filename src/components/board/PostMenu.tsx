@@ -30,6 +30,7 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox 
     try {
       await API_BASE_URL.delete(`/posts/${postId}`);
       window.location.reload(); // 페이지 새로고침
+      navigate(`/board`);
     } catch (error) {
       console.error('게시글 삭제 중 오류가 발생했습니다:', error);
       alert('게시글 삭제 중 오류가 발생했습니다.');
