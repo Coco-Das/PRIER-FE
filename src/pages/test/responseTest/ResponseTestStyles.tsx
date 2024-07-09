@@ -75,21 +75,19 @@ export const Textarea = styled.textarea`
   border: 1px solid red;
 `;
 export const StyledImg = styled.img`
-  width: 90%;
-  height: 90%;
+  width: 100%;
+  height: 600px;
   object-fit: contain;
   border: 1px solid #ccc;
   border-radius: 20px;
 `;
 
 export const ImageWrapper = styled.div`
-  gap: 15px;
-  display: inline-block;
   width: 100%;
   height: auto;
-  flex-direction: column;
-  display: flex;
-  align-items: center;
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 15px;
 `;
 
 export const CustomButton = styled.button`

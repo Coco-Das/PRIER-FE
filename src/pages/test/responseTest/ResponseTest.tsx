@@ -274,7 +274,7 @@ export const ResponseTest = () => {
             <span className="mt-3" style={{ fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: introduce }} />
             <p className="font-extrabold mt-5">프로젝트 목표</p>
             <span className="mt-3" style={{ fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: goal }} />
-            <ImageWrapper className="mt-5">
+            <ImageWrapper className="mt-3">
               {mainImageUrl && <StyledImg src={mainImageUrl} alt="메인 이미지" />}
 
               {additionalImageUrls.map((url, index) => (
