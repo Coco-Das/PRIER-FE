@@ -328,10 +328,17 @@ export const HoverButton = styled.button`
   padding: 5px 10px;
   cursor: pointer;
   display: none;
-  font-size: 10px;
-  width: 100px;
+  font-size: 12px;
+  width: 70px;
   ${ImageContainer}:hover & {
     display: block;
+  }
+  &:hover {
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+
+  &:active {
+    background-color: rgba(0, 0, 0, 0.7);
   }
 `;
 export const LikesContainer = styled.div`
