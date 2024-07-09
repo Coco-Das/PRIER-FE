@@ -287,19 +287,53 @@ export const ContentContainer = styled.div`
   line-height: 150%;
   font-weight: 500;
   margin-top: 10px;
+  flex-direction: column;
 `;
 
+export const ImageContainer = styled.div`
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 10px;
+  align-items: flex-start;
+`;
+
+export const StyledImage = styled.img<{ widthRatio: number; heightRatio: number; category?: string }>`
+  border-radius: 10px;
+  width: ${props => (props.widthRatio > props.heightRatio ? 'auto' : '400px')};
+  height: ${props => (props.widthRatio > props.heightRatio ? 'auto' : 'auto')};
+  max-width: 100%;
+  max-height: 100%;
+  margin-top: 10px;
+  object-fit: cover;
+  background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')};
+`;
 export const Image = styled.img<{ category?: string }>`
   border-radius: 10px;
-  width: 100%;
-  max-width: 760px;
-  height: auto;
-  max-height: 300px; /* 최대 높이 설정 */
+  width: 500px;
+  height: auto; /* 최대 높이 설정 */
   margin-top: 10px;
   object-fit: cover;
   background: ${props => (props.category === 'Notice' ? '#e1f9f0' : '#ffffff')}; // 이미지 배경색 설정
 `;
 
+export const HoverButton = styled.button`
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.3);
+  color: white;
+  border: none;
+  border-radius: 5px;
+  padding: 5px 10px;
+  cursor: pointer;
+  display: none;
+  font-size: 10px;
+  width: 100px;
+  ${ImageContainer}:hover & {
+    display: block;
+  }
+`;
 export const LikesContainer = styled.div`
   display: flex;
   align-items: center;

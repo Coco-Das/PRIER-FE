@@ -1,11 +1,30 @@
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useEffect, useState } from 'react';
+import { Editor, EditorState, convertFromRaw, CompositeDecorator } from 'draft-js';
+import 'draft-js/dist/Draft.css';
+import backto from '../../assets/BackTo.svg';
+import announcementAvatar from '../../assets/Announcement.svg';
+import useFormatDate from '../../hooks/UseFormatDate';
+import PostMenu from '../../components/board/PostMenu';
+import CommentMenu from '../../components/board/CommentMenu';
+import { useNavigate } from 'react-router-dom';
+import { Loading } from '../../components/utils/Loading';
+import axios from 'axios';
+import { API_BASE_URL } from '../../const/TokenApi';
+import useExtractTextFromContent from '../../hooks/UseTextFromContent';
+import ImageModal from '../../components/board/ImageModal'; // 모달 컴포넌트 임포트
+import useLike from '../../hooks/UseLike';
+import { LinkUserProfile } from '../../services/UserApi';
+import { useUserStore } from '../../states/user/UserStore';
 import {
   PostDetailContainer,
   PostContentContainer,
   CommentsContainer,
   Backto,
+  ImageContainer,
+  StyledImage,
   UserContainer,
+  HoverButton,
   Avatar,
   AvatarImage,
   AuthorContainer,
@@ -26,24 +45,6 @@ import {
   CommentInput,
   CommentButton,
 } from './BoardStyles';
-import backto from '../../assets/BackTo.svg';
-import announcementAvatar from '../../assets/Announcement.svg';
-import useFormatDate from '../../hooks/UseFormatDate';
-import PostMenu from '../../components/board/PostMenu';
-import CommentMenu from '../../components/board/CommentMenu';
-import { useNavigate } from 'react-router-dom';
-import { Loading } from '../../components/utils/Loading';
-import axios from 'axios';
-import { API_BASE_URL } from '../../const/TokenApi';
-import useExtractTextFromContent from '../../hooks/UseTextFromContent';
-import ImageModal from '../../components/board/ImageModal'; // 모달 컴포넌트 임포트
-import useLike from '../../hooks/UseLike';
-import { LinkUserProfile } from '../../services/UserApi';
-import { useUserStore } from '../../states/user/UserStore';
-import { Editor, EditorState, convertFromRaw, CompositeDecorator } from 'draft-js'; // Draft.js 임포트
-import 'draft-js/dist/Draft.css';
-
-// CreateBoard에서 사용한 styleMap과 decorator를 가져옵니다.
 const styleMap = {
   RED: { color: 'red' },
   ORANGE: { color: 'orange' },
@@ -55,17 +56,15 @@ const styleMap = {
   BLACK: { color: 'black' },
   WHITE: { color: 'white' },
   BACKGROUND_YELLOW: { backgroundColor: 'yellow' },
-  // 폰트 크기 스타일 추가
   ...Array.from({ length: 1000 }, (_, i) => i + 1).reduce((acc, size) => {
     acc[`FONTSIZE_${size}`] = { fontSize: `${size}px` };
     return acc;
   }, {} as Record<string, React.CSSProperties>),
   default: {
-    fontSize: '12px', // 기본 폰트 크기 설정
+    fontSize: '12px',
   },
 };
 
-// 링크 엔티티를 찾는 전략을 정의합니다.
 const findLinkEntities = (contentBlock: any, callback: any, contentState: any) => {
   contentBlock.findEntityRanges((character: any) => {
     const entityKey = character.getEntity();
@@ -73,7 +72,6 @@ const findLinkEntities = (contentBlock: any, callback: any, contentState: any) =
   }, callback);
 };
 
-// 링크 컴포넌트 정의
 const Link = (props: any) => {
   const { url } = props.contentState.getEntity(props.entityKey).getData();
   return (
@@ -83,7 +81,6 @@ const Link = (props: any) => {
   );
 };
 
-// 컴포지트 데코레이터 정의
 const decorator = new CompositeDecorator([
   {
     strategy: findLinkEntities,
@@ -92,6 +89,7 @@ const decorator = new CompositeDecorator([
 ]);
 
 interface Media {
+  [x: string]: string | undefined;
   metadata: string;
   mediaType: string;
   s3Url: string;
@@ -99,7 +97,7 @@ interface Media {
 
 interface Comment {
   writerId: number;
-  nickname: string; // 닉네임 속성 추가
+  nickname: string;
   content: string;
   createdAt: string;
   updatedAt: string | null;
@@ -128,6 +126,41 @@ interface PostDetailProps {
   postId: number;
   onBackToList: () => void;
 }
+
+interface ImageComponentProps {
+  mediaItem: Media;
+  index: number;
+  openModal: (imageUrl: string) => void;
+}
+
+const ImageComponent: React.FC<ImageComponentProps> = ({ mediaItem, index, openModal }) => {
+  const [widthRatio, setWidthRatio] = useState(1);
+  const [heightRatio, setHeightRatio] = useState(1);
+
+  useEffect(() => {
+    const img = new window.Image() as HTMLImageElement;
+    img.src = mediaItem.s3Url;
+    img.onload = () => {
+      setWidthRatio(img.width);
+      setHeightRatio(img.height);
+    };
+  }, [mediaItem.s3Url]);
+
+  return (
+    <ImageContainer>
+      <StyledImage
+        key={index}
+        src={mediaItem.s3Url}
+        alt={mediaItem.metadata}
+        onClick={() => openModal(mediaItem.s3Url)}
+        category={mediaItem.category}
+        widthRatio={widthRatio}
+        heightRatio={heightRatio}
+      />
+      <HoverButton onClick={() => openModal(mediaItem.s3Url)}>클릭해서 크게보기</HoverButton>
+    </ImageContainer>
+  );
+};
 
 const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const [post, setPost] = useState<Post | null>(null);
@@ -160,6 +193,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   useEffect(() => {
     fetchPost();
   }, [postId]);
+
   if (!post) {
     return <div></div>;
   }
@@ -182,7 +216,6 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
     if (newComment.trim()) {
       try {
         if (editingCommentId !== null) {
-          // 댓글 수정 로직
           const response = await API_BASE_URL.put(`/posts/${postId}/comment/${editingCommentId}`, {
             content: newComment,
           });
@@ -195,7 +228,6 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
             setEditingCommentId(null);
           }
         } else {
-          // 댓글 전송 로직
           const response = await API_BASE_URL.post(`/posts/${postId}/comment`, {
             content: newComment,
           });
@@ -212,7 +244,6 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
               writerProfileUrl: response.data.writerProfileUrl,
             };
             window.location.reload();
-
             setPost({ ...post, comments: [...post.comments, newCommentData] });
           }
         }
@@ -259,7 +290,6 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const likeState = likes[post.postId] || { isLiked: post.isLikedByMe, likeCount: post.likes };
   const currentIsLiked = likeState.isLiked;
 
-  // content를 EditorState로 변환
   const contentState = convertFromRaw(JSON.parse(post.content));
   const editorState = EditorState.createWithContent(contentState, decorator);
 
@@ -297,33 +327,24 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
                 </div>
               )}
             </UserContainer>
-            <ContentContainer className=" px-[50px] flex flex-col items-start self-center w-[100%]">
-              <h1 className="text-xl font-semibold	 mb-8">{post.title}</h1>
-              <div className=" w-[100%]" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
-                <div
-                  style={{
-                    fontSize: '12px',
-                  }}
-                >
+            <ContentContainer className="px-[50px] flex flex-col items-start self-center w-[100%]">
+              <h1 className="text-xl font-semibold mb-8">{post.title}</h1>
+              <div className="w-[100%]" style={{ paddingLeft: '0px', paddingRight: '0px' }}>
+                <div style={{ fontSize: '12px' }}>
                   <Editor editorState={editorState} customStyleMap={styleMap} readOnly={true} onChange={() => {}} />
                 </div>
               </div>
               {post.media && post.media.length > 0 && (
-                <div className="flex flex-wrap gap-4">
+                <div className="flex flex-col gap-4">
                   {post.media.map((mediaItem, index) => (
-                    <Image
-                      key={index}
-                      src={mediaItem.s3Url}
-                      alt={mediaItem.metadata}
-                      onClick={() => openModal(mediaItem.s3Url)}
-                    />
+                    <ImageComponent key={index} mediaItem={mediaItem} index={index} openModal={openModal} />
                   ))}
                 </div>
               )}
             </ContentContainer>
             <LikeBackContainer>
               <button onClick={onBackToList} className="w-[15px] mt-[10px]">
-                <Backto src={backto} />
+                <img src={backto} alt="Back" />
               </button>
               <LikesContainer style={{ zIndex: 1 }}>
                 <Likes>Likes {likeState.likeCount}</Likes>
@@ -354,41 +375,36 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
                 <p className="text-sm text-gray-600 mt-2">댓글을 남겨보세요.</p>
               </div>
             ) : (
-              post.comments.map(comment => {
-                return (
-                  <CommentContainer key={comment.commentId} className="flex justify-between">
-                    <CommentAvatar onClick={e => handleProfileClick(e, comment.writerId)}>
-                      <AvatarImage src={comment.writerProfileUrl} alt="Avatar" />
-                    </CommentAvatar>
-                    <CommentContent className="flex-1">
-                      <div className="flex flex-row items-center space-x-2 justify-between">
-                        <div className="flex flex-row items-center space-x-2">
-                          <CommentAuthor
-                            onClick={e => handleProfileClick(e, comment.writerId)}
-                            category={post.category}
-                          >
-                            {comment.nickname}
-                          </CommentAuthor>
-                          <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
-                        </div>
-                        {USER_ID === comment.writerId && (
-                          <div>
-                            <CommentMenu
-                              commentId={comment.commentId}
-                              postId={post.postId}
-                              title={post.title}
-                              onEditClick={handleEditComment}
-                              onDeleteSuccess={() => handleDeleteComment(comment.commentId)}
-                              commentContent={comment.content}
-                            />
-                          </div>
-                        )}
+              post.comments.map(comment => (
+                <CommentContainer key={comment.commentId} className="flex justify-between">
+                  <CommentAvatar onClick={e => handleProfileClick(e, comment.writerId)}>
+                    <AvatarImage src={comment.writerProfileUrl} alt="Avatar" />
+                  </CommentAvatar>
+                  <CommentContent className="flex-1">
+                    <div className="flex flex-row items-center space-x-2 justify-between">
+                      <div className="flex flex-row items-center space-x-2">
+                        <CommentAuthor onClick={e => handleProfileClick(e, comment.writerId)} category={post.category}>
+                          {comment.nickname}
+                        </CommentAuthor>
+                        <CommentCreatedAt>{formatDate(comment.createdAt)}</CommentCreatedAt>
                       </div>
-                      <CommentText>{comment.content}</CommentText>
-                    </CommentContent>
-                  </CommentContainer>
-                );
-              })
+                      {USER_ID === comment.writerId && (
+                        <div>
+                          <CommentMenu
+                            commentId={comment.commentId}
+                            postId={post.postId}
+                            title={post.title}
+                            onEditClick={handleEditComment}
+                            onDeleteSuccess={() => handleDeleteComment(comment.commentId)}
+                            commentContent={comment.content}
+                          />
+                        </div>
+                      )}
+                    </div>
+                    <CommentText>{comment.content}</CommentText>
+                  </CommentContent>
+                </CommentContainer>
+              ))
             )}
             <CommentInputContainer className="">
               <CommentInput type="text" value={newComment} onChange={handleCommentChange} placeholder="댓글 달기..." />
@@ -397,7 +413,6 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
               </CommentButton>
             </CommentInputContainer>
           </CommentsContainer>
-
           {isModalOpen && <ImageModal imageUrl={modalImageUrl} onClose={closeModal} />}
         </>
       )}
