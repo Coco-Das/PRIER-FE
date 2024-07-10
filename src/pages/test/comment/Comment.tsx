@@ -24,6 +24,7 @@ import { Loading } from '../../../components/utils/Loading';
 interface CommentProps {
   show: boolean;
   onMouseLeave?: () => void;
+  isMine: boolean;
 }
 
 interface CommentData {
@@ -36,7 +37,7 @@ interface CommentData {
   profileUrl: string;
 }
 
-export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
+export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave, isMine }) => {
   const { projectId } = useParams<{ projectId: string }>();
   const setProjectId = useProjectStore(state => state.setProjectId);
   const [comments, setComments] = useState<CommentData[]>([]);
@@ -172,16 +173,33 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
       {loading && <Loading />}
       <SidebarContainer $show={show} onMouseLeave={onMouseLeave}>
         <div style={{ width: '100%', height: '5%', display: 'flex', gap: '15px', paddingLeft: '20px' }}>
-          <Button
-            onClick={() => handleTabChange('all')}
-            style={{
-              backgroundColor: activeTab === 'all' ? '#315af1' : 'white',
-              color: activeTab === 'all' ? 'white' : '#315af1',
-            }}
-          >
-            전체 댓글
-          </Button>
-          <Button
+          {!isMine ? (
+            <>
+              <Button
+                onClick={() => handleTabChange('all')}
+                style={{
+                  backgroundColor: activeTab === 'all' ? '#315af1' : 'white',
+                  color: activeTab === 'all' ? 'white' : '#315af1',
+                }}
+              >
+                전체 댓글
+              </Button>
+
+              <Button
+                onClick={() => handleTabChange('mine')}
+                style={{
+                  backgroundColor: activeTab === 'mine' ? '#315af1' : 'white',
+                  color: activeTab === 'mine' ? 'white' : '#315af1',
+                }}
+              >
+                나의 댓글
+              </Button>
+            </>
+          ) : (
+            <span style={{ fontSize: '15px', color: '#315af1', fontWeight: 'bold', marginTop: '10px' }}>전체 댓글</span>
+          )}
+
+          {/* <Button
             onClick={() => handleTabChange('mine')}
             style={{
               backgroundColor: activeTab === 'mine' ? '#315af1' : 'white',
@@ -189,7 +207,7 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
             }}
           >
             나의 댓글
-          </Button>
+          </Button> */}
         </div>
         <CommentDiv style={{ height: '95%' }} ref={commentDivRef}>
           {filteredComments.length === 0 ? (
@@ -288,4 +306,5 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
 Comment.propTypes = {
   show: PropTypes.bool.isRequired,
   onMouseLeave: PropTypes.func.isRequired,
+  isMine: PropTypes.bool.isRequired,
 };

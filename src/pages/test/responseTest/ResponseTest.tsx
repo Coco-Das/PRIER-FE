@@ -89,14 +89,17 @@ export const ResponseTest = () => {
   const location = useLocation();
   const { editBoolean } = location.state || { editBoolean: false };
   const { createBoolean } = location.state || { createBoolean: false };
+  const { extendBoolean } = location.state || { extendBoolean: false };
 
   useEffect(() => {
     if (editBoolean) {
       setSnackbar({ message: '프로젝트가 수정되었습니다', type: 'success' });
     } else if (createBoolean) {
       setSnackbar({ message: '프로젝트가 등록되었습니다', type: 'success' });
+    } else if (extendBoolean) {
+      setSnackbar({ message: '연장되었습니다', type: 'success' });
     }
-  }, [editBoolean]);
+  }, [editBoolean, createBoolean, extendBoolean]);
 
   const saveTagColors = (tags: Tag[]) => {
     const tagColors: { [key: string]: string } = {};
@@ -157,7 +160,7 @@ export const ResponseTest = () => {
       const addMedia = Data.media.filter((item: Media) => !item.main);
       setAdditionalImageUrls(addMedia.map((item: Media) => item.url));
       setFeedback(formatDateTime(Data.feedbackEndDate));
-      // console.log(Data);
+
       setLoading(false); // 데이터 가져온 후 로딩 상태 해제
     } catch (error) {
       setLoading(false); // 데이터 가져온 후 로딩 상태 해제
@@ -452,7 +455,7 @@ export const ResponseTest = () => {
             </div>
           </ProjectIntro>
         </Project>
-        <Comment show={showSidebar} onMouseLeave={() => setShowSidebar(false)}></Comment>
+        <Comment show={showSidebar} onMouseLeave={() => setShowSidebar(false)} isMine={isMine}></Comment>
         {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
       </CreateWrapper>
     </>

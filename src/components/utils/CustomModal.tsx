@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { API_BASE_URL } from '../../const/TokenApi';
 import { useProjectStore } from '../../states/projects/ProjectStore';
+import Snackbar from '../user/Snackbar';
 
 interface CustomAlertProps {
   //   onConfirm?: () => void;
@@ -106,6 +107,7 @@ const ExtendsBtn = styled(AgreeButton)<{ $point: number; $used: number }>`
     pointer-events: none;
     background-color:#cccccc;
     
+
   `}
 `;
 
@@ -116,6 +118,7 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
   const [used, setUsed] = useState(0);
   const setProjectId = useProjectStore(state => state.setProjectId);
   const navigate = useNavigate();
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const handlePlus = () => {
     setWeeks(prevCount => {
@@ -156,9 +159,11 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
 
   const handleExtend = async () => {
     try {
+      if (weeks === 0) return;
       const response = await API_BASE_URL.post(`/projects/${projectId}/extend?weeks=${weeks}`);
       onExtend();
-      navigate(`/responsetest/${projectId}`);
+      navigate(`/responsetest/${projectId}`, { state: { extendBoolean: true } });
+      setSnackbar({ message: '연장 성공', type: 'success' });
     } catch (error) {
       console.log(error);
     }
@@ -252,6 +257,7 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
             )}
           </div>
         </BalloonContent>
+        {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
       </ModalContent>
     </ModalOverlay>
   );
