@@ -17,6 +17,7 @@ import SidebarAlert from '../../../components/utils/SidebarAlert';
 import DeletePng from '../../../assets/delete.png';
 import EditPng from '../../../assets/edit.png';
 import { LinkUserProfile } from '../../../services/UserApi';
+import { Loading } from '../../../components/utils/Loading';
 
 //댓글 불러옴 get
 //댓글 등록 post
@@ -50,6 +51,7 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
   const [commentToDelete, setCommentToDelete] = useState<number | null>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(false);
 
   useEffect(() => {
     if (textareaRef.current) {
@@ -142,7 +144,22 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
   };
 
   const handleProfileClick = async (userId: number) => {
-    await LinkUserProfile(userId);
+    setLoading(true);
+    try {
+      await LinkUserProfile(userId);
+      if (USER_ID === userId) {
+        navigate(`/mypage`);
+      } else {
+        navigate(`/profile/${userId}`);
+      }
+    } finally {
+      if (USER_ID === userId) {
+        navigate(`/mypage`);
+      } else {
+        navigate(`/profile/${userId}`);
+      }
+      setLoading(false);
+    }
     if (USER_ID === userId) {
       navigate(`/mypage`);
     } else {
@@ -151,117 +168,120 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
   };
 
   return (
-    <SidebarContainer $show={show} onMouseLeave={onMouseLeave}>
-      <div style={{ width: '100%', height: '5%', display: 'flex', gap: '15px', paddingLeft: '20px' }}>
-        <Button
-          onClick={() => handleTabChange('all')}
-          style={{
-            backgroundColor: activeTab === 'all' ? '#315af1' : 'white',
-            color: activeTab === 'all' ? 'white' : '#315af1',
-          }}
-        >
-          전체 댓글
-        </Button>
-        <Button
-          onClick={() => handleTabChange('mine')}
-          style={{
-            backgroundColor: activeTab === 'mine' ? '#315af1' : 'white',
-            color: activeTab === 'mine' ? 'white' : '#315af1',
-          }}
-        >
-          나의 댓글
-        </Button>
-      </div>
-      <CommentDiv style={{ height: '95%' }} ref={commentDivRef}>
-        {filteredComments.length === 0 ? (
-          <div
+    <>
+      {loading && <Loading />}
+      <SidebarContainer $show={show} onMouseLeave={onMouseLeave}>
+        <div style={{ width: '100%', height: '5%', display: 'flex', gap: '15px', paddingLeft: '20px' }}>
+          <Button
+            onClick={() => handleTabChange('all')}
             style={{
-              color: '#888',
-              height: '100%',
-              display: 'flex',
-              flexDirection: 'column',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: '18px',
+              backgroundColor: activeTab === 'all' ? '#315af1' : 'white',
+              color: activeTab === 'all' ? 'white' : '#315af1',
             }}
           >
-            <p>작성된 댓글이 없습니다</p>
-          </div>
-        ) : (
-          filteredComments.map(comment => (
-            <CommentWrapper key={comment.commentId}>
-              {USER_ID === comment.userId && (
+            전체 댓글
+          </Button>
+          <Button
+            onClick={() => handleTabChange('mine')}
+            style={{
+              backgroundColor: activeTab === 'mine' ? '#315af1' : 'white',
+              color: activeTab === 'mine' ? 'white' : '#315af1',
+            }}
+          >
+            나의 댓글
+          </Button>
+        </div>
+        <CommentDiv style={{ height: '95%' }} ref={commentDivRef}>
+          {filteredComments.length === 0 ? (
+            <div
+              style={{
+                color: '#888',
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                alignItems: 'center',
+                justifyContent: 'center',
+                fontSize: '18px',
+              }}
+            >
+              <p>작성된 댓글이 없습니다</p>
+            </div>
+          ) : (
+            filteredComments.map(comment => (
+              <CommentWrapper key={comment.commentId}>
+                {USER_ID === comment.userId && (
+                  <div
+                    style={{
+                      display: 'flex',
+                      width: '100%',
+                      justifyContent: 'flex-end',
+                      gap: '10px',
+                    }}
+                  >
+                    {editingCommentId === comment.commentId ? (
+                      <>
+                        <button onClick={handleSaveClick}>저장</button>
+                        <button onClick={() => setEditingCommentId(null)}>취소</button>
+                      </>
+                    ) : (
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
+                        <EditButton src={EditPng} onClick={() => handleEditClick(comment)}>
+                          {/* 수정 */}
+                        </EditButton>
+                        <DeleteButton src={DeletePng} onClick={() => handleDeleteClick(comment.commentId)}>
+                          {/* 삭제 */}
+                        </DeleteButton>
+                      </div>
+                    )}
+                  </div>
+                )}
+                {editingCommentId === comment.commentId ? (
+                  <textarea
+                    ref={textareaRef}
+                    value={editingContent}
+                    onChange={e => setEditingContent(e.target.value)}
+                    style={{ outline: 'none', resize: 'none', overflow: 'hidden', width: '100%' }}
+                  />
+                ) : (
+                  <span dangerouslySetInnerHTML={{ __html: comment.content.replace(/\n/g, '<br />') }}></span>
+                )}
                 <div
                   style={{
                     display: 'flex',
-                    width: '100%',
-                    justifyContent: 'flex-end',
-                    gap: '10px',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
                   }}
                 >
+                  <div
+                    onClick={() => handleProfileClick(comment.userId)}
+                    style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
+                  >
+                    <ProfileImg src={comment.profileUrl}></ProfileImg>
+                    <strong className="ml-1">{comment.userName}</strong>
+                  </div>
+
                   {editingCommentId === comment.commentId ? (
-                    <>
-                      <button onClick={handleSaveClick}>저장</button>
-                      <button onClick={() => setEditingCommentId(null)}>취소</button>
-                    </>
+                    <StarRating initialScore={editingScore} onRatingChange={handleRatingChange} />
                   ) : (
-                    <div style={{ display: 'flex', alignItems: 'center', gap: '10px' }}>
-                      <EditButton src={EditPng} onClick={() => handleEditClick(comment)}>
-                        {/* 수정 */}
-                      </EditButton>
-                      <DeleteButton src={DeletePng} onClick={() => handleDeleteClick(comment.commentId)}>
-                        {/* 삭제 */}
-                      </DeleteButton>
-                    </div>
+                    <StarRating initialScore={comment.score} readOnly={true} onHover={false} />
                   )}
                 </div>
-              )}
-              {editingCommentId === comment.commentId ? (
-                <textarea
-                  ref={textareaRef}
-                  value={editingContent}
-                  onChange={e => setEditingContent(e.target.value)}
-                  style={{ outline: 'none', resize: 'none', overflow: 'hidden', width: '100%' }}
-                />
-              ) : (
-                <span dangerouslySetInnerHTML={{ __html: comment.content.replace(/\n/g, '<br />') }}></span>
-              )}
-              <div
-                style={{
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                }}
-              >
-                <div
-                  onClick={() => handleProfileClick(comment.userId)}
-                  style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
-                >
-                  <ProfileImg src={comment.profileUrl}></ProfileImg>
-                  <strong className="ml-1">{comment.userName}</strong>
-                </div>
-
-                {editingCommentId === comment.commentId ? (
-                  <StarRating initialScore={editingScore} onRatingChange={handleRatingChange} />
-                ) : (
-                  <StarRating initialScore={comment.score} readOnly={true} onHover={false} />
-                )}
-              </div>
-            </CommentWrapper>
-          ))
+              </CommentWrapper>
+            ))
+          )}
+        </CommentDiv>
+        {showAlert && (
+          <SidebarAlert
+            message="삭제하시겠습니까?"
+            onCancel={() => {
+              setShowAlert(false);
+              setCommentToDelete(null);
+            }}
+            onConfirm={confirmDelete}
+          />
         )}
-      </CommentDiv>
-      {showAlert && (
-        <SidebarAlert
-          message="삭제하시겠습니까?"
-          onCancel={() => {
-            setShowAlert(false);
-            setCommentToDelete(null);
-          }}
-          onConfirm={confirmDelete}
-        />
-      )}
-    </SidebarContainer>
+      </SidebarContainer>
+    </>
   );
 };
 
