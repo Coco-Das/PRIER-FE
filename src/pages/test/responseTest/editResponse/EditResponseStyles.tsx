@@ -43,6 +43,22 @@ export const ProjectTextArea = styled.div`
   p {
     color: #315af1;
   }
+  &::-webkit-scrollbar {
+    width: 8px; /* 스크롤바 너비 설정 */
+  }
+
+  &::-webkit-scrollbar-track {
+    margin-top: 8px;
+
+    margin-bottom: 8px;
+    background: transparent; /* 스크롤바 트랙 배경을 투명하게 설정 */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: lightgray; /* 스크롤바 thumb 색상 설정 */
+    border-radius: 15px; /* 스크롤바 thumb 모서리 둥글게 설정 */
+    border: 3px solid transparent; /* 스크롤바 thumb과 트랙 사이의 간격 설정 */
+  }
 `;
 export const Textarea = styled.textarea`
   width: 100%;
@@ -51,9 +67,24 @@ export const Textarea = styled.textarea`
   font-size: 16px;
   font-family: inherit;
   resize: none;
-  min-height: 100px;
-  overflow: hidden;
-  box-sizing: border-box;
+  min-height: 150px;
+  overflow: auto;
+  &::-webkit-scrollbar {
+    width: 8px; /* 스크롤바 너비 설정 */
+  }
+
+  &::-webkit-scrollbar-track {
+    margin-top: 8px;
+
+    margin-bottom: 8px;
+    background: transparent; /* 스크롤바 트랙 배경을 투명하게 설정 */
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: lightgray; /* 스크롤바 thumb 색상 설정 */
+    border-radius: 15px; /* 스크롤바 thumb 모서리 둥글게 설정 */
+    border: 3px solid transparent; /* 스크롤바 thumb과 트랙 사이의 간격 설정 */
+  }
 `;
 export const StyledImg = styled.img`
   max-width: 100%;
