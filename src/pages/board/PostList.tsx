@@ -35,19 +35,21 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
   const formatDate = useFormatDate();
   const extractTextFromContent = useExtractTextFromContent();
   const navigate = useNavigate();
+  const [loading, setLoading] = useState(true);
   const [activePostId, setActivePostId] = useState<number | null>(null);
   const { likes, toggleLike, isLikedByMe } = useLike();
   const storedUserId = localStorage.getItem('userId');
   const USER_ID = storedUserId ? Number(storedUserId) : null;
 
-  const handleProfileClick = async (e: React.MouseEvent, writerId: number) => {
-    e.stopPropagation();
-    if (writerId === USER_ID) {
-      navigate(`/mypage`);
-    } else {
+  const handleProfileClick = async (writerId: number) => {
+    setLoading(true);
+    try {
       await LinkUserProfile(writerId);
       navigate(`/profile/${writerId}`);
+    } finally {
+      setLoading(false);
     }
+    navigate(`/profile/${writerId}`);
   };
 
   const handlePostClick = (postId: number) => {
@@ -55,7 +57,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
     setTimeout(() => {
       onPostClick(postId);
       navigate(`/board/post/${postId}`);
-    }, 2000);
+    }, 100);
   };
 
   const sortedPosts = [...posts].sort((a, b) => {
@@ -101,7 +103,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
               <UserContainer>
                 <Avatar
                   category={post.category}
-                  onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.writerId)}
+                  onClick={e => post.category !== 'NOTICE' && handleProfileClick(post.writerId)}
                   className="mt-[5px]"
                   style={{ cursor: 'pointer' }}
                 >
@@ -113,7 +115,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
                 <AuthorContainer>
                   <Author
                     category={post.category}
-                    onClick={e => post.category !== 'NOTICE' && handleProfileClick(e, post.writerId)}
+                    onClick={e => post.category !== 'NOTICE' && handleProfileClick(post.writerId)}
                     style={{ cursor: 'pointer' }}
                   >
                     {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}

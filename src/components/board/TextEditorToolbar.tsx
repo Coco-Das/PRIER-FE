@@ -10,7 +10,8 @@ import {
   InputAdornment,
   IconButton,
 } from '@mui/material';
-import { FormatBold, FormatItalic, FormatUnderlined, FormatColorText, ArrowDropDown } from '@mui/icons-material';
+import { FormatBold, FormatItalic, FormatUnderlined, FormatColorText, ArrowDropDown, Link } from '@mui/icons-material';
+import LinkModal from './LinkModal';
 
 interface TextEditorToolbarProps {
   editorState: EditorState;
@@ -24,6 +25,7 @@ const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEd
   const [fontColor, setFontColor] = useState<string>('black');
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const [fontColorAnchorEl, setFontColorAnchorEl] = useState<null | HTMLElement>(null);
+  const [linkDialogOpen, setLinkDialogOpen] = useState(false);
   const open = Boolean(anchorEl);
   const fontColorOpen = Boolean(fontColorAnchorEl);
   const fontSizes = ['9', '10', '12', '14', '15', '16', '18', '20', '24', '28', '30', '32', '38', '50'];
@@ -82,6 +84,26 @@ const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEd
 
   const handleFontColorClose = () => {
     setFontColorAnchorEl(null);
+  };
+
+  const handleLinkClick = () => {
+    setLinkDialogOpen(true);
+  };
+
+  const handleLinkDialogClose = () => {
+    setLinkDialogOpen(false);
+  };
+
+  const confirmLink = (url: string) => {
+    const selection = editorState.getSelection();
+    if (!selection.isCollapsed()) {
+      const contentState = editorState.getCurrentContent();
+      const contentStateWithEntity = contentState.createEntity('LINK', 'MUTABLE', { url });
+      const entityKey = contentStateWithEntity.getLastCreatedEntityKey();
+      const newEditorState = RichUtils.toggleLink(editorState, selection, entityKey);
+      onEditorChange(newEditorState);
+    }
+    handleLinkDialogClose();
   };
 
   return (
@@ -147,6 +169,12 @@ const TextEditorToolbar: React.FC<TextEditorToolbarProps> = ({ editorState, onEd
           </MenuItem>
         ))}
       </Menu>
+      <ToggleButtonGroup size="small" exclusive>
+        <ToggleButton value="link" onClick={handleLinkClick}>
+          <Link />
+        </ToggleButton>
+      </ToggleButtonGroup>
+      {linkDialogOpen && <LinkModal showButtons={true} onConfirm={confirmLink} onCancel={handleLinkDialogClose} />}
     </Box>
   );
 };

@@ -4,6 +4,11 @@ import Gif2 from '../../assets/projectloading.json';
 import Lottie from './LottieComponent';
 
 const Container = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
   overflow: hidden;
   width: 100%;
   height: 100%;
@@ -11,6 +16,8 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  background: white;
+  z-index: 50;
 `;
 
 const shootingtime = '4500ms';

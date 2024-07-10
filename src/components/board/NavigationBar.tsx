@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import {
   Navigation,
   Button,
@@ -50,7 +50,6 @@ const DropdownContent = styled.div`
   background-color: #f9f9f9;
   width: 100px;
   box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-  border-radius: 10px;
   z-index: 3;
   margin-left: 0;
   ${Dropdown}:hover & {
@@ -64,7 +63,7 @@ const DropdownOption = styled.div<{ active?: boolean }>`
   text-decoration: none;
   display: block;
   font-size: 15px;
-  text-align: center; /* 추가된 부분 */
+  text-align: center;
 
   background-color: ${props => (props.active ? '#E6E6E6' : 'white')};
   &:hover {
@@ -92,6 +91,7 @@ const CustomCategoryButton = styled(CategoryButton)`
     color: #ffff;
   }
 `;
+
 const NavigationBar: React.FC<NavigationBarProps> = ({
   activeCategory,
   activeFilter,
@@ -104,42 +104,47 @@ const NavigationBar: React.FC<NavigationBarProps> = ({
   handleSortClick,
   setTitle,
 }) => {
+  const navigate = useNavigate();
   const [selectedActivity, setSelectedActivity] = useState('내 활동');
 
   const handleActivityClick = (activity: string) => {
     setSelectedActivity(activity);
     handleFilterClick(activity === '좋아요한 글' ? 'likes' : 'myposts');
     setTitle(`내가 ${activity}`);
+    navigate(`/board?category=${activeCategory}&filter=${activity === '좋아요한 글' ? 'likes' : 'myposts'}`);
   };
 
   const handleBoardClick = () => {
     setSelectedActivity('내 활동');
     handleFilterClick('all');
     setTitle('Community');
+    navigate(`/board?category=${activeCategory}&filter=all`);
   };
 
   const handleTitleClick = () => {
     if (title === '내가 좋아요한 글') {
       handleFilterClick('likes');
       setTitle('내가 좋아요한 글');
+      navigate(`/board?category=${activeCategory}&filter=likes`);
     } else if (title === '내가 작성한 글') {
       handleFilterClick('myposts');
       setTitle('내가 작성한 글');
+      navigate(`/board?category=${activeCategory}&filter=myposts`);
     } else {
       handleFilterClick('all');
       setTitle('Community');
+      navigate(`/board?category=${activeCategory}&filter=all`);
     }
   };
 
   const handleCategorySelection = (category: string) => {
     handleCategoryClick(category);
-    if (title === '내가 좋아요한 글') {
-      handleFilterClick('likes');
-    } else if (title === '내가 작성한 글') {
-      handleFilterClick('myposts');
-    } else {
-      handleFilterClick('all');
-    }
+    navigate(`/board?category=${category}&filter=${activeFilter}`);
+  };
+
+  const handleFilterButtonClick = (filter: string) => {
+    handleFilterClick(filter);
+    navigate(`/board?category=${activeCategory}&filter=${filter}`);
   };
 
   return (

@@ -8,6 +8,7 @@ import PostList from './PostList';
 import PostDetail from './PostDetail';
 import usePagination from '../../hooks/UsePagination';
 import { API_BASE_URL } from '../../const/TokenApi';
+import { Loading } from '../../components/utils/Loading';
 
 const Board: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -22,7 +23,7 @@ const Board: React.FC = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [USER_ID, setUserId] = useState<number | null>(null);
   const [allFetched, setAllFetched] = useState<boolean>(false);
-  const [title, setTitle] = useState<string>('Community'); // 추가된 상태
+  const [title, setTitle] = useState<string>('Community');
 
   const POSTS_PER_PAGE = 3;
   const {
@@ -156,7 +157,13 @@ const Board: React.FC = () => {
     setActiveCategory(category);
     setPage(1);
 
-    fetchPosts(); // 모든 카테고리에서 데이터를 가져오도록 호출
+    if (activeFilter === 'all') {
+      fetchPosts();
+    } else if (activeFilter === 'myposts') {
+      fetchMyPosts();
+    } else if (activeFilter === 'likes') {
+      fetchLikedPosts();
+    }
 
     navigate(`/board?category=${category}&filter=${activeFilter}`);
   };
@@ -166,12 +173,22 @@ const Board: React.FC = () => {
     if (filter === 'all') {
       setAllFetched(false);
     }
+
+    if (filter === 'all') {
+      fetchPosts();
+    } else if (filter === 'myposts') {
+      fetchMyPosts();
+    } else if (filter === 'likes') {
+      fetchLikedPosts();
+    }
+
     navigate(`/board?category=${activeCategory}&filter=${filter}`);
   };
 
   const handleSortClick = (sort: string) => {
     setActiveSort(sort);
     setPage(1);
+
     if (activeFilter === 'all') {
       fetchPosts();
     } else if (activeFilter === 'myposts') {
@@ -179,6 +196,7 @@ const Board: React.FC = () => {
     } else if (activeFilter === 'likes') {
       fetchLikedPosts();
     }
+    navigate(`/board?category=${activeCategory}&filter=${activeFilter}`);
   };
 
   const handlePostClick = (postId: number) => {
@@ -186,7 +204,7 @@ const Board: React.FC = () => {
   };
 
   const handleBackToList = async () => {
-    await fetchData(); // 필터에 맞는 데이터를 가져옴
+    await fetchData();
     navigate(`/board?category=${activeCategory}&filter=${activeFilter}`);
   };
 
@@ -208,34 +226,39 @@ const Board: React.FC = () => {
   const isDetailPage = location.pathname.includes('post');
 
   return (
-    <Container>
-      <NavigationBar
-        activeCategory={activeCategory}
-        activeFilter={activeFilter}
-        handleCategoryClick={handleCategoryClick}
-        handleFilterClick={handleFilterClick}
-        setTitle={setTitle} // 수정된 부분
-        title={title} // 수정된 부분
-        searchTerm={searchTerm}
-        handleSearchChange={handleSearchChange}
-        activeSort={activeSort}
-        handleSortClick={handleSortClick}
-      />
-      {loading && !postId ? (
-        <></>
-      ) : postId ? (
-        <PostDetail postId={Number(postId)} onBackToList={handleBackToList} />
-      ) : filteredPosts.length > 0 ? (
-        <PostList posts={paginatedPosts} onPostClick={handlePostClick} userId={USER_ID} activeSort={activeSort} />
-      ) : searchTerm ? (
-        <NoPostsMessage>{searchTerm} (이)가 포함된 게시물이 없습니다.</NoPostsMessage>
-      ) : (
-        <NoPostsMessage>해당 게시물이 없습니다.</NoPostsMessage>
-      )}
-      {!postId && filteredPosts.length > POSTS_PER_PAGE && (
-        <PaginationComponent count={totalPageCount} page={currentPage} onChange={handlePageChange} />
-      )}
-    </Container>
+    <>
+      {loading && <Loading />}
+      <Container>
+        <NavigationBar
+          activeCategory={activeCategory}
+          activeFilter={activeFilter}
+          handleCategoryClick={handleCategoryClick}
+          handleFilterClick={handleFilterClick}
+          setTitle={setTitle}
+          title={title}
+          searchTerm={searchTerm}
+          handleSearchChange={handleSearchChange}
+          activeSort={activeSort}
+          handleSortClick={handleSortClick}
+        />
+        {!loading && (
+          <>
+            {postId ? (
+              <PostDetail postId={Number(postId)} onBackToList={handleBackToList} />
+            ) : filteredPosts.length > 0 ? (
+              <PostList posts={paginatedPosts} onPostClick={handlePostClick} userId={USER_ID} activeSort={activeSort} />
+            ) : searchTerm ? (
+              <NoPostsMessage>{searchTerm} (이)가 포함된 게시물이 없습니다.</NoPostsMessage>
+            ) : (
+              <NoPostsMessage>해당 게시물이 없습니다.</NoPostsMessage>
+            )}
+            {!postId && filteredPosts.length > POSTS_PER_PAGE && (
+              <PaginationComponent count={totalPageCount} page={currentPage} onChange={handlePageChange} />
+            )}
+          </>
+        )}
+      </Container>
+    </>
   );
 };
 

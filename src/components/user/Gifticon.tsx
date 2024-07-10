@@ -17,8 +17,8 @@ import {
   Title,
 } from './UserStyle';
 import { styled } from 'styled-components';
-import { useGifticonStore } from '../../states/user/PointStore';
-import { DescriptionGift, FetchGiftList, PurchaseGift } from '../../services/StoreApi';
+import { useGifticonStore, userPointStore } from '../../states/user/PointStore';
+import { CheckPoint, DescriptionGift, FetchGiftList, PurchaseGift } from '../../services/StoreApi';
 import GiftPurchaseModal from './GiftPurchaseModal';
 import Snackbar from './Snackbar';
 import CoinIcon from '../../assets/Coin.png';
@@ -42,6 +42,7 @@ export default function Gifticon() {
   const [selectedProductId, setSelectedProductId] = useState<number | null>(null);
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const { setGifticons } = useGifticonStore();
+  const pointStore = userPointStore();
 
   const handleFlip = async (index: number, productId: number) => {
     if (index === flippedIndex) {
@@ -66,11 +67,12 @@ export default function Gifticon() {
   const ConfirmPurchase = async () => {
     if (selectedProductId) {
       try {
-        const response = await PurchaseGift(selectedProductId);
-        console.log(response);
+        await PurchaseGift(selectedProductId);
         setShowPurchaseAlert(false);
         setSnackbar({ message: `상품을 구매했습니다.`, type: 'success' });
         setFlippedIndex(null);
+        const points = await CheckPoint();
+        pointStore.setPoint(points);
         const gifticonData = await FetchGiftList();
         setGifticons(gifticonData);
       } catch (error) {

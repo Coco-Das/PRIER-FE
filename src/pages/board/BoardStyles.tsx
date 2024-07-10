@@ -17,7 +17,7 @@ export const Container = styled.div`
 export const Title = styled.div`
   color: #4188fe;
   text-align: left;
-  font-size: 1.25rem; /* 20px */
+  font-size: 24px; /* 20px */
   line-height: 1.75rem; /* 28px */
   font-weight: 600;
   width: 100%;
@@ -181,26 +181,25 @@ export const BackgroundContainer = styled.div<{ isActive?: boolean }>`
   }
 
   ${({ isActive }) =>
-    isActive &&
-    css`
-      transform: scale(1.02);
-      &::before {
-        display: block; /* 활성화 시 보이게 */
-        background-image: linear-gradient(45deg, #315af1, #23be87, #773cd1);
-        filter: hue-rotate(0deg);
-        animation: ${huerotate} 3s infinite linear;
-      }
-
-      &:hover {
-        transform: scale(1.02); /* 클릭 상태일 때는 호버 시 더 커지지 않도록 유지 */
-      }
-    `}
-
-  ${({ isActive }) =>
     !isActive &&
     css`
       &:hover {
         transform: scale(1.02); /* 클릭 상태가 아닐 때는 호버 시 커지도록 설정 */
+        &::before {
+          display: block; /* 호버 시 보이게 */
+          background-image: linear-gradient(45deg, #315af1, #23be87, #773cd1);
+          filter: hue-rotate(0deg);
+          animation: ${huerotate} 3s infinite linear;
+        }
+      }
+    `}
+
+  ${({ isActive }) =>
+    isActive &&
+    css`
+      transform: scale(1); /* 클릭 상태일 때는 원래 크기로 유지 */
+      &::before {
+        display: none; /* 클릭 상태일 때 배경 숨기기 */
       }
     `}
 `;
@@ -453,7 +452,7 @@ export const CommentAvatar = styled(Avatar)`
   width: 40px;
   height: 40px;
   align-self: start;
-  margin-top: 7px;
+  margin-top: 1px;
 `;
 
 export const CommentContent = styled.div`
@@ -464,11 +463,17 @@ export const CommentContent = styled.div`
 
 export const CommentAuthor = styled(Author)`
   font-size: 14px;
+  margin-bottom: 2px;
 `;
 
 export const CommentText = styled.div`
   font-size: 14px;
   color: #000;
+  width: 300px;
+  word-wrap: break-word; /* 줄 바꿈 설정 */
+  white-space: pre-wrap; /* 공백과 줄바꿈 문자 유지 */
+  overflow-wrap: break-word; /* 긴 단어 줄 바꿈 */
+  word-break: break-word; /* 단어가 너무 길 경우 줄 바꿈 */
 `;
 
 export const CommentCreatedAt = styled(TimeViews)`
