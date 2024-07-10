@@ -1,25 +1,44 @@
 import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import { device } from '../../styles/Media';
+
 const StarRatingDiv = styled.div`
   display: flex;
   flex-direction: row;
   margin-left: auto;
+  gap: 3px;
+  &:hover {
+    cursor: pointer;
+  }
 `;
 
-const Star = styled.span<{ $onHover: boolean }>`
-  font-size: 24px;
+const starShape = `
+  polygon(
+    50% 0%, 
+    61% 35%, 
+    98% 35%, 
+    68% 57%, 
+    79% 91%, 
+    50% 70%, 
+    21% 91%, 
+    32% 57%, 
+    2% 35%, 
+    39% 35%
+  )
+`;
+
+const Star = styled.span<{ $onHover: boolean; $isFilled: boolean }>`
+  font-size: 22px;
   cursor: ${({ $onHover }) => ($onHover ? 'pointer' : 'default')};
   position: relative;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 24px;
-  height: 24px;
-  svg {
-    width: 100%;
-    height: 100%;
-  }
+  width: 20px;
+  height: 20px;
+  clip-path: ${starShape};
+  background-color: ${({ $isFilled }) => ($isFilled ? 'gold' : 'lightgray')};
+
   ${device.small} {
     width: 10px;
     height: 10px;
@@ -27,24 +46,31 @@ const Star = styled.span<{ $onHover: boolean }>`
   }
 `;
 
-const StarIcon = styled(Star)<{ $isFilled: boolean }>`
-  color: ${({ $isFilled }) => ($isFilled ? 'gold' : 'lightgray')};
-`;
+const HalfStar = styled.span<{ $onHover: boolean }>`
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  clip-path: ${starShape};
+  background-color: lightgray;
 
-const HalfStar = styled(Star)`
   &:before {
-    content: '★';
+    content: '';
     position: absolute;
-    top: -6px;
+    top: 0;
     left: 0;
-    width: 12px;
-    height: 24px;
-    overflow: hidden;
-    color: gold;
+    width: 50%;
+    height: 100%;
+    background-color: gold;
+    clip-path: polygon(0% 0%, 100% 0%, 100% 100%, 0% 100%);
   }
+
   ${device.small} {
-    width: 5px;
+    width: 10px;
     height: 10px;
+    gap: 1px;
   }
 `;
 
@@ -95,20 +121,19 @@ const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange, r
         {Array(filledStars)
           .fill(0)
           .map((_, index) => (
-            <StarIcon
+            <Star
               $onHover={onHover}
               key={`filled-${index}`}
               $isFilled={true}
               onMouseMove={e => handleMouseMove(e, index)}
               onClick={() => handleClick(index + 1)}
               onMouseLeave={handleMouseLeave}
-            >
-              ★
-            </StarIcon>
+            />
           ))}
         {halfStars === 1 && (
           <HalfStar
             $onHover={onHover}
+            key={`half-${filledStars}`}
             onMouseMove={e => handleMouseMove(e, filledStars)}
             onClick={() => handleClick(filledStars + 0.5)}
             onMouseLeave={handleMouseLeave}
@@ -117,16 +142,14 @@ const StarRating: React.FC<StarRatingProps> = ({ initialScore, onRatingChange, r
         {Array(emptyStars)
           .fill(0)
           .map((_, index) => (
-            <StarIcon
+            <Star
               $onHover={onHover}
               key={`empty-${index}`}
               $isFilled={false}
               onMouseMove={e => handleMouseMove(e, filledStars + halfStars + index)}
               onClick={() => handleClick(filledStars + halfStars + index + 0.5)}
               onMouseLeave={handleMouseLeave}
-            >
-              ★
-            </StarIcon>
+            />
           ))}
       </>
     );
