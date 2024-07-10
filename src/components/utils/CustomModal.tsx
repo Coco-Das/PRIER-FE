@@ -11,7 +11,8 @@ interface CustomAlertProps {
   onMouseLeave: () => void;
   top: number;
   left: number;
-  onExtend: () => void;
+  onExtend: (success: boolean) => void;
+  // successExtend?: boolean;
 }
 
 const ModalOverlay = styled.div`
@@ -118,7 +119,6 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
   const [used, setUsed] = useState(0);
   const setProjectId = useProjectStore(state => state.setProjectId);
   const navigate = useNavigate();
-  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const handlePlus = () => {
     setWeeks(prevCount => {
@@ -161,11 +161,11 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
     try {
       if (weeks === 0) return;
       const response = await API_BASE_URL.post(`/projects/${projectId}/extend?weeks=${weeks}`);
-      onExtend();
-      navigate(`/responsetest/${projectId}`, { state: { extendBoolean: true } });
-      setSnackbar({ message: '연장 성공', type: 'success' });
+      onExtend(true);
+      navigate(`/responsetest/${projectId}`);
     } catch (error) {
       console.log(error);
+      onExtend(false);
     }
   };
 
@@ -257,7 +257,6 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
             )}
           </div>
         </BalloonContent>
-        {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
       </ModalContent>
     </ModalOverlay>
   );

@@ -89,17 +89,14 @@ export const ResponseTest = () => {
   const location = useLocation();
   const { editBoolean } = location.state || { editBoolean: false };
   const { createBoolean } = location.state || { createBoolean: false };
-  const { extendBoolean } = location.state || { extendBoolean: false };
 
   useEffect(() => {
     if (editBoolean) {
       setSnackbar({ message: '프로젝트가 수정되었습니다', type: 'success' });
     } else if (createBoolean) {
       setSnackbar({ message: '프로젝트가 등록되었습니다', type: 'success' });
-    } else if (extendBoolean) {
-      setSnackbar({ message: '연장되었습니다', type: 'success' });
     }
-  }, [editBoolean, createBoolean, extendBoolean]);
+  }, [editBoolean, createBoolean]);
 
   const saveTagColors = (tags: Tag[]) => {
     const tagColors: { [key: string]: string } = {};
@@ -127,10 +124,11 @@ export const ResponseTest = () => {
   }, [projectId, setProjectId]);
 
   //정보 가져오기
-  const handleGetInfo = async () => {
+  const handleGetInfo = async (successExtend = false) => {
     if (!projectId) return;
     try {
       setLoading(true);
+
       const response = await API_BASE_URL.get(`/projects/${projectId}`);
       const Data = response.data;
 
@@ -162,6 +160,11 @@ export const ResponseTest = () => {
       setFeedback(formatDateTime(Data.feedbackEndDate));
 
       setLoading(false); // 데이터 가져온 후 로딩 상태 해제
+      if (successExtend) {
+        setSnackbar({ message: '연장이 성공했습니다', type: 'success' });
+      } else if (successExtend === false) {
+        setSnackbar({ message: '연장이 실패했습니다', type: 'error' });
+      }
     } catch (error) {
       setLoading(false); // 데이터 가져온 후 로딩 상태 해제
       if (error instanceof AxiosError) {
