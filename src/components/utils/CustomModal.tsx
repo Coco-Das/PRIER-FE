@@ -3,6 +3,7 @@ import { Link, useNavigate, useParams } from 'react-router-dom';
 import styled from 'styled-components';
 import { API_BASE_URL } from '../../const/TokenApi';
 import { useProjectStore } from '../../states/projects/ProjectStore';
+import Snackbar from '../user/Snackbar';
 
 interface CustomAlertProps {
   //   onConfirm?: () => void;
@@ -10,7 +11,8 @@ interface CustomAlertProps {
   onMouseLeave: () => void;
   top: number;
   left: number;
-  onExtend: () => void;
+  onExtend: (success: boolean) => void;
+  // successExtend?: boolean;
 }
 
 const ModalOverlay = styled.div`
@@ -106,6 +108,7 @@ const ExtendsBtn = styled(AgreeButton)<{ $point: number; $used: number }>`
     pointer-events: none;
     background-color:#cccccc;
     
+
   `}
 `;
 
@@ -156,8 +159,9 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
 
   const handleExtend = async () => {
     try {
+      if (weeks === 0) return;
       const response = await API_BASE_URL.post(`/projects/${projectId}/extend?weeks=${weeks}`);
-      onExtend();
+      onExtend(true);
       navigate(`/responsetest/${projectId}`);
     } catch (error) {
       ('');

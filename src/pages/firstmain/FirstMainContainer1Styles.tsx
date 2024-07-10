@@ -27,10 +27,10 @@ export const FirstContainer = styled.div`
 
 export const Logo = styled.img`
   width: auto;
-  height: 9rem;
+  margin-bottom: 55px;
+  height: 5.5rem;
   margin-top: -10rem;
   position: relative;
-  left: 2rem;
   ${animationCSS};
 `;
 
