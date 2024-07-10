@@ -66,8 +66,7 @@ export default function Gifticon() {
   const ConfirmPurchase = async () => {
     if (selectedProductId) {
       try {
-        const response = await PurchaseGift(selectedProductId);
-        console.log(response);
+        await PurchaseGift(selectedProductId);
         setShowPurchaseAlert(false);
         setSnackbar({ message: `상품을 구매했습니다.`, type: 'success' });
         setFlippedIndex(null);

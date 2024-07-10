@@ -5,7 +5,7 @@ import { useAllProjectStore, useNewProjectStore } from '../states/user/UserProje
 export async function FetchAllProject(filter: number, page: number) {
   try {
     const response = await API_BASE_URL.get(`/projects?filter=${filter}&page=${page}`);
-    console.log('모든 프로젝트 요청 성공', response.data);
+
     const projectData = {
       totalPages: response.data.totalPages,
       totalElements: response.data.totalElements,
@@ -40,7 +40,7 @@ export async function FetchAllProject(filter: number, page: number) {
 export async function FetchLatestProject() {
   try {
     const response = await API_BASE_URL.get(`/projects`);
-    console.log('신규 프로젝트 요청 성공', response.data);
+
     const projectData = {
       totalPages: response.data.totalPages,
       totalElements: response.data.totalElements,
@@ -74,7 +74,6 @@ export async function FetchLatestProject() {
 export async function SearchProject(keyword: string) {
   try {
     const response = await API_BASE_URL.get(`/projects?search=${keyword}`);
-    console.log('프로젝트 검색 성공', keyword, response.data);
 
     const projectData = {
       totalPages: response.data.totalPages,
