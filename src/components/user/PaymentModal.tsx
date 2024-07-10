@@ -1,5 +1,5 @@
 import React from 'react';
-import { keyframes, styled } from 'styled-components';
+import { styled } from 'styled-components';
 import PointIcon from '../../assets/Coin.png';
 interface PaymentModalProps {
   amount: number;
@@ -66,35 +66,35 @@ const CancleButton = styled.button`
     border: 1px solid #315af1;
   }
 `;
-const bounce = keyframes`
-  0%, 100% {
-    transform: translateY(0);
-    opacity: 1;
-  }
-  50% {
-    transform: translateY(-10px);
-    opacity: 1;
-  }
-`;
-const Tooltip = styled.div`
-  position: absolute;
-  bottom: 40%;
-  background-color: white;
-  border: 1px solid red;
-  border-radius: 50px;
-  padding: 5px 10px;
-  color: red;
-  font-size: 12px;
-  font-weight: 300;
-  white-space: nowrap;
-  animation: ${bounce} 0.7s ease-in-out 3, fadeOut 0.6s forwards 4s;
+// const bounce = keyframes`
+//   0%, 100% {
+//     transform: translateY(0);
+//     opacity: 1;
+//   }
+//   50% {
+//     transform: translateY(-10px);
+//     opacity: 1;
+//   }
+// `;
+// const Tooltip = styled.div`
+//   position: absolute;
+//   bottom: 40%;
+//   background-color: white;
+//   border: 1px solid red;
+//   border-radius: 50px;
+//   padding: 5px 10px;
+//   color: red;
+//   font-size: 12px;
+//   font-weight: 300;
+//   white-space: nowrap;
+//   animation: ${bounce} 0.7s ease-in-out 3, fadeOut 0.6s forwards 4s;
 
-  @keyframes fadeOut {
-    to {
-      opacity: 0;
-    }
-  }
-`;
+//   @keyframes fadeOut {
+//     to {
+//       opacity: 0;
+//     }
+//   }
+// `;
 const PaymentModal: React.FC<PaymentModalProps> = ({ amount, itemName, onConfirm, onCancel }) => {
   return (
     <PaymentOverlay>
@@ -103,7 +103,6 @@ const PaymentModal: React.FC<PaymentModalProps> = ({ amount, itemName, onConfirm
         <PaymentText>{amount} 원을 충전하시겠습니까?</PaymentText>
         <AlertText>충전 후 포인트를 사용할 시에는 취소가 불가합니다.</AlertText>
         <span className="flex mt-36 gap-8">
-          <Tooltip>카카오 페이로 결제하기</Tooltip>
           <PaymentButton onClick={() => onConfirm(amount, itemName)}>결제</PaymentButton>
           <CancleButton onClick={onCancel}>취소</CancleButton>
         </span>
