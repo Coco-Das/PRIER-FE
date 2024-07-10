@@ -76,7 +76,7 @@ const findLinkEntities = (contentBlock: any, callback: any, contentState: any) =
 const Link = (props: any) => {
   const { url } = props.contentState.getEntity(props.entityKey).getData();
   return (
-    <a href={url} style={{ color: '#3b5998', textDecoration: 'underline' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: '#3b5998', textDecoration: 'underline' }}>
       {props.children}
     </a>
   );
@@ -203,12 +203,15 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const handleProfileClick = async (writerId: number) => {
     setLoading(true);
     try {
-      await LinkUserProfile(writerId);
-      navigate(`/profile/${writerId}`);
+      if (writerId == USER_ID) {
+        navigate(`/mypage`);
+      } else {
+        await LinkUserProfile(writerId);
+        navigate(`/profile/${writerId}`);
+      }
     } finally {
       setLoading(false);
     }
-    navigate(`/profile/${writerId}`);
   };
 
   const handleCommentChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -297,6 +300,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
 
   return (
     <PostDetailContainer className="flex">
+      {loading && <Loading />}
       <>
         <PostContentContainer className="self-start mt-0" category={post.category}>
           <UserContainer className="mt-[-16px]">

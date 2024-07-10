@@ -18,7 +18,7 @@ interface PositionedMenuProps {
   insidePostBox?: boolean;
 }
 
-const PostMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox }) => {
+const PostListMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox }) => {
   const navigate = useNavigate();
   const [showAlert, setShowAlert] = React.useState(false);
   const [loading, setLoading] = useState(true);
@@ -28,11 +28,9 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox 
   };
 
   const handleDelete = async () => {
-    setLoading(true);
     try {
       await API_BASE_URL.delete(`/posts/${postId}`);
-      navigate(`/board`);
-      setLoading(false);
+      window.location.reload();
     } catch (error) {
       console.error('게시글 삭제 중 오류가 발생했습니다:', error);
       alert('게시글 삭제 중 오류가 발생했습니다.');
@@ -81,4 +79,4 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox 
   );
 };
 
-export default PostMenu;
+export default PostListMenu;
