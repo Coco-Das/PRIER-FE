@@ -42,6 +42,7 @@ import { ToggleBtn } from '../../../../components/utils/Toggle';
 import Snackbar from '../../../../components/user/Snackbar';
 import DeletePng from '../../../../assets/delete.png';
 import SettingPng from '../../../../assets/setting.png';
+import { Loading } from '../../../../components/utils/Loading';
 
 interface AutoResizeTextareaProps extends React.TextareaHTMLAttributes<HTMLTextAreaElement> {
   value?: string;
@@ -413,345 +414,347 @@ export const EditResponse = () => {
 
     try {
       setLoading(true);
-      // console.log(jsonData);
       const response = await API_BASE_URL.put(`/projects/${projectId}`, formData, config);
-      // console.log(response.data);
-
-      // setTimeout(() => {
-      setLoading(false);
       navigate(`/responsetest/${projectId}`, { state: { editBoolean: true } });
-      // }, 500); // 2초 지연
     } catch (error) {
       setSnackbar({ message: '프로젝트 수정이 실패하였습니다.', type: 'error' });
       console.error('에러:', error);
-      // console.log('JSON Data:', jsonData);
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <CreateWrapper>
-      <Project>
-        <ProjectDiv>
-          <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-            <Settings src={SettingPng} />
-            <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
-              테스트를 진행할 프로젝트에 대해 설명해주세요
-            </span>
-          </div>
-          <ProjectTextArea className="mt-2">
-            <input
-              style={{ fontSize: '25px', outline: 'none' }}
-              placeholder={title}
-              className="mb-10 font-semibold"
-              onChange={handleTitleChange}
-              value={title}
-            />
-            <p className="font-extrabold">프로젝트 소개</p>
-            <AutoResizeTextarea
-              value={introduce}
-              onChange={handleIntroduceChange}
-              placeholder="프로젝트 소개를 입력하세요..."
-            />
-            <p className="font-extrabold mt-5">프로젝트 목표</p>
-            <AutoResizeTextarea value={goal} onChange={handleGoalChange} placeholder="프로젝트 목표를 입력하세요..." />
-            <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
-            <div style={{ display: 'flex' }}>
-              <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
-              <span
-                className="ml-2"
-                style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato', fontWeight: 'bold' }}
-              >
-                * 메인이미지는 필수입니다
+    <>
+      {loading && <Loading />}
+      <CreateWrapper>
+        <Project>
+          <ProjectDiv>
+            <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
+              <Settings src={SettingPng} />
+              <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
+                테스트를 진행할 프로젝트에 대해 설명해주세요
               </span>
             </div>
-            {mainImageUrl && (
-              <ImageWrapper className="mt-5">
-                <StyledImg src={mainImageUrl} alt="메인 이미지" />
-                <ImgDeleteButton onClick={handleDeleteMainImage}>×</ImgDeleteButton>
-              </ImageWrapper>
-            )}
-            <HiddenInput
-              type="file"
-              accept="image/*"
-              multiple
-              onChange={handleAdditionalImageChange}
-              ref={additionalFileInputRef}
-            />
-            <CustomButton onClick={handleAdditionalButtonClick}>이미지 업로드</CustomButton>
-            <FileCount>파일 수: {additionalImageUrls.length} 개</FileCount>
-            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
-              {additionalImageUrls.map((url, index) => (
-                <ImageWrapper key={index}>
-                  <StyledImg src={url} alt={`추가 이미지 ${index + 1}`} />
-                  <ImgDeleteButton onClick={() => handleDeleteAdditionalImage(index)}>×</ImgDeleteButton>
-                </ImageWrapper>
-              ))}
-            </div>
-          </ProjectTextArea>
-        </ProjectDiv>
-        <ProjectIntro>
-          <TagDiv className="mt-20">
-            <span className="font-bold">태그</span>{' '}
-            <Input
-              style={{ height: '90%' }}
-              className="ml-4"
-              value={tagInput}
-              onChange={handleTagInputChange}
-              onKeyDown={handleTagInputKeyDown}
-            />
-          </TagDiv>
-          <TagWrapper $isMine={isMine}>
-            {tags.map((tag, index) => (
-              <Tag key={index} $bgColor={tag.color}>
-                {tag.tagName}
-                <ImgDeleteButton
-                  style={{
-                    top: '-3px',
-                    right: '-5px',
-                    width: '15px',
-                    height: '15px',
-                  }}
-                  onClick={() => handleDeleteTag(index)}
+            <ProjectTextArea className="mt-2">
+              <input
+                style={{ fontSize: '25px', outline: 'none' }}
+                placeholder={title}
+                className="mb-10 font-semibold"
+                onChange={handleTitleChange}
+                value={title}
+              />
+              <p className="font-extrabold">프로젝트 소개</p>
+              <AutoResizeTextarea
+                value={introduce}
+                onChange={handleIntroduceChange}
+                placeholder="프로젝트 소개를 입력하세요..."
+              />
+              <p className="font-extrabold mt-5">프로젝트 목표</p>
+              <AutoResizeTextarea
+                value={goal}
+                onChange={handleGoalChange}
+                placeholder="프로젝트 목표를 입력하세요..."
+              />
+              <HiddenInput type="file" accept="image/*" onChange={handleMainImageChange} ref={mainFileInputRef} />
+              <div style={{ display: 'flex' }}>
+                <CustomButton onClick={handleMainButtonClick}>메인 이미지 업로드</CustomButton>
+                <span
+                  className="ml-2"
+                  style={{ fontSize: '12px', marginTop: 'auto', color: 'tomato', fontWeight: 'bold' }}
                 >
-                  x
-                </ImgDeleteButton>
-              </Tag>
-            ))}
-          </TagWrapper>
-          <OrangeDiv className="mt-3">
-            <span className="font-bold">개발일정</span>
-            <OrangeInputDiv style={{ gap: '0px' }}>
-              <DatePicker
-                selected={startDate}
-                onChange={(date: Date) => setStartDate(date)}
-                dateFormat="yyyy-MM-dd"
-                placeholderText="시작 날짜"
-                customInput={<Input style={{ width: '90%', textAlign: 'center', cursor: 'pointer' }} />}
+                  * 메인이미지는 필수입니다
+                </span>
+              </div>
+              {mainImageUrl && (
+                <ImageWrapper className="mt-5">
+                  <StyledImg src={mainImageUrl} alt="메인 이미지" />
+                  <ImgDeleteButton onClick={handleDeleteMainImage}>×</ImgDeleteButton>
+                </ImageWrapper>
+              )}
+              <HiddenInput
+                type="file"
+                accept="image/*"
+                multiple
+                onChange={handleAdditionalImageChange}
+                ref={additionalFileInputRef}
               />
-              <DatePicker
-                selected={endDate}
-                onChange={(date: Date) => setEndDate(date)}
-                dateFormat="yyyy-MM-dd"
-                placeholderText="종료 날짜"
-                customInput={<Input style={{ width: '90%', textAlign: 'center', cursor: 'pointer' }} />}
-              />
-            </OrangeInputDiv>
-            <OrangeInputDiv style={{ height: '27%' }}>
-              <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>진행단계 :</div>
-              <DropDownContainer onSelect={handleStepChange} select={getStatusText(status)} />
-            </OrangeInputDiv>
-          </OrangeDiv>
-          <BlueDiv className="mt-2">
-            <span className="font-bold">팀 소개</span>
-            <BlueInputDiv>
-              <span>팀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;명 :</span>
-              <Input style={{ width: '73%' }} onChange={handleTeamNameChange} value={teamName} />
-            </BlueInputDiv>
-            <BlueInputDiv>
-              <span>한줄소개 :</span>
+              <CustomButton onClick={handleAdditionalButtonClick}>이미지 업로드</CustomButton>
+              <FileCount>파일 수: {additionalImageUrls.length} 개</FileCount>
+              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
+                {additionalImageUrls.map((url, index) => (
+                  <ImageWrapper key={index}>
+                    <StyledImg src={url} alt={`추가 이미지 ${index + 1}`} />
+                    <ImgDeleteButton onClick={() => handleDeleteAdditionalImage(index)}>×</ImgDeleteButton>
+                  </ImageWrapper>
+                ))}
+              </div>
+            </ProjectTextArea>
+          </ProjectDiv>
+          <ProjectIntro>
+            <TagDiv className="mt-20">
+              <span className="font-bold">태그</span>{' '}
               <Input
-                style={{ width: '73%', overflowY: 'auto' }}
-                onChange={handleTeamDescriptionChange}
-                value={teamDescription}
+                style={{ height: '90%' }}
+                className="ml-4"
+                value={tagInput}
+                onChange={handleTagInputChange}
+                onKeyDown={handleTagInputKeyDown}
               />
-            </BlueInputDiv>
-            <BlueInputDiv style={{ alignItems: 'normal' }}>
-              <span>팀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;원 :</span>
-              <Textarea
-                style={{
-                  width: '73%',
-                  borderRadius: '10px',
-                  backgroundColor: 'inherit',
-                  fontSize: '15px',
-                  border: '1px solid #315AF1',
-                  height: '110px',
-                  overflowY: 'auto',
-                }}
-                onChange={handleTeamMateChange}
-                value={teamMate}
-              />
-            </BlueInputDiv>
-          </BlueDiv>
-          <GreenDiv className="mt-2">
-            <GreenInputDiv>
-              <span className="font-bold">배포 링크</span>
-              <Input style={{ width: '73%' }} onChange={handleLinkChange} value={link} />
-            </GreenInputDiv>
-          </GreenDiv>
-        </ProjectIntro>
-      </Project>
-      <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
-        <Settings src={SettingPng} />
-        <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
-          상세한 피드백을 위한 원하는 질문 폼을 작성해주세요
-          <span style={{ fontSize: '12px', color: '#828282' }} className="font-medium">
-            {' '}
-            (기존 질문은 삭제만 가능합니다.)
-          </span>
-        </span>
-      </div>
-      <Question>
-        {questions.map((question, index) => (
-          <QuestionDiv key={question.questionId} className="mt-4">
-            {question.category === 'SUBJECTIVE' ? (
-              <div>
-                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
-                  <span
+            </TagDiv>
+            <TagWrapper $isMine={isMine}>
+              {tags.map((tag, index) => (
+                <Tag key={index} $bgColor={tag.color}>
+                  {tag.tagName}
+                  <ImgDeleteButton
                     style={{
-                      marginLeft: '20px',
+                      top: '-3px',
+                      right: '-5px',
+                      width: '15px',
+                      height: '15px',
+                    }}
+                    onClick={() => handleDeleteTag(index)}
+                  >
+                    x
+                  </ImgDeleteButton>
+                </Tag>
+              ))}
+            </TagWrapper>
+            <OrangeDiv className="mt-3">
+              <span className="font-bold">개발일정</span>
+              <OrangeInputDiv style={{ gap: '0px' }}>
+                <DatePicker
+                  selected={startDate}
+                  onChange={(date: Date) => setStartDate(date)}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="시작 날짜"
+                  customInput={<Input style={{ width: '90%', textAlign: 'center', cursor: 'pointer' }} />}
+                />
+                <DatePicker
+                  selected={endDate}
+                  onChange={(date: Date) => setEndDate(date)}
+                  dateFormat="yyyy-MM-dd"
+                  placeholderText="종료 날짜"
+                  customInput={<Input style={{ width: '90%', textAlign: 'center', cursor: 'pointer' }} />}
+                />
+              </OrangeInputDiv>
+              <OrangeInputDiv style={{ height: '27%' }}>
+                <div style={{ height: '100%', display: 'flex', alignItems: 'center' }}>진행단계 :</div>
+                <DropDownContainer onSelect={handleStepChange} select={getStatusText(status)} />
+              </OrangeInputDiv>
+            </OrangeDiv>
+            <BlueDiv className="mt-2">
+              <span className="font-bold">팀 소개</span>
+              <BlueInputDiv>
+                <span>팀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;명 :</span>
+                <Input style={{ width: '73%' }} onChange={handleTeamNameChange} value={teamName} />
+              </BlueInputDiv>
+              <BlueInputDiv>
+                <span>한줄소개 :</span>
+                <Input
+                  style={{ width: '73%', overflowY: 'auto' }}
+                  onChange={handleTeamDescriptionChange}
+                  value={teamDescription}
+                />
+              </BlueInputDiv>
+              <BlueInputDiv style={{ alignItems: 'normal' }}>
+                <span>팀&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;원 :</span>
+                <Textarea
+                  style={{
+                    width: '73%',
+                    borderRadius: '10px',
+                    backgroundColor: 'inherit',
+                    fontSize: '15px',
+                    border: '1px solid #315AF1',
+                    height: '110px',
+                    overflowY: 'auto',
+                  }}
+                  onChange={handleTeamMateChange}
+                  value={teamMate}
+                />
+              </BlueInputDiv>
+            </BlueDiv>
+            <GreenDiv className="mt-2">
+              <GreenInputDiv>
+                <span className="font-bold">배포 링크</span>
+                <Input style={{ width: '73%' }} onChange={handleLinkChange} value={link} />
+              </GreenInputDiv>
+            </GreenDiv>
+          </ProjectIntro>
+        </Project>
+        <div className="mt-4" style={{ display: 'flex', alignItems: 'center' }}>
+          <Settings src={SettingPng} />
+          <span className="ml-4 font-extrabold" style={{ color: '#315AF1' }}>
+            상세한 피드백을 위한 원하는 질문 폼을 작성해주세요
+            <span style={{ fontSize: '12px', color: '#828282' }} className="font-medium">
+              {' '}
+              (기존 질문은 삭제만 가능합니다.)
+            </span>
+          </span>
+        </div>
+        <Question>
+          {questions.map((question, index) => (
+            <QuestionDiv key={question.questionId} className="mt-4">
+              {question.category === 'SUBJECTIVE' ? (
+                <div>
+                  <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                    <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
+                    <span
+                      style={{
+                        marginLeft: '20px',
+                        fontSize: '20px',
+                        outline: 'none',
+                        fontWeight: 'bold',
+                        width: '90%',
+                      }}
+                    >
+                      {question.content}
+                    </span>
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
+                    <QuestionDeleteButton src={DeletePng} onClick={() => handleQuestionDelete(question.questionId)} />
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                    <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
+                    <span style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '90%' }}>
+                      {question.content}
+                    </span>
+                  </div>
+                  <div
+                    style={{
+                      marginLeft: '75px',
+                      marginTop: '50px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      gap: '10rem',
                       fontSize: '20px',
-                      outline: 'none',
-                      fontWeight: 'bold',
-                      width: '90%',
+                      width: '85%',
+                      opacity: '0.3',
                     }}
                   >
-                    {question.content}
-                  </span>
+                    {question.options?.map((option, i) => (
+                      <div key={i}>
+                        <label>
+                          <input
+                            type="radio"
+                            name={`question-${question.questionId}`}
+                            value={option}
+                            checked={false}
+                            readOnly
+                          />{' '}
+                          {option}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
+                    <QuestionDeleteButton src={DeletePng} onClick={() => handleQuestionDelete(question.questionId)} />
+                  </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton src={DeletePng} onClick={() => handleQuestionDelete(question.questionId)} />
-                </div>
-              </div>
-            ) : (
-              <div>
-                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  <span style={{ whiteSpace: 'nowrap' }}>{index + 1}번 문항</span>
-                  <span style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '90%' }}>
-                    {question.content}
-                  </span>
-                </div>
-                <div
-                  style={{
-                    marginLeft: '75px',
-                    marginTop: '50px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '10rem',
-                    fontSize: '20px',
-                    width: '85%',
-                    opacity: '0.3',
-                  }}
-                >
-                  {question.options?.map((option, i) => (
-                    <div key={i}>
-                      <label>
-                        <input
-                          type="radio"
-                          name={`question-${question.questionId}`}
-                          value={option}
-                          checked={false}
-                          readOnly
-                        />{' '}
-                        {option}
-                      </label>
-                    </div>
-                  ))}
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton src={DeletePng} onClick={() => handleQuestionDelete(question.questionId)} />
-                </div>
-              </div>
-            )}
-          </QuestionDiv>
-        ))}
+              )}
+            </QuestionDiv>
+          ))}
 
-        {newQuestions.map((question, index) => (
-          <QuestionDiv key={question.newQuestionId} className="mt-4">
-            {question.category === 'SUBJECTIVE' ? (
-              <div>
-                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  <span style={{ whiteSpace: 'nowrap' }}>{index + questions.length + 1}번 문항</span>
-                  <input
-                    placeholder="질문을 입력하세요"
-                    style={{
-                      marginLeft: '20px',
-                      fontSize: '20px',
-                      outline: 'none',
-                      fontWeight: 'bold',
-                      width: '90%',
-                    }}
-                    value={question.content}
-                    onChange={e => handleQuestionContentChange(question.newQuestionId ?? null, e.target.value)}
-                  />
-                  <div style={{ marginLeft: 'auto' }}>
-                    <ToggleBtn
-                      currentType={question.category}
-                      onToggle={() => toggleQuestionType(question.newQuestionId ?? null)}
+          {newQuestions.map((question, index) => (
+            <QuestionDiv key={question.newQuestionId} className="mt-4">
+              {question.category === 'SUBJECTIVE' ? (
+                <div>
+                  <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                    <span style={{ whiteSpace: 'nowrap' }}>{index + questions.length + 1}번 문항</span>
+                    <input
+                      placeholder="질문을 입력하세요"
+                      style={{
+                        marginLeft: '20px',
+                        fontSize: '20px',
+                        outline: 'none',
+                        fontWeight: 'bold',
+                        width: '90%',
+                      }}
+                      value={question.content}
+                      onChange={e => handleQuestionContentChange(question.newQuestionId ?? null, e.target.value)}
                     />
-                  </div>
-                </div>
-                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton
-                    src={DeletePng}
-                    onClick={() => handleQuestionDelete(question.newQuestionId ?? null)}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div>
-                <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
-                  <span style={{ whiteSpace: 'nowrap' }}>{index + questions.length + 1}번 문항</span>
-                  <input
-                    placeholder="질문을 입력하세요"
-                    style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '90%' }}
-                    onChange={e => handleQuestionContentChange(question.newQuestionId ?? null, e.target.value)}
-                    value={question.content}
-                  />
-                  <div style={{ marginLeft: 'auto' }}>
-                    <ToggleBtn
-                      currentType={question.category}
-                      onToggle={() => toggleQuestionType(question.newQuestionId ?? null)}
-                    />
-                  </div>
-                </div>
-                <div
-                  style={{
-                    marginLeft: '75px',
-                    marginTop: '50px',
-                    display: 'flex',
-                    justifyContent: 'center',
-                    gap: '10rem',
-                    fontSize: '20px',
-                    width: '85%',
-                    opacity: '0.3',
-                  }}
-                >
-                  {question.options?.map((option, i) => (
-                    <div key={i}>
-                      <label>
-                        <input
-                          type="radio"
-                          name={`question-${question.newQuestionId}`}
-                          value={option}
-                          checked={false}
-                          readOnly={true}
-                        />{' '}
-                        {option}
-                      </label>
+                    <div style={{ marginLeft: 'auto' }}>
+                      <ToggleBtn
+                        currentType={question.category}
+                        onToggle={() => toggleQuestionType(question.newQuestionId ?? null)}
+                      />
                     </div>
-                  ))}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
+                    <QuestionDeleteButton
+                      src={DeletePng}
+                      onClick={() => handleQuestionDelete(question.newQuestionId ?? null)}
+                    />
+                  </div>
                 </div>
-                <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
-                  <QuestionDeleteButton
-                    src={DeletePng}
-                    onClick={() => handleQuestionDelete(question.newQuestionId ?? null)}
-                  />
+              ) : (
+                <div>
+                  <div style={{ display: 'flex', fontSize: '15px', alignItems: 'center', fontWeight: 'bold' }}>
+                    <span style={{ whiteSpace: 'nowrap' }}>{index + questions.length + 1}번 문항</span>
+                    <input
+                      placeholder="질문을 입력하세요"
+                      style={{ marginLeft: '20px', fontSize: '20px', outline: 'none', width: '90%' }}
+                      onChange={e => handleQuestionContentChange(question.newQuestionId ?? null, e.target.value)}
+                      value={question.content}
+                    />
+                    <div style={{ marginLeft: 'auto' }}>
+                      <ToggleBtn
+                        currentType={question.category}
+                        onToggle={() => toggleQuestionType(question.newQuestionId ?? null)}
+                      />
+                    </div>
+                  </div>
+                  <div
+                    style={{
+                      marginLeft: '75px',
+                      marginTop: '50px',
+                      display: 'flex',
+                      justifyContent: 'center',
+                      gap: '10rem',
+                      fontSize: '20px',
+                      width: '85%',
+                      opacity: '0.3',
+                    }}
+                  >
+                    {question.options?.map((option, i) => (
+                      <div key={i}>
+                        <label>
+                          <input
+                            type="radio"
+                            name={`question-${question.newQuestionId}`}
+                            value={option}
+                            checked={false}
+                            readOnly={true}
+                          />{' '}
+                          {option}
+                        </label>
+                      </div>
+                    ))}
+                  </div>
+                  <div style={{ display: 'flex', justifyContent: 'right', marginRight: '10px', marginTop: '20px' }}>
+                    <QuestionDeleteButton
+                      src={DeletePng}
+                      onClick={() => handleQuestionDelete(question.newQuestionId ?? null)}
+                    />
+                  </div>
                 </div>
-              </div>
-            )}
-          </QuestionDiv>
-        ))}
-        <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
-          {!hidden && <AddButton onClick={addQuestion} />}
-        </div>
-        <div style={{ width: '100%', display: 'flex', marginBottom: '20px' }}>
-          <CustomButton onClick={handleEditSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
-            수정하기
-          </CustomButton>
-        </div>
-      </Question>
-      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
-    </CreateWrapper>
+              )}
+            </QuestionDiv>
+          ))}
+          <div style={{ display: 'flex', justifyContent: 'center', marginTop: '40px' }}>
+            {!hidden && <AddButton onClick={addQuestion} />}
+          </div>
+          <div style={{ width: '100%', display: 'flex', marginBottom: '20px' }}>
+            <CustomButton onClick={handleEditSubmit} style={{ marginLeft: 'auto', width: '15%' }}>
+              수정하기
+            </CustomButton>
+          </div>
+        </Question>
+        {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
+      </CreateWrapper>
+    </>
   );
 };
