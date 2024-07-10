@@ -50,7 +50,7 @@ import firstmainimg12 from '../../assets/FirstMainImg12.png';
 import firstmainimg13 from '../../assets/FirstMainImg13.png';
 import firstmainimg14 from '../../assets/FirstMainImg14.png';
 import firstmainimg15 from '../../assets/FirstMainImg15.png';
-import logo from '../../assets/Logo-firstMain.png';
+import logo from '../../assets/MainLogo.png';
 import ProjectImg1 from '../../assets/ProjectImg1.png';
 import ProjectImg2 from '../../assets/ProjectImg2.png';
 import Star from '../../assets/star.json';
