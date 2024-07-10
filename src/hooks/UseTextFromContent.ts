@@ -14,11 +14,9 @@ const useExtractTextFromContent = () => {
           }
         });
       }
-      console.log(text);
 
       return text;
     } catch (error) {
-      console.error('Error parsing content JSON:', error);
       return '';
     }
   }, []);

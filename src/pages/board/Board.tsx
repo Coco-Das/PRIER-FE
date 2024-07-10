@@ -51,10 +51,8 @@ const Board: React.FC = () => {
       );
       setPosts(sortedPosts);
       setAllFetched(true);
-      console.log('게시물 불러오기 성공');
-      console.log(response.data);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      ('');
     } finally {
       setLoading(false);
     }
@@ -68,7 +66,7 @@ const Board: React.FC = () => {
         activeCategory === 'ALL' ? myPosts : myPosts.filter((post: BoardPost) => post.category === activeCategory);
       setPosts(filteredMyPosts);
     } catch (error) {
-      console.error('Error fetching my posts:', error);
+      ('');
     } finally {
       setLoading(false);
     }
@@ -84,7 +82,7 @@ const Board: React.FC = () => {
           : likedPosts.filter((post: BoardPost) => post.category === activeCategory);
       setPosts(filteredLikedPosts);
     } catch (error) {
-      console.error('Error fetching liked posts:', error);
+      ('');
     } finally {
       setLoading(false);
     }

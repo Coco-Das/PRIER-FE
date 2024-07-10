@@ -112,7 +112,7 @@ const FirstMain = () => {
         const projectData = await FetchAllProject(1, 0);
         setTotalElements(projectData.totalElements);
       } catch (error) {
-        console.error('총 프로젝트 개수 가져오기 실패:', error);
+        ('');
       }
     };
 
