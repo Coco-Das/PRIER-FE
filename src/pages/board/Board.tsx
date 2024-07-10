@@ -42,7 +42,6 @@ const Board: React.FC = () => {
   }, []);
 
   const fetchPosts = async () => {
-    setLoading(true);
     try {
       const response = await API_BASE_URL.get('/posts');
       const sortedPosts = response.data.postListDto.sort(
@@ -60,7 +59,6 @@ const Board: React.FC = () => {
   };
 
   const fetchMyPosts = async () => {
-    setLoading(true);
     try {
       const response = await API_BASE_URL.get('/posts/my');
       const myPosts = response.data.postListDto.reverse();
@@ -75,7 +73,6 @@ const Board: React.FC = () => {
   };
 
   const fetchLikedPosts = async () => {
-    setLoading(true);
     try {
       const response = await API_BASE_URL.get('/posts/like/my');
       const likedPosts = response.data.postListDto.reverse();
@@ -170,6 +167,8 @@ const Board: React.FC = () => {
 
   const handleFilterClick = (filter: string) => {
     setActiveFilter(filter);
+    setPage(1);
+
     if (filter === 'all') {
       setAllFetched(false);
     }

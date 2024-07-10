@@ -15,7 +15,7 @@ import {
 } from './BoardStyles';
 import { BoardPost } from '../../states/board/BoardStore';
 import useFormatDate from '../../hooks/UseFormatDate';
-import PostMenu from '../../components/board/PostMenu';
+import PostMenu from '../../components/board/PostListMenu';
 import { useNavigate } from 'react-router-dom';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 import useLike from '../../hooks/UseLike';
@@ -57,6 +57,7 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
     setTimeout(() => {
       onPostClick(postId);
       navigate(`/board/post/${postId}`);
+      setLoading(true);
     }, 100);
   };
 
@@ -101,23 +102,14 @@ const PostList: React.FC<PostListProps> = ({ posts, onPostClick, userId, activeS
               style={{ cursor: 'pointer' }}
             >
               <UserContainer>
-                <Avatar
-                  category={post.category}
-                  onClick={e => post.category !== 'NOTICE' && handleProfileClick(post.writerId)}
-                  className="mt-[5px]"
-                  style={{ cursor: 'pointer' }}
-                >
+                <Avatar category={post.category} className="mt-[5px]" style={{ cursor: 'pointer' }}>
                   <AvatarImage
                     src={post.category === 'NOTICE' ? announcementAvatar : post.writerProfileUrl}
                     alt="Avatar"
                   />
                 </Avatar>
                 <AuthorContainer>
-                  <Author
-                    category={post.category}
-                    onClick={e => post.category !== 'NOTICE' && handleProfileClick(post.writerId)}
-                    style={{ cursor: 'pointer' }}
-                  >
+                  <Author category={post.category} style={{ cursor: 'pointer' }}>
                     {post.category === 'NOTICE' ? '공지사항' : `${post.nickname}`}
                   </Author>
                   <div style={{ display: 'flex', alignItems: 'center', gap: '4px' }}>
