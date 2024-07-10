@@ -182,7 +182,7 @@ const SideBar: React.FC<SideBarProps> = ({ open, toggleDrawer, currentPath }) =>
       await logout();
       navigate('/firstmain');
     } catch (error) {
-      console.error('로그아웃 실패:', error);
+      ('');
     }
   }, [logout, navigate]);
 

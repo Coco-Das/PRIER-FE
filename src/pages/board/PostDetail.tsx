@@ -186,9 +186,8 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
     try {
       const response = await API_BASE_URL.get(`/posts/${postId}`);
       setPost(response.data);
-      console.log(response.data);
     } catch (error) {
-      console.error('게시글을 가져오는 중 오류 발생:', error);
+      ('');
     } finally {
       setLoading(false);
     }
@@ -228,12 +227,13 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
             content: newComment,
           });
 
-          if (response.status === 200) {
+          if (response.status === 200 || response.status === 201) {
             const updatedComments = post.comments.map(comment =>
               comment.commentId === editingCommentId ? { ...comment, content: newComment } : comment,
             );
             setPost({ ...post, comments: updatedComments });
             setEditingCommentId(null);
+            setSnackbar({ message: '댓글이 수정되었습니다.', type: 'success' });
           }
         } else {
           const response = await API_BASE_URL.post(`/posts/${postId}/comment`, {
@@ -241,7 +241,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
           });
 
           fetchPost();
-          if (response.status === 201) {
+          if (response.status === 201 || response.status === 200) {
             const newCommentData: Comment = {
               writerId: USER_ID!,
               nickname: userProfile.nickname,
@@ -252,11 +252,12 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
               writerProfileUrl: response.data.writerProfileUrl,
             };
             setPost({ ...post, comments: [...post.comments, newCommentData] });
+            setSnackbar({ message: '댓글이 추가되었습니다.', type: 'success' });
           }
         }
         setNewComment('');
       } catch (error) {
-        console.error('댓글 전송 중 오류 발생:', error);
+        ('');
       }
     }
   };
@@ -272,12 +273,13 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const handleDeleteComment = async (commentId: number) => {
     try {
       const response = await axios.delete(`${API_BASE_URL}/posts/${postId}/comment/${commentId}`);
-      if (response.status === 201) {
+      if (response.status === 200) {
         const updatedComments = post.comments.filter(comment => comment.commentId !== commentId);
         setPost({ ...post, comments: updatedComments });
+        setSnackbar({ message: '댓글이 삭제되었습니다.', type: 'error' });
       }
     } catch (error) {
-      console.error('댓글 삭제 중 오류 발생:', error);
+      ('');
     }
   };
 

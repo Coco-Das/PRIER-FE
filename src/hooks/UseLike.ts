@@ -26,10 +26,10 @@ const useLike = () => {
           },
         }));
       } else {
-        console.error(`좋아요 후 포스트 데이터를 가져오지 못했습니다.`);
+        ('');
       }
     } catch (error) {
-      console.error(`포스트 좋아요 상태를 토글하는 중 오류가 발생했습니다:`, error);
+      ('');
     }
   };
 

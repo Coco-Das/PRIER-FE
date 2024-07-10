@@ -43,8 +43,7 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
       await fetchPost();
       setSnackbar({ message: '댓글이 삭제되었습니다.', type: 'error' });
     } catch (error) {
-      console.error('Failed to delete the comment:', error);
-      setSnackbar({ message: '댓글 삭제 중 오류가 발생했습니다.', type: 'error' });
+      ('');
     }
   };
 
