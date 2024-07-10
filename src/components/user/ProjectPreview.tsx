@@ -30,6 +30,7 @@ export default function ProjectPreview() {
       await LinkUserProfile(userId);
       Navigate(`/profile/${userId}`);
     } finally {
+      Navigate(`/profile/${userId}`);
       setLoading(false);
     }
     Navigate(`/profile/${userId}`);
