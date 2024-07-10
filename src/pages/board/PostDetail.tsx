@@ -16,6 +16,7 @@ import ImageModal from '../../components/board/ImageModal';
 import useLike from '../../hooks/UseLike';
 import { LinkUserProfile } from '../../services/UserApi';
 import { useUserStore } from '../../states/user/UserStore';
+import Snackbar from '../../components/user/Snackbar';
 import {
   PostDetailContainer,
   PostContentContainer,
@@ -170,6 +171,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const [editingCommentId, setEditingCommentId] = useState<number | null>(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [modalImageUrl, setModalImageUrl] = useState<string | null>(null);
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
 
   const formatDate = useFormatDate();
   const extractTextFromContent = useExtractTextFromContent();
@@ -270,10 +272,9 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
   const handleDeleteComment = async (commentId: number) => {
     try {
       const response = await axios.delete(`${API_BASE_URL}/posts/${postId}/comment/${commentId}`);
-      if (response.status === 200) {
+      if (response.status === 201) {
         const updatedComments = post.comments.filter(comment => comment.commentId !== commentId);
         setPost({ ...post, comments: updatedComments });
-        window.location.reload();
       }
     } catch (error) {
       console.error('댓글 삭제 중 오류 발생:', error);
@@ -395,6 +396,8 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
                           onEditClick={handleEditComment}
                           onDeleteSuccess={() => handleDeleteComment(comment.commentId)}
                           commentContent={comment.content}
+                          fetchPost={fetchPost} // fetchPost 전달
+                          setSnackbar={setSnackbar} // setSnackbar 전달
                         />
                       </div>
                     )}
@@ -412,6 +415,7 @@ const PostDetail: React.FC<PostDetailProps> = ({ postId, onBackToList }) => {
           </CommentInputContainer>
         </CommentsContainer>
         {isModalOpen && <ImageModal imageUrl={modalImageUrl} onClose={closeModal} />}
+        {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
       </>
     </PostDetailContainer>
   );

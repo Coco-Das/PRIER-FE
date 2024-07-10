@@ -11,6 +11,7 @@ import Dropdown from '@mui/joy/Dropdown';
 import { useNavigate } from 'react-router-dom';
 import { API_BASE_URL } from '../../const/TokenApi';
 import DeleteAlert from '../board/DeleteAlert'; // Import CustomAlert
+import { Loading } from '../../components/utils/Loading';
 
 interface PositionedMenuProps {
   postId: number;
@@ -31,11 +32,14 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox 
     setLoading(true);
     try {
       await API_BASE_URL.delete(`/posts/${postId}`);
-      navigate(`/board`);
-      setLoading(false);
+      navigate(`/board`, {
+        state: { refresh: true, snackbar: { message: '게시물이 삭제되었습니다.', type: 'error' } },
+      });
     } catch (error) {
       console.error('게시글 삭제 중 오류가 발생했습니다:', error);
       alert('게시글 삭제 중 오류가 발생했습니다.');
+    } finally {
+      setLoading(false);
     }
   };
 

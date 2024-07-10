@@ -9,16 +9,18 @@ import DeleteForever from '@mui/icons-material/DeleteForever';
 import MenuButton from '@mui/joy/MenuButton';
 import Dropdown from '@mui/joy/Dropdown';
 import { API_BASE_URL } from '../../const/TokenApi';
-import DeleteAlert from '../board/DeleteAlert'; // Import CustomAlert
+import DeleteAlert from '../board/DeleteAlert';
 
 interface CommentMenuProps {
   commentId: number;
   postId: number;
-  title: string; // Add title prop
+  title: string;
   onEditClick: (commentId: number) => void;
   onDeleteSuccess: () => void;
   insidePostBox?: boolean;
   commentContent: string;
+  fetchPost: () => void; // fetchPost 추가
+  setSnackbar: (snackbar: { message: string; type: 'success' | 'error' } | null) => void; // 스낵바 상태 설정 함수
 }
 
 const CommentMenu: React.FC<CommentMenuProps> = ({
@@ -29,6 +31,8 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
   onDeleteSuccess,
   insidePostBox,
   commentContent,
+  fetchPost,
+  setSnackbar,
 }) => {
   const [showAlert, setShowAlert] = React.useState(false);
 
@@ -36,9 +40,11 @@ const CommentMenu: React.FC<CommentMenuProps> = ({
     try {
       await API_BASE_URL.delete(`/posts/${postId}/comment/${commentId}`);
       onDeleteSuccess();
-      window.location.reload();
+      await fetchPost();
+      setSnackbar({ message: '댓글이 삭제되었습니다.', type: 'error' });
     } catch (error) {
       console.error('Failed to delete the comment:', error);
+      setSnackbar({ message: '댓글 삭제 중 오류가 발생했습니다.', type: 'error' });
     }
   };
 

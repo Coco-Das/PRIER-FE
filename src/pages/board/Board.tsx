@@ -9,6 +9,7 @@ import PostDetail from './PostDetail';
 import usePagination from '../../hooks/UsePagination';
 import { API_BASE_URL } from '../../const/TokenApi';
 import { Loading } from '../../components/utils/Loading';
+import Snackbar from '../../components/user/Snackbar';
 
 const Board: React.FC = () => {
   const { postId } = useParams<{ postId: string }>();
@@ -24,6 +25,7 @@ const Board: React.FC = () => {
   const [USER_ID, setUserId] = useState<number | null>(null);
   const [allFetched, setAllFetched] = useState<boolean>(false);
   const [title, setTitle] = useState<string>('Community');
+  const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null); // 스낵바 상태 변수
 
   const POSTS_PER_PAGE = 3;
   const {
@@ -97,6 +99,15 @@ const Board: React.FC = () => {
       await fetchMyPosts();
     }
   };
+
+  useEffect(() => {
+    if (location.state?.refresh) {
+      fetchData();
+    }
+    if (location.state?.snackbar) {
+      setSnackbar(location.state.snackbar);
+    }
+  }, [location.state]);
 
   useEffect(() => {
     fetchData();
@@ -256,6 +267,7 @@ const Board: React.FC = () => {
             )}
           </>
         )}
+        {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
       </Container>
     </>
   );
