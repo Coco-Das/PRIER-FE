@@ -51,10 +51,12 @@ export default function LatestProject() {
                   <ProfileImg src={project.profileImageUrl} onClick={() => handleProfileClick(project.userId)} />
                 )}
                 <span className="flex-col ml-4">
-                  <ProjectTitle>{project.title}</ProjectTitle>
-                  <ProjectTeam className="text-base font-light" style={{ color: '#828282' }}>
-                    Team : {project.teamName}
-                  </ProjectTeam>
+                  <Link to={`/responsetest/${project.projectId}`}>
+                    <ProjectTitle>{project.title}</ProjectTitle>
+                    <ProjectTeam className="text-base font-light" style={{ color: '#828282' }}>
+                      Team : {project.teamName}
+                    </ProjectTeam>
+                  </Link>
                 </span>
               </div>
             </div>{' '}
