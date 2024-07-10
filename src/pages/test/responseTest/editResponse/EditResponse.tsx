@@ -118,6 +118,7 @@ export const EditResponse = () => {
   const [deleteMainImage, setDeleteMainImage] = useState(false);
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
   const [hidden, setHidden] = useState(false);
+  const [loading, setLoading] = useState(false);
 
   //태그 색상 랜덤 설정
   const getRandomColor = () => {
@@ -411,13 +412,15 @@ export const EditResponse = () => {
     };
 
     try {
+      setLoading(true);
       // console.log(jsonData);
       const response = await API_BASE_URL.put(`/projects/${projectId}`, formData, config);
-      console.log(response.data);
-      setSnackbar({ message: '프로젝트가 수정되었습니다', type: 'success' });
-      setTimeout(() => {
-        navigate(`/responsetest/${projectId}`);
-      }, 500); // 2초 지연
+      // console.log(response.data);
+
+      // setTimeout(() => {
+      setLoading(false);
+      navigate(`/responsetest/${projectId}`, { state: { editBoolean: true } });
+      // }, 500); // 2초 지연
     } catch (error) {
       setSnackbar({ message: '프로젝트 수정이 실패하였습니다.', type: 'error' });
       console.error('에러:', error);
@@ -490,6 +493,7 @@ export const EditResponse = () => {
           <TagDiv className="mt-20">
             <span className="font-bold">태그</span>{' '}
             <Input
+              style={{ height: '90%' }}
               className="ml-4"
               value={tagInput}
               onChange={handleTagInputChange}

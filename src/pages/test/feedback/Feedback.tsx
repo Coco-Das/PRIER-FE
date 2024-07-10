@@ -67,7 +67,6 @@ function Feedback() {
   const setProjectId = useProjectStore(state => state.setProjectId);
   const [title, setTitle] = useState('');
   const [teamName, setTeamName] = useState('');
-  // const [introduce, setIntroduce] = useState('');
   const [teamDescription, setTeamDescription] = useState('');
   const [mainImgUrl, setMainImgUrl] = useState('');
   const [questions, setQuestions] = useState<Question[]>([]);
