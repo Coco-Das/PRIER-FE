@@ -197,9 +197,9 @@ const CreateBoard: React.FC = () => {
   // 게시물 생성 확인 핸들러
   const confirmCreateBoard = async () => {
     const contentState = editorState.getCurrentContent();
-    const rawContent = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
+    const rawContent = convertToRaw(contentState);
     const filteredContent = filterFontSizeStyles(rawContent);
-    const contentString = JSON.stringify(filteredContent); // Raw 데이터를 문자열로 변환
+    const contentString = JSON.stringify(filteredContent);
 
     const formData = new FormData();
     formData.append(
@@ -221,7 +221,9 @@ const CreateBoard: React.FC = () => {
       if (response.status === 201) {
         console.log('게시물 작성 성공');
         console.log('보낸 데이터:', { title, content: contentString, category, images });
-        navigate('/board');
+        navigate('/board', {
+          state: { snackbar: { message: '게시물이 생성되었습니다.', type: 'success' } },
+        });
       } else {
         console.error('게시물 작성 실패');
         console.log('응답 상태 코드:', response.status);

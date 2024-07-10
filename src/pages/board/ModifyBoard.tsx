@@ -269,8 +269,8 @@ const ModifyBoard: React.FC = () => {
     setShowCreateBoardAlert(false);
 
     const contentState = editorState.getCurrentContent();
-    const rawContent = convertToRaw(contentState); // 콘텐츠 상태를 Raw 데이터로 변환
-    const contentString = JSON.stringify(rawContent); // Raw 데이터를 문자열로 변환
+    const rawContent = convertToRaw(contentState);
+    const contentString = JSON.stringify(rawContent);
     const formData = new FormData();
 
     formData.append(
@@ -294,7 +294,9 @@ const ModifyBoard: React.FC = () => {
       if (response.status === 200) {
         console.log('게시물 수정 성공');
         console.log('보낸 데이터:', { title, content: contentString, category, images, postMediaIds });
-        navigate('/board');
+        navigate('/board', {
+          state: { snackbar: { message: '게시물이 수정되었습니다.', type: 'success' } },
+        });
       } else {
         console.error('게시물 수정 실패');
         console.log('응답 상태 코드:', response.status);

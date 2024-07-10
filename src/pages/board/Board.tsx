@@ -51,8 +51,6 @@ const Board: React.FC = () => {
       );
       setPosts(sortedPosts);
       setAllFetched(true);
-      console.log('게시물 불러오기 성공');
-      console.log(response.data);
     } catch (error) {
       console.error('Error fetching posts:', error);
     } finally {

@@ -36,8 +36,7 @@ const PostMenu: React.FC<PositionedMenuProps> = ({ postId, title, insidePostBox 
         state: { refresh: true, snackbar: { message: '게시물이 삭제되었습니다.', type: 'error' } },
       });
     } catch (error) {
-      console.error('게시글 삭제 중 오류가 발생했습니다:', error);
-      alert('게시글 삭제 중 오류가 발생했습니다.');
+      ('');
     } finally {
       setLoading(false);
     }
