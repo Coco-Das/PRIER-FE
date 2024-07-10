@@ -76,7 +76,7 @@ const findLinkEntities = (contentBlock: any, callback: any, contentState: any) =
 const Link = (props: any) => {
   const { url } = props.contentState.getEntity(props.entityKey).getData();
   return (
-    <a href={url} style={{ color: '#3b5998', textDecoration: 'underline' }}>
+    <a href={url} target="_blank" rel="noopener noreferrer" style={{ color: '#3b5998', textDecoration: 'underline' }}>
       {props.children}
     </a>
   );
