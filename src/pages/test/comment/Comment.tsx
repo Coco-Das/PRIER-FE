@@ -16,6 +16,7 @@ import StarRating from '../../../components/utils/StarRating';
 import SidebarAlert from '../../../components/utils/SidebarAlert';
 import DeletePng from '../../../assets/delete.png';
 import EditPng from '../../../assets/edit.png';
+import { LinkUserProfile } from '../../../services/UserApi';
 
 //댓글 불러옴 get
 //댓글 등록 post
@@ -140,6 +141,15 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
     setEditingScore(newScore);
   };
 
+  const handleProfileClick = async (userId: number) => {
+    await LinkUserProfile(userId);
+    if (USER_ID === userId) {
+      navigate(`/mypage`);
+    } else {
+      navigate(`/profile/${userId}`);
+    }
+  };
+
   return (
     <SidebarContainer $show={show} onMouseLeave={onMouseLeave}>
       <div style={{ width: '100%', height: '5%', display: 'flex', gap: '15px', paddingLeft: '20px' }}>
@@ -224,7 +234,7 @@ export const Comment: React.FC<CommentProps> = ({ show, onMouseLeave }) => {
                 }}
               >
                 <div
-                  onClick={() => navigate(`/profile/${comment.userId}`)}
+                  onClick={() => handleProfileClick(comment.userId)}
                   style={{ cursor: 'pointer', display: 'flex', alignItems: 'center' }}
                 >
                   <ProfileImg src={comment.profileUrl}></ProfileImg>
