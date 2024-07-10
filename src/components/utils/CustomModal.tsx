@@ -143,7 +143,7 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
       const response = await API_BASE_URL.get('/points');
       setPoint(response.data);
     } catch (error) {
-      console.log(error);
+      ('');
     }
   };
 
@@ -160,7 +160,7 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
       onExtend();
       navigate(`/responsetest/${projectId}`);
     } catch (error) {
-      console.log(error);
+      ('');
     }
   };
 

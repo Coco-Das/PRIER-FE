@@ -219,19 +219,14 @@ const CreateBoard: React.FC = () => {
       });
 
       if (response.status === 201) {
-        console.log('게시물 작성 성공');
-        console.log('보낸 데이터:', { title, content: contentString, category, images });
         navigate('/board', {
           state: { snackbar: { message: '게시물이 생성되었습니다.', type: 'success' } },
         });
       } else {
-        console.error('게시물 작성 실패');
-        console.log('응답 상태 코드:', response.status);
-        console.log('보낸 데이터:', { title, content: contentString, category, images });
+        ('');
       }
     } catch (error) {
-      console.error('에러:', error);
-      console.log('보낸 데이터:', { title, content: contentString, category, images });
+      ('');
     }
   };
 

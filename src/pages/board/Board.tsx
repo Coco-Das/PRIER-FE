@@ -52,7 +52,7 @@ const Board: React.FC = () => {
       setPosts(sortedPosts);
       setAllFetched(true);
     } catch (error) {
-      console.error('Error fetching posts:', error);
+      ('');
     } finally {
       setLoading(false);
     }
@@ -66,7 +66,7 @@ const Board: React.FC = () => {
         activeCategory === 'ALL' ? myPosts : myPosts.filter((post: BoardPost) => post.category === activeCategory);
       setPosts(filteredMyPosts);
     } catch (error) {
-      console.error('Error fetching my posts:', error);
+      ('');
     } finally {
       setLoading(false);
     }
@@ -82,7 +82,7 @@ const Board: React.FC = () => {
           : likedPosts.filter((post: BoardPost) => post.category === activeCategory);
       setPosts(filteredLikedPosts);
     } catch (error) {
-      console.error('Error fetching liked posts:', error);
+      ('');
     } finally {
       setLoading(false);
     }
