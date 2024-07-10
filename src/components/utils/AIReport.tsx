@@ -1,10 +1,11 @@
 import { useEffect, useRef } from 'react';
-import { useUserStore } from '../../states/user/UserStore';
+import { useOtherProfileStore, useUserStore } from '../../states/user/UserStore';
 import { AIBestText, StyledGraphIcon, TitleText } from '../../pages/user/mypage/MyPageStyle';
 import { SmallText } from '../user/UserStyle';
 import { styled } from 'styled-components';
 import graphIcon from '../../assets/Graph.png';
 import { device } from '../../styles/Media';
+import { useLocation } from 'react-router-dom';
 const COLOR_MAP = ['#315AF1', '#28B381', '#FFBA6B', '#828282', '#828282'];
 const DIRECT_MAP = [null, [-1, -1], [1.2, -1], [1, 1], [-1, 1]];
 const AIOverlay = styled.div`
@@ -28,8 +29,11 @@ const AIOverlay = styled.div`
 `;
 
 export default function AIReport() {
-  const userProfile = useUserStore(state => state.userProfile);
+  const { pathname } = useLocation();
+  const myProfile = useUserStore(state => state.userProfile);
+  const otherProfile = useOtherProfileStore(state => state.otherProfile);
   const canvasRef = useRef<HTMLDivElement>(null);
+  const userProfile = pathname === '/mypage' ? myProfile || [] : otherProfile || [];
 
   useEffect(() => {
     if (!canvasRef.current) {

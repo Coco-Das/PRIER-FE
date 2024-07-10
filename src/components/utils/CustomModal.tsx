@@ -141,7 +141,6 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
   const handleGetPoint = async () => {
     try {
       const response = await API_BASE_URL.get('/points');
-      console.log(response.data);
       setPoint(response.data);
     } catch (error) {
       console.log(error);
@@ -158,10 +157,8 @@ const CustomModal: React.FC<CustomAlertProps> = ({ onCancel, top, left, onMouseL
   const handleExtend = async () => {
     try {
       const response = await API_BASE_URL.post(`/projects/${projectId}/extend?weeks=${weeks}`);
-      console.log(projectId, weeks);
       onExtend();
       navigate(`/responsetest/${projectId}`);
-      console.log('연장 요청 성공', response.data);
     } catch (error) {
       console.log(error);
     }
