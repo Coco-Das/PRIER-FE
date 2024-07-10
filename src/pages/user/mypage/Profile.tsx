@@ -199,12 +199,9 @@ export default function UserProfile() {
                   </LinkProject>
                 </Link>
                 <FeedbackContainer>
-                  <Link to={`/feedback/${userProfile.nowProjectId}`}>
-                    <TitleText className="mb-4">받은 피드백</TitleText>
-                    <UniqueText className="mb-4">{userProfile.nowProjectFeedbackCount}</UniqueText>
-                    <DetailText>{userProfile.nowProjectFeedbackCount}개의 피드백이 제출되었습니다.</DetailText>
-                    <LinkText className="text-end">모아보기 &gt;</LinkText>
-                  </Link>
+                  <TitleText className="mb-4">받은 피드백</TitleText>
+                  <UniqueText className="mb-4">{userProfile.nowProjectFeedbackCount}</UniqueText>
+                  <DetailText>{userProfile.nowProjectFeedbackCount}개의 피드백이 제출되었습니다.</DetailText>
                 </FeedbackContainer>
               </LinkContainer>
               {userProfile.nowProjectFeedbackCount === 0 ? (
