@@ -23,7 +23,7 @@ import {
   CommentBtn,
 } from './ResponseTestStyles';
 import { API_BASE_URL } from '../../../const/TokenApi';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { useProjectStore } from '../../../states/projects/ProjectStore';
 import StarRating from '../../../components/utils/StarRating';
 import CustomAlert from '../../../components/utils/CustomAlert';
@@ -35,6 +35,8 @@ import Snackbar from '../../../components/user/Snackbar';
 import DeletePng from '../../../assets/delete.png';
 import EditPng from '../../../assets/edit.png';
 import LinkImg from '../../../assets/link_gray.png';
+import Deadline from '../../../assets/deadline.png';
+import { Loading } from '../../../components/utils/Loading';
 
 interface Tag {
   tagName: string;
@@ -81,8 +83,20 @@ export const ResponseTest = () => {
   const [showSidebar, setShowSidebar] = useState(false);
   const userProfile = useUserStore(state => state.userProfile);
   const storedUserId = localStorage.getItem('userId');
-  const USER_ID = storedUserId ? Number(storedUserId) : null;
+  // const USER_ID = storedUserId ? Number(storedUserId) : null;
   const [snackbar, setSnackbar] = useState<{ message: string; type: 'success' | 'error' } | null>(null);
+  const [loading, setLoading] = useState(true);
+  const location = useLocation();
+  const { editBoolean } = location.state || { editBoolean: false };
+  const { createBoolean } = location.state || { createBoolean: false };
+
+  useEffect(() => {
+    if (editBoolean) {
+      setSnackbar({ message: '프로젝트가 수정되었습니다', type: 'success' });
+    } else if (createBoolean) {
+      setSnackbar({ message: '프로젝트가 등록되었습니다', type: 'success' });
+    }
+  }, [editBoolean]);
 
   const saveTagColors = (tags: Tag[]) => {
     const tagColors: { [key: string]: string } = {};
@@ -113,6 +127,7 @@ export const ResponseTest = () => {
   const handleGetInfo = async () => {
     if (!projectId) return;
     try {
+      setLoading(true);
       const response = await API_BASE_URL.get(`/projects/${projectId}`);
       const Data = response.data;
 
@@ -143,7 +158,9 @@ export const ResponseTest = () => {
       setAdditionalImageUrls(addMedia.map((item: Media) => item.url));
       setFeedback(formatDateTime(Data.feedbackEndDate));
       // console.log(Data);
+      setLoading(false); // 데이터 가져온 후 로딩 상태 해제
     } catch (error) {
+      setLoading(false); // 데이터 가져온 후 로딩 상태 해제
       if (error instanceof AxiosError) {
         // console.log(error.response?.status);
         setAlert(true);
@@ -250,178 +267,196 @@ export const ResponseTest = () => {
   };
 
   return (
-    <CreateWrapper>
-      <Project>
-        {alert && <CustomAlert message="없는 페이지입니다." showButtons={false} />}
-        <ProjectDiv>
-          <div
-            className="mt-4"
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              wordWrap: 'break-word',
-              width: '100%',
-            }}
-          >
-            <span className="ml-4 font-bold" style={{ wordBreak: 'break-word' }}>
-              안녕하세요 <span>{userProfile.nickname} 님</span>, <span style={{ color: '#315AF1' }}>{teamName}</span>의{' '}
-              <span style={{ color: '#23BE87' }}>{title}</span> 프로젝트 입니다.
-            </span>
-          </div>
-          <ProjectTextArea className="mt-2">
-            <p style={{ fontSize: '15px', marginLeft: 'auto', color: 'black' }}>{feedback}</p>
-            <p className="font-extrabold">프로젝트 소개</p>
-            <span className="mt-3" style={{ fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: introduce }} />
-            <p className="font-extrabold mt-5">프로젝트 목표</p>
-            <span className="mt-3" style={{ fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: goal }} />
-            <ImageWrapper className="mt-3">
-              {mainImageUrl && <StyledImg src={mainImageUrl} alt="메인 이미지" />}
-
-              {additionalImageUrls.map((url, index) => (
-                <StyledImg key={index} src={url} alt={`추가 이미지 ${index + 1}`} />
-              ))}
-            </ImageWrapper>
-          </ProjectTextArea>
-        </ProjectDiv>
-        <ProjectIntro>
-          {isMine && (
-            <div
-              style={{
-                marginTop: '20px',
-                display: 'flex',
-                alignItems: 'center',
-              }}
-            >
-              <div style={{ display: 'flex', marginLeft: 'auto', gap: '15px', alignItems: 'center' }}>
-                <EditButton src={EditPng} onClick={() => navigate(`/editproject/${projectId}`)} />
-                <DeleteButton src={DeletePng} onClick={() => setShowAlert(true)} />
-                {showAlert && (
-                  <CustomAlert
-                    message="삭제하시겠습니까?"
-                    onConfirm={handleDelete}
-                    onCancel={() => {
-                      setShowAlert(false);
-                    }}
-                  />
-                )}
-              </div>
-            </div>
-          )}
-          <TagWrapper $isMine={isMine}>
-            {tags.map((tag, index) => (
-              <Tag key={index} $bgColor={tag.color}>
-                {tag.tagName}
-              </Tag>
-            ))}
-          </TagWrapper>
-          <OrangeDiv>
-            <span className="font-bold">개발일정</span>
-            <OrangeInputDiv>
-              <span style={{ color: '#828282' }}>
-                프로젝트 기간: <span>{startDate}</span> ~ <span>{endDate}</span>
-              </span>
-            </OrangeInputDiv>
-            <OrangeInputDiv>
-              <span>
-                진행단계: <span>{getStatusText(status)}</span>
-              </span>
-            </OrangeInputDiv>
-          </OrangeDiv>
-          <BlueDiv className="mt-2">
-            <span className="font-bold">팀소개</span>
-            <BlueInputDiv>
-              <span style={{ fontSize: '18px' }}>{teamName}</span>
-              <span>{teamDescription}</span>
-              <span dangerouslySetInnerHTML={{ __html: teamMate }}></span>
-            </BlueInputDiv>
-          </BlueDiv>
-          {link && (
-            <GreenDiv className="mt-2" onClick={handleClick}>
-              <img style={{ width: '18px', height: '18px' }} src={LinkImg} />
-              <span
-                className="underline"
+    <>
+      {loading ? (
+        <Loading />
+      ) : (
+        <CreateWrapper>
+          <Project>
+            {alert && <CustomAlert message="없는 페이지입니다." showButtons={false} />}
+            <ProjectDiv>
+              <div
+                className="mt-4"
                 style={{
+                  display: 'flex',
                   alignItems: 'center',
+                  wordWrap: 'break-word',
                   width: '100%',
-                  overflow: 'hidden',
-                  textOverflow: 'ellipsis',
                 }}
               >
-                {link}
-              </span>
-            </GreenDiv>
-          )}
-          <WhiteDiv className="mt-2">
-            <div style={{ display: 'flex', height: 'auto' }}>
-              <span className="font-bold">댓글 달기</span>
-              {!isMine && <StarRating initialScore={score} onRatingChange={handleRatingChange} />}
-            </div>
-            {isMine ? (
-              <textarea
-                style={{ padding: '5px 10px', outline: 'none', marginTop: '5px', resize: 'none' }}
-                placeholder="전체 댓글을 눌러 댓글을 확인해보세요!"
-                readOnly
-              />
-            ) : (
-              <textarea
-                style={{ padding: '5px 10px', outline: 'none', marginTop: '5px', resize: 'none' }}
-                placeholder="한줄 평"
-                value={comment}
-                onChange={handleCommentChange}
-              />
-            )}
+                <span className="ml-4 font-bold" style={{ wordBreak: 'break-word' }}>
+                  안녕하세요 <span>{userProfile.nickname} 님</span>,{' '}
+                  <span style={{ color: '#315AF1' }}>{teamName}</span>의{' '}
+                  <span style={{ color: '#23BE87' }}>{title}</span> 프로젝트 입니다.
+                </span>
+              </div>
+              <ProjectTextArea className="mt-2">
+                <p
+                  style={{
+                    fontSize: '14px',
+                    marginLeft: 'auto',
+                    color: '#828282',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  {feedback}
+                  <img style={{ height: '20px', width: '20px' }} src={Deadline} />
+                </p>
+                <p className="font-extrabold">프로젝트 소개</p>
+                <span className="mt-3" style={{ fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: introduce }} />
+                <p className="font-extrabold mt-5">프로젝트 목표</p>
+                <span className="mt-3" style={{ fontSize: '16px' }} dangerouslySetInnerHTML={{ __html: goal }} />
+                <ImageWrapper className="mt-3">
+                  {mainImageUrl && <StyledImg src={mainImageUrl} alt="메인 이미지" />}
 
-            <div
-              style={{
-                display: 'flex',
-                justifyContent: 'flex-end',
-                gap: '20px',
-                height: '25%',
-                marginTop: 'auto',
-              }}
-            >
-              <CommentBtn onClick={() => setShowSidebar(true)}>전체댓글</CommentBtn>
-              {!isMine && <CommentBtn onClick={handleCommentSubmit}>등록</CommentBtn>}
-            </div>
-          </WhiteDiv>
-          <div style={{ display: 'flex', justifyContent: 'space-between', paddingLeft: '30px' }}>
-            {isMine && (
-              <ButtonContainer>
-                <CustomButton style={{ width: '100%' }} ref={buttonRef} onClick={handleMouseEnter}>
-                  연장하기
-                </CustomButton>
-                {showModal && buttonPosition && (
-                  <CustomModal
-                    top={buttonPosition.top}
-                    left={buttonPosition.left}
-                    onCancel={() => setShowModal(false)}
-                    onMouseLeave={() => setShowModal(false)}
-                    onExtend={handleGetInfo}
+                  {additionalImageUrls.map((url, index) => (
+                    <StyledImg key={index} src={url} alt={`추가 이미지 ${index + 1}`} />
+                  ))}
+                </ImageWrapper>
+              </ProjectTextArea>
+            </ProjectDiv>
+            <ProjectIntro>
+              {isMine && (
+                <div
+                  style={{
+                    marginTop: '20px',
+                    display: 'flex',
+                    alignItems: 'center',
+                  }}
+                >
+                  <div style={{ display: 'flex', marginLeft: 'auto', gap: '15px', alignItems: 'center' }}>
+                    <EditButton src={EditPng} onClick={() => navigate(`/editproject/${projectId}`)} />
+                    <DeleteButton src={DeletePng} onClick={() => setShowAlert(true)} />
+                    {showAlert && (
+                      <CustomAlert
+                        message="삭제하시겠습니까?"
+                        onConfirm={handleDelete}
+                        onCancel={() => {
+                          setShowAlert(false);
+                        }}
+                      />
+                    )}
+                  </div>
+                </div>
+              )}
+              <TagWrapper $isMine={isMine}>
+                {tags.map((tag, index) => (
+                  <Tag key={index} $bgColor={tag.color}>
+                    {tag.tagName}
+                  </Tag>
+                ))}
+              </TagWrapper>
+              <OrangeDiv>
+                <span className="font-bold">개발일정</span>
+                <OrangeInputDiv>
+                  <span style={{ color: '#828282' }}>
+                    프로젝트 기간: <span>{startDate}</span> ~ <span>{endDate}</span>
+                  </span>
+                </OrangeInputDiv>
+                <OrangeInputDiv>
+                  <span>
+                    진행단계: <span>{getStatusText(status)}</span>
+                  </span>
+                </OrangeInputDiv>
+              </OrangeDiv>
+              <BlueDiv className="mt-2">
+                <span className="font-bold">팀소개</span>
+                <BlueInputDiv>
+                  <span style={{ fontSize: '18px' }}>{teamName}</span>
+                  <span>{teamDescription}</span>
+                  <span dangerouslySetInnerHTML={{ __html: teamMate }}></span>
+                </BlueInputDiv>
+              </BlueDiv>
+              {link && (
+                <GreenDiv className="mt-2" onClick={handleClick}>
+                  <img style={{ width: '18px', height: '18px' }} src={LinkImg} />
+                  <span
+                    className="underline"
+                    style={{
+                      alignItems: 'center',
+                      width: '100%',
+                      overflow: 'hidden',
+                      textOverflow: 'ellipsis',
+                    }}
+                  >
+                    {link}
+                  </span>
+                </GreenDiv>
+              )}
+              <WhiteDiv className="mt-2">
+                <div style={{ display: 'flex', height: 'auto' }}>
+                  <span className="font-bold">댓글 달기</span>
+                  {!isMine && <StarRating initialScore={score} onRatingChange={handleRatingChange} />}
+                </div>
+                {isMine ? (
+                  <textarea
+                    style={{ padding: '5px 10px', outline: 'none', marginTop: '5px', resize: 'none' }}
+                    placeholder="전체 댓글을 눌러 댓글을 확인해보세요!"
+                    readOnly
+                  />
+                ) : (
+                  <textarea
+                    style={{ padding: '5px 10px', outline: 'none', marginTop: '5px', resize: 'none' }}
+                    placeholder="한줄 평"
+                    value={comment}
+                    onChange={handleCommentChange}
                   />
                 )}
-              </ButtonContainer>
-            )}
 
-            {!isMine ? (
-              <CustomButton
-                style={{ marginLeft: 'auto', width: '30%' }}
-                onClick={() => navigate(`/responsequestions/${projectId}`)}
-              >
-                테스트폼 참여하기
-              </CustomButton>
-            ) : (
-              <CustomButton
-                style={{ marginLeft: 'auto', width: '30%' }}
-                onClick={() => navigate(`/feedback/${projectId}`)}
-              >
-                피드백 상세보기
-              </CustomButton>
-            )}
-          </div>
-        </ProjectIntro>
-      </Project>
-      <Comment show={showSidebar} onMouseLeave={() => setShowSidebar(false)}></Comment>
-      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
-    </CreateWrapper>
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    gap: '20px',
+                    height: '25%',
+                    marginTop: 'auto',
+                  }}
+                >
+                  <CommentBtn onClick={() => setShowSidebar(true)}>전체댓글</CommentBtn>
+                  {!isMine && <CommentBtn onClick={handleCommentSubmit}>등록</CommentBtn>}
+                </div>
+              </WhiteDiv>
+              <div style={{ display: 'flex', justifyContent: 'space-between', paddingLeft: '30px' }}>
+                {isMine && (
+                  <ButtonContainer>
+                    <CustomButton style={{ width: '100%' }} ref={buttonRef} onClick={handleMouseEnter}>
+                      연장하기
+                    </CustomButton>
+                    {showModal && buttonPosition && (
+                      <CustomModal
+                        top={buttonPosition.top}
+                        left={buttonPosition.left}
+                        onCancel={() => setShowModal(false)}
+                        onMouseLeave={() => setShowModal(false)}
+                        onExtend={handleGetInfo}
+                      />
+                    )}
+                  </ButtonContainer>
+                )}
+
+                {!isMine ? (
+                  <CustomButton
+                    style={{ marginLeft: 'auto', width: '30%' }}
+                    onClick={() => navigate(`/responsequestions/${projectId}`)}
+                  >
+                    테스트폼 참여하기
+                  </CustomButton>
+                ) : (
+                  <CustomButton
+                    style={{ marginLeft: 'auto', width: '30%' }}
+                    onClick={() => navigate(`/feedback/${projectId}`)}
+                  >
+                    피드백 상세보기
+                  </CustomButton>
+                )}
+              </div>
+            </ProjectIntro>
+          </Project>
+          <Comment show={showSidebar} onMouseLeave={() => setShowSidebar(false)}></Comment>
+          {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
+        </CreateWrapper>
+      )}
+    </>
   );
 };
