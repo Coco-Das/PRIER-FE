@@ -15,7 +15,7 @@ import {
 } from './BoardStyles';
 import { BoardPost } from '../../states/board/BoardStore';
 import useFormatDate from '../../hooks/UseFormatDate';
-import PostMenu from '../../components/board/PostListMenu';
+import PostMenu from '../../components/board/PostMenu';
 import { useNavigate } from 'react-router-dom';
 import useExtractTextFromContent from '../../hooks/UseTextFromContent';
 import useLike from '../../hooks/UseLike';
