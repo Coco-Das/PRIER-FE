@@ -162,8 +162,6 @@ export const ResponseTest = () => {
       setLoading(false); // 데이터 가져온 후 로딩 상태 해제
       if (successExtend) {
         setSnackbar({ message: '연장이 성공했습니다', type: 'success' });
-      } else if (successExtend === false) {
-        setSnackbar({ message: '연장이 실패했습니다', type: 'error' });
       }
     } catch (error) {
       setLoading(false); // 데이터 가져온 후 로딩 상태 해제
