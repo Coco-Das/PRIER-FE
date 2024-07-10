@@ -43,6 +43,7 @@ import CustomAlert from '../../components/utils/CustomAlert';
 import { API_BASE_URL } from '../../const/TokenApi';
 import { useUserStore } from '../../states/user/UserStore';
 import Snackbar from '../../components/user/Snackbar';
+import { Loading } from '../../components/utils/Loading';
 
 const { hasCommandModifier } = KeyBindingUtil;
 
@@ -111,6 +112,7 @@ const ModifyBoard: React.FC = () => {
   const profileNickname = sessionStorage.getItem('nickname');
   const profileImg = sessionStorage.getItem('profileImg') || userAvatar;
   const [currentFontSize, setCurrentFontSize] = useState<string>('14'); // 현재 폰트 크기 상태 변수
+  const [loading, setLoading] = useState(true);
 
   const fileInputRef = useRef<HTMLInputElement>(null); // 파일 입력 참조 변수
 
@@ -332,114 +334,117 @@ const ModifyBoard: React.FC = () => {
   };
 
   return (
-    <Container>
-      <CreateContainer>
-        <Header>
-          <div className="flex justify-end mb-2">
-            <Select
-              placeholder="카테고리"
-              indicator={<KeyboardArrowDown />}
-              sx={{
-                width: 145,
-                [`& .${selectClasses.indicator}`]: {
-                  transition: '0.2s',
-                  [`&.${selectClasses.expanded}`]: {
-                    transform: 'rotate(-180deg)',
+    <>
+      {loading && <Loading />}
+      <Container>
+        <CreateContainer>
+          <Header>
+            <div className="flex justify-end mb-2">
+              <Select
+                placeholder="카테고리"
+                indicator={<KeyboardArrowDown />}
+                sx={{
+                  width: 145,
+                  [`& .${selectClasses.indicator}`]: {
+                    transition: '0.2s',
+                    [`&.${selectClasses.expanded}`]: {
+                      transform: 'rotate(-180deg)',
+                    },
                   },
-                },
-              }}
-              onChange={(event, newValue) => setCategory(newValue as string)}
-              value={category}
-            >
-              <Option value="ITNEWS">IT 지식</Option>
-              <Option value="DAILY">잡담/일상</Option>
-              <Option value="TECH">기술</Option>
-              <Option value="INTERNSHIP">인턴십/공모전</Option>
-              <Option value="NOTICE">공지사항</Option>
-            </Select>
-          </div>
-        </Header>
-        <PostBox>
-          <UserContainer>
-            <Avatar>
-              <AvatarImage src={profileImg} />
-            </Avatar>
-            <AuthorContainer>
-              <Author>{profileNickname}</Author>
-            </AuthorContainer>
-            <TextEditorToolbar
-              editorState={editorState}
-              onEditorChange={handleEditorChange}
-              currentFontSize={currentFontSize}
-            />
-
-            <CustomButton onClick={handleImageUpload}>
-              <ButtonText>이미지 업로드</ButtonText>
-            </CustomButton>
-            <input
-              type="file"
-              ref={fileInputRef}
-              style={{ display: 'none' }}
-              onChange={handleFileChange}
-              multiple
-              accept="image/*"
-            />
-          </UserContainer>
-          <ContentContainer className="px-[50px]">
-            <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
-            <div
-              style={{
-                borderRadius: '5px',
-                minHeight: '400px',
-                fontSize: '14px',
-              }}
-            >
-              <Editor
-                editorState={editorState}
-                customStyleMap={styleMap}
-                handleKeyCommand={handleKeyCommand}
-                keyBindingFn={mapKeyToEditorCommand}
-                onChange={handleEditorChange}
-                handleBeforeInput={handleBeforeInput}
-                handleReturn={handleReturn}
-                placeholder="내용을 입력하세요"
-                blockStyleFn={() => 'block-default-font-size'}
-              />
+                }}
+                onChange={(event, newValue) => setCategory(newValue as string)}
+                value={category}
+              >
+                <Option value="ITNEWS">IT 지식</Option>
+                <Option value="DAILY">잡담/일상</Option>
+                <Option value="TECH">기술</Option>
+                <Option value="INTERNSHIP">인턴십/공모전</Option>
+                <Option value="NOTICE">공지사항</Option>
+              </Select>
             </div>
-          </ContentContainer>
-          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '0px', margin: '0 50px' }}>
-            {existingImages &&
-              existingImages.map((image, index) => (
-                <ImageWrapper key={index}>
-                  <StyledImg src={image.s3Url} alt={`Existing image ${index}`} />
-                  <DeleteButton onClick={() => handleDeleteExistingImage(index)}>×</DeleteButton>
-                </ImageWrapper>
-              ))}
-            {images &&
-              images.map((image, index) => (
-                <ImageWrapper key={index}>
-                  <StyledImg src={URL.createObjectURL(image)} alt={`Uploaded image ${index}`} />
-                  <DeleteButton onClick={() => handleDeleteImage(index)}>×</DeleteButton>
-                </ImageWrapper>
-              ))}
+          </Header>
+          <PostBox>
+            <UserContainer>
+              <Avatar>
+                <AvatarImage src={profileImg} />
+              </Avatar>
+              <AuthorContainer>
+                <Author>{profileNickname}</Author>
+              </AuthorContainer>
+              <TextEditorToolbar
+                editorState={editorState}
+                onEditorChange={handleEditorChange}
+                currentFontSize={currentFontSize}
+              />
+
+              <CustomButton onClick={handleImageUpload}>
+                <ButtonText>이미지 업로드</ButtonText>
+              </CustomButton>
+              <input
+                type="file"
+                ref={fileInputRef}
+                style={{ display: 'none' }}
+                onChange={handleFileChange}
+                multiple
+                accept="image/*"
+              />
+            </UserContainer>
+            <ContentContainer className="px-[50px]">
+              <Title placeholder="제목을 입력하세요" value={title} onChange={e => setTitle(e.target.value)} />
+              <div
+                style={{
+                  borderRadius: '5px',
+                  minHeight: '400px',
+                  fontSize: '14px',
+                }}
+              >
+                <Editor
+                  editorState={editorState}
+                  customStyleMap={styleMap}
+                  handleKeyCommand={handleKeyCommand}
+                  keyBindingFn={mapKeyToEditorCommand}
+                  onChange={handleEditorChange}
+                  handleBeforeInput={handleBeforeInput}
+                  handleReturn={handleReturn}
+                  placeholder="내용을 입력하세요"
+                  blockStyleFn={() => 'block-default-font-size'}
+                />
+              </div>
+            </ContentContainer>
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '0px', margin: '0 50px' }}>
+              {existingImages &&
+                existingImages.map((image, index) => (
+                  <ImageWrapper key={index}>
+                    <StyledImg src={image.s3Url} alt={`Existing image ${index}`} />
+                    <DeleteButton onClick={() => handleDeleteExistingImage(index)}>×</DeleteButton>
+                  </ImageWrapper>
+                ))}
+              {images &&
+                images.map((image, index) => (
+                  <ImageWrapper key={index}>
+                    <StyledImg src={URL.createObjectURL(image)} alt={`Uploaded image ${index}`} />
+                    <DeleteButton onClick={() => handleDeleteImage(index)}>×</DeleteButton>
+                  </ImageWrapper>
+                ))}
+            </div>
+            <FileCount>업로드된 이미지 수: {images.length + existingImages.length}</FileCount>
+          </PostBox>
+          <div>
+            <Button onClick={handleModifyClick} className="ml-auto">
+              수정
+            </Button>
+            {showCreateBoardAlert && (
+              <CustomAlert
+                message="게시물을 수정하시겠습니까?"
+                onConfirm={confirmCreateBoard}
+                onCancel={() => setShowCreateBoardAlert(false)}
+              />
+            )}
           </div>
-          <FileCount>업로드된 이미지 수: {images.length + existingImages.length}</FileCount>
-        </PostBox>
-        <div>
-          <Button onClick={handleModifyClick} className="ml-auto">
-            수정
-          </Button>
-          {showCreateBoardAlert && (
-            <CustomAlert
-              message="게시물을 수정하시겠습니까?"
-              onConfirm={confirmCreateBoard}
-              onCancel={() => setShowCreateBoardAlert(false)}
-            />
-          )}
-        </div>
-      </CreateContainer>
-      {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
-    </Container>
+        </CreateContainer>
+        {snackbar && <Snackbar message={snackbar.message} type={snackbar.type} onClose={() => setSnackbar(null)} />}
+      </Container>
+    </>
   );
 };
 
