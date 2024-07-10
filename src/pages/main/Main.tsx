@@ -45,7 +45,6 @@ export default function Main() {
         const pointsData = await CheckPoint();
         pointStore.setPoint(pointsData);
         await FetchMyPage();
-        console.log(pointStore.point);
       } catch (error) {
         console.error('메인 페이지 호출 실패:', error);
       }
@@ -56,10 +55,8 @@ export default function Main() {
   useEffect(() => {
     const fetchProjects = async () => {
       try {
-        const Latest = await FetchLatestProject();
-        console.log('최근 프로젝트 데이터 가져오기 :', Latest);
-        const AllProject = await FetchAllProject(1, 0);
-        console.log('모든 프로젝트 데이터 가져오기 :', AllProject);
+        await FetchLatestProject();
+        await FetchAllProject(1, 0);
       } catch (error) {
         console.error('프로젝트 데이터 가져오기 실패:', error);
       }
@@ -73,9 +70,8 @@ export default function Main() {
     setActiveButton(buttonLabel);
     try {
       await setFilter(newFilter);
-      const allProjects = await FetchAllProject(newFilter, 0);
+      await FetchAllProject(newFilter, 0);
       setCurrentPage(1);
-      console.log('모든 프로젝트 데이터 가져오기 :', allProjects);
     } catch (error) {
       console.error('프로젝트 데이터 가져오기 실패:', error);
     }
@@ -84,8 +80,7 @@ export default function Main() {
   const handlePageChange = async (event: React.ChangeEvent<unknown>, value: number) => {
     setCurrentPage(value);
     try {
-      const allProjects = await FetchAllProject(filter, value - 1);
-      console.log('페이지네이션 :', allProjects);
+      await FetchAllProject(filter, value - 1);
     } catch (error) {
       console.error('프로젝트 데이터 가져오기 실패:', error);
     }
